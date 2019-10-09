@@ -53,7 +53,7 @@ namespace VFatumbot.BotLogic
                     {
                         string mesg = "";
 
-                        FinalAttractor[] ida = GetIDA(userProfile.Location, userProfile.tmprad, /*u* not used*/-1, doScan ? 1 : 0);
+                        FinalAttractor[] ida = GetIDA(userProfile.Location, userProfile.Radius, /*u* not used*/-1, doScan ? 1 : 0);
                         ida = SortIDA(ida, "attractor", idacou);
                         if (ida.Length > 0)
                         {
@@ -116,7 +116,7 @@ namespace VFatumbot.BotLogic
                     {
                         string mesg = "";
 
-                        FinalAttractor[] ida = GetIDA(userProfile.Location, userProfile.tmprad, /*u* not used*/-1, doScan ? 1 : 0);
+                        FinalAttractor[] ida = GetIDA(userProfile.Location, userProfile.Radius, /*u* not used*/-1, doScan ? 1 : 0);
                         ida = SortIDA(ida, "void", idacou);
                         if (ida.Length > 0)
                         {
@@ -146,11 +146,11 @@ namespace VFatumbot.BotLogic
 
         public async Task LocationActionAsync(WaterfallStepContext stepContext, UserProfile userProfile, CancellationToken cancellationToken)
         {
-            await stepContext.Context.SendActivityAsync(MessageFactory.Text($"Your current radius is {userProfile.tmprad}"), cancellationToken);
+            await stepContext.Context.SendActivityAsync(MessageFactory.Text($"Your current radius is {userProfile.Radius}"), cancellationToken);
 
-            await stepContext.Context.SendActivityAsync(MessageFactory.Text($"Your current location is {userProfile.tmplat},{userProfile.tmplon}"), cancellationToken);
+            await stepContext.Context.SendActivityAsync(MessageFactory.Text($"Your current location is {userProfile.Latitude},{userProfile.Longitude}"), cancellationToken);
 
-            var incoords = new double[] { userProfile.tmplat, userProfile.tmplon };
+            var incoords = new double[] { userProfile.Latitude, userProfile.Longitude };
 
             dynamic w3wResult = await Helpers.GetWhat3WordsAddressAsync(incoords);
 
@@ -192,7 +192,7 @@ namespace VFatumbot.BotLogic
                     {
                         string mesg = "";
 
-                        FinalAttractor[] ida = GetIDA(userProfile.Location, userProfile.tmprad, /*u* not used*/-1, doScan ? 1 : 0);
+                        FinalAttractor[] ida = GetIDA(userProfile.Location, userProfile.Radius, /*u* not used*/-1, doScan ? 1 : 0);
                         ida = SortIDA(ida, "any", idacou);
                         if (ida.Length > 0)
                         {
@@ -226,18 +226,18 @@ namespace VFatumbot.BotLogic
             if (command.Contains(" "))
             {
                 string newRadiusStr = command.Replace(command.Substring(0, command.IndexOf(" ", StringComparison.CurrentCulture)), "");
-                int tmprad = 3000;
-                if (Int32.TryParse(newRadiusStr, out tmprad))
+                int Radius = 3000;
+                if (Int32.TryParse(newRadiusStr, out Radius))
                 {
-                    userProfile.tmprad = tmprad;
+                    userProfile.Radius = Radius;
                 }
             }
-            await stepContext.Context.SendActivityAsync(MessageFactory.Text($"Your current radius is {userProfile.tmprad}"), cancellationToken);
+            await stepContext.Context.SendActivityAsync(MessageFactory.Text($"Your current radius is {userProfile.Radius}"), cancellationToken);
         }
 
         public async Task QuantumActionAsync(WaterfallStepContext stepContext, UserProfile userProfile, CancellationToken cancellationToken, bool suggestTime = false)
         {
-            double[] incoords = GetQuantumRandom(userProfile.tmplat, userProfile.tmplon, userProfile.tmprad);
+            double[] incoords = GetQuantumRandom(userProfile.Latitude, userProfile.Longitude, userProfile.Radius);
 
             string mesg = Tolog(stepContext.Context, "random", (float)incoords[0], (float)incoords[1], suggestTime ? "qtime" : "quantum");
             await stepContext.Context.SendActivityAsync(MessageFactory.Text(mesg), cancellationToken);
@@ -249,7 +249,7 @@ namespace VFatumbot.BotLogic
 
         public async Task PsuedoActionAsync(WaterfallStepContext stepContext, UserProfile userProfile, CancellationToken cancellationToken)
         {
-            double[] incoords = GetPseudoRandom(userProfile.tmplat, userProfile.tmplon, userProfile.tmprad);
+            double[] incoords = GetPseudoRandom(userProfile.Latitude, userProfile.Longitude, userProfile.Radius);
 
             string mesg = Tolog(stepContext.Context, "random", (float)incoords[0], (float)incoords[1], "pseudo");
             await stepContext.Context.SendActivityAsync(MessageFactory.Text(mesg), cancellationToken);
@@ -259,7 +259,7 @@ namespace VFatumbot.BotLogic
             await stepContext.Context.SendActivityAsync(ReplyFactory.CreateLocationCardsReply(incoords, w3wResult), cancellationToken);
         }
 
-        public async Task PairActionAsync(WaterfallStepContext stepContext, UserProfile userProfile, CancellationToken cancellationToken, bool doScan = false)
+        public async Task PairActionAsync(WaterfallStepContext stepContext, UserProfile userProfile, CancellationToken cancellationToken, MainDialog mainDialog, bool doScan = false)
         {
             int idacou = 1;
             if (stepContext.Context.Activity.Text.Contains("["))
@@ -294,7 +294,7 @@ namespace VFatumbot.BotLogic
                     {
                         string mesg = "";
 
-                        FinalAttractor[] ida = GetIDA(userProfile.Location, userProfile.tmprad, /*u* not used*/-1, doScan ? 1 : 0);
+                        FinalAttractor[] ida = GetIDA(userProfile.Location, userProfile.Radius, /*u* not used*/-1, doScan ? 1 : 0);
                         FinalAttractor[] att = SortIDA(ida, "attractor", idacou);
                         FinalAttractor[] voi = SortIDA(ida, "void", idacou);
                         if (att.Count() > voi.Count()) {
@@ -314,130 +314,132 @@ namespace VFatumbot.BotLogic
                                 dynamic w3wResult = await Helpers.GetWhat3WordsAddressAsync(incoords);
                                 await stepContext.Context.SendActivityAsync(ReplyFactory.CreateLocationCardsReply(incoords, w3wResult), cancellationToken);
 
-
                                 mesg = Tolog(stepContext.Context, "void", voi[i]);
                                 await stepContext.Context.SendActivityAsync(MessageFactory.Text(mesg), cancellationToken);
                                 incoords = new double[] { voi[i].X.center.point.latitude, voi[i].X.center.point.longitude };
                                 w3wResult = await Helpers.GetWhat3WordsAddressAsync(incoords);
                                 await stepContext.Context.SendActivityAsync(ReplyFactory.CreateLocationCardsReply(incoords, w3wResult), cancellationToken);
-                            }
+
+								await mainDialog.ContinueDialog(context, cancellationToken);
+							}
                         }
                         else if (ida.Count() < 1) // TODO: is this needed vs idacou > 1 if ?
                         {
                             mesg = "No Anomalies found at the moment. Try again later.";
                             await stepContext.Context.SendActivityAsync(MessageFactory.Text(mesg), cancellationToken);
-                        }
+							await mainDialog.ContinueDialog(context, cancellationToken);
+						}
                     }, cancellationToken);
             });
         }
 
-        public async Task PointActionAsync(WaterfallStepContext stepContext, UserProfile userProfile, CancellationToken cancellationToken)
+        public async Task PointActionAsync(WaterfallStepContext stepContext, UserProfile userProfile, CancellationToken cancellationToken, MainDialog mainDialog)
         {
             await stepContext.Context.SendActivityAsync(MessageFactory.Text("Wait a minute. It will take a while."), cancellationToken);
-            await stepContext.Context.Adapter.ContinueConversationAsync(Consts.APP_ID,
-                ((Microsoft.Bot.Schema.Activity)stepContext.Context.Activity).GetConversationReference(),
-                async (context, token) =>
-                {
-                        string mesg = "";
-                        double[] incoords = new double[2];
 
-                        FinalAttractor[] ida = GetIDA(userProfile.Location, userProfile.tmprad, -1/*not used?*/);
+			DispatchWorkerThread((object sender, DoWorkEventArgs e) =>
+			{
+				stepContext.Context.Adapter.ContinueConversationAsync(Consts.APP_ID,
+                    ((Microsoft.Bot.Schema.Activity)stepContext.Context.Activity).GetConversationReference(),
+                    async (context, token) =>
+                    {
+                            string mesg = "";
+                            double[] incoords = new double[2];
 
-                        FinalAttractor[] att = SortIDA(ida, "attractor", 1);
-                        FinalAttractor[] voi = SortIDA(ida, "void", 1);
-                        ida = SortIDA(ida, "any", 1);
-                        double[] pcoords = GetPseudoRandom(userProfile.Location.latitude, userProfile.Location.longitude, userProfile.tmprad);
-                        double[] qcoords = GetQuantumRandom(userProfile.Location.latitude, userProfile.Location.longitude, userProfile.tmprad);
+                            FinalAttractor[] ida = GetIDA(userProfile.Location, userProfile.Radius, -1/*not used?*/);
 
-                        Random rn = new Random();
-                        int mtd = rn.Next(100);
+                            FinalAttractor[] att = SortIDA(ida, "attractor", 1);
+                            FinalAttractor[] voi = SortIDA(ida, "void", 1);
+                            ida = SortIDA(ida, "any", 1);
+                            double[] pcoords = GetPseudoRandom(userProfile.Location.latitude, userProfile.Location.longitude, userProfile.Radius);
+                            double[] qcoords = GetQuantumRandom(userProfile.Location.latitude, userProfile.Location.longitude, userProfile.Radius);
 
-                        if (mtd < 20)
-                        {
-                            incoords[0] = pcoords[0];
-                            incoords[1] = pcoords[1];
-                            mesg = Tolog(stepContext.Context, "blind", (float)incoords[0], (float)incoords[1], "pseudo");
-                        }
-                        if ((mtd < 40) && (mtd > 20))
-                        {
-                            if (att.Count() > 0)
-                            {
-                                incoords[0] = att[0].X.center.point.latitude;
-                                incoords[1] = att[0].X.center.point.longitude;
-                                mesg = Tolog(stepContext.Context, "blind", att[0]);
-                            }
-                            else
+                            Random rn = new Random();
+                            int mtd = rn.Next(100);
+
+                            if (mtd < 20)
                             {
                                 incoords[0] = pcoords[0];
                                 incoords[1] = pcoords[1];
                                 mesg = Tolog(stepContext.Context, "blind", (float)incoords[0], (float)incoords[1], "pseudo");
                             }
-                        }
-                        if ((mtd < 60) && (mtd > 40))
-                        {
-                            incoords[0] = qcoords[0];
-                            incoords[1] = qcoords[1];
-                            mesg = Tolog(stepContext.Context, "blind", (float)incoords[0], (float)incoords[1], "quantum");
-                        }
-                        if ((mtd < 80) && (mtd > 60))
-                        {
-                            if (voi.Count() > 0)
+                            if ((mtd < 40) && (mtd > 20))
                             {
-                                incoords[0] = voi[0].X.center.point.latitude;
-                                incoords[1] = voi[0].X.center.point.longitude;
-                                mesg = Tolog(stepContext.Context, "blind", voi[0]);
+                                if (att.Count() > 0)
+                                {
+                                    incoords[0] = att[0].X.center.point.latitude;
+                                    incoords[1] = att[0].X.center.point.longitude;
+                                    mesg = Tolog(stepContext.Context, "blind", att[0]);
+                                }
+                                else
+                                {
+                                    incoords[0] = pcoords[0];
+                                    incoords[1] = pcoords[1];
+                                    mesg = Tolog(stepContext.Context, "blind", (float)incoords[0], (float)incoords[1], "pseudo");
+                                }
                             }
-                            else
-                            {
-                                mtd = 90;
-                            }
-                        }
-                        if ((mtd < 100) && (mtd > 80))
-                        {
-                            if (ida.Count() > 0)
-                            {
-                                incoords[0] = ida[0].X.center.point.latitude;
-                                incoords[1] = ida[0].X.center.point.longitude;
-                                mesg = Tolog(stepContext.Context, "blind", ida[0]);
-                            }
-                            else
+                            if ((mtd < 60) && (mtd > 40))
                             {
                                 incoords[0] = qcoords[0];
                                 incoords[1] = qcoords[1];
                                 mesg = Tolog(stepContext.Context, "blind", (float)incoords[0], (float)incoords[1], "quantum");
                             }
-                        }
+                            if ((mtd < 80) && (mtd > 60))
+                            {
+                                if (voi.Count() > 0)
+                                {
+                                    incoords[0] = voi[0].X.center.point.latitude;
+                                    incoords[1] = voi[0].X.center.point.longitude;
+                                    mesg = Tolog(stepContext.Context, "blind", voi[0]);
+                                }
+                                else
+                                {
+                                    mtd = 90;
+                                }
+                            }
+                            if ((mtd < 100) && (mtd > 80))
+                            {
+                                if (ida.Count() > 0)
+                                {
+                                    incoords[0] = ida[0].X.center.point.latitude;
+                                    incoords[1] = ida[0].X.center.point.longitude;
+                                    mesg = Tolog(stepContext.Context, "blind", ida[0]);
+                                }
+                                else
+                                {
+                                    incoords[0] = qcoords[0];
+                                    incoords[1] = qcoords[1];
+                                    mesg = Tolog(stepContext.Context, "blind", (float)incoords[0], (float)incoords[1], "quantum");
+                                }
+                            }
 
-                        await stepContext.Context.SendActivityAsync(MessageFactory.Text(mesg), cancellationToken);
+                            await stepContext.Context.SendActivityAsync(MessageFactory.Text(mesg), cancellationToken);
 
-                        dynamic w3wResult = await Helpers.GetWhat3WordsAddressAsync(incoords);
+                            dynamic w3wResult = await Helpers.GetWhat3WordsAddressAsync(incoords);
 
-                        await stepContext.Context.SendActivityAsync(ReplyFactory.CreateLocationCardsReply(incoords, w3wResult), cancellationToken);
-                }, cancellationToken);
-        }
+                            await stepContext.Context.SendActivityAsync(ReplyFactory.CreateLocationCardsReply(incoords, w3wResult), cancellationToken);
+
+						    await mainDialog.ContinueDialog(context, cancellationToken);
+					}, cancellationToken);
+			});
+		}
 
         public async Task ToggleWaterSkip(WaterfallStepContext stepContext, UserProfile userProfile, CancellationToken cancellationToken)
         {
-            userProfile.includeWater = !userProfile.includeWater;
-            await stepContext.Context.SendActivityAsync(MessageFactory.Text("Water points will be " + (userProfile.includeWater ? "included" : "skipped")), cancellationToken);
+            userProfile.IsIncludeWaterPoints = !userProfile.IsIncludeWaterPoints;
+            await stepContext.Context.SendActivityAsync(MessageFactory.Text("Water points will be " + (userProfile.IsIncludeWaterPoints ? "included" : "skipped")), cancellationToken);
         }
 
         public async Task SaveActionAsync(WaterfallStepContext stepContext, UserState userState, UserProfile userProfile, CancellationToken cancellationToken)
         {
-            await stepContext.Context.SendActivityAsync(MessageFactory.Text("Water points will be " + (userProfile.includeWater ? "included" : "skipped")), cancellationToken);
+            await stepContext.Context.SendActivityAsync(MessageFactory.Text("Water points will be " + (userProfile.IsIncludeWaterPoints ? "included" : "skipped")), cancellationToken);
 
-            await stepContext.Context.SendActivityAsync(MessageFactory.Text($"Current location is {userProfile.tmplat},{userProfile.tmplon}"), cancellationToken);
+            await stepContext.Context.SendActivityAsync(MessageFactory.Text($"Current location is {userProfile.Latitude},{userProfile.Longitude}"), cancellationToken);
 
-            await stepContext.Context.SendActivityAsync(MessageFactory.Text($"Current radius is {userProfile.tmprad}"), cancellationToken);
+            await stepContext.Context.SendActivityAsync(MessageFactory.Text($"Current radius is {userProfile.Radius}"), cancellationToken);
 
             // TODO: I don't think this is saving the way we want it to
             await userState.SaveChangesAsync(stepContext.Context, false, cancellationToken);
-        }
-
-        public async Task HelpActionAsync(WaterfallStepContext stepContext, UserProfile userProfile, CancellationToken cancellationToken)
-        {
-            var reply = MessageFactory.Text(System.IO.File.ReadAllText("help.txt"));
-            await stepContext.Context.SendActivityAsync(reply, cancellationToken);
         }
     }
 }

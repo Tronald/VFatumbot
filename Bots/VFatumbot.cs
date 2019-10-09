@@ -36,37 +36,68 @@ namespace VFatumbot
                 // Greet anyone
                 if (member.Id != turnContext.Activity.Recipient.Id)
                 {
-                    var reply = MessageFactory.Text(System.IO.File.ReadAllText("help.txt"));
-                    await turnContext.SendActivityAsync(reply, cancellationToken);
-
                     var userStateAccessors = UserState.CreateProperty<UserProfile>(nameof(UserProfile));
                     UserProfile = await userStateAccessors.GetAsync(turnContext, () => new UserProfile());
 
-                    await turnContext.SendActivityAsync(MessageFactory.Text("Start off by sending your location or send a Google Map URL."), cancellationToken);
+                    await turnContext.SendActivityAsync(MessageFactory.Text("Welcome to VFatumbot. Here we're trying at some new features based on the original [Fatum Project bot](https://www.reddit.com/r/randonauts/). Type \"help\" anytime for more info."), cancellationToken);
+                    await turnContext.SendActivityAsync(MessageFactory.Text("Start off by sending your location or a [Google Maps URL](https://www.google.com/maps/@51.509865,-0.118092,13z). Don't forget you can send \"help\" for more info."), cancellationToken);
                 }
             }
         }
 
         public override async Task OnTurnAsync(ITurnContext turnContext, CancellationToken cancellationToken = default(CancellationToken))
         {
-            // Intercept any locations the user sends us, no matter where in the conversation they are
+            var userStateAccessors = UserState.CreateProperty<UserProfile>(nameof(UserProfile));
+            UserProfile = await userStateAccessors.GetAsync(turnContext, () => new UserProfile());
+
             double lat = 0, lon = 0;
-            if (InterceptLocation(turnContext, cancellationToken, out lat, out lon))
+            if (InterceptLocation(turnContext, cancellationToken, out lat, out lon)) // Intercept any locations the user sends us, no matter where in the conversation they are
             {
                 // Update user's location
-                var userStateAccessors = UserState.CreateProperty<UserProfile>(nameof(UserProfile));
-                UserProfile = await userStateAccessors.GetAsync(turnContext, () => new UserProfile());
-                UserProfile.tmplat = lat;
-                UserProfile.tmplon = lon;
+                UserProfile.Latitude = lat;
+                UserProfile.Longitude = lon;
 
                 await turnContext.SendActivityAsync(MessageFactory.Text($"New location confirmed @ {lat},{lon}"), cancellationToken);
 
-                var isWater = await Helpers.IsWaterCoordinatesAsync(new double[] { UserProfile.tmplat, UserProfile.tmplon });
-                await turnContext.SendActivityAsync(MessageFactory.Text($"Is it a water point? {isWater}"), cancellationToken);
+                var incoords = new double[] { lat, lon };
+                var w3wResult = await Helpers.GetWhat3WordsAddressAsync(incoords);
+                await turnContext.SendActivityAsync(ReplyFactory.CreateLocationCardsReply(incoords, w3wResult), cancellationToken);
+
+                //var isWater = await Helpers.IsWaterCoordinatesAsync(new double[] { UserProfile.Latitude, UserProfile.Longitude });
+                //await turnContext.SendActivityAsync(MessageFactory.Text($"Is it a water point? {isWater}"), cancellationToken);
 
                 //TODO: FatumFunctions.Tolog(message, "locset");
 
                 await base.OnTurnAsync(turnContext, cancellationToken);
+            }
+            else if (!string.IsNullOrEmpty(turnContext.Activity.Text) &&
+                (
+                    turnContext.Activity.Text.EndsWith("help", StringComparison.InvariantCultureIgnoreCase) ||
+                    turnContext.Activity.Text.Equals("hi", StringComparison.InvariantCultureIgnoreCase) ||
+                    turnContext.Activity.Text.Equals("hello", StringComparison.InvariantCultureIgnoreCase)
+                )
+            )
+            {
+                var reply = MessageFactory.Text(System.IO.File.ReadAllText("help.txt"));
+                await turnContext.SendActivityAsync(reply, cancellationToken);
+                if (!string.IsNullOrEmpty(turnContext.Activity.Text)
+                    && UserProfile.Latitude == 0d && UserProfile.Longitude == 0d
+                    //&& !"emulator".Equals(turnContext.Activity.ChannelId)
+                    )
+                {
+                    await turnContext.SendActivityAsync(MessageFactory.Text("You haven't set a location. Send your location from your messenger app (hint: you can do so by tapping the +/⸬/📎 etc. icon), or if you're on a computer send a [Google Maps URL](https://www.google.com/maps/@51.509865,-0.118092,13z). Don't forget you can send \"help\" for more info."), cancellationToken);
+                }
+                else
+                {
+                    await base.OnTurnAsync(turnContext, cancellationToken);
+                }
+            }
+            else if (!string.IsNullOrEmpty(turnContext.Activity.Text)
+                && UserProfile.Latitude == 0d && UserProfile.Longitude == 0d
+                //&& !"emulator".Equals(turnContext.Activity.ChannelId) 
+                )
+            {
+                await turnContext.SendActivityAsync(MessageFactory.Text("You haven't set a location. Send your location from your messenger app (hint: you can do so by tapping the +/⸬/📎 etc. icon), or if you're on a computer send a [Google Maps URL](https://www.google.com/maps/@51.509865,-0.118092,13z)."), cancellationToken);
             }
             else
             {

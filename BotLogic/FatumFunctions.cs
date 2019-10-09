@@ -34,10 +34,10 @@ namespace VFatumbot.BotLogic
             [FieldOffset(8)]
             public double longitude;
 
-            public LatLng(double tmplat, double tmplon) : this()
+            public LatLng(double Latitude, double Longitude) : this()
             {
-                this.latitude = tmplat;
-                this.longitude = tmplon;
+                this.latitude = Latitude;
+                this.longitude = Longitude;
             }
         }
 
