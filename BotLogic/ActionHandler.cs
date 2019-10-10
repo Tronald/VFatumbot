@@ -226,7 +226,7 @@ namespace VFatumbot.BotLogic
             if (command.Contains(" "))
             {
                 string newRadiusStr = command.Replace(command.Substring(0, command.IndexOf(" ", StringComparison.CurrentCulture)), "");
-                int Radius = 3000;
+                int Radius = Consts.DEFAULT_RADIUS;
                 if (Int32.TryParse(newRadiusStr, out Radius))
                 {
                     userProfile.Radius = Radius;

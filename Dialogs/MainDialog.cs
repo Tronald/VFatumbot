@@ -70,7 +70,7 @@ namespace VFatumbot
             var options = new PromptOptions()
             {
                 Prompt = MessageFactory.Text("What would you like to get/check?"),
-                RetryPrompt = MessageFactory.Text("That is not a valid action."),
+                RetryPrompt = MessageFactory.Text("That is not a valid action. What would you like to get/check?"),
                 Choices = GetActionChoices(),
             };
 
@@ -108,6 +108,14 @@ namespace VFatumbot
                 case "Scan":
                     return await stepContext.BeginDialogAsync(nameof(ScanDialog), this, cancellationToken);
                 case "My Location":
+                    // TODO: we shouldn't need this location-is-set check here because it's checked higher up in VFatumbot.cs but the location wasn't been set sometimes so just for debugging now...
+                    if (!UserProfile.IsLocationSet)
+                    {
+                        await stepContext.Context.SendActivityAsync(MessageFactory.Text(Consts.NO_LOCATION_SET_MSG), cancellationToken);
+                        await stepContext.RepromptDialogAsync(cancellationToken);
+                    }
+                    // END TODO
+
                     await actionHandler.LocationActionAsync(stepContext, UserProfile, cancellationToken);
                     break;
                 case "Settings":

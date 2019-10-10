@@ -81,11 +81,11 @@ namespace VFatumbot
                 var reply = MessageFactory.Text(System.IO.File.ReadAllText("help.txt"));
                 await turnContext.SendActivityAsync(reply, cancellationToken);
                 if (!string.IsNullOrEmpty(turnContext.Activity.Text)
-                    && UserProfile.Latitude == 0d && UserProfile.Longitude == 0d
-                    && !"emulator".Equals(turnContext.Activity.ChannelId)
+                    && !UserProfile.IsLocationSet
+                    //&& !"emulator".Equals(turnContext.Activity.ChannelId)
                     )
                 {
-                    await turnContext.SendActivityAsync(MessageFactory.Text("You haven't set a location. Send your location from your messenger app (hint: you can do so by tapping the +/⸬/📎 etc. icon), or if you're on a computer send a [Google Maps URL](https://www.google.com/maps/@51.509865,-0.118092,13z). Don't forget you can send \"help\" for more info."), cancellationToken);
+                    await turnContext.SendActivityAsync(MessageFactory.Text(Consts.NO_LOCATION_SET_MSG), cancellationToken);
                 }
                 else
                 {
@@ -93,11 +93,11 @@ namespace VFatumbot
                 }
             }
             else if (!string.IsNullOrEmpty(turnContext.Activity.Text)
-                && UserProfile.Latitude == 200d && UserProfile.Longitude == 200d
-                && !"emulator".Equals(turnContext.Activity.ChannelId) 
+                && !UserProfile.IsLocationSet
+                //&& !"emulator".Equals(turnContext.Activity.ChannelId) 
                 )
             {
-                await turnContext.SendActivityAsync(MessageFactory.Text("You haven't set a location. Send your location from your messenger app (hint: you can do so by tapping the +/⸬/📎 etc. icon), or if you're on a computer send a [Google Maps URL](https://www.google.com/maps/@51.509865,-0.118092,13z)."), cancellationToken);
+                await turnContext.SendActivityAsync(MessageFactory.Text(Consts.NO_LOCATION_SET_MSG), cancellationToken);
             }
             else
             {
