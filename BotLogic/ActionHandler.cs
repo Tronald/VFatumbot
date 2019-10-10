@@ -232,7 +232,7 @@ namespace VFatumbot.BotLogic
                     userProfile.Radius = Radius;
                 }
             }
-            await stepContext.Context.SendActivityAsync(MessageFactory.Text($"Your current radius is {userProfile.Radius}"), cancellationToken);
+            await stepContext.Context.SendActivityAsync(MessageFactory.Text($"Your current radius is {userProfile.Radius}m"), cancellationToken);
         }
 
         public async Task QuantumActionAsync(WaterfallStepContext stepContext, UserProfile userProfile, CancellationToken cancellationToken, bool suggestTime = false)
