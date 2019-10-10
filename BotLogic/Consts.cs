@@ -15,7 +15,7 @@
         public const string THUMBNAIL_SIZE = "400x400";
 
         // Dummy invalid coordinate
-        public const double INVALID_COORD = 200.0;
+        public const double INVALID_COORD = -1000.0;
 
         // Default radius to search within (meters)
         public const int DEFAULT_RADIUS = 3000;
