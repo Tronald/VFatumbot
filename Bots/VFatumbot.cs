@@ -82,7 +82,6 @@ namespace VFatumbot
                 await turnContext.SendActivityAsync(reply, cancellationToken);
                 if (!string.IsNullOrEmpty(turnContext.Activity.Text)
                     && !UserProfile.IsLocationSet
-                    && !"emulator".Equals(turnContext.Activity.ChannelId)
                     )
                 {
                     await turnContext.SendActivityAsync(MessageFactory.Text(Consts.NO_LOCATION_SET_MSG), cancellationToken);
@@ -94,7 +93,6 @@ namespace VFatumbot
             }
             else if (!string.IsNullOrEmpty(turnContext.Activity.Text)
                 && !UserProfile.IsLocationSet
-                //&& !"emulator".Equals(turnContext.Activity.ChannelId) 
                 )
             {
                 await turnContext.SendActivityAsync(MessageFactory.Text(Consts.NO_LOCATION_SET_MSG), cancellationToken);
