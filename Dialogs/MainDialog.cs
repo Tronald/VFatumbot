@@ -18,9 +18,8 @@ namespace VFatumbot
         protected readonly ILogger _logger;
         protected readonly UserState _userState;
 
-        protected UserProfile UserProfile;
-
-        public BotState _conversationState;
+        public UserProfile UserProfile;
+        public BotState ConversationState;
 
         public MainDialog(UserState userState, ILogger<MainDialog> logger) : base(nameof(MainDialog))
         {
@@ -44,7 +43,7 @@ namespace VFatumbot
         // like getting attractors etc have completed their work on a background thread
         public async Task ContinueDialog(ITurnContext turnContext, CancellationToken cancellationToken)
         {
-            var conversationStateAccessors = _conversationState.CreateProperty<DialogState>(nameof(DialogState));
+            var conversationStateAccessors = ConversationState.CreateProperty<DialogState>(nameof(DialogState));
 
             var dialogSet = new DialogSet(conversationStateAccessors);
             dialogSet.Add(this);
@@ -53,7 +52,7 @@ namespace VFatumbot
             var results = await dialogContext.ContinueDialogAsync(cancellationToken);
 
             await dialogContext.BeginDialogAsync(Id, null, cancellationToken);
-            await _conversationState.SaveChangesAsync(dialogContext.Context, false, cancellationToken);
+            await ConversationState.SaveChangesAsync(dialogContext.Context, false, cancellationToken);
         }
 
         // 1. Prompts the user if the user is not in the middle of a dialog.
@@ -61,9 +60,6 @@ namespace VFatumbot
         public async Task<DialogTurnResult> ChoiceActionStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
         {
             _logger.LogInformation("MainDialog.ChoiceActionStepAsync");
-
-            var userStateAccessors = _userState.CreateProperty<UserProfile>(nameof(UserProfile));
-            UserProfile = await userStateAccessors.GetAsync(stepContext.Context, () => new UserProfile());
 
             // Create the PromptOptions which contain the prompt and re-prompt messages.
             // PromptOptions also contains the list of choices available to the user.

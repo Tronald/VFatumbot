@@ -82,7 +82,7 @@ namespace VFatumbot
                 await turnContext.SendActivityAsync(reply, cancellationToken);
                 if (!string.IsNullOrEmpty(turnContext.Activity.Text)
                     && !UserProfile.IsLocationSet
-                    //&& !"emulator".Equals(turnContext.Activity.ChannelId)
+                    && !"emulator".Equals(turnContext.Activity.ChannelId)
                     )
                 {
                     await turnContext.SendActivityAsync(MessageFactory.Text(Consts.NO_LOCATION_SET_MSG), cancellationToken);
@@ -114,11 +114,8 @@ namespace VFatumbot
             Logger.LogInformation("Running dialog with Message Activity.");
 
             // Run the Dialog with the new message Activity.
-            //if (Dialog._conversationState == null)
-            //{
-                Dialog._conversationState = ConversationState;
-                var xxxxx = ConversationState;
-            //}
+            Dialog.ConversationState = ConversationState;
+            Dialog.UserProfile = UserProfile;
             await Dialog.RunAsync(turnContext, ConversationState.CreateProperty<DialogState>(nameof(DialogState)), cancellationToken);
         }
 
