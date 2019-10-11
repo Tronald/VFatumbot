@@ -89,6 +89,8 @@ namespace VFatumbot
 
             var actionHandler = new ActionHandler();
 
+            var repromptThisRound = false;
+
             // Handle the chosen action
             switch (((FoundChoice)stepContext.Result).Value)
             {
@@ -112,6 +114,7 @@ namespace VFatumbot
                     }
                     // END TODO
 
+                    repromptThisRound = true;
                     await actionHandler.LocationActionAsync(stepContext, UserProfile, cancellationToken);
                     break;
                 case "Settings":
@@ -162,7 +165,15 @@ namespace VFatumbot
             // Send the reply
             await stepContext.Context.SendActivityAsync(reply, cancellationToken);
 
-            return await stepContext.EndDialogAsync();
+            if (repromptThisRound)
+            {
+                return await stepContext.ReplaceDialogAsync(nameof(MainDialog));
+            }
+            else
+            {
+                // Long-running tasks like /getattractors etc will make use of ContinueDialog to re-prompt users
+                return await stepContext.EndDialogAsync();
+            }
         }
 
         private IList<Choice> GetActionChoices()
