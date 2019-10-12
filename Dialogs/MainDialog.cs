@@ -19,9 +19,8 @@ namespace VFatumbot
         protected readonly UserState _userState;
 
         public UserProfile UserProfile;
-        public BotState ConversationState;
 
-        public MainDialog(UserState userState, ILogger<MainDialog> logger) : base(nameof(MainDialog))
+        public MainDialog(UserState userState, ConversationState conversationState, ILogger<MainDialog> logger) : base(nameof(MainDialog))
         {
             _logger = logger;
             _userState = userState;
@@ -37,22 +36,6 @@ namespace VFatumbot
 
             // The initial child Dialog to run.
             InitialDialogId = nameof(WaterfallDialog);
-        }
-
-        // Used as a callback to continue the dialog (i.e. prompt user for next action) after long tasks
-        // like getting attractors etc have completed their work on a background thread
-        public async Task ContinueDialog(ITurnContext turnContext, CancellationToken cancellationToken)
-        {
-            var conversationStateAccessors = ConversationState.CreateProperty<DialogState>(nameof(DialogState));
-
-            var dialogSet = new DialogSet(conversationStateAccessors);
-            dialogSet.Add(this);
-
-            var dialogContext = await dialogSet.CreateContextAsync(turnContext, cancellationToken);
-            var results = await dialogContext.ContinueDialogAsync(cancellationToken);
-
-            await dialogContext.BeginDialogAsync(Id, null, cancellationToken);
-            await ConversationState.SaveChangesAsync(dialogContext.Context, false, cancellationToken);
         }
 
         // 1. Prompts the user if the user is not in the middle of a dialog.

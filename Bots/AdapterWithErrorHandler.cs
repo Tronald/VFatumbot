@@ -6,14 +6,21 @@ using Microsoft.Bot.Builder.Integration.AspNet.Core;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Bot.Builder;
+using System.Threading.Tasks;
+using Microsoft.Bot.Builder.Dialogs;
+using System.Threading;
 
 namespace VFatumbot
 {
     public class AdapterWithErrorHandler : BotFrameworkHttpAdapter
     {
+        protected readonly ConversationState  _conversationState;
+
         public AdapterWithErrorHandler(IConfiguration configuration, ILogger<BotFrameworkHttpAdapter> logger, ConversationState conversationState = null)
             : base(configuration, logger)
         {
+            _conversationState = conversationState;
+
             OnTurnError = async (turnContext, exception) =>
             {
                 // Log any leaked exception from the application.
@@ -37,6 +44,22 @@ namespace VFatumbot
                     }
                 }
             };
+        }
+
+        // Used as a callback to continue the dialog (i.e. prompt user for next action) after long tasks
+        // like getting attractors etc have completed their work on a background thread
+        public async Task ContinueDialogAsync(ITurnContext turnContext, MainDialog dialog, CancellationToken cancellationToken)
+        {
+            var conversationStateAccessors = _conversationState.CreateProperty<DialogState>(nameof(DialogState));
+
+            var dialogSet = new DialogSet(conversationStateAccessors);
+            dialogSet.Add(dialog);
+
+            var dialogContext = await dialogSet.CreateContextAsync(turnContext, cancellationToken);
+            var results = await dialogContext.ContinueDialogAsync(cancellationToken);
+
+            await dialogContext.BeginDialogAsync(dialog.Id, null, cancellationToken);
+            await _conversationState.SaveChangesAsync(dialogContext.Context, false, cancellationToken);
         }
     }
 }

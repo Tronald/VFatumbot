@@ -68,14 +68,14 @@ namespace VFatumbot.BotLogic
 
                                 await stepContext.Context.SendActivityAsync(ReplyFactory.CreateLocationCardsReply(incoords, w3wResult), cancellationToken);
 
-                                await mainDialog.ContinueDialog(context, cancellationToken);
+                                await ((AdapterWithErrorHandler)stepContext.Context.Adapter).ContinueDialogAsync(context, mainDialog, cancellationToken);
                             }
                         }
                         else if (ida.Count() < 1)
                         {
                             mesg = "No Anomalies found at the moment. Try again later.";
                             await stepContext.Context.SendActivityAsync(MessageFactory.Text(mesg), cancellationToken);
-                            await mainDialog.ContinueDialog(context, cancellationToken);
+                            await ((AdapterWithErrorHandler)stepContext.Context.Adapter).ContinueDialogAsync(context, mainDialog, cancellationToken);
                         }
                     }, cancellationToken);
             });
@@ -131,14 +131,14 @@ namespace VFatumbot.BotLogic
 
                                 await stepContext.Context.SendActivityAsync(ReplyFactory.CreateLocationCardsReply(incoords, w3wResult), cancellationToken);
 
-                                await mainDialog.ContinueDialog(context, cancellationToken);
+                                await ((AdapterWithErrorHandler)stepContext.Context.Adapter).ContinueDialogAsync(context, mainDialog, cancellationToken);
                             }
                         }
                         else if (ida.Count() < 1)
                         {
                             mesg = "No Anomalies found at the moment. Try again later.";
                             await stepContext.Context.SendActivityAsync(MessageFactory.Text(mesg), cancellationToken);
-                            await mainDialog.ContinueDialog(context, cancellationToken);
+                            await ((AdapterWithErrorHandler)stepContext.Context.Adapter).ContinueDialogAsync(context, mainDialog, cancellationToken);
                         }
                     }, cancellationToken);
             });
@@ -207,14 +207,14 @@ namespace VFatumbot.BotLogic
 
                                 await stepContext.Context.SendActivityAsync(ReplyFactory.CreateLocationCardsReply(incoords, w3wResult), cancellationToken);
 
-                                await mainDialog.ContinueDialog(context, cancellationToken);
+                                await ((AdapterWithErrorHandler)stepContext.Context.Adapter).ContinueDialogAsync(context, mainDialog, cancellationToken);
                             }
                         }
                         else if (ida.Count() < 1)
                         {
                             mesg = "No Anomalies found at the moment. Try again later.";
                             await stepContext.Context.SendActivityAsync(MessageFactory.Text(mesg), cancellationToken);
-                            await mainDialog.ContinueDialog(context, cancellationToken);
+                            await ((AdapterWithErrorHandler)stepContext.Context.Adapter).ContinueDialogAsync(context, mainDialog, cancellationToken);
                         }
                     }, cancellationToken);
             });
@@ -320,14 +320,14 @@ namespace VFatumbot.BotLogic
                                 w3wResult = await Helpers.GetWhat3WordsAddressAsync(incoords);
                                 await stepContext.Context.SendActivityAsync(ReplyFactory.CreateLocationCardsReply(incoords, w3wResult), cancellationToken);
 
-								await mainDialog.ContinueDialog(context, cancellationToken);
+								await ((AdapterWithErrorHandler)stepContext.Context.Adapter).ContinueDialogAsync(context, mainDialog, cancellationToken);
 							}
                         }
                         else if (ida.Count() < 1) // TODO: is this needed vs idacou > 1 if ?
                         {
                             mesg = "No Anomalies found at the moment. Try again later.";
                             await stepContext.Context.SendActivityAsync(MessageFactory.Text(mesg), cancellationToken);
-							await mainDialog.ContinueDialog(context, cancellationToken);
+							await ((AdapterWithErrorHandler)stepContext.Context.Adapter).ContinueDialogAsync(context, mainDialog, cancellationToken);
 						}
                     }, cancellationToken);
             });
@@ -419,7 +419,7 @@ namespace VFatumbot.BotLogic
 
                             await stepContext.Context.SendActivityAsync(ReplyFactory.CreateLocationCardsReply(incoords, w3wResult), cancellationToken);
 
-						    await mainDialog.ContinueDialog(context, cancellationToken);
+						    await ((AdapterWithErrorHandler)stepContext.Context.Adapter).ContinueDialogAsync(context, mainDialog, cancellationToken);
 					}, cancellationToken);
 			});
 		}
