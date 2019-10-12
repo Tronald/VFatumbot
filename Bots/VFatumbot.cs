@@ -62,6 +62,8 @@ namespace VFatumbot
 
                 await turnContext.SendActivityAsync(MessageFactory.Text($"New location confirmed @ {lat},{lon}"), cancellationToken);
 
+                //await turnContext.SendActivityAsync(MessageFactory.Text(Newtonsoft.Json.JsonConvert.SerializeObject(turnContext.Activity)), cancellationToken);
+
                 var incoords = new double[] { lat, lon };
                 var w3wResult = await Helpers.GetWhat3WordsAddressAsync(incoords);
                 await turnContext.SendActivityAsync(ReplyFactory.CreateLocationCardsReply(incoords, w3wResult), cancellationToken);
@@ -75,9 +77,9 @@ namespace VFatumbot
             }
             else if (!string.IsNullOrEmpty(turnContext.Activity.Text) &&
                 (
-                    turnContext.Activity.Text.EndsWith("help", StringComparison.InvariantCultureIgnoreCase) ||
-                    turnContext.Activity.Text.Equals("hi", StringComparison.InvariantCultureIgnoreCase) ||
-                    turnContext.Activity.Text.Equals("hello", StringComparison.InvariantCultureIgnoreCase)
+                    turnContext.Activity.Text.EndsWith("help", StringComparison.InvariantCultureIgnoreCase)
+                    //|| turnContext.Activity.Text.Equals("hi", StringComparison.InvariantCultureIgnoreCase) ||
+                    //|| turnContext.Activity.Text.Equals("hello", StringComparison.InvariantCultureIgnoreCase)
                 )
             )
             {
@@ -104,6 +106,10 @@ namespace VFatumbot
             {
                 await base.OnTurnAsync(turnContext, cancellationToken);
             }
+
+            // Save user's IDs
+            UserProfile.UserId = turnContext.Activity.From.Id;
+            UserProfile.Username = turnContext.Activity.From.Name;
 
             // Add message details to the conversation data.
             // Convert saved Timestamp to local DateTimeOffset, then to string for display.
@@ -149,7 +155,7 @@ namespace VFatumbot
             }
 
             // Secondly is if there is a Google Map URL
-            if (!isFound && turnContext.Activity.Text != null && turnContext.Activity.Text.Contains("google.com/maps/"))
+            if (!isFound && turnContext.Activity.Text != null && (turnContext.Activity.Text.Contains("google.com/maps/") || turnContext.Activity.Text.Contains("Sending location @")))
             {
                 string[] seps0 = { "@" };
                 string[] entry0 = turnContext.Activity.Text.Split(seps0, StringSplitOptions.RemoveEmptyEntries);

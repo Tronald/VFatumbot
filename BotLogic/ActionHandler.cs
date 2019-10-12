@@ -426,6 +426,8 @@ namespace VFatumbot.BotLogic
 
         public async Task SettingsActionAsync(WaterfallStepContext stepContext, UserState userState, UserProfile userProfile, CancellationToken cancellationToken)
         {
+            await stepContext.Context.SendActivityAsync(MessageFactory.Text($"Hi, your ID is {userProfile.UserId} and name is {userProfile.Username}"), cancellationToken);
+
             userProfile.IsIncludeWaterPoints = !userProfile.IsIncludeWaterPoints;
             await stepContext.Context.SendActivityAsync(MessageFactory.Text("Water points will be " + (userProfile.IsIncludeWaterPoints ? "included" : "skipped")), cancellationToken);
 

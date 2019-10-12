@@ -6,6 +6,9 @@ namespace VFatumbot
     // Defines a state property used to track information about the user.
     public class UserProfile
     {
+        public string UserId { get; set; }
+        public string Username { get; set; }
+
 #if EMULATORDEBUG
         // Fukuoka, Japan
         public double Latitude { get; set; } = 33.5977505;
