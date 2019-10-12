@@ -146,7 +146,7 @@ namespace VFatumbot.BotLogic
 
         public async Task LocationActionAsync(WaterfallStepContext stepContext, UserProfile userProfile, CancellationToken cancellationToken)
         {
-            await stepContext.Context.SendActivityAsync(MessageFactory.Text($"Your current radius is {userProfile.Radius}"), cancellationToken);
+            await stepContext.Context.SendActivityAsync(MessageFactory.Text($"Your current radius is {userProfile.Radius}m"), cancellationToken);
 
             await stepContext.Context.SendActivityAsync(MessageFactory.Text($"Your current location is {userProfile.Latitude},{userProfile.Longitude}"), cancellationToken);
 
