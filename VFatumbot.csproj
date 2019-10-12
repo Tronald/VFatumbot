@@ -52,6 +52,12 @@
     <Compile Condition=" '$(EnableDefaultCompileItems)' == 'true' " Update="Bots\AdapterWithErrorHandler.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
+    <Compile Condition=" '$(EnableDefaultCompileItems)' == 'true' " Update="Dialogs\ScanDialog %28copy%29.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Condition=" '$(EnableDefaultCompileItems)' == 'true' " Update="Dialogs\BlindSpotsDialog.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Update="libAttract.dll">

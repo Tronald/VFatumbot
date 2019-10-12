@@ -424,22 +424,14 @@ namespace VFatumbot.BotLogic
 			});
 		}
 
-        public async Task ToggleWaterSkip(WaterfallStepContext stepContext, UserProfile userProfile, CancellationToken cancellationToken)
+        public async Task SettingsActionAsync(WaterfallStepContext stepContext, UserState userState, UserProfile userProfile, CancellationToken cancellationToken)
         {
             userProfile.IsIncludeWaterPoints = !userProfile.IsIncludeWaterPoints;
-            await stepContext.Context.SendActivityAsync(MessageFactory.Text("Water points will be " + (userProfile.IsIncludeWaterPoints ? "included" : "skipped")), cancellationToken);
-        }
-
-        public async Task SaveActionAsync(WaterfallStepContext stepContext, UserState userState, UserProfile userProfile, CancellationToken cancellationToken)
-        {
             await stepContext.Context.SendActivityAsync(MessageFactory.Text("Water points will be " + (userProfile.IsIncludeWaterPoints ? "included" : "skipped")), cancellationToken);
 
             await stepContext.Context.SendActivityAsync(MessageFactory.Text($"Current location is {userProfile.Latitude},{userProfile.Longitude}"), cancellationToken);
 
-            await stepContext.Context.SendActivityAsync(MessageFactory.Text($"Current radius is {userProfile.Radius}"), cancellationToken);
-
-            // TODO: I don't think this is saving the way we want it to
-            await userState.SaveChangesAsync(stepContext.Context, false, cancellationToken);
+            await stepContext.Context.SendActivityAsync(MessageFactory.Text($"Current radius is {userProfile.Radius}m"), cancellationToken);
         }
     }
 }

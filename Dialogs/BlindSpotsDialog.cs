@@ -13,7 +13,7 @@ using VFatumbot.BotLogic;
 
 namespace VFatumbot
 {
-    public class ScanDialog : ComponentDialog
+    public class BlindSpotsDialog : ComponentDialog
     {
         protected readonly ILogger _logger;
         protected readonly UserState _userState;
@@ -22,7 +22,7 @@ namespace VFatumbot
 
         protected UserProfile UserProfile;
 
-        public ScanDialog(UserState userState, object mainDialog, ILogger<MainDialog> logger) : base(nameof(ScanDialog))
+        public BlindSpotsDialog(UserState userState, object mainDialog, ILogger<MainDialog> logger) : base(nameof(BlindSpotsDialog))
         {
             _logger = logger;
             _userState = userState;
@@ -44,7 +44,7 @@ namespace VFatumbot
         // 2. Re-prompts the user when an invalid input is received.
         public async Task<DialogTurnResult> ChoiceActionStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
         {
-            _logger.LogInformation("ScanDialog.ChoiceActionStepAsync");
+            _logger.LogInformation("BlindSpotsDialog.ChoiceActionStepAsync");
 
             var userStateAccessors = _userState.CreateProperty<UserProfile>(nameof(UserProfile));
             UserProfile = await userStateAccessors.GetAsync(stepContext.Context, () => new UserProfile());
@@ -66,7 +66,7 @@ namespace VFatumbot
         // This method is only called when a valid prompt response is parsed from the user's response to the ChoicePrompt.
         private async Task<DialogTurnResult> PerformActionStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
         {
-            _logger.LogInformation("ScanDialog.PerformActionStepAsync");
+            _logger.LogInformation("BlindSpotsDialog.PerformActionStepAsync");
 
             // Cards are sent as Attachments in the Bot Framework.
             // So we need to create a list of attachments for the reply activity.
@@ -82,17 +82,20 @@ namespace VFatumbot
             // Handle the chosen action
             switch (((FoundChoice)stepContext.Result).Value)
             {
-                case "Scan Attractor":
-                    await actionHandler.AttractionActionAsync(stepContext, UserProfile, cancellationToken, _mainDialog, true);
+                case "Quantum":
+                    goBackMainMenuThisRound = true;
+                    await actionHandler.QuantumActionAsync(stepContext, UserProfile, cancellationToken);
                     break;
-                case "Scan Void":
-                    await actionHandler.VoidActionAsync(stepContext, UserProfile, cancellationToken, _mainDialog, true);
+                case "Quantum Time":
+                    goBackMainMenuThisRound = true;
+                    await actionHandler.QuantumActionAsync(stepContext, UserProfile, cancellationToken, true);
                     break;
-                case "Scan Anomaly":
-                    await actionHandler.AnomalyActionAsync(stepContext, UserProfile, cancellationToken, _mainDialog, true);
+                case "Psuedo":
+                    goBackMainMenuThisRound = true;
+                    await actionHandler.PsuedoActionAsync(stepContext, UserProfile, cancellationToken);
                     break;
-                case "Scan Pair":
-                    await actionHandler.PairActionAsync(stepContext, UserProfile, cancellationToken, _mainDialog, true);
+                case "Point":
+                    await actionHandler.PointActionAsync(stepContext, UserProfile, cancellationToken, _mainDialog);
                     break;
                 case "< Back":
                     goBackMainMenuThisRound = true;
@@ -118,35 +121,40 @@ namespace VFatumbot
             var actionOptions = new List<Choice>()
             {
                 new Choice() {
-                    Value = "Scan Attractor",
+                    Value = "Quantum",
                     Synonyms = new List<string>()
                                     {
-                                        "scanattractor",
-                                        "/scanattractor",
+                                        "quantum",
+                                        "getquantum",
+                                        "/getquantum",
                                     }
                 },
                 new Choice() {
-                    Value = "Scan Void",
+                    Value = "Quantum Time",
                     Synonyms = new List<string>()
                                     {
-                                        "scanvoid",
-                                        "/scanvoid",
+                                        "quantumtime",
+                                        "getquantumtime",
+                                        "qtime",
+                                        "/getqtime",
                                     }
                 },
                 new Choice() {
-                    Value = "Scan Anomaly",
+                    Value = "Psuedo",
                     Synonyms = new List<string>()
                                     {
-                                        "scananomaly",
-                                        "/scananomaly",
+                                        "psuedo",
+                                        "getpsuedo",
+                                        "/getpsuedo",
                                     }
                 },
                 new Choice() {
-                    Value = "Scan Pair",
+                    Value = "Point",
                     Synonyms = new List<string>()
                                     {
-                                        "scanpair",
-                                        "/scanpair",
+                                        "point",
+                                        "getpoint",
+                                        "/getpoint",
                                     }
                 },
                 new Choice() {

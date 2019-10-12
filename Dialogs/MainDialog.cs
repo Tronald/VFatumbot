@@ -27,6 +27,7 @@ namespace VFatumbot
 
             // Define the main dialog and its related components.
             AddDialog(new ScanDialog(userState, this, logger));
+            AddDialog(new BlindSpotsDialog(userState, this, logger));
             AddDialog(new ChoicePrompt(nameof(ChoicePrompt)));
             AddDialog(new WaterfallDialog(nameof(WaterfallDialog), new WaterfallStep[]
             {
@@ -86,6 +87,11 @@ namespace VFatumbot
                 case "Anomaly":
                     await actionHandler.AnomalyActionAsync(stepContext, UserProfile, cancellationToken, this);
                     break;
+                case "Pair":
+                    await actionHandler.PairActionAsync(stepContext, UserProfile, cancellationToken, this);
+                    break;
+                case "Blind Spots":
+                    return await stepContext.BeginDialogAsync(nameof(BlindSpotsDialog), this, cancellationToken);
                 case "Scan":
                     return await stepContext.BeginDialogAsync(nameof(ScanDialog), this, cancellationToken);
                 case "My Location":
@@ -101,48 +107,9 @@ namespace VFatumbot
                     await actionHandler.LocationActionAsync(stepContext, UserProfile, cancellationToken);
                     break;
                 case "Settings":
-                    // TODO: do settings stuff
+                    repromptThisRound = true;
+                    await actionHandler.SettingsActionAsync(stepContext, _userState, UserProfile, cancellationToken); // TODO: Make Settings Dialog instead
                     break;
-
-                //case "Radius":
-                //    await actionHandler.RadiusActionAsync(stepContext, UserProfile, cancellationToken);
-                //    break;
-
-                //case "Quantum":
-                //    await actionHandler.QuantumActionAsync(stepContext, UserProfile, cancellationToken);
-                //    break;
-                //case "Quantum Time":
-                //    await actionHandler.QuantumActionAsync(stepContext, UserProfile, cancellationToken, true);
-                //    break;
-                //case "Psuedo":
-                //    await actionHandler.PsuedoActionAsync(stepContext, UserProfile, cancellationToken);
-                //    break;
-                //case "Pair":
-                //    await actionHandler.PairActionAsync(stepContext, UserProfile, cancellationToken, this);
-                //    break;
-                //case "Scan Attractor":
-                //    await actionHandler.AttractionActionAsync(stepContext, UserProfile, cancellationToken, this, true);
-                //    break;
-                //case "Scan Void":
-                //    await actionHandler.VoidActionAsync(stepContext, UserProfile, cancellationToken, this, true);
-                //    break;
-                //case "Scan Anomaly":
-                //    await actionHandler.AnomalyActionAsync(stepContext, UserProfile, cancellationToken, this, true);
-                //    break;
-                //case "Scan Pair":
-                //    await actionHandler.PairActionAsync(stepContext, UserProfile, cancellationToken, this, true);
-                //    break;
-                //case "Point":
-                //    await actionHandler.PointActionAsync(stepContext, UserProfile, cancellationToken, this);
-                //    break;
-                //case "Water On":
-                //case "Water Off":
-                //    await actionHandler.ToggleWaterSkip(stepContext, UserProfile, cancellationToken);
-                //    await actionHandler.SaveActionAsync(stepContext, _userState, UserProfile, cancellationToken);
-                //    break;
-                //case "Save":
-                //    await actionHandler.SaveActionAsync(stepContext, _userState, UserProfile, cancellationToken);
-                //    break;
             }
 
             // Send the reply
@@ -198,6 +165,24 @@ namespace VFatumbot
                                     }
                 },
                 new Choice() {
+                    Value = "Pair",
+                    Synonyms = new List<string>()
+                                    {
+                                        "pair",
+                                        "getpair",
+                                        "/getpair",
+                                    }
+                },
+                new Choice() {
+                    Value = "Blind Spots",
+                    Synonyms = new List<string>()
+                                    {
+                                        "blind spots",
+                                        "blindspots",
+                                        "/blindspots",
+                                    }
+                },
+                new Choice() {
                     Value = "Scan",
                     Synonyms = new List<string>()
                                     {
@@ -224,77 +209,6 @@ namespace VFatumbot
                                         "settings",
                                     }
                 },
-
-                //new Choice() {
-                //    Value = "Radius",
-                //    Synonyms = new List<string>()
-                //                    {
-                //                        "radius",
-                //                        "setradius",
-                //                        "/setradius",
-                //                    }
-                //},
-                //new Choice() {
-                //    Value = "Quantum",
-                //    Synonyms = new List<string>()
-                //                    {
-                //                        "quantum",
-                //                        "getquantum",
-                //                        "/getquantum",
-                //                    }
-                //},
-                //new Choice() {
-                //    Value = "Quantum Time",
-                //    Synonyms = new List<string>()
-                //                    {
-                //                        "quantumtime",
-                //                        "getquantumtime",
-                //                        "qtime",
-                //                        "/getqtime",
-                //                    }
-                //},
-                //new Choice() {
-                //    Value = "Psuedo",
-                //    Synonyms = new List<string>()
-                //                    {
-                //                        "psuedo",
-                //                        "getpsuedo",
-                //                        "/getpsuedo",
-                //                    }
-                //},
-                //new Choice() {
-                //    Value = "Pair",
-                //    Synonyms = new List<string>()
-                //                    {
-                //                        "pair",
-                //                        "getpair",
-                //                        "/getpair",
-                //                    }
-                //},
-                //new Choice() {
-                //    Value = "Point",
-                //    Synonyms = new List<string>()
-                //                    {
-                //                        "point",
-                //                        "getpoint",
-                //                        "/getpoint",
-                //                    }
-                //},
-                //new Choice() {
-                //    Value = "Water " + (UserProfile.IsIncludeWaterPoints ? "Off" : "On"),
-                //    Synonyms = new List<string>()
-                //                    {
-                //                        "water",
-                //                    }
-                //},
-                //new Choice() {
-                //    Value = "Save",
-                //    Synonyms = new List<string>()
-                //                    {
-                //                        "save",
-                //                        "setdefault",
-                //                    }
-                //},
             };
 
             return actionOptions;
