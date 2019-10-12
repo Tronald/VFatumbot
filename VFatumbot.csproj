@@ -7,7 +7,7 @@
 
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <DefineConstants>TRACE;DEBUG;NETCOREAPP;NETCOREAPP2_1;</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;NETCOREAPP;NETCOREAPP2_1</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -16,7 +16,7 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <IntermediateOutputPath>obj\Debug\netcoreapp2.1</IntermediateOutputPath>
     <Optimize>false</Optimize>
-    <DefineConstants>TRACE;DEBUG;NETCOREAPP;NETCOREAPP2_1;EMULATOR</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;EMULATORDEBUG;NETCOREAPP;NETCOREAPP2_1</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" Version="$(AspNetCoreAppRuntimeFrameworkVersion)">
@@ -37,7 +37,6 @@
   
   <ItemGroup>
     <Compile Remove="Cards2.cs" />
-    <Compile Remove="Models\ConversationData.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="BotLogic\" />
