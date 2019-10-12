@@ -50,8 +50,11 @@ namespace VFatumbot
             var userStateAccessors = UserState.CreateProperty<UserProfile>(nameof(UserProfile));
             UserProfile = await userStateAccessors.GetAsync(turnContext, () => new UserProfile());
 
+            var conversationStateAccessors = ConversationState.CreateProperty<ConversationData>(nameof(ConversationData));
+            var conversationData = await conversationStateAccessors.GetAsync(turnContext, () => new ConversationData());
+
             double lat = 0, lon = 0;
-            if (InterceptLocation(turnContext, cancellationToken, out lat, out lon)) // Intercept any locations the user sends us, no matter where in the conversation they are
+            if (InterceptLocation(turnContext, out lat, out lon)) // Intercept any locations the user sends us, no matter where in the conversation they are
             {
                 // Update user's location
                 UserProfile.Latitude = lat;
@@ -102,6 +105,13 @@ namespace VFatumbot
                 await base.OnTurnAsync(turnContext, cancellationToken);
             }
 
+            // Add message details to the conversation data.
+            // Convert saved Timestamp to local DateTimeOffset, then to string for display.
+            var messageTimeOffset = (DateTimeOffset)turnContext.Activity.Timestamp;
+            var localMessageTime = messageTimeOffset.ToLocalTime();
+            conversationData.Timestamp = localMessageTime.ToString();
+            conversationData.ChannelId = turnContext.Activity.ChannelId.ToString();
+
             // Save any state changes that might have occured during the turn.
             await ConversationState.SaveChangesAsync(turnContext, false, cancellationToken);
             await UserState.SaveChangesAsync(turnContext, false, cancellationToken);
@@ -112,12 +122,11 @@ namespace VFatumbot
             Logger.LogInformation("Running dialog with Message Activity.");
 
             // Run the Dialog with the new message Activity.
-            Dialog.ConversationState = ConversationState;
             Dialog.UserProfile = UserProfile;
             await Dialog.RunAsync(turnContext, ConversationState.CreateProperty<DialogState>(nameof(DialogState)), cancellationToken);
         }
 
-        protected bool InterceptLocation(ITurnContext turnContext, CancellationToken cancellationToken, out double lat, out double lon)
+        protected bool InterceptLocation(ITurnContext turnContext, out double lat, out double lon)
         {
             lat = lon = 0;
             bool isFound = false;
