@@ -53,8 +53,8 @@ namespace VFatumbot
             // PromptOptions also contains the list of choices available to the user.
             var options = new PromptOptions()
             {
-                Prompt = MessageFactory.Text("Choose the kind of scan:"),
-                RetryPrompt = MessageFactory.Text("That is not a valid scan."),
+                Prompt = MessageFactory.Text("Choose the kind of blind spot:"),
+                RetryPrompt = MessageFactory.Text("That is not a valid blind spot."),
                 Choices = GetActionChoices(),
             };
 
