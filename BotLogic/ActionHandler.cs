@@ -131,7 +131,11 @@ namespace VFatumbot.BotLogic
 
                                 await stepContext.Context.SendActivityAsync(ReplyFactory.CreateLocationCardsReply(incoords, w3wResult), cancellationToken);
 
-                                await ((AdapterWithErrorHandler)stepContext.Context.Adapter).ContinueDialogAsync(context, mainDialog, cancellationToken);
+                                //await ((AdapterWithErrorHandler)stepContext.Context.Adapter).ContinueDialogAsync(context, mainDialog, cancellationToken);
+
+                                // TODO: tesing reporting experiences dialog
+                                //await ((AdapterWithErrorHandler)stepContext.Context.Adapter).ContinueDialogAsync(context, new ReportDialog(), cancellationToken);
+                                await stepContext.BeginDialogAsync(nameof(ReportDialog), null, cancellationToken);
                             }
                         }
                         else if (ida.Count() < 1)
@@ -440,17 +444,5 @@ namespace VFatumbot.BotLogic
 					}, cancellationToken);
 			});
 		}
-
-        public async Task SettingsActionAsync(WaterfallStepContext stepContext, UserState userState, UserProfile userProfile, CancellationToken cancellationToken)
-        {
-            await stepContext.Context.SendActivityAsync(MessageFactory.Text($"Hi, your ID is {userProfile.UserId} and name is {userProfile.Username}"), cancellationToken);
-
-            userProfile.IsIncludeWaterPoints = !userProfile.IsIncludeWaterPoints;
-            await stepContext.Context.SendActivityAsync(MessageFactory.Text("Water points will be " + (userProfile.IsIncludeWaterPoints ? "included" : "skipped")), cancellationToken);
-
-            await stepContext.Context.SendActivityAsync(MessageFactory.Text($"Current location is {userProfile.Latitude},{userProfile.Longitude}"), cancellationToken);
-
-            await stepContext.Context.SendActivityAsync(MessageFactory.Text($"Current radius is {userProfile.Radius}m"), cancellationToken);
-        }
     }
 }

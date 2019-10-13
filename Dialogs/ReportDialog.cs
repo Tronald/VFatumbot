@@ -6,11 +6,10 @@ using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Builder.Dialogs.Choices;
 using Microsoft.Bot.Schema;
 using Microsoft.Extensions.Logging;
-using VFatumbot.BotLogic;
 
 namespace VFatumbot
 {
-    public class ScanDialog : ComponentDialog
+    public class ReportDialog : ComponentDialog
     {
         protected readonly ILogger _logger;
         protected readonly UserState _userState;
@@ -19,7 +18,7 @@ namespace VFatumbot
 
         protected UserProfile UserProfile;
 
-        public ScanDialog(UserState userState, object mainDialog, ILogger<MainDialog> logger) : base(nameof(ScanDialog))
+        public ReportDialog(UserState userState, object mainDialog, ILogger<MainDialog> logger) : base(nameof(ReportDialog))
         {
             _logger = logger;
             _userState = userState;
@@ -41,7 +40,7 @@ namespace VFatumbot
         // 2. Re-prompts the user when an invalid input is received.
         public async Task<DialogTurnResult> ChoiceActionStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
         {
-            _logger.LogInformation("ScanDialog.ChoiceActionStepAsync");
+            _logger.LogInformation("ReportDialog.ChoiceActionStepAsync");
 
             var userStateAccessors = _userState.CreateProperty<UserProfile>(nameof(UserProfile));
             UserProfile = await userStateAccessors.GetAsync(stepContext.Context, () => new UserProfile());
@@ -50,8 +49,8 @@ namespace VFatumbot
             // PromptOptions also contains the list of choices available to the user.
             var options = new PromptOptions()
             {
-                Prompt = MessageFactory.Text("Choose the kind of scan:"),
-                RetryPrompt = MessageFactory.Text("That is not a valid scan."),
+                Prompt = MessageFactory.Text("Did you visit this point and would you like to report on your experience?"),
+                RetryPrompt = MessageFactory.Text("That is not a valid answer."),
                 Choices = GetActionChoices(),
             };
 
@@ -63,7 +62,7 @@ namespace VFatumbot
         // This method is only called when a valid prompt response is parsed from the user's response to the ChoicePrompt.
         private async Task<DialogTurnResult> PerformActionStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
         {
-            _logger.LogInformation("ScanDialog.PerformActionStepAsync");
+            _logger.LogInformation("ReportDialog.PerformActionStepAsync");
 
             // Cards are sent as Attachments in the Bot Framework.
             // So we need to create a list of attachments for the reply activity.
@@ -72,42 +71,24 @@ namespace VFatumbot
             // Reply to the activity we received with an activity.
             var reply = MessageFactory.Attachment(attachments);
 
-            var actionHandler = new ActionHandler();
-
-            var goBackMainMenuThisRound = false;
-
             // Handle the chosen action
             switch (((FoundChoice)stepContext.Result).Value)
             {
-                case "Scan Attractor":
-                    await actionHandler.AttractionActionAsync(stepContext, UserProfile, cancellationToken, _mainDialog, true);
+                case "No":
+                    return await stepContext.EndDialogAsync();
                     break;
-                case "Scan Void":
-                    await actionHandler.VoidActionAsync(stepContext, UserProfile, cancellationToken, _mainDialog, true);
+                case "Yes and report":
+                    return await stepContext.EndDialogAsync();
                     break;
-                case "Scan Anomaly":
-                    await actionHandler.AnomalyActionAsync(stepContext, UserProfile, cancellationToken, _mainDialog, true);
-                    break;
-                case "Scan Pair":
-                    await actionHandler.PairActionAsync(stepContext, UserProfile, cancellationToken, _mainDialog, true);
-                    break;
-                case "< Back":
-                    goBackMainMenuThisRound = true;
+                case "Yes sans report":
+                    return await stepContext.EndDialogAsync();
                     break;
             }
 
             // Send the reply
             await stepContext.Context.SendActivityAsync(reply, cancellationToken);
 
-            if (goBackMainMenuThisRound)
-            {
-                return await stepContext.ReplaceDialogAsync(nameof(MainDialog));
-            }
-            else
-            {
-                // Long-running tasks like /getattractors etc will make use of ContinueDialog to re-prompt users
-                return await stepContext.EndDialogAsync();
-            }
+            return await stepContext.NextAsync(cancellationToken: cancellationToken);
         }
 
         private IList<Choice> GetActionChoices()
@@ -115,45 +96,21 @@ namespace VFatumbot
             var actionOptions = new List<Choice>()
             {
                 new Choice() {
-                    Value = "Scan Attractor",
+                    Value = "No",
                     Synonyms = new List<string>()
                                     {
-                                        "scanattractor",
-                                        "/scanattractor",
                                     }
                 },
                 new Choice() {
-                    Value = "Scan Void",
+                    Value = "Yes and report",
                     Synonyms = new List<string>()
                                     {
-                                        "scanvoid",
-                                        "/scanvoid",
                                     }
                 },
                 new Choice() {
-                    Value = "Scan Anomaly",
+                    Value = "Yes sans report",
                     Synonyms = new List<string>()
                                     {
-                                        "scananomaly",
-                                        "/scananomaly",
-                                    }
-                },
-                new Choice() {
-                    Value = "Scan Pair",
-                    Synonyms = new List<string>()
-                                    {
-                                        "scanpair",
-                                        "/scanpair",
-                                    }
-                },
-                new Choice() {
-                    Value = "< Back",
-                    Synonyms = new List<string>()
-                                    {
-                                        "<",
-                                        "Back",
-                                        "back",
-                                        "<back",
                                     }
                 },
             };

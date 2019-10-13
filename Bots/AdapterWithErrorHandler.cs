@@ -48,7 +48,7 @@ namespace VFatumbot
 
         // Used as a callback to continue the dialog (i.e. prompt user for next action) after long tasks
         // like getting attractors etc have completed their work on a background thread
-        public async Task ContinueDialogAsync(ITurnContext turnContext, MainDialog dialog, CancellationToken cancellationToken)
+        public async Task ContinueDialogAsync(ITurnContext turnContext, Dialog dialog, CancellationToken cancellationToken)
         {
             var conversationStateAccessors = _conversationState.CreateProperty<DialogState>(nameof(DialogState));
 

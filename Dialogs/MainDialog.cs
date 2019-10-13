@@ -26,8 +26,10 @@ namespace VFatumbot
             _userState = userState;
 
             // Define the main dialog and its related components.
-            AddDialog(new ScanDialog(userState, this, logger));
             AddDialog(new BlindSpotsDialog(userState, this, logger));
+            AddDialog(new ReportDialog(userState, this, logger));
+            AddDialog(new ScanDialog(userState, this, logger));
+            AddDialog(new SettingsDialog(userState, this, logger));
             AddDialog(new ChoicePrompt(nameof(ChoicePrompt)));
             AddDialog(new WaterfallDialog(nameof(WaterfallDialog), new WaterfallStep[]
             {
@@ -110,9 +112,7 @@ namespace VFatumbot
                     await actionHandler.LocationActionAsync(stepContext, UserProfile, cancellationToken);
                     break;
                 case "Settings":
-                    repromptThisRound = true;
-                    await actionHandler.SettingsActionAsync(stepContext, _userState, UserProfile, cancellationToken); // TODO: Make Settings Dialog instead
-                    break;
+                    return await stepContext.BeginDialogAsync(nameof(SettingsDialog), this, cancellationToken);
             }
 
             // Send the reply
