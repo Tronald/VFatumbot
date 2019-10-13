@@ -96,6 +96,8 @@ namespace VFatumbot
                     await turnContext.SendActivityAsync(ReplyFactory.CreateLocationCardsReply(incoords, w3wResult), cancellationToken);
 
                     //TODO: FatumFunctions.Tolog(message, "locset");
+
+                    await base.OnTurnAsync(turnContext, cancellationToken);
                 }
             }
             else if (!string.IsNullOrEmpty(turnContext.Activity.Text) &&
