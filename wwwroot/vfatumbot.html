@@ -20,11 +20,88 @@
             height: 100%;
             width: 100%;
         }
+
+        /* The snackbar - position it at the bottom and in the middle of the screen */
+        #snackbar {
+            visibility: hidden; /* Hidden by default. Visible on click */
+            min-width: 250px; /* Set a default minimum width */
+            margin-left: -125px; /* Divide value of min-width by 2 */
+            background-color: #333; /* Black background color */
+            color: #fff; /* White text color */
+            text-align: center; /* Centered text */
+            border-radius: 2px; /* Rounded borders */
+            padding: 16px; /* Padding */
+            position: fixed; /* Sit on top of the screen */
+            z-index: 1; /* Add a z-index if needed */
+            left: 50%; /* Center the snackbar */
+            bottom: 30px; /* 30px from the bottom */
+        }
+
+        /* Show the snackbar when clicking on a button (class added with JavaScript) */
+        #snackbar.show {
+            visibility: visible; /* Show the snackbar */
+            /* Add animation: Take 0.5 seconds to fade in and out the snackbar.
+However, delay the fade out process for 2.5 seconds */
+            -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+            animation: fadein 0.5s, fadeout 0.5s 2.5s;
+        }
+
+        /* Animations to fade the snackbar in and out */
+        @-webkit-keyframes fadein {
+            from {
+                bottom: 0;
+                opacity: 0;
+            }
+
+            to {
+                bottom: 30px;
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadein {
+            from {
+                bottom: 0;
+                opacity: 0;
+            }
+
+            to {
+                bottom: 30px;
+                opacity: 1;
+            }
+        }
+
+        @-webkit-keyframes fadeout {
+            from {
+                bottom: 30px;
+                opacity: 1;
+            }
+
+            to {
+                bottom: 0;
+                opacity: 0;
+            }
+        }
+
+        @keyframes fadeout {
+            from {
+                bottom: 30px;
+                opacity: 1;
+            }
+
+            to {
+                bottom: 0;
+                opacity: 0;
+            }
+        }
     </style>
 </head>
 <body>
     <div id="webchat" role="main"></div>
+    <div id="snackbar"></div>
     <script>(async function () {
+            showSnackbar("Connecting to bot...");
+
             // Re-use credentials if they exist in cookies
             // TODO: is there a better persistent way than cookies?
             var userId = getCookie('userId');
@@ -62,6 +139,7 @@
                 type: 'event',
             };
             directLine.postActivity(activity).subscribe(function (id) {
+                hideSnackbar();
             });
 
             // Replace "upload file button and icon with "send location" icon and logic
@@ -72,19 +150,19 @@
                     uploadFileDiv = undefined;
                 }
             }
-            uploadFileDiv.replaceWith("<div class=\"css-1lzfo2b css-14x775w\"><input aria-hidden=\"true\" multiple=\"\" role=\"button\" tabindex=\"-1\" type=\"file\"><button class=\"css-115fwte\" id=\"sendLocationBtn\" title=\"Send location\" type=\"button\"><svg height=\"28\" viewBox=\"0 -3 28 28\" width=\"28\"><path d=\"M18.5 2c1.309 0 2.5 1.16 2.5 2.434 0 1.358-1.044 3.303-2.5 5.723-1.456-2.42-2.5-4.365-2.5-5.723 0-1.274 1.191-2.434 2.5-2.434zm0-2c-2.361 0-4.5 1.985-4.5 4.434 0 2.45 1.951 5.373 4.5 9.566 2.549-4.193 4.5-7.116 4.5-9.566 0-2.449-2.139-4.434-4.5-4.434zm0 6c-.828 0-1.5-.672-1.5-1.5s.672-1.5 1.5-1.5 1.5.672 1.5 1.5-.672 1.5-1.5 1.5zm-7.26 1.237c-.004-.009-.289-.017-.24-.078l.137-.085c.012-.077.072-.162-.008-.304l.047-.125-.1.029s.141-.606.33-.332l-.08.093c.123.122.156.426.195.623.115.06.295.071.088.175.107-.018-.561.286-.648.161-.065-.076.289-.127.279-.157zm-.715-.159c-.078.078.002.128.082.094.113-.05.268-.048.283-.202l.074-.091c.031-.049-.062-.126-.102-.135-.059-.012-.1.064-.137.095l-.066.017-.062.08.008.044-.08.098zm7 9.167l-.734-1.206-.723-1.186c-.73-1.194-1.389-2.276-1.961-3.296l-.07.067c-.377.156-.943-.509-1.34-.531.193.03.018-.49.018-.524-.152-.189-1.123.021-1.377.055-.479.063-.979.057-1.346.355-.258.21-.262.551-.525.716-.17.106-.355.072-.502.209-.258.245-.553.607-.697.929-.061.135.078.458.043.632-.336 1.063.086 2.538 1.375 2.701.312.039.639.209.955.114.252-.076.475-.248.746-.268.377-.025.219.529.736.379.252-.074.365.172.365.359-.084.391-.268.609.088.883.242.188.443.456.486.78.027.182.197.494-.014.602-.15.075-.26.507-.258.649.031.165.365.481.467.621.145.2.039.436.158.663.121.232.236.41.322.645.111.324.959-.007 1.156-.006.674.004 1.014-.944 1.488-1.235.266-.165.191-.616.51-.848.295-.215.607-.344.635-.741.021-.344-.258-1.062-.104-1.353l.103-.165zm-7.302-7.76c.041.172-.119.645-.154.795-.031.138.443.226.416.295.004-.008.641-.22.705-.275l.143-.323c.121-.081.248-.146.385-.196l.164-.285c.055-.021.709-.123.756-.101.164.075.469.389.582.531l.041.032c-.326-.67-.59-1.314-.795-1.942l-.084.036c-.221 0-.527.251-.662.405-.096.104-.67.337-.732.33.33.035.314.276.287.482-.068.476-1.095.035-1.052.216zm10.904 5.049c-.277 4.807-4.252 8.623-9.129 8.623-2.604 0-4.951-1.086-6.619-2.83-.197-.208-.346-.7-.02-.9l.332-.085c.258-.22-.242-1.111-.045-1.254.617-.441.324-.982-.055-1.429-.16-.19-1.043-1.1-1.143-.937.074-.249-.16-.85-.301-1.087-.24-.398-.553-.643-.68-1.081-.047-.174-.047-.703-.151-.826-.041-.05-.359-.185-.348-.257.305-1.82 1.148-3.458 2.365-4.751l.819-.33c.516-.773.545-.173 1.008-.375.154 0 .332-.634.496-.734.289-.185.068-.185.016-.27-.113-.184 2.41-1.103 2.453-.938.033.14-1.25.809-1.109.788-.325.043-.387.627-.327.625.162-.005 1.182-.774 1.656-.61.467.161 1.301-.37 1.627-.64l.042-.039c.029-.761.195-1.494.48-2.172l-.494-.025c-6.074 0-11 4.925-11 11s4.926 11 11 11 11-4.925 11-11c0-.764-.078-1.509-.227-2.229-.49.864-1.043 1.779-1.646 2.763z\" clip-rule=\"evenodd\"></path></svg></button></div>");
+            uploadFileDiv.replaceWith("<div class=\"css-1lzfo2b css-14x775w\"><input aria-hidden=\"true\" multiple=\"\" role=\"button\" tabindex=\"-1\"><button class=\"css-115fwte\" id=\"sendLocationBtn\" title=\"Send location\" type=\"button\"><svg height=\"28\" viewBox=\"0 -3 28 28\" width=\"28\"><path d=\"M18.5 2c1.309 0 2.5 1.16 2.5 2.434 0 1.358-1.044 3.303-2.5 5.723-1.456-2.42-2.5-4.365-2.5-5.723 0-1.274 1.191-2.434 2.5-2.434zm0-2c-2.361 0-4.5 1.985-4.5 4.434 0 2.45 1.951 5.373 4.5 9.566 2.549-4.193 4.5-7.116 4.5-9.566 0-2.449-2.139-4.434-4.5-4.434zm0 6c-.828 0-1.5-.672-1.5-1.5s.672-1.5 1.5-1.5 1.5.672 1.5 1.5-.672 1.5-1.5 1.5zm-7.26 1.237c-.004-.009-.289-.017-.24-.078l.137-.085c.012-.077.072-.162-.008-.304l.047-.125-.1.029s.141-.606.33-.332l-.08.093c.123.122.156.426.195.623.115.06.295.071.088.175.107-.018-.561.286-.648.161-.065-.076.289-.127.279-.157zm-.715-.159c-.078.078.002.128.082.094.113-.05.268-.048.283-.202l.074-.091c.031-.049-.062-.126-.102-.135-.059-.012-.1.064-.137.095l-.066.017-.062.08.008.044-.08.098zm7 9.167l-.734-1.206-.723-1.186c-.73-1.194-1.389-2.276-1.961-3.296l-.07.067c-.377.156-.943-.509-1.34-.531.193.03.018-.49.018-.524-.152-.189-1.123.021-1.377.055-.479.063-.979.057-1.346.355-.258.21-.262.551-.525.716-.17.106-.355.072-.502.209-.258.245-.553.607-.697.929-.061.135.078.458.043.632-.336 1.063.086 2.538 1.375 2.701.312.039.639.209.955.114.252-.076.475-.248.746-.268.377-.025.219.529.736.379.252-.074.365.172.365.359-.084.391-.268.609.088.883.242.188.443.456.486.78.027.182.197.494-.014.602-.15.075-.26.507-.258.649.031.165.365.481.467.621.145.2.039.436.158.663.121.232.236.41.322.645.111.324.959-.007 1.156-.006.674.004 1.014-.944 1.488-1.235.266-.165.191-.616.51-.848.295-.215.607-.344.635-.741.021-.344-.258-1.062-.104-1.353l.103-.165zm-7.302-7.76c.041.172-.119.645-.154.795-.031.138.443.226.416.295.004-.008.641-.22.705-.275l.143-.323c.121-.081.248-.146.385-.196l.164-.285c.055-.021.709-.123.756-.101.164.075.469.389.582.531l.041.032c-.326-.67-.59-1.314-.795-1.942l-.084.036c-.221 0-.527.251-.662.405-.096.104-.67.337-.732.33.33.035.314.276.287.482-.068.476-1.095.035-1.052.216zm10.904 5.049c-.277 4.807-4.252 8.623-9.129 8.623-2.604 0-4.951-1.086-6.619-2.83-.197-.208-.346-.7-.02-.9l.332-.085c.258-.22-.242-1.111-.045-1.254.617-.441.324-.982-.055-1.429-.16-.19-1.043-1.1-1.143-.937.074-.249-.16-.85-.301-1.087-.24-.398-.553-.643-.68-1.081-.047-.174-.047-.703-.151-.826-.041-.05-.359-.185-.348-.257.305-1.82 1.148-3.458 2.365-4.751l.819-.33c.516-.773.545-.173 1.008-.375.154 0 .332-.634.496-.734.289-.185.068-.185.016-.27-.113-.184 2.41-1.103 2.453-.938.033.14-1.25.809-1.109.788-.325.043-.387.627-.327.625.162-.005 1.182-.774 1.656-.61.467.161 1.301-.37 1.627-.64l.042-.039c.029-.761.195-1.494.48-2.172l-.494-.025c-6.074 0-11 4.925-11 11s4.926 11 11 11 11-4.925 11-11c0-.764-.078-1.509-.227-2.229-.49.864-1.043 1.779-1.646 2.763z\" clip-rule=\"evenodd\"></path></svg></button></div>");
             $('#sendLocationBtn').click(function () {
                 if (!navigator.geolocation) {
                     alert("This browser doesn't support getting your location.'")
                 } else {
+                    showSnackbar("Sending your location...");
                     var position = navigator.geolocation.getCurrentPosition(function (position) {
-                        console.log("location got");
                         var activity = {
                             from: {
                                 id: userId,
                                 name: username
                             },
-                            type: 'event',
+                            type: 'message',
                             entities: [{
                                 geo: {
                                     elevation: 0,
@@ -96,6 +174,7 @@
                             }]
                         };
                         directLine.postActivity(activity).subscribe(function (id) {
+                            hideSnackbar();
                         });
                     });
                 }
@@ -104,6 +183,19 @@
             //
             // Helper functions below
             //
+
+            // Flash a snackbar (toast) message
+            function showSnackbar(msg, timeout = 30000) {
+                // Flash a snackbar message
+                var snackbar = document.getElementById("snackbar");
+                snackbar.className = "show";
+                $("#snackbar").text(msg)
+                setTimeout(function () { snackbar.className = snackbar.className.replace("show", ""); }, timeout);
+            };
+            function hideSnackbar() {
+                var snackbar = document.getElementById("snackbar");
+                snackbar.className = snackbar.className.replace("show", "");
+            };
 
             // Random ID generator
             // https://gist.github.com/gordonbrander/2230317
