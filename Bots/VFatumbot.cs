@@ -38,12 +38,12 @@ namespace VFatumbot
                 {
                     var userStateAccessors = UserState.CreateProperty<UserProfile>(nameof(UserProfile));
                     UserProfile = await userStateAccessors.GetAsync(turnContext, () => new UserProfile());
+                    Dialog.UserProfile = UserProfile;
 
                     if (UserProfile.IsLocationSet)
                     {
                         await turnContext.SendActivityAsync(MessageFactory.Text("Welcome back to VFatumbot!"), cancellationToken);
                         await turnContext.SendActivityAsync(MessageFactory.Text("Don't forget to send your current location."), cancellationToken);
-                        Dialog.UserProfile = UserProfile;
                         await Dialog.RunAsync(turnContext, ConversationState.CreateProperty<DialogState>(nameof(DialogState)), cancellationToken);
                     }
                     else
