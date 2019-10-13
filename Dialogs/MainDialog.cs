@@ -43,7 +43,7 @@ namespace VFatumbot
 
         // 1. Prompts the user if the user is not in the middle of a dialog.
         // 2. Re-prompts the user when an invalid input is received.
-        public async Task<DialogTurnResult> ChoiceActionStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
+        private async Task<DialogTurnResult> ChoiceActionStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
         {
             _logger.LogInformation("MainDialog.ChoiceActionStepAsync");
 
