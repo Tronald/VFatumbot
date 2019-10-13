@@ -1,7 +1,8 @@
 By using the VFatumbot you do so at your own risk! In no way are we or the official Fatum Project guys responsible or will be held liable for any positive or adverse affects or consequences from the use of this platform.
 
 VFatumbot is a fork of the original Fatumbot. The intention is not to replace it or offer a rival, but rather to prototype/get some feedback on some ideas we have like:
-- Making it more accessible to people not only on Telegram via Facebook etc.
+- Making it more accessible to people not only on Telegram via Facebook, WebChat etc.
+- Ability to set location by searching addresses.
 - Option to ignore water points.
 - Offering an easy virtual trip to points via Google Street View/Earth (for you lazy ones).
 - Make it a bit easier to use with buttons.

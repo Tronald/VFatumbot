@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Geocoding;
+using Geocoding.Google;
 using Newtonsoft.Json;
 
 namespace VFatumbot.BotLogic
@@ -14,6 +17,19 @@ namespace VFatumbot.BotLogic
             var jsonContent = response.Content.ReadAsStringAsync().Result;
             dynamic result = JsonConvert.DeserializeObject(jsonContent);
             return result;
+        }
+
+        public static async Task<Tuple<double, double>> GeocodeAddressAsync(string address)
+        {
+            IGeocoder geocoder = new GoogleGeocoder() { ApiKey = Consts.GOOGLE_MAPS_API_KEY };
+            IEnumerable<Address> addresses = await geocoder.GeocodeAsync(address);
+
+            if (addresses.Count() != 0)
+            {
+                return new Tuple<double, double>(addresses.First().Coordinates.Latitude, addresses.First().Coordinates.Longitude);
+            }
+
+            return null;
         }
 
         public static async Task<bool> IsWaterCoordinatesAsync(double[] incoords)

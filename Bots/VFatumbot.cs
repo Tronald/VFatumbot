@@ -49,7 +49,7 @@ namespace VFatumbot
                     else
                     {
                         await turnContext.SendActivityAsync(MessageFactory.Text("Welcome to VFatumbot. Here we're trying at some new features based on the original [Fatum Project bot](https://www.reddit.com/r/randonauts/). Type \"help\" anytime for more info."), cancellationToken);
-                        await turnContext.SendActivityAsync(MessageFactory.Text("Start off by sending your location or a [Google Maps URL](https://www.google.com/maps/@51.509865,-0.118092,13z). Don't forget you can type \"help\" for more info."), cancellationToken);
+                        await turnContext.SendActivityAsync(MessageFactory.Text("Start off by sending your location, or typing \"search <address>\", or a [Google Maps URL](https://www.google.com/maps/@51.509865,-0.118092,13z). Don't forget you can type \"help\" for more info."), cancellationToken);
                     }
                 }
             }
@@ -66,30 +66,41 @@ namespace VFatumbot
             double lat = 0, lon = 0;
             if (InterceptLocation(turnContext, out lat, out lon)) // Intercept any locations the user sends us, no matter where in the conversation they are
             {
-                // Update user's location
-                UserProfile.Latitude = lat;
-                UserProfile.Longitude = lon;
+                bool cont = true;
+                if (lat == Consts.INVALID_COORD && lon == Consts.INVALID_COORD)
+                {
+                    // Do a geocode query lookup against the address the user sent
+                    var result = await Helpers.GeocodeAddressAsync(turnContext.Activity.Text.ToLower().Replace("search", ""));
+                    if (result != null)
+                    {
+                        lat = result.Item1;
+                        lon = result.Item2;
+                    }
+                    else
+                    {
+                        await turnContext.SendActivityAsync(MessageFactory.Text("Address not found."), cancellationToken);
+                        cont = false;
+                    }
+                }
 
-                await turnContext.SendActivityAsync(MessageFactory.Text($"New location confirmed @ {lat},{lon}"), cancellationToken);
+                if (cont)
+                {
+                    // Update user's location
+                    UserProfile.Latitude = lat;
+                    UserProfile.Longitude = lon;
 
-                //await turnContext.SendActivityAsync(MessageFactory.Text(Newtonsoft.Json.JsonConvert.SerializeObject(turnContext.Activity)), cancellationToken);
+                    await turnContext.SendActivityAsync(MessageFactory.Text($"New location confirmed @ {lat},{lon}"), cancellationToken);
 
-                var incoords = new double[] { lat, lon };
-                var w3wResult = await Helpers.GetWhat3WordsAddressAsync(incoords);
-                await turnContext.SendActivityAsync(ReplyFactory.CreateLocationCardsReply(incoords, w3wResult), cancellationToken);
+                    var incoords = new double[] { lat, lon };
+                    var w3wResult = await Helpers.GetWhat3WordsAddressAsync(incoords);
+                    await turnContext.SendActivityAsync(ReplyFactory.CreateLocationCardsReply(incoords, w3wResult), cancellationToken);
 
-                //var isWater = await Helpers.IsWaterCoordinatesAsync(new double[] { UserProfile.Latitude, UserProfile.Longitude });
-                //await turnContext.SendActivityAsync(MessageFactory.Text($"Is it a water point? {isWater}"), cancellationToken);
-
-                //TODO: FatumFunctions.Tolog(message, "locset");
-
-                await base.OnTurnAsync(turnContext, cancellationToken);
+                    //TODO: FatumFunctions.Tolog(message, "locset");
+                }
             }
             else if (!string.IsNullOrEmpty(turnContext.Activity.Text) &&
                 (
                     turnContext.Activity.Text.EndsWith("help", StringComparison.InvariantCultureIgnoreCase)
-                    //|| turnContext.Activity.Text.Equals("hi", StringComparison.InvariantCultureIgnoreCase) ||
-                    //|| turnContext.Activity.Text.Equals("hello", StringComparison.InvariantCultureIgnoreCase)
                 )
             )
             {
@@ -178,7 +189,14 @@ namespace VFatumbot
                 }
             }
 
-            // TODO: take any unexpected input to be an address and search its lats/longs on the Google Map API? Have to take into consideration the dialog state.
+            // Geocode the address the user sent
+            if (!isFound && !string.IsNullOrEmpty(turnContext.Activity.Text) && turnContext.Activity.Text.ToLower().StartsWith("search"))
+            {
+                // dirty hack: get the calling method which is already async to do the Google Geocode async API call
+                lat = lon = Consts.INVALID_COORD;
+
+                return true;
+            }
 
             return isFound;
         }
