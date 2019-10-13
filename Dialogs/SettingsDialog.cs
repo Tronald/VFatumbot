@@ -24,14 +24,17 @@ namespace VFatumbot
             _userState = userState;
             _mainDialog = (MainDialog)mainDialog;
 
+            AddDialog(new ChoicePrompt(nameof(ChoicePrompt)));
             AddDialog(new NumberPrompt<int>(nameof(NumberPrompt<int>)));
             AddDialog(new TextPrompt(nameof(TextPrompt)));
 
             AddDialog(new WaterfallDialog(nameof(WaterfallDialog), new WaterfallStep[]
             {
                 CurrentSettingsStepAsync,
+                UpdateSettingsYesOrNoStepAsync,
                 RadiusStepAsync,
                 WaterPointsStepAsync,
+                UpdateWaterPointsYesOrNoStepAsync,
                 FinishSettingsStepAsync
             }));
 
@@ -40,12 +43,25 @@ namespace VFatumbot
 
         private async Task<DialogTurnResult> CurrentSettingsStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
         {
-            var userStateAccessors = _userState.CreateProperty<UserProfile>(nameof(UserProfile));
-            UserProfile = await userStateAccessors.GetAsync(stepContext.Context, () => new UserProfile());
-            await _userState.SaveChangesAsync(stepContext.Context, true, cancellationToken);
+            UserProfile = _mainDialog.UserProfile;
 
             await ShowCurrentSettingsAsync(stepContext, cancellationToken);
-            return await stepContext.NextAsync(cancellationToken: cancellationToken);
+
+            return await stepContext.PromptAsync(nameof(ChoicePrompt), GetPromptOptions("Update your settings?"), cancellationToken);
+        }
+
+        private async Task<DialogTurnResult> UpdateSettingsYesOrNoStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
+        {
+            _logger.LogInformation("SettingsDialog.UpdateSettingsYesOrNoStepAsync");
+
+            switch (((FoundChoice)stepContext.Result).Value)
+            {
+                case "Yes":
+                    return await stepContext.NextAsync();
+                case "No":
+                default:
+                    return await stepContext.ReplaceDialogAsync(nameof(MainDialog), cancellationToken);
+            }
         }
 
         private static async Task<DialogTurnResult> RadiusStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
@@ -57,15 +73,33 @@ namespace VFatumbot
         private async Task<DialogTurnResult> WaterPointsStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
         {
             UserProfile.Radius = (int)stepContext.Result;
-            var promptOptions = new PromptOptions { Prompt = MessageFactory.Text("Include water points? Yes/No") };
             await _userState.SaveChangesAsync(stepContext.Context, true, cancellationToken);
 
-            return await stepContext.PromptAsync(nameof(TextPrompt), promptOptions, cancellationToken);
+            return await stepContext.PromptAsync(nameof(ChoicePrompt), GetPromptOptions("Include water points?"), cancellationToken);
+        }
+
+        private async Task<DialogTurnResult> UpdateWaterPointsYesOrNoStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
+        {
+            _logger.LogInformation("SettingsDialog.UpdateWaterPointsYesOrNoStepAsync");
+
+            switch (((FoundChoice)stepContext.Result).Value)
+            {
+                case "Yes":
+                    UserProfile.IsIncludeWaterPoints = true;
+                    break;
+                case "No":
+                default:
+                    UserProfile.IsIncludeWaterPoints = false;
+                    break;
+            }
+
+            await _userState.SaveChangesAsync(stepContext.Context, true, cancellationToken);
+
+            return await stepContext.NextAsync();
         }
 
         private async Task<DialogTurnResult> FinishSettingsStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
         {
-            UserProfile.IsIncludeWaterPoints = ((string)stepContext.Result).ToLower().Contains("yes");
             await ShowCurrentSettingsAsync(stepContext, cancellationToken);
             await stepContext.EndDialogAsync(cancellationToken);
             return await stepContext.ReplaceDialogAsync(nameof(MainDialog), cancellationToken);
@@ -73,13 +107,39 @@ namespace VFatumbot
 
         public async Task ShowCurrentSettingsAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
         {
-            await stepContext.Context.SendActivityAsync(MessageFactory.Text($"Hi, your ID is {UserProfile.UserId} and name is {UserProfile.Username}"), cancellationToken);
+            await stepContext.Context.SendActivityAsync(MessageFactory.Text($"ID is {UserProfile.UserId} and name is {UserProfile.Username}"), cancellationToken);
 
             await stepContext.Context.SendActivityAsync(MessageFactory.Text("Water points will be " + (UserProfile.IsIncludeWaterPoints ? "included" : "skipped")), cancellationToken);
 
             await stepContext.Context.SendActivityAsync(MessageFactory.Text($"Current location is {UserProfile.Latitude},{UserProfile.Longitude}"), cancellationToken);
 
             await stepContext.Context.SendActivityAsync(MessageFactory.Text($"Current radius is {UserProfile.Radius}m"), cancellationToken);
+        }
+
+        private PromptOptions GetPromptOptions(string prompt)
+        {
+            return new PromptOptions()
+            {
+                Prompt = MessageFactory.Text(prompt),
+                RetryPrompt = MessageFactory.Text($"That is not a valid answer. {prompt}"),
+                Choices = new List<Choice>()
+                                {
+                                    new Choice() {
+                                        Value = "Yes",
+                                        Synonyms = new List<string>()
+                                                        {
+                                                            "yes",
+                                                        }
+                                    },
+                                    new Choice() {
+                                        Value = "No",
+                                        Synonyms = new List<string>()
+                                                        {
+                                                            "no",
+                                                        }
+                                    },
+                                }
+            };
         }
     }
 }
