@@ -49,7 +49,7 @@ namespace VFatumbot
             // PromptOptions also contains the list of choices available to the user.
             var options = new PromptOptions()
             {
-                Prompt = MessageFactory.Text("Did you visit this point and would you like to report on your experience?"),
+                Prompt = MessageFactory.Text("(IN-DEV, not functioning yet) Did you visit this point and would you like to report on your experience?"),
                 RetryPrompt = MessageFactory.Text("That is not a valid answer."),
                 Choices = GetActionChoices(),
             };
