@@ -39,8 +39,18 @@ namespace VFatumbot
                     var userStateAccessors = UserState.CreateProperty<UserProfile>(nameof(UserProfile));
                     UserProfile = await userStateAccessors.GetAsync(turnContext, () => new UserProfile());
 
-                    await turnContext.SendActivityAsync(MessageFactory.Text("Welcome to VFatumbot. Here we're trying at some new features based on the original [Fatum Project bot](https://www.reddit.com/r/randonauts/). Type \"help\" anytime for more info."), cancellationToken);
-                    await turnContext.SendActivityAsync(MessageFactory.Text("Start off by sending your location or a [Google Maps URL](https://www.google.com/maps/@51.509865,-0.118092,13z). Don't forget you can send \"help\" for more info."), cancellationToken);
+                    if (UserProfile.IsLocationSet)
+                    {
+                        await turnContext.SendActivityAsync(MessageFactory.Text("Welcome back to VFatumbot!"), cancellationToken);
+                        await turnContext.SendActivityAsync(MessageFactory.Text("Don't forget to send your current location."), cancellationToken);
+                        Dialog.UserProfile = UserProfile;
+                        await Dialog.RunAsync(turnContext, ConversationState.CreateProperty<DialogState>(nameof(DialogState)), cancellationToken);
+                    }
+                    else
+                    {
+                        await turnContext.SendActivityAsync(MessageFactory.Text("Welcome to VFatumbot. Here we're trying at some new features based on the original [Fatum Project bot](https://www.reddit.com/r/randonauts/). Type \"help\" anytime for more info."), cancellationToken);
+                        await turnContext.SendActivityAsync(MessageFactory.Text("Start off by sending your location or a [Google Maps URL](https://www.google.com/maps/@51.509865,-0.118092,13z). Don't forget you can type \"help\" for more info."), cancellationToken);
+                    }
                 }
             }
         }
