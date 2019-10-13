@@ -38,7 +38,7 @@ namespace VFatumbot.BotLogic
                 //if (metasessions.ContainsKey(u) == true)
                 //{ await Bot.SendTextMessageAsync(message.Chat.Id, "Your scanning session is already in progress."); }
                 //else
-                await stepContext.Context.SendActivityAsync(MessageFactory.Text("Generation may take from 5 to 15 minutes."), cancellationToken);
+                await stepContext.Context.SendActivityAsync(MessageFactory.Text("Generation may take from 10 to 20 minutes."), cancellationToken);
             }
             else
             {
@@ -101,7 +101,7 @@ namespace VFatumbot.BotLogic
                 //if (metasessions.ContainsKey(u) == true)
                 //{ await Bot.SendTextMessageAsync(message.Chat.Id, "Your scanning session is already in progress."); }
                 //else
-                await stepContext.Context.SendActivityAsync(MessageFactory.Text("Generation may take from 5 to 15 minutes."), cancellationToken);
+                await stepContext.Context.SendActivityAsync(MessageFactory.Text("Generation may take from 10 to 20 minutes."), cancellationToken);
             }
             else
             {
@@ -177,7 +177,7 @@ namespace VFatumbot.BotLogic
                 //if (metasessions.ContainsKey(u) == true)
                 //{ await Bot.SendTextMessageAsync(message.Chat.Id, "Your scanning session is already in progress."); }
                 //else
-                await stepContext.Context.SendActivityAsync(MessageFactory.Text("Generation may take from 5 to 15 minutes."), cancellationToken);
+                await stepContext.Context.SendActivityAsync(MessageFactory.Text("Generation may take from 10 to 20 minutes."), cancellationToken);
             }
             else
             {
@@ -279,7 +279,7 @@ namespace VFatumbot.BotLogic
                 //if (metasessions.ContainsKey(u) == true)
                 //{ await Bot.SendTextMessageAsync(message.Chat.Id, "Your scanning session is already in progress."); }
                 //else
-                await stepContext.Context.SendActivityAsync(MessageFactory.Text("Generation may take from 5 to 15 minutes."), cancellationToken);
+                await stepContext.Context.SendActivityAsync(MessageFactory.Text("Generation may take from 10 to 20 minutes."), cancellationToken);
             }
             else
             {
