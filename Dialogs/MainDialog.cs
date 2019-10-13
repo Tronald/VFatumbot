@@ -87,6 +87,9 @@ namespace VFatumbot
                 case "Anomaly":
                     await actionHandler.AnomalyActionAsync(stepContext, UserProfile, cancellationToken, this);
                     break;
+                case "Intent Suggestions":
+                    await actionHandler.IntentSuggestionActionAsync(stepContext, UserProfile, cancellationToken, this);
+                    break;
                 case "Pair":
                     await actionHandler.PairActionAsync(stepContext, UserProfile, cancellationToken, this);
                     break;
@@ -162,6 +165,12 @@ namespace VFatumbot
                                         "ida",
                                         "getida",
                                         "/getida",
+                                    }
+                },
+                new Choice() {
+                    Value = "Intent Suggestions",
+                    Synonyms = new List<string>()
+                                    {
                                     }
                 },
                 new Choice() {

@@ -220,6 +220,23 @@ namespace VFatumbot.BotLogic
             });
         }
 
+        public async Task IntentSuggestionActionAsync(WaterfallStepContext stepContext, UserProfile userProfile, CancellationToken cancellationToken, MainDialog mainDialog)
+        {
+            await stepContext.Context.SendActivityAsync(MessageFactory.Text("Wait a minute. Quantumly randomizing the English dictionary for you."), cancellationToken);
+
+            DispatchWorkerThread((object sender, DoWorkEventArgs e) =>
+            {
+                stepContext.Context.Adapter.ContinueConversationAsync(Consts.APP_ID,
+                    ((Microsoft.Bot.Schema.Activity)stepContext.Context.Activity).GetConversationReference(),
+                    async (context, token) =>
+                    {
+                        string[] intentSuggestions = await Helpers.GetIntentSuggestionsAsync();
+                        await stepContext.Context.SendActivityAsync(MessageFactory.Text("Intent suggestions: " + string.Join(", ", intentSuggestions)), cancellationToken);
+                        await ((AdapterWithErrorHandler)stepContext.Context.Adapter).ContinueDialogAsync(context, mainDialog, cancellationToken);
+                    }, cancellationToken);
+            });
+        }
+
         public async Task RadiusActionAsync(WaterfallStepContext stepContext, UserProfile userProfile, CancellationToken cancellationToken)
         {
             string command = "" + stepContext.Context.Activity.Text;

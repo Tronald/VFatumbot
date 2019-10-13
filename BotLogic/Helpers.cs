@@ -32,6 +32,19 @@ namespace VFatumbot.BotLogic
             return null;
         }
 
+        public static async Task<string[]> GetIntentSuggestionsAsync()
+        {
+            int numSuggestions = 5;
+            string[] result = new string[numSuggestions];
+            string[] words = await System.IO.File.ReadAllLinesAsync("words.txt");
+            QuantumRandomNumberGenerator rnd = new QuantumRandomNumberGenerator();
+            for (int i = 0; i < numSuggestions; i++)
+            {
+                result[i] = words[rnd.Next(words.Length)];
+            }
+            return result;
+        }
+
         public static async Task<bool> IsWaterCoordinatesAsync(double[] incoords)
         {
             // Get a static map with no frills, and make the water green to compare
