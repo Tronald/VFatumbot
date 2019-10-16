@@ -47,14 +47,11 @@ namespace VFatumbot
         // like getting attractors etc have completed their work on a background thread
         public async Task ContinueDialogAsync(ITurnContext turnContext, Dialog dialog, CancellationToken cancellationToken)
         {
-            var conversationStateAccessors = _conversationState.CreateProperty<DialogState>(nameof(DialogState));
-
-            var dialogSet = new DialogSet(conversationStateAccessors);
+            var conversationStateAccesor = _conversationState.CreateProperty<DialogState>(nameof(DialogState));
+            var dialogSet = new DialogSet(conversationStateAccesor);
             dialogSet.Add(dialog);
-
             var dialogContext = await dialogSet.CreateContextAsync(turnContext, cancellationToken);
-            var results = await dialogContext.ContinueDialogAsync(cancellationToken);
-
+            await dialogContext.ContinueDialogAsync(cancellationToken);
             await dialogContext.BeginDialogAsync(dialog.Id, null, cancellationToken);
             await _conversationState.SaveChangesAsync(dialogContext.Context, false, cancellationToken);
         }

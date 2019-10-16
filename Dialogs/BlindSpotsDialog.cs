@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Builder.Dialogs.Choices;
-using Microsoft.Bot.Schema;
 using Microsoft.Extensions.Logging;
 using VFatumbot.BotLogic;
 
@@ -14,8 +13,9 @@ namespace VFatumbot
     {
         protected readonly ILogger _logger;
         protected readonly IStatePropertyAccessor<UserProfile> _userProfileAccessor;
+        protected readonly MainDialog _mainDialog;
 
-        public BlindSpotsDialog(IStatePropertyAccessor<UserProfile> userProfileAccessor, ILogger<MainDialog> logger) : base(nameof(BlindSpotsDialog))
+        public BlindSpotsDialog(IStatePropertyAccessor<UserProfile> userProfileAccessor, MainDialog mainDialog, ILogger<MainDialog> logger) : base(nameof(BlindSpotsDialog))
         {
             _logger = logger;
             _userProfileAccessor = userProfileAccessor;
@@ -63,7 +63,7 @@ namespace VFatumbot
                     await actionHandler.PsuedoActionAsync(stepContext, userProfile, cancellationToken);
                     break;
                 case "Point":
-                    //await actionHandler.PointActionAsync(stepContext, userProfile, cancellationToken, _mainDialog);
+                    await actionHandler.PointActionAsync(stepContext, userProfile, cancellationToken, _mainDialog);
                     break;
                 case "< Back":
                     break;

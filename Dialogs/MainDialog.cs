@@ -24,9 +24,9 @@ namespace VFatumbot
             if (userState != null)
                 _userProfileAccessor = userState.CreateProperty<UserProfile>(nameof(UserProfile));
 
-            AddDialog(new BlindSpotsDialog(_userProfileAccessor, logger));
+            AddDialog(new BlindSpotsDialog(_userProfileAccessor, this, logger));
             AddDialog(new TripReportDialog(_userProfileAccessor, logger));
-            AddDialog(new ScanDialog(_userProfileAccessor, logger));
+            AddDialog(new ScanDialog(_userProfileAccessor, this, logger));
             AddDialog(new SettingsDialog(_userProfileAccessor, logger));
             AddDialog(new ChoicePrompt(nameof(ChoicePrompt)));
             AddDialog(new WaterfallDialog(nameof(WaterfallDialog), new WaterfallStep[]

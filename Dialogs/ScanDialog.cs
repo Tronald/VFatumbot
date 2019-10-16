@@ -13,11 +13,13 @@ namespace VFatumbot
     {
         protected readonly ILogger _logger;
         protected readonly IStatePropertyAccessor<UserProfile> _userProfileAccessor;
+        protected readonly MainDialog _mainDialog;
 
-        public ScanDialog(IStatePropertyAccessor<UserProfile> userProfileAccessor, ILogger<MainDialog> logger) : base(nameof(ScanDialog))
+        public ScanDialog(IStatePropertyAccessor<UserProfile> userProfileAccessor, MainDialog mainDialog, ILogger<MainDialog> logger) : base(nameof(ScanDialog))
         {
             _logger = logger;
             _userProfileAccessor = userProfileAccessor;
+            _mainDialog = mainDialog;
 
             AddDialog(new ChoicePrompt(nameof(ChoicePrompt)));
             AddDialog(new WaterfallDialog(nameof(WaterfallDialog), new WaterfallStep[]
@@ -54,16 +56,16 @@ namespace VFatumbot
             switch (((FoundChoice)stepContext.Result).Value)
             {
                 case "Scan Attractor":
-                    //await actionHandler.AttractionActionAsync(stepContext, userProfile, cancellationToken, _mainDialog, true);
+                    await actionHandler.AttractionActionAsync(stepContext, userProfile, cancellationToken, _mainDialog, true);
                     break;
                 case "Scan Void":
-                    //await actionHandler.VoidActionAsync(stepContext, userProfile, cancellationToken, _mainDialog, true);
+                    await actionHandler.VoidActionAsync(stepContext, userProfile, cancellationToken, _mainDialog, true);
                     break;
                 case "Scan Anomaly":
-                    //await actionHandler.AnomalyActionAsync(stepContext, userProfile, cancellationToken, _mainDialog, true);
+                    await actionHandler.AnomalyActionAsync(stepContext, userProfile, cancellationToken, _mainDialog, true);
                     break;
                 case "Scan Pair":
-                    //await actionHandler.PairActionAsync(stepContext, userProfile, cancellationToken, _mainDialog, true);
+                    await actionHandler.PairActionAsync(stepContext, userProfile, cancellationToken, _mainDialog, true);
                     break;
                 case "< Back":
                     goBackMainMenuThisRound = true;
