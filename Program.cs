@@ -13,6 +13,8 @@ namespace VFatumbot
     {
         public static void Main(string[] args)
         {
+            //var intentSuggestions = BotLogic.Helpers.GetIntentSuggestionsAsync();
+            //Console.WriteLine("Intent suggestions: " + string.Join(", ", intentSuggestions.Result));
             CreateWebHostBuilder(args).Build().Run();
         }
 
