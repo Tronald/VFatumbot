@@ -19,7 +19,7 @@ namespace VFatumbot
             _userProfileAccessor = userProfileAccessor;
 
             AddDialog(new ChoicePrompt(nameof(ChoicePrompt)));
-            AddDialog(new NumberPrompt<int>(nameof(NumberPrompt<int>)));
+            AddDialog(new NumberPrompt<int>(nameof(NumberPrompt<int>), RadiusValidatorAsync));
             AddDialog(new TextPrompt(nameof(TextPrompt)));
 
             AddDialog(new WaterfallDialog(nameof(WaterfallDialog), new WaterfallStep[]
@@ -66,12 +66,30 @@ namespace VFatumbot
             return await stepContext.PromptAsync(nameof(NumberPrompt<int>), promptOptions, cancellationToken);
         }
 
+        private async Task<bool> RadiusValidatorAsync(PromptValidatorContext<int> promptContext, CancellationToken cancellationToken)
+        {
+            int inputtedRadius;
+            if (!int.TryParse(promptContext.Context.Activity.Text, out inputtedRadius))
+            {
+                return false;
+            }
+
+            if (inputtedRadius < 100 // TODO should be 1000
+                || inputtedRadius > 20000000) // TOOD this should be 100,000
+            {
+                return false;
+            }
+
+            return true;
+        }
+
         private async Task<DialogTurnResult> WaterPointsStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
         {
             _logger.LogInformation($"SettingsDialog.WaterPointsStepAsync");
 
+            var inputtedRadius = (int)stepContext.Result;
             var userProfile = await _userProfileAccessor.GetAsync(stepContext.Context);
-            userProfile.Radius = (int)stepContext.Result;
+            userProfile.Radius = inputtedRadius;
             await _userProfileAccessor.SetAsync(stepContext.Context, userProfile);
 
             return await stepContext.PromptAsync(nameof(ChoicePrompt), GetPromptOptions("Include water points?"), cancellationToken);
