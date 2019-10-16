@@ -1,7 +1,4 @@
-﻿// Copyright (c) Microsoft Corporation. All rights reserved.
-// Licensed under the MIT License.
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Bot.Builder;
@@ -17,19 +14,20 @@ namespace VFatumbot
     {
         protected readonly ILogger _logger;
         protected readonly UserState _userState;
-
-        public UserProfile UserProfile;
+        protected readonly IStatePropertyAccessor<UserProfile> _userProfileAccessor;
 
         public MainDialog(UserState userState, ConversationState conversationState, ILogger<MainDialog> logger) : base(nameof(MainDialog))
         {
             _logger = logger;
             _userState = userState;
 
-            // Define the main dialog and its related components.
-            AddDialog(new BlindSpotsDialog(userState, this, logger));
-            AddDialog(new ReportDialog(userState, this, logger));
-            AddDialog(new ScanDialog(userState, this, logger));
-            AddDialog(new SettingsDialog(userState, this, logger));
+            if (userState != null)
+                _userProfileAccessor = userState.CreateProperty<UserProfile>(nameof(UserProfile));
+
+            AddDialog(new BlindSpotsDialog(_userProfileAccessor, logger));
+            AddDialog(new TripReportDialog(_userProfileAccessor, logger));
+            AddDialog(new ScanDialog(_userProfileAccessor, logger));
+            AddDialog(new SettingsDialog(_userProfileAccessor, logger));
             AddDialog(new ChoicePrompt(nameof(ChoicePrompt)));
             AddDialog(new WaterfallDialog(nameof(WaterfallDialog), new WaterfallStep[]
             {
@@ -37,18 +35,13 @@ namespace VFatumbot
                 PerformActionStepAsync,
             }));
 
-            // The initial child Dialog to run.
             InitialDialogId = nameof(WaterfallDialog);
         }
 
-        // 1. Prompts the user if the user is not in the middle of a dialog.
-        // 2. Re-prompts the user when an invalid input is received.
         private async Task<DialogTurnResult> ChoiceActionStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
         {
             _logger.LogInformation("MainDialog.ChoiceActionStepAsync");
 
-            // Create the PromptOptions which contain the prompt and re-prompt messages.
-            // PromptOptions also contains the list of choices available to the user.
             var options = new PromptOptions()
             {
                 Prompt = MessageFactory.Text("What would you like to get/check?"),
@@ -56,67 +49,45 @@ namespace VFatumbot
                 Choices = GetActionChoices(),
             };
 
-            // Prompt the user with the configured PromptOptions.
             return await stepContext.PromptAsync(nameof(ChoicePrompt), options, cancellationToken);
         }
 
-        // Send a response to the user based on their choice.
-        // This method is only called when a valid prompt response is parsed from the user's response to the ChoicePrompt.
         private async Task<DialogTurnResult> PerformActionStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
         {
-            _logger.LogInformation("MainDialog.PerformActionStepAsync");
+            _logger.LogInformation($"MainDialog.PerformActionStepAsync[{((FoundChoice)stepContext.Result).Value}]");
 
-            // Cards are sent as Attachments in the Bot Framework.
-            // So we need to create a list of attachments for the reply activity.
-            var attachments = new List<Attachment>();
-            
-            // Reply to the activity we received with an activity.
-            var reply = MessageFactory.Attachment(attachments);
-
+            var userProfile = await _userProfileAccessor.GetAsync(stepContext.Context, () => new UserProfile());
             var actionHandler = new ActionHandler();
-
             var repromptThisRound = false;
 
-            // Handle the chosen action
             switch (((FoundChoice)stepContext.Result).Value)
             {
                 case "Attractor":
-                    await actionHandler.AttractionActionAsync(stepContext, UserProfile, cancellationToken, this);
+                    await actionHandler.AttractionActionAsync(stepContext, userProfile, cancellationToken, this);
                     break;
                 case "Void":
-                    await actionHandler.VoidActionAsync(stepContext, UserProfile, cancellationToken, this);
+                    await actionHandler.VoidActionAsync(stepContext, userProfile, cancellationToken, this);
                     break;
                 case "Anomaly":
-                    await actionHandler.AnomalyActionAsync(stepContext, UserProfile, cancellationToken, this);
+                    await actionHandler.AnomalyActionAsync(stepContext, userProfile, cancellationToken, this);
                     break;
                 case "Intent Suggestions":
-                    await actionHandler.IntentSuggestionActionAsync(stepContext, UserProfile, cancellationToken, this);
+                    await actionHandler.IntentSuggestionActionAsync(stepContext, userProfile, cancellationToken, this);
                     break;
                 case "Pair":
-                    await actionHandler.PairActionAsync(stepContext, UserProfile, cancellationToken, this);
+                    await actionHandler.PairActionAsync(stepContext, userProfile, cancellationToken, this);
                     break;
                 case "Blind Spots":
                     return await stepContext.BeginDialogAsync(nameof(BlindSpotsDialog), this, cancellationToken);
                 case "Scan":
                     return await stepContext.BeginDialogAsync(nameof(ScanDialog), this, cancellationToken);
                 case "My Location":
-                    // TODO: we shouldn't need this location-is-set check here because it's checked higher up in VFatumbot.cs but the location wasn't been set sometimes so just for debugging now...
-                    if (!UserProfile.IsLocationSet)
-                    {
-                        await stepContext.Context.SendActivityAsync(MessageFactory.Text(Consts.NO_LOCATION_SET_MSG), cancellationToken);
-                        await stepContext.RepromptDialogAsync(cancellationToken);
-                    }
-                    // END TODO
-
                     repromptThisRound = true;
-                    await actionHandler.LocationActionAsync(stepContext, UserProfile, cancellationToken);
+                    await actionHandler.LocationActionAsync(stepContext, userProfile, cancellationToken);
                     break;
                 case "Settings":
                     return await stepContext.BeginDialogAsync(nameof(SettingsDialog), this, cancellationToken);
             }
-
-            // Send the reply
-            await stepContext.Context.SendActivityAsync(reply, cancellationToken);
 
             if (repromptThisRound)
             {

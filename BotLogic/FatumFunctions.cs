@@ -1,17 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Globalization;
-using System.Text;
-using System.Threading.Tasks;
-using System.IO;
-using System.Net;
-using System.Text.RegularExpressions;
 using System.Runtime.InteropServices;
-using System.Threading;
-using System.Collections;
-using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Builder;
 
 namespace VFatumbot.BotLogic

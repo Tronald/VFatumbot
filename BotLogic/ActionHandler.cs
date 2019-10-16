@@ -135,7 +135,7 @@ namespace VFatumbot.BotLogic
 
                                 // TODO: tesing reporting experiences dialog
                                 //await ((AdapterWithErrorHandler)stepContext.Context.Adapter).ContinueDialogAsync(context, new ReportDialog(), cancellationToken);
-                                await stepContext.BeginDialogAsync(nameof(ReportDialog), null, cancellationToken);
+                                await stepContext.BeginDialogAsync(nameof(TripReportDialog), null, cancellationToken);
                             }
                         }
                         else if (ida.Count() < 1)

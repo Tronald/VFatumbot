@@ -13,19 +13,13 @@ namespace VFatumbot
     public class BlindSpotsDialog : ComponentDialog
     {
         protected readonly ILogger _logger;
-        protected readonly UserState _userState;
+        protected readonly IStatePropertyAccessor<UserProfile> _userProfileAccessor;
 
-        private MainDialog _mainDialog;
-
-        protected UserProfile UserProfile;
-
-        public BlindSpotsDialog(UserState userState, object mainDialog, ILogger<MainDialog> logger) : base(nameof(BlindSpotsDialog))
+        public BlindSpotsDialog(IStatePropertyAccessor<UserProfile> userProfileAccessor, ILogger<MainDialog> logger) : base(nameof(BlindSpotsDialog))
         {
             _logger = logger;
-            _userState = userState;
-            _mainDialog = (MainDialog)mainDialog;
+            _userProfileAccessor = userProfileAccessor;
 
-            // Define the main dialog and its related components.
             AddDialog(new ChoicePrompt(nameof(ChoicePrompt)));
             AddDialog(new WaterfallDialog(nameof(WaterfallDialog), new WaterfallStep[]
             {
@@ -33,21 +27,13 @@ namespace VFatumbot
                 PerformActionStepAsync,
             }));
 
-            // The initial child Dialog to run.
             InitialDialogId = nameof(WaterfallDialog);
         }
 
-        // 1. Prompts the user if the user is not in the middle of a dialog.
-        // 2. Re-prompts the user when an invalid input is received.
         public async Task<DialogTurnResult> ChoiceActionStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
         {
-            _logger.LogInformation("BlindSpotsDialog.ChoiceActionStepAsync");
+            _logger.LogInformation($"BlindSpotsDialog.ChoiceActionStepAsync[{stepContext.Result}]");
 
-            var userStateAccessors = _userState.CreateProperty<UserProfile>(nameof(UserProfile));
-            UserProfile = await userStateAccessors.GetAsync(stepContext.Context, () => new UserProfile());
-
-            // Create the PromptOptions which contain the prompt and re-prompt messages.
-            // PromptOptions also contains the list of choices available to the user.
             var options = new PromptOptions()
             {
                 Prompt = MessageFactory.Text("Choose the kind of blind spot:"),
@@ -55,62 +41,35 @@ namespace VFatumbot
                 Choices = GetActionChoices(),
             };
 
-            // Prompt the user with the configured PromptOptions.
             return await stepContext.PromptAsync(nameof(ChoicePrompt), options, cancellationToken);
         }
 
-        // Send a response to the user based on their choice.
-        // This method is only called when a valid prompt response is parsed from the user's response to the ChoicePrompt.
         private async Task<DialogTurnResult> PerformActionStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
         {
-            _logger.LogInformation("BlindSpotsDialog.PerformActionStepAsync");
-
-            // Cards are sent as Attachments in the Bot Framework.
-            // So we need to create a list of attachments for the reply activity.
-            var attachments = new List<Attachment>();
-            
-            // Reply to the activity we received with an activity.
-            var reply = MessageFactory.Attachment(attachments);
+            _logger.LogInformation($"BlindSpotsDialog.PerformActionStepAsync[{((FoundChoice)stepContext.Result).Value}]");
 
             var actionHandler = new ActionHandler();
+            var userProfile = await _userProfileAccessor.GetAsync(stepContext.Context, () => new UserProfile());
 
-            var goBackMainMenuThisRound = false;
-
-            // Handle the chosen action
             switch (((FoundChoice)stepContext.Result).Value)
             {
                 case "Quantum":
-                    goBackMainMenuThisRound = true;
-                    await actionHandler.QuantumActionAsync(stepContext, UserProfile, cancellationToken);
+                    await actionHandler.QuantumActionAsync(stepContext, userProfile, cancellationToken);
                     break;
                 case "Quantum Time":
-                    goBackMainMenuThisRound = true;
-                    await actionHandler.QuantumActionAsync(stepContext, UserProfile, cancellationToken, true);
+                    await actionHandler.QuantumActionAsync(stepContext, userProfile, cancellationToken, true);
                     break;
                 case "Psuedo":
-                    goBackMainMenuThisRound = true;
-                    await actionHandler.PsuedoActionAsync(stepContext, UserProfile, cancellationToken);
+                    await actionHandler.PsuedoActionAsync(stepContext, userProfile, cancellationToken);
                     break;
                 case "Point":
-                    await actionHandler.PointActionAsync(stepContext, UserProfile, cancellationToken, _mainDialog);
+                    //await actionHandler.PointActionAsync(stepContext, userProfile, cancellationToken, _mainDialog);
                     break;
                 case "< Back":
-                    goBackMainMenuThisRound = true;
                     break;
             }
 
-            // Send the reply
-            await stepContext.Context.SendActivityAsync(reply, cancellationToken);
-
-            if (goBackMainMenuThisRound)
-            {
-                return await stepContext.ReplaceDialogAsync(nameof(MainDialog));
-            }
-            else
-            {
-                // Long-running tasks like /getattractors etc will make use of ContinueDialog to re-prompt users
-                return await stepContext.EndDialogAsync();
-            }
+            return await stepContext.ReplaceDialogAsync(nameof(MainDialog));
         }
 
         private IList<Choice> GetActionChoices()

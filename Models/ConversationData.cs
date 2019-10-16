@@ -8,5 +8,7 @@
 
         // The ID of the user's channel.
         public string ChannelId { get; set; }
+
+        // TODO: add an "is scanning" boolean/timestamp check
     }
 }

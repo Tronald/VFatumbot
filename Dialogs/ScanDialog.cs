@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Builder.Dialogs.Choices;
-using Microsoft.Bot.Schema;
 using Microsoft.Extensions.Logging;
 using VFatumbot.BotLogic;
 
@@ -13,19 +12,13 @@ namespace VFatumbot
     public class ScanDialog : ComponentDialog
     {
         protected readonly ILogger _logger;
-        protected readonly UserState _userState;
+        protected readonly IStatePropertyAccessor<UserProfile> _userProfileAccessor;
 
-        private MainDialog _mainDialog;
-
-        protected UserProfile UserProfile;
-
-        public ScanDialog(UserState userState, object mainDialog, ILogger<MainDialog> logger) : base(nameof(ScanDialog))
+        public ScanDialog(IStatePropertyAccessor<UserProfile> userProfileAccessor, ILogger<MainDialog> logger) : base(nameof(ScanDialog))
         {
             _logger = logger;
-            _userState = userState;
-            _mainDialog = (MainDialog)mainDialog;
+            _userProfileAccessor = userProfileAccessor;
 
-            // Define the main dialog and its related components.
             AddDialog(new ChoicePrompt(nameof(ChoicePrompt)));
             AddDialog(new WaterfallDialog(nameof(WaterfallDialog), new WaterfallStep[]
             {
@@ -33,21 +26,13 @@ namespace VFatumbot
                 PerformActionStepAsync,
             }));
 
-            // The initial child Dialog to run.
             InitialDialogId = nameof(WaterfallDialog);
         }
 
-        // 1. Prompts the user if the user is not in the middle of a dialog.
-        // 2. Re-prompts the user when an invalid input is received.
         public async Task<DialogTurnResult> ChoiceActionStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
         {
             _logger.LogInformation("ScanDialog.ChoiceActionStepAsync");
 
-            var userStateAccessors = _userState.CreateProperty<UserProfile>(nameof(UserProfile));
-            UserProfile = await userStateAccessors.GetAsync(stepContext.Context, () => new UserProfile());
-
-            // Create the PromptOptions which contain the prompt and re-prompt messages.
-            // PromptOptions also contains the list of choices available to the user.
             var options = new PromptOptions()
             {
                 Prompt = MessageFactory.Text("Choose the kind of scan:"),
@@ -55,49 +40,35 @@ namespace VFatumbot
                 Choices = GetActionChoices(),
             };
 
-            // Prompt the user with the configured PromptOptions.
             return await stepContext.PromptAsync(nameof(ChoicePrompt), options, cancellationToken);
         }
 
-        // Send a response to the user based on their choice.
-        // This method is only called when a valid prompt response is parsed from the user's response to the ChoicePrompt.
         private async Task<DialogTurnResult> PerformActionStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
         {
-            _logger.LogInformation("ScanDialog.PerformActionStepAsync");
-
-            // Cards are sent as Attachments in the Bot Framework.
-            // So we need to create a list of attachments for the reply activity.
-            var attachments = new List<Attachment>();
-            
-            // Reply to the activity we received with an activity.
-            var reply = MessageFactory.Attachment(attachments);
+            _logger.LogInformation($"ScanDialog.PerformActionStepAsync[{((FoundChoice)stepContext.Result).Value}]");
 
             var actionHandler = new ActionHandler();
-
+            var userProfile = await _userProfileAccessor.GetAsync(stepContext.Context, () => new UserProfile());
             var goBackMainMenuThisRound = false;
 
-            // Handle the chosen action
             switch (((FoundChoice)stepContext.Result).Value)
             {
                 case "Scan Attractor":
-                    await actionHandler.AttractionActionAsync(stepContext, UserProfile, cancellationToken, _mainDialog, true);
+                    //await actionHandler.AttractionActionAsync(stepContext, userProfile, cancellationToken, _mainDialog, true);
                     break;
                 case "Scan Void":
-                    await actionHandler.VoidActionAsync(stepContext, UserProfile, cancellationToken, _mainDialog, true);
+                    //await actionHandler.VoidActionAsync(stepContext, userProfile, cancellationToken, _mainDialog, true);
                     break;
                 case "Scan Anomaly":
-                    await actionHandler.AnomalyActionAsync(stepContext, UserProfile, cancellationToken, _mainDialog, true);
+                    //await actionHandler.AnomalyActionAsync(stepContext, userProfile, cancellationToken, _mainDialog, true);
                     break;
                 case "Scan Pair":
-                    await actionHandler.PairActionAsync(stepContext, UserProfile, cancellationToken, _mainDialog, true);
+                    //await actionHandler.PairActionAsync(stepContext, userProfile, cancellationToken, _mainDialog, true);
                     break;
                 case "< Back":
                     goBackMainMenuThisRound = true;
                     break;
             }
-
-            // Send the reply
-            await stepContext.Context.SendActivityAsync(reply, cancellationToken);
 
             if (goBackMainMenuThisRound)
             {
