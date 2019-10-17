@@ -189,7 +189,7 @@ namespace VFatumbot
                 }
             }
 
-            // Geocode the address the user sent
+            // Thirdly, geocode the address the user sent
             if (!isFound && !string.IsNullOrEmpty(turnContext.Activity.Text) && turnContext.Activity.Text.ToLower().StartsWith("search"))
             {
                 // dirty hack: get the calling method which is already async to do the Google Geocode async API call
