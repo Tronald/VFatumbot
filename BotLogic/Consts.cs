@@ -5,6 +5,11 @@
         // Azure App ID
         public const string APP_ID = "";
 
+        // Azure Cosmos DB credentials
+        public const string COSMOS_DB_NAME = "";
+        public const string COSMOS_DB_URI = "";
+        public const string COSMOS_DB_KEY = "";
+
         // Google Maps API key
         public const string GOOGLE_MAPS_API_KEY = "";
 
