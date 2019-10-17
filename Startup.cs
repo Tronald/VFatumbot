@@ -1,10 +1,13 @@
+using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Bot.Builder;
+using Microsoft.Bot.Builder.Azure;
 using Microsoft.Bot.Builder.Integration.AspNet.Core;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using VFatumbot.BotLogic;
 
 namespace VFatumbot
 {
@@ -27,6 +30,25 @@ namespace VFatumbot
             // Create the Bot Framework Adapter.
             services.AddSingleton<IBotFrameworkHttpAdapter, AdapterWithErrorHandler>();
 
+#if RELEASE
+            // For the bot running in the Azure cloud, we need to use Cosmos DB (or Azure's Blob Storage service)
+            // to keep data persistent, otherwise the stateless nature of the bot would be useless in keeping
+            // track of users's locations, radius settings etc.
+            var storage = new CosmosDbStorage(new CosmosDbStorageOptions
+            {
+                AuthKey = Consts.COSMOS_DB_KEY,
+                CollectionId = Consts.COSMOS_CONTAINER_NAME,
+                CosmosDBEndpoint = new Uri(Consts.COSMOS_DB_URI),
+                DatabaseId = Consts.COSMOS_DB_NAME,
+            });
+
+            var conversationState = new ConversationState(storage);
+            var userState = new UserState(storage);
+
+            // Add the states as singletons
+            services.AddSingleton(conversationState);
+            services.AddSingleton(userState);
+#else
             // Create the storage we'll be using for User and Conversation state. (Memory is great for testing purposes.)
             services.AddSingleton<IStorage, MemoryStorage>();
 
@@ -35,6 +57,7 @@ namespace VFatumbot
 
             // Create the Conversation state.
             services.AddSingleton<ConversationState>();
+#endif
 
             // The Dialog that will be run by the bot.
             services.AddSingleton<MainDialog>();
