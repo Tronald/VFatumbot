@@ -7,6 +7,7 @@
 
         // Azure Cosmos DB credentials
         public const string COSMOS_DB_NAME = "";
+        public const string COSMOS_CONTAINER_NAME = "";
         public const string COSMOS_DB_URI = "";
         public const string COSMOS_DB_KEY = "";
 
