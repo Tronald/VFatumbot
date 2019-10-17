@@ -241,21 +241,6 @@ namespace VFatumbot.BotLogic
             });
         }
 
-        public async Task RadiusActionAsync(WaterfallStepContext stepContext, UserProfile userProfile, CancellationToken cancellationToken)
-        {
-            string command = "" + stepContext.Context.Activity.Text;
-            if (command.Contains(" "))
-            {
-                string newRadiusStr = command.Replace(command.Substring(0, command.IndexOf(" ", StringComparison.CurrentCulture)), "");
-                int Radius = Consts.DEFAULT_RADIUS;
-                if (Int32.TryParse(newRadiusStr, out Radius))
-                {
-                    userProfile.Radius = Radius;
-                }
-            }
-            await stepContext.Context.SendActivityAsync(MessageFactory.Text($"Your current radius is {userProfile.Radius}m"), cancellationToken);
-        }
-
         public async Task QuantumActionAsync(WaterfallStepContext stepContext, UserProfile userProfile, CancellationToken cancellationToken, bool suggestTime = false)
         {
             double[] incoords = GetQuantumRandom(userProfile.Latitude, userProfile.Longitude, userProfile.Radius);
