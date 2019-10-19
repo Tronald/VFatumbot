@@ -1,10 +1,10 @@
-﻿
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en-US">
 <head>
-    <title>VFatumbot</title>
+    <title>Fatumbot</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script src="webchat20191012_v4.js"></script>
+    <script src="https://cdn.botframework.com/botframework-webchat/latest/webchat.js"></script>
+    <!--<script src="webchat20191012_v4.js"></script>-->
     <script src="jquery-3.4.1.slim.min.js"></script>
     <style>
         html,
@@ -37,14 +37,14 @@
             bottom: 30px; /* 30px from the bottom */
         }
 
-        /* Show the snackbar when clicking on a button (class added with JavaScript) */
-        #snackbar.show {
-            visibility: visible; /* Show the snackbar */
-            /* Add animation: Take 0.5 seconds to fade in and out the snackbar.
-However, delay the fade out process for 2.5 seconds */
-            -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
-            animation: fadein 0.5s, fadeout 0.5s 2.5s;
-        }
+            /* Show the snackbar when clicking on a button (class added with JavaScript) */
+            #snackbar.show {
+                visibility: visible; /* Show the snackbar */
+                /* Add animation: Take 0.5 seconds to fade in and out the snackbar.
+        However, delay the fade out process for 2.5 seconds */
+                -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+                animation: fadein 0.5s, fadeout 0.5s 2.5s;
+            }
 
         /* Animations to fade the snackbar in and out */
         @-webkit-keyframes fadein {
@@ -95,6 +95,23 @@ However, delay the fade out process for 2.5 seconds */
             }
         }
     </style>
+    <link rel="apple-touch-icon" sizes="57x57" href="/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
 </head>
 <body>
     <div id="webchat" role="main"></div>
@@ -116,7 +133,9 @@ However, delay the fade out process for 2.5 seconds */
             }
 
             let directLine = window.WebChat.createDirectLine({
-                token: '***REMOVED***' // TODO: get this dynamically?
+                // TODO: get this dynamically?
+                token: '***REMOVED***' // AU
+                //token: '***REMOVED***' // JP
             });
 
             window.WebChat.renderWebChat(
