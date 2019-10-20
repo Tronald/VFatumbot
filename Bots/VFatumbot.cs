@@ -46,7 +46,7 @@ namespace VFatumbot
                     }
                     else
                     {
-                        await turnContext.SendActivityAsync(MessageFactory.Text("Welcome to Fatumbot. This is tool to experiment with the ideas that the mind and matter are connected in more ways than currently understood, and that by visiting random (in the true sense of the word) places one can journey outside of their normal probability paths."), cancellationToken);
+                        await turnContext.SendActivityAsync(MessageFactory.Text("Welcome to Fatumbot. This is a tool to experiment with the ideas that the mind and matter are connected in more ways than currently understood, and that by visiting random (in the true sense of the word) places one can journey outside of their normal probability paths."), cancellationToken);
                         await turnContext.SendActivityAsync(MessageFactory.Text("Start off by sending your location, or typing \"search <address>\", or a Google Maps URL. Don't forget you can type \"help\" for more info."), cancellationToken);
                     }
                 }
@@ -74,8 +74,6 @@ namespace VFatumbot
 
             // TODO: most of the logic/functionalioty in the following if statements I realised later on should probably be structured in the way the Bot Framework SDK talks about "middleware".
             // Maybe one day re-structure/re-factor it to following their middleware patterns...
-
-            bool abortTurn = false;
 
             double lat = 0, lon = 0;
             if (InterceptLocation(turnContext, out lat, out lon)) // Intercept any locations the user sends us, no matter where in the conversation they are
@@ -110,35 +108,36 @@ namespace VFatumbot
                     await turnContext.SendActivityAsync(ReplyFactory.CreateLocationCardsReply(incoords, w3wResult), cancellationToken);
 
                     //TODO: FatumFunctions.Tolog(message, "locset");
+
+                    await mUserProfileAccessor.SetAsync(turnContext, userProfile);
+                    await _userState.SaveChangesAsync(turnContext, false, cancellationToken);
+                    await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(turnContext, _mainDialog, cancellationToken);
+           
+                    return;
                 }
             }
-            else if (!string.IsNullOrEmpty(turnContext.Activity.Text) &&
-                    turnContext.Activity.Text.EndsWith("help", StringComparison.InvariantCultureIgnoreCase)
-            )
+            else if (!string.IsNullOrEmpty(turnContext.Activity.Text) && turnContext.Activity.Text.EndsWith("help", StringComparison.InvariantCultureIgnoreCase))
             {
                 var reply = MessageFactory.Text(System.IO.File.ReadAllText("help.txt"));
                 await turnContext.SendActivityAsync(reply, cancellationToken);
-                if (!string.IsNullOrEmpty(turnContext.Activity.Text)
-                    && !userProfile.IsLocationSet
-                    )
+                if (!string.IsNullOrEmpty(turnContext.Activity.Text) && !userProfile.IsLocationSet)
                 {
                     await turnContext.SendActivityAsync(MessageFactory.Text(Consts.NO_LOCATION_SET_MSG), cancellationToken);
-                    abortTurn = true;
+                    return;
+                }
+                else 
+                {
+                    await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(turnContext, _mainDialog, cancellationToken);
+                    return;
                 }
             }
-            else if (!string.IsNullOrEmpty(turnContext.Activity.Text)
-                    && !userProfile.IsLocationSet
-            )
+            else if (!string.IsNullOrEmpty(turnContext.Activity.Text) && !userProfile.IsLocationSet)
             {
                 await turnContext.SendActivityAsync(MessageFactory.Text(Consts.NO_LOCATION_SET_MSG), cancellationToken);
-                abortTurn = true;
+                return;
             }
 
-            if (!abortTurn)
-            {
-                await mUserProfileAccessor.SetAsync(turnContext, userProfile);
-                await base.OnTurnAsync(turnContext, cancellationToken);
-            }
+            await base.OnTurnAsync(turnContext, cancellationToken);
 
             // Save any state changes that might have occured during the turn.
             await _conversationState.SaveChangesAsync(turnContext, false, cancellationToken);

@@ -54,7 +54,7 @@ namespace VFatumbot.BotLogic
                         string mesg = "";
                         int numWaterPointsSkipped = 0;
 
-                        redo:
+                    redo:
                         FinalAttractor[] ida = GetIDA(userProfile.Location, userProfile.Radius, /*u* not used*/-1, doScan ? 1 : 0);
                         ida = SortIDA(ida, "attractor", idacou);
                         if (ida.Length > 0)
@@ -74,7 +74,7 @@ namespace VFatumbot.BotLogic
                                         if (numWaterPointsSkipped > Consts.WATER_POINTS_SEARCH_MAX)
                                         {
                                             await stepContext.Context.SendActivityAsync(MessageFactory.Text("Couldn't find anything but water points. Try again later."), cancellationToken);
-                                            await ((AdapterWithErrorHandler)stepContext.Context.Adapter).ContinueDialogAsync(context, mainDialog, cancellationToken);
+                                            await ((AdapterWithErrorHandler)stepContext.Context.Adapter).RepromptMainDialog(context, mainDialog, cancellationToken);
                                             return;
                                         }
 
@@ -101,14 +101,14 @@ namespace VFatumbot.BotLogic
 
                                 await stepContext.Context.SendActivityAsync(ReplyFactory.CreateLocationCardsReply(incoords, w3wResult), cancellationToken);
 
-                                await ((AdapterWithErrorHandler)stepContext.Context.Adapter).ContinueDialogAsync(context, mainDialog, cancellationToken);
+                                await ((AdapterWithErrorHandler)stepContext.Context.Adapter).RepromptMainDialog(context, mainDialog, cancellationToken);
                             }
                         }
                         else if (ida.Count() < 1)
                         {
                             mesg = "No Anomalies found at the moment. Try again later.";
                             await stepContext.Context.SendActivityAsync(MessageFactory.Text(mesg), cancellationToken);
-                            await ((AdapterWithErrorHandler)stepContext.Context.Adapter).ContinueDialogAsync(context, mainDialog, cancellationToken);
+                            await ((AdapterWithErrorHandler)stepContext.Context.Adapter).RepromptMainDialog(context, mainDialog, cancellationToken);
                         }
                     }, cancellationToken);
             });
@@ -150,7 +150,7 @@ namespace VFatumbot.BotLogic
                         string mesg = "";
                         int numWaterPointsSkipped = 0;
 
-                        redo:
+                    redo:
                         FinalAttractor[] ida = GetIDA(userProfile.Location, userProfile.Radius, /*u* not used*/-1, doScan ? 1 : 0);
                         ida = SortIDA(ida, "void", idacou);
                         if (ida.Length > 0)
@@ -170,7 +170,7 @@ namespace VFatumbot.BotLogic
                                         if (numWaterPointsSkipped > Consts.WATER_POINTS_SEARCH_MAX)
                                         {
                                             await stepContext.Context.SendActivityAsync(MessageFactory.Text("Couldn't find anything but water points. Try again later."), cancellationToken);
-                                            await ((AdapterWithErrorHandler)stepContext.Context.Adapter).ContinueDialogAsync(context, mainDialog, cancellationToken);
+                                            await ((AdapterWithErrorHandler)stepContext.Context.Adapter).RepromptMainDialog(context, mainDialog, cancellationToken);
                                             return;
                                         }
 
@@ -208,7 +208,7 @@ namespace VFatumbot.BotLogic
                         {
                             mesg = "No Anomalies found at the moment. Try again later.";
                             await stepContext.Context.SendActivityAsync(MessageFactory.Text(mesg), cancellationToken);
-                            await ((AdapterWithErrorHandler)stepContext.Context.Adapter).ContinueDialogAsync(context, mainDialog, cancellationToken);
+                            await ((AdapterWithErrorHandler)stepContext.Context.Adapter).RepromptMainDialog(context, mainDialog, cancellationToken);
                         }
                     }, cancellationToken);
             });
@@ -263,7 +263,7 @@ namespace VFatumbot.BotLogic
                         string mesg = "";
                         int numWaterPointsSkipped = 0;
 
-                        redo:
+                    redo:
                         FinalAttractor[] ida = GetIDA(userProfile.Location, userProfile.Radius, /*u* not used*/-1, doScan ? 1 : 0);
                         ida = SortIDA(ida, "any", idacou);
                         if (ida.Length > 0)
@@ -283,7 +283,7 @@ namespace VFatumbot.BotLogic
                                         if (numWaterPointsSkipped > Consts.WATER_POINTS_SEARCH_MAX)
                                         {
                                             await stepContext.Context.SendActivityAsync(MessageFactory.Text("Couldn't find anything but water points. Try again later."), cancellationToken);
-                                            await ((AdapterWithErrorHandler)stepContext.Context.Adapter).ContinueDialogAsync(context, mainDialog, cancellationToken);
+                                            await ((AdapterWithErrorHandler)stepContext.Context.Adapter).RepromptMainDialog(context, mainDialog, cancellationToken);
                                             return;
                                         }
 
@@ -310,14 +310,14 @@ namespace VFatumbot.BotLogic
 
                                 await stepContext.Context.SendActivityAsync(ReplyFactory.CreateLocationCardsReply(incoords, w3wResult), cancellationToken);
 
-                                await ((AdapterWithErrorHandler)stepContext.Context.Adapter).ContinueDialogAsync(context, mainDialog, cancellationToken);
+                                await ((AdapterWithErrorHandler)stepContext.Context.Adapter).RepromptMainDialog(context, mainDialog, cancellationToken);
                             }
                         }
                         else if (ida.Count() < 1)
                         {
                             mesg = "No Anomalies found at the moment. Try again later.";
                             await stepContext.Context.SendActivityAsync(MessageFactory.Text(mesg), cancellationToken);
-                            await ((AdapterWithErrorHandler)stepContext.Context.Adapter).ContinueDialogAsync(context, mainDialog, cancellationToken);
+                            await ((AdapterWithErrorHandler)stepContext.Context.Adapter).RepromptMainDialog(context, mainDialog, cancellationToken);
                         }
                     }, cancellationToken);
             });
@@ -335,7 +335,7 @@ namespace VFatumbot.BotLogic
                     {
                         string[] intentSuggestions = await Helpers.GetIntentSuggestionsAsync();
                         await stepContext.Context.SendActivityAsync(MessageFactory.Text("Intent suggestions: " + string.Join(", ", intentSuggestions)), cancellationToken);
-                        await ((AdapterWithErrorHandler)stepContext.Context.Adapter).ContinueDialogAsync(context, mainDialog, cancellationToken);
+                        await ((AdapterWithErrorHandler)stepContext.Context.Adapter).RepromptMainDialog(context, mainDialog, cancellationToken);
                     }, cancellationToken);
             });
         }
@@ -344,7 +344,7 @@ namespace VFatumbot.BotLogic
         {
             int numWaterPointsSkipped = 0;
 
-            redo:
+        redo:
             double[] incoords = GetQuantumRandom(userProfile.Latitude, userProfile.Longitude, userProfile.Radius);
 
             // Skip water points?
@@ -378,7 +378,7 @@ namespace VFatumbot.BotLogic
         {
             int numWaterPointsSkipped = 0;
 
-            redo:
+        redo:
             double[] incoords = GetPseudoRandom(userProfile.Latitude, userProfile.Longitude, userProfile.Radius);
 
             // Skip water points?
@@ -448,7 +448,8 @@ namespace VFatumbot.BotLogic
                         FinalAttractor[] ida = GetIDA(userProfile.Location, userProfile.Radius, /*u* not used*/-1, doScan ? 1 : 0);
                         FinalAttractor[] att = SortIDA(ida, "attractor", idacou);
                         FinalAttractor[] voi = SortIDA(ida, "void", idacou);
-                        if (att.Count() > voi.Count()) {
+                        if (att.Count() > voi.Count())
+                        {
                             idacou = voi.Count();
                         }
                         else
@@ -471,7 +472,7 @@ namespace VFatumbot.BotLogic
                                     dynamic w3wResult1 = await Helpers.GetWhat3WordsAddressAsync(incoords);
                                     await stepContext.Context.SendActivityAsync(ReplyFactory.CreateLocationCardsReply(incoords, w3wResult1), cancellationToken);
                                 }
-                               
+
                                 incoords = new double[] { voi[i].X.center.point.latitude, voi[i].X.center.point.longitude };
                                 if (!userProfile.IsIncludeWaterPoints && await Helpers.IsWaterCoordinatesAsync(incoords))
                                 {
@@ -484,21 +485,21 @@ namespace VFatumbot.BotLogic
                                     dynamic w3wResult2 = await Helpers.GetWhat3WordsAddressAsync(incoords);
                                     await stepContext.Context.SendActivityAsync(ReplyFactory.CreateLocationCardsReply(incoords, w3wResult2), cancellationToken);
                                 }
-							}
+                            }
 
                             if (numAttWaterPointsSkipped > 1)
                                 await stepContext.Context.SendActivityAsync(MessageFactory.Text("Number of attractor water points skipped: " + numAttWaterPointsSkipped), cancellationToken);
                             if (numVoiWaterPointsSkipped > 1)
-                            await stepContext.Context.SendActivityAsync(MessageFactory.Text("Number of void water points skipped: " + numVoiWaterPointsSkipped), cancellationToken);
+                                await stepContext.Context.SendActivityAsync(MessageFactory.Text("Number of void water points skipped: " + numVoiWaterPointsSkipped), cancellationToken);
 
-                            await ((AdapterWithErrorHandler)stepContext.Context.Adapter).ContinueDialogAsync(context, mainDialog, cancellationToken);
+                            await ((AdapterWithErrorHandler)stepContext.Context.Adapter).RepromptMainDialog(context, mainDialog, cancellationToken);
                         }
                         else// if (ida.Count() < 1) // TODO: is this needed vs idacou > 1 if ?
                         {
                             mesg = "No Anomalies found at the moment. Try again later.";
                             await stepContext.Context.SendActivityAsync(MessageFactory.Text(mesg), cancellationToken);
-							await ((AdapterWithErrorHandler)stepContext.Context.Adapter).ContinueDialogAsync(context, mainDialog, cancellationToken);
-						}
+                            await ((AdapterWithErrorHandler)stepContext.Context.Adapter).RepromptMainDialog(context, mainDialog, cancellationToken);
+                        }
                     }, cancellationToken);
             });
         }
@@ -507,9 +508,9 @@ namespace VFatumbot.BotLogic
         {
             await stepContext.Context.SendActivityAsync(MessageFactory.Text("Wait a minute. It will take a while."), cancellationToken);
 
-			DispatchWorkerThread((object sender, DoWorkEventArgs e) =>
-			{
-				stepContext.Context.Adapter.ContinueConversationAsync(Consts.APP_ID,
+            DispatchWorkerThread((object sender, DoWorkEventArgs e) =>
+            {
+                stepContext.Context.Adapter.ContinueConversationAsync(Consts.APP_ID,
                     ((Microsoft.Bot.Schema.Activity)stepContext.Context.Activity).GetConversationReference(),
                     async (context, token) =>
                     {
@@ -519,7 +520,7 @@ namespace VFatumbot.BotLogic
 
                         FinalAttractor[] ida = GetIDA(userProfile.Location, userProfile.Radius, -1/*not used?*/);
 
-                        redoAtt:
+                    redoAtt:
                         FinalAttractor[] att = SortIDA(ida, "attractor", 1);
                         if (!userProfile.IsIncludeWaterPoints)
                         {
@@ -539,7 +540,7 @@ namespace VFatumbot.BotLogic
                             }
                         }
 
-                        redoVoid:
+                    redoVoid:
                         FinalAttractor[] voi = SortIDA(ida, "void", 1);
                         if (!userProfile.IsIncludeWaterPoints)
                         {
@@ -561,7 +562,7 @@ namespace VFatumbot.BotLogic
 
                         ida = SortIDA(ida, "any", 1);
 
-                        redoPsuedo:
+                    redoPsuedo:
                         double[] pcoords = GetPseudoRandom(userProfile.Location.latitude, userProfile.Location.longitude, userProfile.Radius);
                         if (!userProfile.IsIncludeWaterPoints)
                         {
@@ -581,7 +582,7 @@ namespace VFatumbot.BotLogic
                             }
                         }
 
-                        redoQuantum:
+                    redoQuantum:
                         double[] qcoords = GetQuantumRandom(userProfile.Location.latitude, userProfile.Location.longitude, userProfile.Radius);
                         if (!userProfile.IsIncludeWaterPoints)
                         {
@@ -666,9 +667,9 @@ namespace VFatumbot.BotLogic
 
                         await stepContext.Context.SendActivityAsync(ReplyFactory.CreateLocationCardsReply(incoords, w3wResult), cancellationToken);
 
-						await ((AdapterWithErrorHandler)stepContext.Context.Adapter).ContinueDialogAsync(context, mainDialog, cancellationToken);
-					}, cancellationToken);
-			});
-		}
+                        await ((AdapterWithErrorHandler)stepContext.Context.Adapter).RepromptMainDialog(context, mainDialog, cancellationToken);
+                    }, cancellationToken);
+            });
+        }
     }
 }
