@@ -29,6 +29,10 @@
     <PackageReference Include="Microsoft.Bot.Builder.Dialogs" Version="4.5.3" />
     <PackageReference Include="Geocoding.Google" Version="4.0.1" />
     <PackageReference Include="Microsoft.Bot.Builder.Azure" Version="4.5.3" />
+    <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="2.9.6">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
   </ItemGroup>
 
   <ItemGroup>
