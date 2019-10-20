@@ -40,14 +40,14 @@ namespace VFatumbot
 
                     if (userProfile.IsLocationSet)
                     {
-                        await turnContext.SendActivityAsync(MessageFactory.Text("Welcome back to VFatumbot!"), cancellationToken);
+                        await turnContext.SendActivityAsync(MessageFactory.Text("Welcome back to Fatumbot!"), cancellationToken);
                         await turnContext.SendActivityAsync(MessageFactory.Text("Don't forget to send your current location."), cancellationToken);
                         await _mainDialog.RunAsync(turnContext, _conversationState.CreateProperty<DialogState>(nameof(DialogState)), cancellationToken);
                     }
                     else
                     {
-                        await turnContext.SendActivityAsync(MessageFactory.Text("Welcome to VFatumbot. Here we're trying at some new features based on the original [Fatum Project bot](https://www.reddit.com/r/randonauts/). Type \"help\" anytime for more info."), cancellationToken);
-                        await turnContext.SendActivityAsync(MessageFactory.Text("Start off by sending your location, or typing \"search <address>\", or a [Google Maps URL](https://www.google.com/maps/@51.509865,-0.118092,13z). Don't forget you can type \"help\" for more info."), cancellationToken);
+                        await turnContext.SendActivityAsync(MessageFactory.Text("Welcome to Fatumbot. This is tool to experiement with the ideas that the mind and matter are connected in more ways than currently understood, and that by visiting random, the true sense of the word, places one can journey outside their normal probability paths."), cancellationToken);
+                        await turnContext.SendActivityAsync(MessageFactory.Text("Start off by sending your location, or typing \"search <address>\", or a Google Maps URL. Don't forget you can type \"help\" for more info."), cancellationToken);
                     }
                 }
             }

@@ -1,17 +1,15 @@
-By using the VFatumbot you do so at your own risk! In no way are we or the official Fatum Project guys responsible or will be held liable for any positive or adverse affects or consequences from the use of this platform.
+Welcome to Fatumbot. This is tool to experiement with the ideas that the mind and matter are connected in more ways than currently understood, and that by visiting random, the true sense of the word, places one can journey outside their normal probability paths.
 
-VFatumbot is a fork of the original Fatumbot. The intention is not to replace it or offer a rival, but rather to prototype/get some feedback on some ideas we have like:
+By using the Fatum Project bot you do so at your own risk! In no way are we responsible or will be held liable for any positive or adverse affects or consequences from the use of this platform.
+
+Some new features this version of the bot is introducing is:
+
 - Making it more accessible to people not only on Telegram via Facebook, WebChat etc.
 - Ability to set location by searching addresses.
 - Option to ignore water points.
 - Offering an easy virtual trip to points via Google Street View/Earth (for you lazy ones).
 - Make it a bit easier to use with buttons.
-- Help connect the community more with features to rate the experiences at visited points and and map analytical results of aggragated anonymized data. 
-
-Maybe oneday some of these features can be merged into the main project. Please note this is running on a free plan at the moment, and as such doesn't have the highest computing power so I'm not sure how stable it will be if lots of people join. I'll monitor it closely.
-
-
---- The original commands also work as described in the official welcome text below ---
+- Help connect the community more with trip reporting. 
 
 *** PRO TIP!! WHEN VISITING ATTRACTORS: BRING A GARBAGE BAG WITH YOU AND PICK UP ANY GARBAGE YOU SEE ***
 
