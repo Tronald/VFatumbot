@@ -10,5 +10,5 @@ Properties/PublishProfiles/**
 PostDeployScripts/*
 .DS_Store
 .vs/*
-appsettings.json
+appsettings*.json
 BotLogic/Consts.cs
