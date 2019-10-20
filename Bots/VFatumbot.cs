@@ -46,7 +46,7 @@ namespace VFatumbot
                     }
                     else
                     {
-                        await turnContext.SendActivityAsync(MessageFactory.Text("Welcome to Fatumbot. This is tool to experiement with the ideas that the mind and matter are connected in more ways than currently understood, and that by visiting random, the true sense of the word, places one can journey outside their normal probability paths."), cancellationToken);
+                        await turnContext.SendActivityAsync(MessageFactory.Text("Welcome to Fatumbot. This is tool to experiment with the ideas that the mind and matter are connected in more ways than currently understood, and that by visiting random (in the true sense of the word) places one can journey outside of their normal probability paths."), cancellationToken);
                         await turnContext.SendActivityAsync(MessageFactory.Text("Start off by sending your location, or typing \"search <address>\", or a Google Maps URL. Don't forget you can type \"help\" for more info."), cancellationToken);
                     }
                 }
