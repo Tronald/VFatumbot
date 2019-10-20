@@ -18,7 +18,7 @@ namespace VFatumbot
         public double Longitude = Consts.INVALID_COORD;
 #endif
         public int Radius { get; set; } = Consts.DEFAULT_RADIUS;
-        public bool IsIncludeWaterPoints { get; set; } = false;
+        public bool IsIncludeWaterPoints { get; set; } = true;
 
         public bool IsLocationSet
         {

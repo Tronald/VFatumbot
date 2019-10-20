@@ -52,19 +52,52 @@ namespace VFatumbot.BotLogic
                     async (context, token) =>
                     {
                         string mesg = "";
+                        int numWaterPointsSkipped = 0;
 
+                        redo:
                         FinalAttractor[] ida = GetIDA(userProfile.Location, userProfile.Radius, /*u* not used*/-1, doScan ? 1 : 0);
                         ida = SortIDA(ida, "attractor", idacou);
                         if (ida.Length > 0)
                         {
                             for (int i = 0; i < ida.Count(); i++)
                             {
+                                var incoords = new double[] { ida[i].X.center.point.latitude, ida[i].X.center.point.longitude };
+
+                                // If water points are set to be skipped, and there's only 1 point in the result array, try again else just exclude those from the results
+                                if (!userProfile.IsIncludeWaterPoints)
+                                {
+                                    var isWaterPoint = await Helpers.IsWaterCoordinatesAsync(incoords);
+                                    if (isWaterPoint)
+                                    {
+                                        numWaterPointsSkipped++;
+
+                                        if (numWaterPointsSkipped > Consts.WATER_POINTS_SEARCH_MAX)
+                                        {
+                                            await stepContext.Context.SendActivityAsync(MessageFactory.Text("Couldn't find anything but water points. Try again later."), cancellationToken);
+                                            await ((AdapterWithErrorHandler)stepContext.Context.Adapter).ContinueDialogAsync(context, mainDialog, cancellationToken);
+                                            return;
+                                        }
+
+                                        if (ida.Length == 1)
+                                        {
+                                            numWaterPointsSkipped++;
+                                            await stepContext.Context.SendActivityAsync(MessageFactory.Text("Number of water points skipped so far: " + numWaterPointsSkipped), cancellationToken);
+                                            goto redo;
+                                        }
+
+                                        continue;
+                                    }
+                                }
+
                                 mesg = Tolog(stepContext.Context, "attractor", ida[i]);
                                 await stepContext.Context.SendActivityAsync(MessageFactory.Text(mesg), cancellationToken);
 
-                                var incoords = new double[] { ida[i].X.center.point.latitude, ida[i].X.center.point.longitude };
-
                                 dynamic w3wResult = await Helpers.GetWhat3WordsAddressAsync(incoords);
+
+                                if (numWaterPointsSkipped > 0)
+                                {
+                                    await stepContext.Context.SendActivityAsync(MessageFactory.Text("Number of water points skipped: " + numWaterPointsSkipped), cancellationToken);
+                                }
 
                                 await stepContext.Context.SendActivityAsync(ReplyFactory.CreateLocationCardsReply(incoords, w3wResult), cancellationToken);
 
@@ -115,19 +148,52 @@ namespace VFatumbot.BotLogic
                     async (context, token) =>
                     {
                         string mesg = "";
+                        int numWaterPointsSkipped = 0;
 
+                        redo:
                         FinalAttractor[] ida = GetIDA(userProfile.Location, userProfile.Radius, /*u* not used*/-1, doScan ? 1 : 0);
                         ida = SortIDA(ida, "void", idacou);
                         if (ida.Length > 0)
                         {
                             for (int i = 0; i < ida.Count(); i++)
                             {
+                                var incoords = new double[] { ida[i].X.center.point.latitude, ida[i].X.center.point.longitude };
+
+                                // If water points are set to be skipped, and there's only 1 point in the result array, try again else just exclude those from the results
+                                if (!userProfile.IsIncludeWaterPoints)
+                                {
+                                    var isWaterPoint = await Helpers.IsWaterCoordinatesAsync(incoords);
+                                    if (isWaterPoint)
+                                    {
+                                        numWaterPointsSkipped++;
+
+                                        if (numWaterPointsSkipped > Consts.WATER_POINTS_SEARCH_MAX)
+                                        {
+                                            await stepContext.Context.SendActivityAsync(MessageFactory.Text("Couldn't find anything but water points. Try again later."), cancellationToken);
+                                            await ((AdapterWithErrorHandler)stepContext.Context.Adapter).ContinueDialogAsync(context, mainDialog, cancellationToken);
+                                            return;
+                                        }
+
+                                        if (ida.Length == 1)
+                                        {
+                                            numWaterPointsSkipped++;
+                                            await stepContext.Context.SendActivityAsync(MessageFactory.Text("Number of water points skipped so far: " + numWaterPointsSkipped), cancellationToken);
+                                            goto redo;
+                                        }
+
+                                        continue;
+                                    }
+                                }
+
                                 mesg = Tolog(stepContext.Context, "void", ida[i]);
                                 await stepContext.Context.SendActivityAsync(MessageFactory.Text(mesg), cancellationToken);
 
-                                var incoords = new double[] { ida[i].X.center.point.latitude, ida[i].X.center.point.longitude };
-
                                 dynamic w3wResult = await Helpers.GetWhat3WordsAddressAsync(incoords);
+
+                                if (numWaterPointsSkipped > 0)
+                                {
+                                    await stepContext.Context.SendActivityAsync(MessageFactory.Text("Number of water points skipped: " + numWaterPointsSkipped), cancellationToken);
+                                }
 
                                 await stepContext.Context.SendActivityAsync(ReplyFactory.CreateLocationCardsReply(incoords, w3wResult), cancellationToken);
 
@@ -195,19 +261,52 @@ namespace VFatumbot.BotLogic
                     async (context, token) =>
                     {
                         string mesg = "";
+                        int numWaterPointsSkipped = 0;
 
+                        redo:
                         FinalAttractor[] ida = GetIDA(userProfile.Location, userProfile.Radius, /*u* not used*/-1, doScan ? 1 : 0);
                         ida = SortIDA(ida, "any", idacou);
                         if (ida.Length > 0)
                         {
                             for (int i = 0; i < ida.Count(); i++)
                             {
+                                var incoords = new double[] { ida[i].X.center.point.latitude, ida[i].X.center.point.longitude };
+
+                                // If water points are set to be skipped, and there's only 1 point in the result array, try again else just exclude those from the results
+                                if (!userProfile.IsIncludeWaterPoints)
+                                {
+                                    var isWaterPoint = await Helpers.IsWaterCoordinatesAsync(incoords);
+                                    if (isWaterPoint)
+                                    {
+                                        numWaterPointsSkipped++;
+
+                                        if (numWaterPointsSkipped > Consts.WATER_POINTS_SEARCH_MAX)
+                                        {
+                                            await stepContext.Context.SendActivityAsync(MessageFactory.Text("Couldn't find anything but water points. Try again later."), cancellationToken);
+                                            await ((AdapterWithErrorHandler)stepContext.Context.Adapter).ContinueDialogAsync(context, mainDialog, cancellationToken);
+                                            return;
+                                        }
+
+                                        if (ida.Length == 1)
+                                        {
+                                            numWaterPointsSkipped++;
+                                            await stepContext.Context.SendActivityAsync(MessageFactory.Text("Number of water points skipped so far: " + numWaterPointsSkipped), cancellationToken);
+                                            goto redo;
+                                        }
+
+                                        continue;
+                                    }
+                                }
+
                                 mesg = Tolog(stepContext.Context, "ida", ida[i]);
                                 await stepContext.Context.SendActivityAsync(MessageFactory.Text(mesg), cancellationToken);
 
-                                var incoords = new double[] { ida[i].X.center.point.latitude, ida[i].X.center.point.longitude };
-
                                 dynamic w3wResult = await Helpers.GetWhat3WordsAddressAsync(incoords);
+
+                                if (numWaterPointsSkipped > 0)
+                                {
+                                    await stepContext.Context.SendActivityAsync(MessageFactory.Text("Number of water points skipped: " + numWaterPointsSkipped), cancellationToken);
+                                }
 
                                 await stepContext.Context.SendActivityAsync(ReplyFactory.CreateLocationCardsReply(incoords, w3wResult), cancellationToken);
 
@@ -243,7 +342,29 @@ namespace VFatumbot.BotLogic
 
         public async Task QuantumActionAsync(WaterfallStepContext stepContext, UserProfile userProfile, CancellationToken cancellationToken, bool suggestTime = false)
         {
+            int numWaterPointsSkipped = 0;
+
+            redo:
             double[] incoords = GetQuantumRandom(userProfile.Latitude, userProfile.Longitude, userProfile.Radius);
+
+            // Skip water points?
+            if (!userProfile.IsIncludeWaterPoints)
+            {
+                var isWaterPoint = await Helpers.IsWaterCoordinatesAsync(incoords);
+                if (isWaterPoint)
+                {
+                    numWaterPointsSkipped++;
+
+                    if (numWaterPointsSkipped > Consts.WATER_POINTS_SEARCH_MAX)
+                    {
+                        await stepContext.Context.SendActivityAsync(MessageFactory.Text("Couldn't find anything but water points. Try again later."), cancellationToken);
+                        return;
+                    }
+
+                    await stepContext.Context.SendActivityAsync(MessageFactory.Text("Number of water points skipped so far: " + numWaterPointsSkipped), cancellationToken);
+                    goto redo;
+                }
+            }
 
             string mesg = Tolog(stepContext.Context, "random", (float)incoords[0], (float)incoords[1], suggestTime ? "qtime" : "quantum");
             await stepContext.Context.SendActivityAsync(MessageFactory.Text(mesg), cancellationToken);
@@ -255,7 +376,29 @@ namespace VFatumbot.BotLogic
 
         public async Task PsuedoActionAsync(WaterfallStepContext stepContext, UserProfile userProfile, CancellationToken cancellationToken)
         {
+            int numWaterPointsSkipped = 0;
+
+            redo:
             double[] incoords = GetPseudoRandom(userProfile.Latitude, userProfile.Longitude, userProfile.Radius);
+
+            // Skip water points?
+            if (!userProfile.IsIncludeWaterPoints)
+            {
+                var isWaterPoint = await Helpers.IsWaterCoordinatesAsync(incoords);
+                if (isWaterPoint)
+                {
+                    numWaterPointsSkipped++;
+
+                    if (numWaterPointsSkipped > Consts.WATER_POINTS_SEARCH_MAX)
+                    {
+                        await stepContext.Context.SendActivityAsync(MessageFactory.Text("Couldn't find anything but water points. Try again later."), cancellationToken);
+                        return;
+                    }
+
+                    await stepContext.Context.SendActivityAsync(MessageFactory.Text("Number of water points skipped so far: " + numWaterPointsSkipped), cancellationToken);
+                    goto redo;
+                }
+            }
 
             string mesg = Tolog(stepContext.Context, "random", (float)incoords[0], (float)incoords[1], "pseudo");
             await stepContext.Context.SendActivityAsync(MessageFactory.Text(mesg), cancellationToken);
@@ -298,6 +441,8 @@ namespace VFatumbot.BotLogic
                     ((Microsoft.Bot.Schema.Activity)stepContext.Context.Activity).GetConversationReference(),
                     async (context, token) =>
                     {
+                        int numAttWaterPointsSkipped = 0;
+                        int numVoiWaterPointsSkipped = 0;
                         string mesg = "";
 
                         FinalAttractor[] ida = GetIDA(userProfile.Location, userProfile.Radius, /*u* not used*/-1, doScan ? 1 : 0);
@@ -314,22 +459,41 @@ namespace VFatumbot.BotLogic
                         {
                             for (int i = 0; i < idacou; i++)
                             {
-                                mesg = Tolog(stepContext.Context, "attractor", att[i]);
-                                await stepContext.Context.SendActivityAsync(MessageFactory.Text(mesg), cancellationToken);
                                 var incoords = new double[] { att[i].X.center.point.latitude, att[i].X.center.point.longitude };
-                                dynamic w3wResult = await Helpers.GetWhat3WordsAddressAsync(incoords);
-                                await stepContext.Context.SendActivityAsync(ReplyFactory.CreateLocationCardsReply(incoords, w3wResult), cancellationToken);
-
-                                mesg = Tolog(stepContext.Context, "void", voi[i]);
-                                await stepContext.Context.SendActivityAsync(MessageFactory.Text(mesg), cancellationToken);
+                                if (!userProfile.IsIncludeWaterPoints && await Helpers.IsWaterCoordinatesAsync(incoords))
+                                {
+                                    numAttWaterPointsSkipped++;
+                                }
+                                else
+                                {
+                                    mesg = Tolog(stepContext.Context, "attractor", att[i]);
+                                    await stepContext.Context.SendActivityAsync(MessageFactory.Text(mesg), cancellationToken);
+                                    dynamic w3wResult1 = await Helpers.GetWhat3WordsAddressAsync(incoords);
+                                    await stepContext.Context.SendActivityAsync(ReplyFactory.CreateLocationCardsReply(incoords, w3wResult1), cancellationToken);
+                                }
+                               
                                 incoords = new double[] { voi[i].X.center.point.latitude, voi[i].X.center.point.longitude };
-                                w3wResult = await Helpers.GetWhat3WordsAddressAsync(incoords);
-                                await stepContext.Context.SendActivityAsync(ReplyFactory.CreateLocationCardsReply(incoords, w3wResult), cancellationToken);
-
-								await ((AdapterWithErrorHandler)stepContext.Context.Adapter).ContinueDialogAsync(context, mainDialog, cancellationToken);
+                                if (!userProfile.IsIncludeWaterPoints && await Helpers.IsWaterCoordinatesAsync(incoords))
+                                {
+                                    numVoiWaterPointsSkipped++;
+                                }
+                                else
+                                {
+                                    mesg = Tolog(stepContext.Context, "void", voi[i]);
+                                    await stepContext.Context.SendActivityAsync(MessageFactory.Text(mesg), cancellationToken);
+                                    dynamic w3wResult2 = await Helpers.GetWhat3WordsAddressAsync(incoords);
+                                    await stepContext.Context.SendActivityAsync(ReplyFactory.CreateLocationCardsReply(incoords, w3wResult2), cancellationToken);
+                                }
 							}
+
+                            if (numAttWaterPointsSkipped > 1)
+                                await stepContext.Context.SendActivityAsync(MessageFactory.Text("Number of attractor water points skipped: " + numAttWaterPointsSkipped), cancellationToken);
+                            if (numVoiWaterPointsSkipped > 1)
+                            await stepContext.Context.SendActivityAsync(MessageFactory.Text("Number of void water points skipped: " + numVoiWaterPointsSkipped), cancellationToken);
+
+                            await ((AdapterWithErrorHandler)stepContext.Context.Adapter).ContinueDialogAsync(context, mainDialog, cancellationToken);
                         }
-                        else if (ida.Count() < 1) // TODO: is this needed vs idacou > 1 if ?
+                        else// if (ida.Count() < 1) // TODO: is this needed vs idacou > 1 if ?
                         {
                             mesg = "No Anomalies found at the moment. Try again later.";
                             await stepContext.Context.SendActivityAsync(MessageFactory.Text(mesg), cancellationToken);
@@ -349,83 +513,160 @@ namespace VFatumbot.BotLogic
                     ((Microsoft.Bot.Schema.Activity)stepContext.Context.Activity).GetConversationReference(),
                     async (context, token) =>
                     {
-                            string mesg = "";
-                            double[] incoords = new double[2];
+                        string mesg = "";
+                        double[] incoords = new double[2];
+                        int numWaterPointsSkipped = 0;
 
-                            FinalAttractor[] ida = GetIDA(userProfile.Location, userProfile.Radius, -1/*not used?*/);
+                        FinalAttractor[] ida = GetIDA(userProfile.Location, userProfile.Radius, -1/*not used?*/);
 
-                            FinalAttractor[] att = SortIDA(ida, "attractor", 1);
-                            FinalAttractor[] voi = SortIDA(ida, "void", 1);
-                            ida = SortIDA(ida, "any", 1);
-                            double[] pcoords = GetPseudoRandom(userProfile.Location.latitude, userProfile.Location.longitude, userProfile.Radius);
-                            double[] qcoords = GetQuantumRandom(userProfile.Location.latitude, userProfile.Location.longitude, userProfile.Radius);
+                        redoAtt:
+                        FinalAttractor[] att = SortIDA(ida, "attractor", 1);
+                        if (!userProfile.IsIncludeWaterPoints)
+                        {
+                            var isWaterPoint = await Helpers.IsWaterCoordinatesAsync(new double[] { att[0].X.center.point.latitude, att[0].X.center.point.longitude });
+                            if (isWaterPoint)
+                            {
+                                numWaterPointsSkipped++;
 
-                            Random rn = new Random();
-                            int mtd = rn.Next(100);
+                                if (numWaterPointsSkipped > Consts.WATER_POINTS_SEARCH_MAX)
+                                {
+                                    await stepContext.Context.SendActivityAsync(MessageFactory.Text("Couldn't find anything but attractor water points. Try again later."), cancellationToken);
+                                    return;
+                                }
 
-                            if (mtd < 20)
+                                await stepContext.Context.SendActivityAsync(MessageFactory.Text("Number of attractor water points skipped so far: " + numWaterPointsSkipped), cancellationToken);
+                                goto redoAtt;
+                            }
+                        }
+
+                        redoVoid:
+                        FinalAttractor[] voi = SortIDA(ida, "void", 1);
+                        if (!userProfile.IsIncludeWaterPoints)
+                        {
+                            var isWaterPoint = await Helpers.IsWaterCoordinatesAsync(new double[] { voi[0].X.center.point.latitude, voi[0].X.center.point.longitude });
+                            if (isWaterPoint)
+                            {
+                                numWaterPointsSkipped++;
+
+                                if (numWaterPointsSkipped > Consts.WATER_POINTS_SEARCH_MAX)
+                                {
+                                    await stepContext.Context.SendActivityAsync(MessageFactory.Text("Couldn't find anything but void water points. Try again later."), cancellationToken);
+                                    return;
+                                }
+
+                                await stepContext.Context.SendActivityAsync(MessageFactory.Text("Number of void water points skipped so far: " + numWaterPointsSkipped), cancellationToken);
+                                goto redoVoid;
+                            }
+                        }
+
+                        ida = SortIDA(ida, "any", 1);
+
+                        redoPsuedo:
+                        double[] pcoords = GetPseudoRandom(userProfile.Location.latitude, userProfile.Location.longitude, userProfile.Radius);
+                        if (!userProfile.IsIncludeWaterPoints)
+                        {
+                            var isWaterPoint = await Helpers.IsWaterCoordinatesAsync(pcoords);
+                            if (isWaterPoint)
+                            {
+                                numWaterPointsSkipped++;
+
+                                if (numWaterPointsSkipped > Consts.WATER_POINTS_SEARCH_MAX)
+                                {
+                                    await stepContext.Context.SendActivityAsync(MessageFactory.Text("Couldn't find anything but psuedo water points. Try again later."), cancellationToken);
+                                    return;
+                                }
+
+                                await stepContext.Context.SendActivityAsync(MessageFactory.Text("Number of attractor psuedo points skipped so far: " + numWaterPointsSkipped), cancellationToken);
+                                goto redoPsuedo;
+                            }
+                        }
+
+                        redoQuantum:
+                        double[] qcoords = GetQuantumRandom(userProfile.Location.latitude, userProfile.Location.longitude, userProfile.Radius);
+                        if (!userProfile.IsIncludeWaterPoints)
+                        {
+                            var isWaterPoint = await Helpers.IsWaterCoordinatesAsync(qcoords);
+                            if (isWaterPoint)
+                            {
+                                numWaterPointsSkipped++;
+
+                                if (numWaterPointsSkipped > Consts.WATER_POINTS_SEARCH_MAX)
+                                {
+                                    await stepContext.Context.SendActivityAsync(MessageFactory.Text("Couldn't find anything but quantum water points. Try again later."), cancellationToken);
+                                    return;
+                                }
+
+                                await stepContext.Context.SendActivityAsync(MessageFactory.Text("Number of attractor quantum points skipped so far: " + numWaterPointsSkipped), cancellationToken);
+                                goto redoQuantum;
+                            }
+                        }
+
+                        Random rn = new Random();
+                        int mtd = rn.Next(100);
+
+                        if (mtd < 20)
+                        {
+                            incoords[0] = pcoords[0];
+                            incoords[1] = pcoords[1];
+                            mesg = Tolog(stepContext.Context, "blind", (float)incoords[0], (float)incoords[1], "pseudo");
+                        }
+                        if ((mtd < 40) && (mtd > 20))
+                        {
+                            if (att.Count() > 0)
+                            {
+                                incoords[0] = att[0].X.center.point.latitude;
+                                incoords[1] = att[0].X.center.point.longitude;
+                                mesg = Tolog(stepContext.Context, "blind", att[0]);
+                            }
+                            else
                             {
                                 incoords[0] = pcoords[0];
                                 incoords[1] = pcoords[1];
                                 mesg = Tolog(stepContext.Context, "blind", (float)incoords[0], (float)incoords[1], "pseudo");
                             }
-                            if ((mtd < 40) && (mtd > 20))
+                        }
+                        if ((mtd < 60) && (mtd > 40))
+                        {
+                            incoords[0] = qcoords[0];
+                            incoords[1] = qcoords[1];
+                            mesg = Tolog(stepContext.Context, "blind", (float)incoords[0], (float)incoords[1], "quantum");
+                        }
+                        if ((mtd < 80) && (mtd > 60))
+                        {
+                            if (voi.Count() > 0)
                             {
-                                if (att.Count() > 0)
-                                {
-                                    incoords[0] = att[0].X.center.point.latitude;
-                                    incoords[1] = att[0].X.center.point.longitude;
-                                    mesg = Tolog(stepContext.Context, "blind", att[0]);
-                                }
-                                else
-                                {
-                                    incoords[0] = pcoords[0];
-                                    incoords[1] = pcoords[1];
-                                    mesg = Tolog(stepContext.Context, "blind", (float)incoords[0], (float)incoords[1], "pseudo");
-                                }
+                                incoords[0] = voi[0].X.center.point.latitude;
+                                incoords[1] = voi[0].X.center.point.longitude;
+                                mesg = Tolog(stepContext.Context, "blind", voi[0]);
                             }
-                            if ((mtd < 60) && (mtd > 40))
+                            else
+                            {
+                                mtd = 90;
+                            }
+                        }
+                        if ((mtd < 100) && (mtd > 80))
+                        {
+                            if (ida.Count() > 0)
+                            {
+                                incoords[0] = ida[0].X.center.point.latitude;
+                                incoords[1] = ida[0].X.center.point.longitude;
+                                mesg = Tolog(stepContext.Context, "blind", ida[0]);
+                            }
+                            else
                             {
                                 incoords[0] = qcoords[0];
                                 incoords[1] = qcoords[1];
                                 mesg = Tolog(stepContext.Context, "blind", (float)incoords[0], (float)incoords[1], "quantum");
                             }
-                            if ((mtd < 80) && (mtd > 60))
-                            {
-                                if (voi.Count() > 0)
-                                {
-                                    incoords[0] = voi[0].X.center.point.latitude;
-                                    incoords[1] = voi[0].X.center.point.longitude;
-                                    mesg = Tolog(stepContext.Context, "blind", voi[0]);
-                                }
-                                else
-                                {
-                                    mtd = 90;
-                                }
-                            }
-                            if ((mtd < 100) && (mtd > 80))
-                            {
-                                if (ida.Count() > 0)
-                                {
-                                    incoords[0] = ida[0].X.center.point.latitude;
-                                    incoords[1] = ida[0].X.center.point.longitude;
-                                    mesg = Tolog(stepContext.Context, "blind", ida[0]);
-                                }
-                                else
-                                {
-                                    incoords[0] = qcoords[0];
-                                    incoords[1] = qcoords[1];
-                                    mesg = Tolog(stepContext.Context, "blind", (float)incoords[0], (float)incoords[1], "quantum");
-                                }
-                            }
+                        }
 
-                            await stepContext.Context.SendActivityAsync(MessageFactory.Text(mesg), cancellationToken);
+                        await stepContext.Context.SendActivityAsync(MessageFactory.Text(mesg), cancellationToken);
 
-                            dynamic w3wResult = await Helpers.GetWhat3WordsAddressAsync(incoords);
+                        dynamic w3wResult = await Helpers.GetWhat3WordsAddressAsync(incoords);
 
-                            await stepContext.Context.SendActivityAsync(ReplyFactory.CreateLocationCardsReply(incoords, w3wResult), cancellationToken);
+                        await stepContext.Context.SendActivityAsync(ReplyFactory.CreateLocationCardsReply(incoords, w3wResult), cancellationToken);
 
-						    await ((AdapterWithErrorHandler)stepContext.Context.Adapter).ContinueDialogAsync(context, mainDialog, cancellationToken);
+						await ((AdapterWithErrorHandler)stepContext.Context.Adapter).ContinueDialogAsync(context, mainDialog, cancellationToken);
 					}, cancellationToken);
 			});
 		}
