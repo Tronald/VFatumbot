@@ -157,7 +157,6 @@ namespace VFatumbot.BotLogic
 
                                         if (ida.Length == 1)
                                         {
-                                            numWaterPointsSkipped++;
                                             await turnContext.SendActivityAsync(MessageFactory.Text("Number of water points skipped so far: " + numWaterPointsSkipped), cancellationToken);
                                             goto redo;
                                         }
@@ -253,7 +252,6 @@ namespace VFatumbot.BotLogic
 
                                         if (ida.Length == 1)
                                         {
-                                            numWaterPointsSkipped++;
                                             await turnContext.SendActivityAsync(MessageFactory.Text("Number of water points skipped so far: " + numWaterPointsSkipped), cancellationToken);
                                             goto redo;
                                         }
@@ -274,12 +272,12 @@ namespace VFatumbot.BotLogic
 
                                 await turnContext.SendActivityAsync(ReplyFactory.CreateLocationCardsReply(incoords, w3wResult), cancellationToken);
 
-                                //await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(context, mainDialog, cancellationToken);
+                                await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(context, mainDialog, cancellationToken);
 
                                 // TODO: tesing reporting experiences dialog
-                                await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(context, new TripReportDialog(null, null), cancellationToken);
+                                //await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(context, new TripReportDialog(null, null), cancellationToken);
 
-                                //await ((AdapterWithErrorHandler)turnContext.Adapter).ContinueDialogAsync(context, new ReportDialog(), cancellationToken);
+                                //await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(context, new ReportDialog(), cancellationToken);
                                 //await stepContext.BeginDialogAsync(nameof(TripReportDialog), null, cancellationToken);
                             }
                         }
@@ -368,7 +366,6 @@ namespace VFatumbot.BotLogic
 
                                         if (ida.Length == 1)
                                         {
-                                            numWaterPointsSkipped++;
                                             await turnContext.SendActivityAsync(MessageFactory.Text("Number of water points skipped so far: " + numWaterPointsSkipped), cancellationToken);
                                             goto redo;
                                         }
