@@ -5,6 +5,7 @@ using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Builder.Dialogs.Choices;
 using Microsoft.Extensions.Logging;
+using VFatumbot.BotLogic;
 
 namespace VFatumbot
 {
@@ -71,12 +72,19 @@ namespace VFatumbot
             int inputtedRadius;
             if (!int.TryParse(promptContext.Context.Activity.Text, out inputtedRadius))
             {
+                await promptContext.Context.SendActivityAsync(MessageFactory.Text($"Invalid radius. Enter desired radius:"), cancellationToken);
                 return false;
             }
 
-            if (inputtedRadius < 100 // TODO should be 1000
-                || inputtedRadius > 20000000) // TOOD this should be 100,000
+            if (inputtedRadius < Consts.RADIUS_MIN)
             {
+                await promptContext.Context.SendActivityAsync(MessageFactory.Text($"Radius must be more than or equal to {Consts.RADIUS_MIN}m. Enter desired radius:"), cancellationToken);
+                return false;
+            }
+
+            if (inputtedRadius > Consts.RADIUS_MAX)
+            {
+                await promptContext.Context.SendActivityAsync(MessageFactory.Text($"Radius must be less than or equal to {Consts.RADIUS_MAX}m. Enter desired radius:"), cancellationToken);
                 return false;
             }
 

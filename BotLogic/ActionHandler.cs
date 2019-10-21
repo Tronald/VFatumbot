@@ -84,13 +84,28 @@ namespace VFatumbot.BotLogic
                     int oldRadius = userProfile.Radius, inputtedRadius;
                     if (Int32.TryParse(newRadiusStr, out inputtedRadius))
                     {
+                        if (inputtedRadius < Consts.RADIUS_MIN)
+                        {
+                            await turnContext.SendActivityAsync(MessageFactory.Text($"Radius must be more than or equal to {Consts.RADIUS_MIN}m"), cancellationToken);
+                            return;
+                        }
+                        if (inputtedRadius > Consts.RADIUS_MAX)
+                        {
+                            await turnContext.SendActivityAsync(MessageFactory.Text($"Radius must be less than or equal to {Consts.RADIUS_MAX}m"), cancellationToken);
+                            return;
+                        }
+
                         userProfile.Radius = inputtedRadius;
+                        await turnContext.SendActivityAsync(MessageFactory.Text($"Changed radius from {oldRadius}m to {userProfile.Radius}m"), cancellationToken);
                     }
-                    await turnContext.SendActivityAsync(MessageFactory.Text($"Changed radius from {oldRadius}m to {userProfile.Radius}m"), cancellationToken);
+                    else
+                    {
+                        await turnContext.SendActivityAsync(MessageFactory.Text($"Invalid radius"), cancellationToken);
+                    }
                 }
                 else
                 {
-                    await turnContext.SendActivityAsync(MessageFactory.Text($"Your current radius from is{userProfile.Radius}m"), cancellationToken);
+                    await turnContext.SendActivityAsync(MessageFactory.Text($"Your current radius from is {userProfile.Radius}m"), cancellationToken);
                 }
             }
         }
