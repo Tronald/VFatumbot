@@ -19,6 +19,7 @@ namespace VFatumbot
         {
             _logger = logger;
             _userProfileAccessor = userProfileAccessor;
+            _mainDialog = mainDialog;
 
             AddDialog(new ChoicePrompt(nameof(ChoicePrompt)));
             AddDialog(new WaterfallDialog(nameof(WaterfallDialog), new WaterfallStep[]
@@ -48,8 +49,9 @@ namespace VFatumbot
         {
             _logger.LogInformation($"BlindSpotsDialog.PerformActionStepAsync[{((FoundChoice)stepContext.Result).Value}]");
 
-            var actionHandler = new ActionHandler();
             var userProfile = await _userProfileAccessor.GetAsync(stepContext.Context, () => new UserProfile());
+            var actionHandler = new ActionHandler();
+            var goBackMainMenuThisRound = true;
 
             switch (((FoundChoice)stepContext.Result).Value)
             {
@@ -62,14 +64,23 @@ namespace VFatumbot
                 case "Psuedo":
                     await actionHandler.PsuedoActionAsync(stepContext.Context, userProfile, cancellationToken);
                     break;
-                case "Point":
+                case "Mystery Point":
+                    goBackMainMenuThisRound = false;
                     await actionHandler.PointActionAsync(stepContext.Context, userProfile, cancellationToken, _mainDialog);
                     break;
                 case "< Back":
                     break;
             }
 
-            return await stepContext.ReplaceDialogAsync(nameof(MainDialog));
+            if (goBackMainMenuThisRound)
+            {
+                return await stepContext.ReplaceDialogAsync(nameof(MainDialog));
+            }
+            else
+            {
+                // Long-running tasks like /getattractors etc will make use of ContinueDialog to re-prompt users
+                return await stepContext.EndDialogAsync();
+            }
         }
 
         private IList<Choice> GetActionChoices()
@@ -102,9 +113,13 @@ namespace VFatumbot
                                     }
                 },
                 new Choice() {
-                    Value = "Point",
+                    Value = "Mystery Point",
                     Synonyms = new List<string>()
                                     {
+                                        "Mystery point",
+                                        "mystery point",
+                                        "Point",
+                                        "Point",
                                         "point",
                                         "getpoint",
                                     }
