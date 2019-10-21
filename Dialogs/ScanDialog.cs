@@ -56,16 +56,16 @@ namespace VFatumbot
             switch (((FoundChoice)stepContext.Result).Value)
             {
                 case "Scan Attractor":
-                    await actionHandler.AttractionActionAsync(stepContext, userProfile, cancellationToken, _mainDialog, true);
+                    await actionHandler.AttractionActionAsync(stepContext.Context, userProfile, cancellationToken, _mainDialog, true);
                     break;
                 case "Scan Void":
-                    await actionHandler.VoidActionAsync(stepContext, userProfile, cancellationToken, _mainDialog, true);
+                    await actionHandler.VoidActionAsync(stepContext.Context, userProfile, cancellationToken, _mainDialog, true);
                     break;
                 case "Scan Anomaly":
-                    await actionHandler.AnomalyActionAsync(stepContext, userProfile, cancellationToken, _mainDialog, true);
+                    await actionHandler.AnomalyActionAsync(stepContext.Context, userProfile, cancellationToken, _mainDialog, true);
                     break;
                 case "Scan Pair":
-                    await actionHandler.PairActionAsync(stepContext, userProfile, cancellationToken, _mainDialog, true);
+                    await actionHandler.PairActionAsync(stepContext.Context, userProfile, cancellationToken, _mainDialog, true);
                     break;
                 case "< Back":
                     goBackMainMenuThisRound = true;
@@ -92,7 +92,6 @@ namespace VFatumbot
                     Synonyms = new List<string>()
                                     {
                                         "scanattractor",
-                                        "/scanattractor",
                                     }
                 },
                 new Choice() {
@@ -100,7 +99,6 @@ namespace VFatumbot
                     Synonyms = new List<string>()
                                     {
                                         "scanvoid",
-                                        "/scanvoid",
                                     }
                 },
                 new Choice() {
@@ -108,7 +106,6 @@ namespace VFatumbot
                     Synonyms = new List<string>()
                                     {
                                         "scananomaly",
-                                        "/scananomaly",
                                     }
                 },
                 new Choice() {
@@ -116,7 +113,6 @@ namespace VFatumbot
                     Synonyms = new List<string>()
                                     {
                                         "scanpair",
-                                        "/scanpair",
                                     }
                 },
                 new Choice() {

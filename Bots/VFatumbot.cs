@@ -136,6 +136,16 @@ namespace VFatumbot
                 await turnContext.SendActivityAsync(MessageFactory.Text(Consts.NO_LOCATION_SET_MSG), cancellationToken);
                 return;
             }
+            else if (!string.IsNullOrEmpty(turnContext.Activity.Text) && turnContext.Activity.Text.StartsWith("/", StringComparison.InvariantCulture))
+            {
+                await new ActionHandler().ParseSlashCommands(turnContext, userProfile, cancellationToken, _mainDialog);
+
+                await mUserProfileAccessor.SetAsync(turnContext, userProfile);
+                await _userState.SaveChangesAsync(turnContext, false, cancellationToken);
+                await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(turnContext, _mainDialog, cancellationToken);
+
+                return;
+            }
 
             await base.OnTurnAsync(turnContext, cancellationToken);
 

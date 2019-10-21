@@ -63,19 +63,19 @@ namespace VFatumbot
             switch (((FoundChoice)stepContext.Result).Value)
             {
                 case "Attractor":
-                    await actionHandler.AttractionActionAsync(stepContext, userProfile, cancellationToken, this);
+                    await actionHandler.AttractionActionAsync(stepContext.Context, userProfile, cancellationToken, this);
                     break;
                 case "Void":
-                    await actionHandler.VoidActionAsync(stepContext, userProfile, cancellationToken, this);
+                    await actionHandler.VoidActionAsync(stepContext.Context, userProfile, cancellationToken, this);
                     break;
                 case "Anomaly":
-                    await actionHandler.AnomalyActionAsync(stepContext, userProfile, cancellationToken, this);
+                    await actionHandler.AnomalyActionAsync(stepContext.Context, userProfile, cancellationToken, this);
                     break;
                 case "Intent Suggestions":
-                    await actionHandler.IntentSuggestionActionAsync(stepContext, userProfile, cancellationToken, this);
+                    await actionHandler.IntentSuggestionActionAsync(stepContext.Context, userProfile, cancellationToken, this);
                     break;
                 case "Pair":
-                    await actionHandler.PairActionAsync(stepContext, userProfile, cancellationToken, this);
+                    await actionHandler.PairActionAsync(stepContext.Context, userProfile, cancellationToken, this);
                     break;
                 case "Blind Spots":
                     return await stepContext.BeginDialogAsync(nameof(BlindSpotsDialog), this, cancellationToken);
@@ -83,7 +83,7 @@ namespace VFatumbot
                     return await stepContext.BeginDialogAsync(nameof(ScanDialog), this, cancellationToken);
                 case "My Location":
                     repromptThisRound = true;
-                    await actionHandler.LocationActionAsync(stepContext, userProfile, cancellationToken);
+                    await actionHandler.LocationActionAsync(stepContext.Context, userProfile, cancellationToken);
                     break;
                 case "Settings":
                     return await stepContext.BeginDialogAsync(nameof(SettingsDialog), this, cancellationToken);
@@ -110,7 +110,6 @@ namespace VFatumbot
                                     {
                                         "attractor",
                                         "getattractor",
-                                        "/getattractor",
                                     }
                 },
                 new Choice() {
@@ -119,11 +118,9 @@ namespace VFatumbot
                                     {
                                         "void",
                                         "getvoid",
-                                        "/getvoid",
                                         "Repeller",
                                         "repeller",
                                         "getrepeller",
-                                        "/getrepeller"
                                     }
                 },
                 new Choice() {
@@ -132,10 +129,8 @@ namespace VFatumbot
                                     {
                                         "anomaly",
                                         "getanomaly",
-                                        "/getanomaly",
                                         "ida",
                                         "getida",
-                                        "/getida",
                                     }
                 },
                 new Choice() {
@@ -150,7 +145,6 @@ namespace VFatumbot
                                     {
                                         "pair",
                                         "getpair",
-                                        "/getpair",
                                     }
                 },
                 new Choice() {
@@ -159,7 +153,6 @@ namespace VFatumbot
                                     {
                                         "blind spots",
                                         "blindspots",
-                                        "/blindspots",
                                     }
                 },
                 new Choice() {
@@ -167,7 +160,6 @@ namespace VFatumbot
                     Synonyms = new List<string>()
                                     {
                                         "scan",
-                                        "/scan",
                                     }
                 },
                 new Choice() {
@@ -178,8 +170,6 @@ namespace VFatumbot
                                         "My location",
                                         "my location",
                                         "location",
-                                        "setlocation",
-                                        "/setlocation",
                                     }
                 },
                  new Choice() {

@@ -18,16 +18,93 @@ namespace VFatumbot.BotLogic
             backgroundWorker.RunWorkerAsync();
         }
 
-        public async Task AttractionActionAsync(WaterfallStepContext stepContext, UserProfile userProfile, CancellationToken cancellationToken, MainDialog mainDialog, bool doScan = false)
+        public async Task ParseSlashCommands(ITurnContext turnContext, UserProfile userProfile, CancellationToken cancellationToken, MainDialog mainDialog)
+        {
+            var command = turnContext.Activity.Text.ToLower();
+            if (command.StartsWith("/getattractor", StringComparison.InvariantCulture))
+            {
+                await AttractionActionAsync(turnContext, userProfile, cancellationToken, mainDialog);
+            }
+            else if (command.StartsWith("/getvoid", StringComparison.InvariantCulture))
+            {
+                await VoidActionAsync(turnContext, userProfile, cancellationToken, mainDialog);
+            }
+            else if (command.StartsWith("/getpair", StringComparison.InvariantCulture))
+            {
+                await PairActionAsync(turnContext, userProfile, cancellationToken, mainDialog);
+            }
+            else if (command.StartsWith("/getattractor", StringComparison.InvariantCulture))
+            {
+                await AttractionActionAsync(turnContext, userProfile, cancellationToken, mainDialog);
+            }
+            else if (command.StartsWith("/getpseudo", StringComparison.InvariantCulture))
+            {
+                await PsuedoActionAsync(turnContext, userProfile, cancellationToken);
+            }
+            else if (command.StartsWith("/getquantum", StringComparison.InvariantCulture))
+            {
+                await QuantumActionAsync(turnContext, userProfile, cancellationToken);
+            }
+            else if (command.StartsWith("/getqtime", StringComparison.InvariantCulture))
+            {
+                await QuantumActionAsync(turnContext, userProfile, cancellationToken, true);
+            }
+            else if (command.StartsWith("/getida", StringComparison.InvariantCulture) ||
+                     command.StartsWith("/getanomaly", StringComparison.InvariantCulture))
+            {
+                await AnomalyActionAsync(turnContext, userProfile, cancellationToken, mainDialog);
+            }
+            else if (command.StartsWith("/scanida", StringComparison.InvariantCulture))
+            {
+                await AnomalyActionAsync(turnContext, userProfile, cancellationToken, mainDialog, true);
+            }
+            else if (command.StartsWith("/scanattractor", StringComparison.InvariantCulture))
+            {
+                await AttractionActionAsync(turnContext, userProfile, cancellationToken, mainDialog, true);
+            }
+            else if (command.StartsWith("/scanvoid", StringComparison.InvariantCulture))
+            {
+                await VoidActionAsync(turnContext, userProfile, cancellationToken, mainDialog, true);
+            }
+            else if (command.StartsWith("/scanpair", StringComparison.InvariantCulture))
+            {
+                await PairActionAsync(turnContext, userProfile, cancellationToken, mainDialog, true);
+            }
+            else if (command.StartsWith("/getpoint", StringComparison.InvariantCulture) ||
+                     command.StartsWith("/blindspot", StringComparison.InvariantCulture) ||
+                     command.StartsWith("/blind", StringComparison.InvariantCulture))
+            {
+                await PointActionAsync(turnContext, userProfile, cancellationToken, mainDialog);
+            }
+            else if (command.StartsWith("/setradius", StringComparison.InvariantCulture))
+            {
+                if (command.Contains(" "))
+                {
+                    string newRadiusStr = command.Replace(command.Substring(0, command.IndexOf(" ", StringComparison.InvariantCulture)), "");
+                    int oldRadius = userProfile.Radius, inputtedRadius;
+                    if (Int32.TryParse(newRadiusStr, out inputtedRadius))
+                    {
+                        userProfile.Radius = inputtedRadius;
+                    }
+                    await turnContext.SendActivityAsync(MessageFactory.Text($"Changed radius from {oldRadius}m to {userProfile.Radius}m"), cancellationToken);
+                }
+                else
+                {
+                    await turnContext.SendActivityAsync(MessageFactory.Text($"Your current radius from is{userProfile.Radius}m"), cancellationToken);
+                }
+            }
+        }
+
+        public async Task AttractionActionAsync(ITurnContext turnContext, UserProfile userProfile, CancellationToken cancellationToken, MainDialog mainDialog, bool doScan = false)
         {
             int idacou = 1;
-            if (stepContext.Context.Activity.Text.Contains("["))
+            if (turnContext.Activity.Text.Contains("["))
             {
-                string[] buf = stepContext.Context.Activity.Text.Split(new string[] { "[", "]" }, StringSplitOptions.RemoveEmptyEntries);
+                string[] buf = turnContext.Activity.Text.Split(new string[] { "[", "]" }, StringSplitOptions.RemoveEmptyEntries);
                 Int32.TryParse(buf[1], out idacou);
                 if (idacou < 1 || idacou > 20)
                 {
-                    await stepContext.Context.SendActivityAsync(MessageFactory.Text("Incorrect value. Parameter should be a digit from 1 to 20."), cancellationToken);
+                    await turnContext.SendActivityAsync(MessageFactory.Text("Incorrect value. Parameter should be a digit from 1 to 20."), cancellationToken);
                     return;
                 }
             }
@@ -38,17 +115,17 @@ namespace VFatumbot.BotLogic
                 //if (metasessions.ContainsKey(u) == true)
                 //{ await Bot.SendTextMessageAsync(message.Chat.Id, "Your scanning session is already in progress."); }
                 //else
-                await stepContext.Context.SendActivityAsync(MessageFactory.Text("Generation may take from 5 to 15 minutes."), cancellationToken);
+                await turnContext.SendActivityAsync(MessageFactory.Text("Generation may take from 5 to 15 minutes."), cancellationToken);
             }
             else
             {
-                await stepContext.Context.SendActivityAsync(MessageFactory.Text("Wait a minute. It will take a while."), cancellationToken);
+                await turnContext.SendActivityAsync(MessageFactory.Text("Wait a minute. It will take a while."), cancellationToken);
             }
 
             DispatchWorkerThread((object sender, DoWorkEventArgs e) =>
             {
-                stepContext.Context.Adapter.ContinueConversationAsync(Consts.APP_ID,
-                    ((Microsoft.Bot.Schema.Activity)stepContext.Context.Activity).GetConversationReference(),
+                turnContext.Adapter.ContinueConversationAsync(Consts.APP_ID,
+                    ((Microsoft.Bot.Schema.Activity)turnContext.Activity).GetConversationReference(),
                     async (context, token) =>
                     {
                         string mesg = "";
@@ -73,15 +150,15 @@ namespace VFatumbot.BotLogic
 
                                         if (numWaterPointsSkipped > Consts.WATER_POINTS_SEARCH_MAX)
                                         {
-                                            await stepContext.Context.SendActivityAsync(MessageFactory.Text("Couldn't find anything but water points. Try again later."), cancellationToken);
-                                            await ((AdapterWithErrorHandler)stepContext.Context.Adapter).RepromptMainDialog(context, mainDialog, cancellationToken);
+                                            await turnContext.SendActivityAsync(MessageFactory.Text("Couldn't find anything but water points. Try again later."), cancellationToken);
+                                            await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(context, mainDialog, cancellationToken);
                                             return;
                                         }
 
                                         if (ida.Length == 1)
                                         {
                                             numWaterPointsSkipped++;
-                                            await stepContext.Context.SendActivityAsync(MessageFactory.Text("Number of water points skipped so far: " + numWaterPointsSkipped), cancellationToken);
+                                            await turnContext.SendActivityAsync(MessageFactory.Text("Number of water points skipped so far: " + numWaterPointsSkipped), cancellationToken);
                                             goto redo;
                                         }
 
@@ -89,41 +166,41 @@ namespace VFatumbot.BotLogic
                                     }
                                 }
 
-                                mesg = Tolog(stepContext.Context, "attractor", ida[i]);
-                                await stepContext.Context.SendActivityAsync(MessageFactory.Text(mesg), cancellationToken);
+                                mesg = Tolog(turnContext, "attractor", ida[i]);
+                                await turnContext.SendActivityAsync(MessageFactory.Text(mesg), cancellationToken);
 
                                 dynamic w3wResult = await Helpers.GetWhat3WordsAddressAsync(incoords);
 
                                 if (numWaterPointsSkipped > 0)
                                 {
-                                    await stepContext.Context.SendActivityAsync(MessageFactory.Text("Number of water points skipped: " + numWaterPointsSkipped), cancellationToken);
+                                    await turnContext.SendActivityAsync(MessageFactory.Text("Number of water points skipped: " + numWaterPointsSkipped), cancellationToken);
                                 }
 
-                                await stepContext.Context.SendActivityAsync(ReplyFactory.CreateLocationCardsReply(incoords, w3wResult), cancellationToken);
+                                await turnContext.SendActivityAsync(ReplyFactory.CreateLocationCardsReply(incoords, w3wResult), cancellationToken);
 
-                                await ((AdapterWithErrorHandler)stepContext.Context.Adapter).RepromptMainDialog(context, mainDialog, cancellationToken);
+                                await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(context, mainDialog, cancellationToken);
                             }
                         }
                         else if (ida.Count() < 1)
                         {
                             mesg = "No Anomalies found at the moment. Try again later.";
-                            await stepContext.Context.SendActivityAsync(MessageFactory.Text(mesg), cancellationToken);
-                            await ((AdapterWithErrorHandler)stepContext.Context.Adapter).RepromptMainDialog(context, mainDialog, cancellationToken);
+                            await turnContext.SendActivityAsync(MessageFactory.Text(mesg), cancellationToken);
+                            await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(context, mainDialog, cancellationToken);
                         }
                     }, cancellationToken);
             });
         }
 
-        public async Task VoidActionAsync(WaterfallStepContext stepContext, UserProfile userProfile, CancellationToken cancellationToken, MainDialog mainDialog, bool doScan = false)
+        public async Task VoidActionAsync(ITurnContext turnContext, UserProfile userProfile, CancellationToken cancellationToken, MainDialog mainDialog, bool doScan = false)
         {
             int idacou = 1;
-            if (stepContext.Context.Activity.Text.Contains("["))
+            if (turnContext.Activity.Text.Contains("["))
             {
-                string[] buf = stepContext.Context.Activity.Text.Split(new string[] { "[", "]" }, StringSplitOptions.RemoveEmptyEntries);
+                string[] buf = turnContext.Activity.Text.Split(new string[] { "[", "]" }, StringSplitOptions.RemoveEmptyEntries);
                 Int32.TryParse(buf[1], out idacou);
                 if (idacou < 1 || idacou > 20)
                 {
-                    await stepContext.Context.SendActivityAsync(MessageFactory.Text("Incorrect value. Parameter should be a digit from 1 to 20."), cancellationToken);
+                    await turnContext.SendActivityAsync(MessageFactory.Text("Incorrect value. Parameter should be a digit from 1 to 20."), cancellationToken);
                     return;
                 }
             }
@@ -134,17 +211,17 @@ namespace VFatumbot.BotLogic
                 //if (metasessions.ContainsKey(u) == true)
                 //{ await Bot.SendTextMessageAsync(message.Chat.Id, "Your scanning session is already in progress."); }
                 //else
-                await stepContext.Context.SendActivityAsync(MessageFactory.Text("Generation may take from 5 to 15 minutes."), cancellationToken);
+                await turnContext.SendActivityAsync(MessageFactory.Text("Generation may take from 5 to 15 minutes."), cancellationToken);
             }
             else
             {
-                await stepContext.Context.SendActivityAsync(MessageFactory.Text("Wait a minute. It will take a while."), cancellationToken);
+                await turnContext.SendActivityAsync(MessageFactory.Text("Wait a minute. It will take a while."), cancellationToken);
             }
 
             DispatchWorkerThread((object sender, DoWorkEventArgs e) =>
             {
-                stepContext.Context.Adapter.ContinueConversationAsync(Consts.APP_ID,
-                    ((Microsoft.Bot.Schema.Activity)stepContext.Context.Activity).GetConversationReference(),
+                turnContext.Adapter.ContinueConversationAsync(Consts.APP_ID,
+                    ((Microsoft.Bot.Schema.Activity)turnContext.Activity).GetConversationReference(),
                     async (context, token) =>
                     {
                         string mesg = "";
@@ -169,15 +246,15 @@ namespace VFatumbot.BotLogic
 
                                         if (numWaterPointsSkipped > Consts.WATER_POINTS_SEARCH_MAX)
                                         {
-                                            await stepContext.Context.SendActivityAsync(MessageFactory.Text("Couldn't find anything but water points. Try again later."), cancellationToken);
-                                            await ((AdapterWithErrorHandler)stepContext.Context.Adapter).RepromptMainDialog(context, mainDialog, cancellationToken);
+                                            await turnContext.SendActivityAsync(MessageFactory.Text("Couldn't find anything but water points. Try again later."), cancellationToken);
+                                            await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(context, mainDialog, cancellationToken);
                                             return;
                                         }
 
                                         if (ida.Length == 1)
                                         {
                                             numWaterPointsSkipped++;
-                                            await stepContext.Context.SendActivityAsync(MessageFactory.Text("Number of water points skipped so far: " + numWaterPointsSkipped), cancellationToken);
+                                            await turnContext.SendActivityAsync(MessageFactory.Text("Number of water points skipped so far: " + numWaterPointsSkipped), cancellationToken);
                                             goto redo;
                                         }
 
@@ -185,58 +262,60 @@ namespace VFatumbot.BotLogic
                                     }
                                 }
 
-                                mesg = Tolog(stepContext.Context, "void", ida[i]);
-                                await stepContext.Context.SendActivityAsync(MessageFactory.Text(mesg), cancellationToken);
+                                mesg = Tolog(turnContext, "void", ida[i]);
+                                await turnContext.SendActivityAsync(MessageFactory.Text(mesg), cancellationToken);
 
                                 dynamic w3wResult = await Helpers.GetWhat3WordsAddressAsync(incoords);
 
                                 if (numWaterPointsSkipped > 0)
                                 {
-                                    await stepContext.Context.SendActivityAsync(MessageFactory.Text("Number of water points skipped: " + numWaterPointsSkipped), cancellationToken);
+                                    await turnContext.SendActivityAsync(MessageFactory.Text("Number of water points skipped: " + numWaterPointsSkipped), cancellationToken);
                                 }
 
-                                await stepContext.Context.SendActivityAsync(ReplyFactory.CreateLocationCardsReply(incoords, w3wResult), cancellationToken);
+                                await turnContext.SendActivityAsync(ReplyFactory.CreateLocationCardsReply(incoords, w3wResult), cancellationToken);
 
-                                //await ((AdapterWithErrorHandler)stepContext.Context.Adapter).ContinueDialogAsync(context, mainDialog, cancellationToken);
+                                //await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(context, mainDialog, cancellationToken);
 
                                 // TODO: tesing reporting experiences dialog
-                                //await ((AdapterWithErrorHandler)stepContext.Context.Adapter).ContinueDialogAsync(context, new ReportDialog(), cancellationToken);
-                                await stepContext.BeginDialogAsync(nameof(TripReportDialog), null, cancellationToken);
+                                await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(context, new TripReportDialog(null, null), cancellationToken);
+
+                                //await ((AdapterWithErrorHandler)turnContext.Adapter).ContinueDialogAsync(context, new ReportDialog(), cancellationToken);
+                                //await stepContext.BeginDialogAsync(nameof(TripReportDialog), null, cancellationToken);
                             }
                         }
                         else if (ida.Count() < 1)
                         {
                             mesg = "No Anomalies found at the moment. Try again later.";
-                            await stepContext.Context.SendActivityAsync(MessageFactory.Text(mesg), cancellationToken);
-                            await ((AdapterWithErrorHandler)stepContext.Context.Adapter).RepromptMainDialog(context, mainDialog, cancellationToken);
+                            await turnContext.SendActivityAsync(MessageFactory.Text(mesg), cancellationToken);
+                            await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(context, mainDialog, cancellationToken);
                         }
                     }, cancellationToken);
             });
         }
 
-        public async Task LocationActionAsync(WaterfallStepContext stepContext, UserProfile userProfile, CancellationToken cancellationToken)
+        public async Task LocationActionAsync(ITurnContext turnContext, UserProfile userProfile, CancellationToken cancellationToken)
         {
-            await stepContext.Context.SendActivityAsync(MessageFactory.Text($"Your current radius is {userProfile.Radius}m"), cancellationToken);
+            await turnContext.SendActivityAsync(MessageFactory.Text($"Your current radius is {userProfile.Radius}m"), cancellationToken);
 
-            await stepContext.Context.SendActivityAsync(MessageFactory.Text($"Your current location is {userProfile.Latitude},{userProfile.Longitude}"), cancellationToken);
+            await turnContext.SendActivityAsync(MessageFactory.Text($"Your current location is {userProfile.Latitude},{userProfile.Longitude}"), cancellationToken);
 
             var incoords = new double[] { userProfile.Latitude, userProfile.Longitude };
 
             dynamic w3wResult = await Helpers.GetWhat3WordsAddressAsync(incoords);
 
-            await stepContext.Context.SendActivityAsync(ReplyFactory.CreateLocationCardsReply(incoords, w3wResult), cancellationToken);
+            await turnContext.SendActivityAsync(ReplyFactory.CreateLocationCardsReply(incoords, w3wResult), cancellationToken);
         }
 
-        public async Task AnomalyActionAsync(WaterfallStepContext stepContext, UserProfile userProfile, CancellationToken cancellationToken, MainDialog mainDialog, bool doScan = true)
+        public async Task AnomalyActionAsync(ITurnContext turnContext, UserProfile userProfile, CancellationToken cancellationToken, MainDialog mainDialog, bool doScan = true)
         {
             int idacou = 1;
-            if (stepContext.Context.Activity.Text.Contains("["))
+            if (turnContext.Activity.Text.Contains("["))
             {
-                string[] buf = stepContext.Context.Activity.Text.Split(new string[] { "[", "]" }, StringSplitOptions.RemoveEmptyEntries);
+                string[] buf = turnContext.Activity.Text.Split(new string[] { "[", "]" }, StringSplitOptions.RemoveEmptyEntries);
                 Int32.TryParse(buf[1], out idacou);
                 if (idacou < 1 || idacou > 20)
                 {
-                    await stepContext.Context.SendActivityAsync(MessageFactory.Text("Incorrect value. Parameter should be a digit from 1 to 20."), cancellationToken);
+                    await turnContext.SendActivityAsync(MessageFactory.Text("Incorrect value. Parameter should be a digit from 1 to 20."), cancellationToken);
                     return;
                 }
             }
@@ -247,17 +326,17 @@ namespace VFatumbot.BotLogic
                 //if (metasessions.ContainsKey(u) == true)
                 //{ await Bot.SendTextMessageAsync(message.Chat.Id, "Your scanning session is already in progress."); }
                 //else
-                await stepContext.Context.SendActivityAsync(MessageFactory.Text("Generation may take from 5 to 15 minutes."), cancellationToken);
+                await turnContext.SendActivityAsync(MessageFactory.Text("Generation may take from 5 to 15 minutes."), cancellationToken);
             }
             else
             {
-                await stepContext.Context.SendActivityAsync(MessageFactory.Text("Wait a minute. It will take a while."), cancellationToken);
+                await turnContext.SendActivityAsync(MessageFactory.Text("Wait a minute. It will take a while."), cancellationToken);
             }
 
             DispatchWorkerThread((object sender, DoWorkEventArgs e) =>
             {
-                stepContext.Context.Adapter.ContinueConversationAsync(Consts.APP_ID,
-                    ((Microsoft.Bot.Schema.Activity)stepContext.Context.Activity).GetConversationReference(),
+                turnContext.Adapter.ContinueConversationAsync(Consts.APP_ID,
+                    ((Microsoft.Bot.Schema.Activity)turnContext.Activity).GetConversationReference(),
                     async (context, token) =>
                     {
                         string mesg = "";
@@ -282,15 +361,15 @@ namespace VFatumbot.BotLogic
 
                                         if (numWaterPointsSkipped > Consts.WATER_POINTS_SEARCH_MAX)
                                         {
-                                            await stepContext.Context.SendActivityAsync(MessageFactory.Text("Couldn't find anything but water points. Try again later."), cancellationToken);
-                                            await ((AdapterWithErrorHandler)stepContext.Context.Adapter).RepromptMainDialog(context, mainDialog, cancellationToken);
+                                            await turnContext.SendActivityAsync(MessageFactory.Text("Couldn't find anything but water points. Try again later."), cancellationToken);
+                                            await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(context, mainDialog, cancellationToken);
                                             return;
                                         }
 
                                         if (ida.Length == 1)
                                         {
                                             numWaterPointsSkipped++;
-                                            await stepContext.Context.SendActivityAsync(MessageFactory.Text("Number of water points skipped so far: " + numWaterPointsSkipped), cancellationToken);
+                                            await turnContext.SendActivityAsync(MessageFactory.Text("Number of water points skipped so far: " + numWaterPointsSkipped), cancellationToken);
                                             goto redo;
                                         }
 
@@ -298,49 +377,49 @@ namespace VFatumbot.BotLogic
                                     }
                                 }
 
-                                mesg = Tolog(stepContext.Context, "ida", ida[i]);
-                                await stepContext.Context.SendActivityAsync(MessageFactory.Text(mesg), cancellationToken);
+                                mesg = Tolog(turnContext, "ida", ida[i]);
+                                await turnContext.SendActivityAsync(MessageFactory.Text(mesg), cancellationToken);
 
                                 dynamic w3wResult = await Helpers.GetWhat3WordsAddressAsync(incoords);
 
                                 if (numWaterPointsSkipped > 0)
                                 {
-                                    await stepContext.Context.SendActivityAsync(MessageFactory.Text("Number of water points skipped: " + numWaterPointsSkipped), cancellationToken);
+                                    await turnContext.SendActivityAsync(MessageFactory.Text("Number of water points skipped: " + numWaterPointsSkipped), cancellationToken);
                                 }
 
-                                await stepContext.Context.SendActivityAsync(ReplyFactory.CreateLocationCardsReply(incoords, w3wResult), cancellationToken);
+                                await turnContext.SendActivityAsync(ReplyFactory.CreateLocationCardsReply(incoords, w3wResult), cancellationToken);
 
-                                await ((AdapterWithErrorHandler)stepContext.Context.Adapter).RepromptMainDialog(context, mainDialog, cancellationToken);
+                                await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(context, mainDialog, cancellationToken);
                             }
                         }
                         else if (ida.Count() < 1)
                         {
                             mesg = "No Anomalies found at the moment. Try again later.";
-                            await stepContext.Context.SendActivityAsync(MessageFactory.Text(mesg), cancellationToken);
-                            await ((AdapterWithErrorHandler)stepContext.Context.Adapter).RepromptMainDialog(context, mainDialog, cancellationToken);
+                            await turnContext.SendActivityAsync(MessageFactory.Text(mesg), cancellationToken);
+                            await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(context, mainDialog, cancellationToken);
                         }
                     }, cancellationToken);
             });
         }
 
-        public async Task IntentSuggestionActionAsync(WaterfallStepContext stepContext, UserProfile userProfile, CancellationToken cancellationToken, MainDialog mainDialog)
+        public async Task IntentSuggestionActionAsync(ITurnContext turnContext, UserProfile userProfile, CancellationToken cancellationToken, MainDialog mainDialog)
         {
-            await stepContext.Context.SendActivityAsync(MessageFactory.Text("Wait a minute. Quantumly randomizing the English dictionary for you."), cancellationToken);
+            await turnContext.SendActivityAsync(MessageFactory.Text("Wait a minute. Quantumly randomizing the English dictionary for you."), cancellationToken);
 
             DispatchWorkerThread((object sender, DoWorkEventArgs e) =>
             {
-                stepContext.Context.Adapter.ContinueConversationAsync(Consts.APP_ID,
-                    ((Microsoft.Bot.Schema.Activity)stepContext.Context.Activity).GetConversationReference(),
+                turnContext.Adapter.ContinueConversationAsync(Consts.APP_ID,
+                    ((Microsoft.Bot.Schema.Activity)turnContext.Activity).GetConversationReference(),
                     async (context, token) =>
                     {
                         string[] intentSuggestions = await Helpers.GetIntentSuggestionsAsync();
-                        await stepContext.Context.SendActivityAsync(MessageFactory.Text("Intent suggestions: " + string.Join(", ", intentSuggestions)), cancellationToken);
-                        await ((AdapterWithErrorHandler)stepContext.Context.Adapter).RepromptMainDialog(context, mainDialog, cancellationToken);
+                        await turnContext.SendActivityAsync(MessageFactory.Text("Intent suggestions: " + string.Join(", ", intentSuggestions)), cancellationToken);
+                        await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(context, mainDialog, cancellationToken);
                     }, cancellationToken);
             });
         }
 
-        public async Task QuantumActionAsync(WaterfallStepContext stepContext, UserProfile userProfile, CancellationToken cancellationToken, bool suggestTime = false)
+        public async Task QuantumActionAsync(ITurnContext turnContext, UserProfile userProfile, CancellationToken cancellationToken, bool suggestTime = false)
         {
             int numWaterPointsSkipped = 0;
 
@@ -357,24 +436,24 @@ namespace VFatumbot.BotLogic
 
                     if (numWaterPointsSkipped > Consts.WATER_POINTS_SEARCH_MAX)
                     {
-                        await stepContext.Context.SendActivityAsync(MessageFactory.Text("Couldn't find anything but water points. Try again later."), cancellationToken);
+                        await turnContext.SendActivityAsync(MessageFactory.Text("Couldn't find anything but water points. Try again later."), cancellationToken);
                         return;
                     }
 
-                    await stepContext.Context.SendActivityAsync(MessageFactory.Text("Number of water points skipped so far: " + numWaterPointsSkipped), cancellationToken);
+                    await turnContext.SendActivityAsync(MessageFactory.Text("Number of water points skipped so far: " + numWaterPointsSkipped), cancellationToken);
                     goto redo;
                 }
             }
 
-            string mesg = Tolog(stepContext.Context, "random", (float)incoords[0], (float)incoords[1], suggestTime ? "qtime" : "quantum");
-            await stepContext.Context.SendActivityAsync(MessageFactory.Text(mesg), cancellationToken);
+            string mesg = Tolog(turnContext, "random", (float)incoords[0], (float)incoords[1], suggestTime ? "qtime" : "quantum");
+            await turnContext.SendActivityAsync(MessageFactory.Text(mesg), cancellationToken);
 
             dynamic w3wResult = await Helpers.GetWhat3WordsAddressAsync(incoords);
 
-            await stepContext.Context.SendActivityAsync(ReplyFactory.CreateLocationCardsReply(incoords, w3wResult), cancellationToken);
+            await turnContext.SendActivityAsync(ReplyFactory.CreateLocationCardsReply(incoords, w3wResult), cancellationToken);
         }
 
-        public async Task PsuedoActionAsync(WaterfallStepContext stepContext, UserProfile userProfile, CancellationToken cancellationToken)
+        public async Task PsuedoActionAsync(ITurnContext turnContext, UserProfile userProfile, CancellationToken cancellationToken)
         {
             int numWaterPointsSkipped = 0;
 
@@ -391,33 +470,33 @@ namespace VFatumbot.BotLogic
 
                     if (numWaterPointsSkipped > Consts.WATER_POINTS_SEARCH_MAX)
                     {
-                        await stepContext.Context.SendActivityAsync(MessageFactory.Text("Couldn't find anything but water points. Try again later."), cancellationToken);
+                        await turnContext.SendActivityAsync(MessageFactory.Text("Couldn't find anything but water points. Try again later."), cancellationToken);
                         return;
                     }
 
-                    await stepContext.Context.SendActivityAsync(MessageFactory.Text("Number of water points skipped so far: " + numWaterPointsSkipped), cancellationToken);
+                    await turnContext.SendActivityAsync(MessageFactory.Text("Number of water points skipped so far: " + numWaterPointsSkipped), cancellationToken);
                     goto redo;
                 }
             }
 
-            string mesg = Tolog(stepContext.Context, "random", (float)incoords[0], (float)incoords[1], "pseudo");
-            await stepContext.Context.SendActivityAsync(MessageFactory.Text(mesg), cancellationToken);
+            string mesg = Tolog(turnContext, "random", (float)incoords[0], (float)incoords[1], "pseudo");
+            await turnContext.SendActivityAsync(MessageFactory.Text(mesg), cancellationToken);
 
             dynamic w3wResult = await Helpers.GetWhat3WordsAddressAsync(incoords);
 
-            await stepContext.Context.SendActivityAsync(ReplyFactory.CreateLocationCardsReply(incoords, w3wResult), cancellationToken);
+            await turnContext.SendActivityAsync(ReplyFactory.CreateLocationCardsReply(incoords, w3wResult), cancellationToken);
         }
 
-        public async Task PairActionAsync(WaterfallStepContext stepContext, UserProfile userProfile, CancellationToken cancellationToken, MainDialog mainDialog, bool doScan = false)
+        public async Task PairActionAsync(ITurnContext turnContext, UserProfile userProfile, CancellationToken cancellationToken, MainDialog mainDialog, bool doScan = false)
         {
             int idacou = 1;
-            if (stepContext.Context.Activity.Text.Contains("["))
+            if (turnContext.Activity.Text.Contains("["))
             {
-                string[] buf = stepContext.Context.Activity.Text.Split(new string[] { "[", "]" }, StringSplitOptions.RemoveEmptyEntries);
+                string[] buf = turnContext.Activity.Text.Split(new string[] { "[", "]" }, StringSplitOptions.RemoveEmptyEntries);
                 Int32.TryParse(buf[1], out idacou);
                 if (idacou < 1 || idacou > 20)
                 {
-                    await stepContext.Context.SendActivityAsync(MessageFactory.Text("Incorrect value. Parameter should be a digit from 1 to 20."), cancellationToken);
+                    await turnContext.SendActivityAsync(MessageFactory.Text("Incorrect value. Parameter should be a digit from 1 to 20."), cancellationToken);
                     return;
                 }
             }
@@ -428,17 +507,17 @@ namespace VFatumbot.BotLogic
                 //if (metasessions.ContainsKey(u) == true)
                 //{ await Bot.SendTextMessageAsync(message.Chat.Id, "Your scanning session is already in progress."); }
                 //else
-                await stepContext.Context.SendActivityAsync(MessageFactory.Text("Generation may take from 5 to 15 minutes."), cancellationToken);
+                await turnContext.SendActivityAsync(MessageFactory.Text("Generation may take from 5 to 15 minutes."), cancellationToken);
             }
             else
             {
-                await stepContext.Context.SendActivityAsync(MessageFactory.Text("Wait a minute. It will take a while."), cancellationToken);
+                await turnContext.SendActivityAsync(MessageFactory.Text("Wait a minute. It will take a while."), cancellationToken);
             }
 
             DispatchWorkerThread((object sender, DoWorkEventArgs e) =>
             {
-                stepContext.Context.Adapter.ContinueConversationAsync(Consts.APP_ID,
-                    ((Microsoft.Bot.Schema.Activity)stepContext.Context.Activity).GetConversationReference(),
+                turnContext.Adapter.ContinueConversationAsync(Consts.APP_ID,
+                    ((Microsoft.Bot.Schema.Activity)turnContext.Activity).GetConversationReference(),
                     async (context, token) =>
                     {
                         int numAttWaterPointsSkipped = 0;
@@ -467,10 +546,10 @@ namespace VFatumbot.BotLogic
                                 }
                                 else
                                 {
-                                    mesg = Tolog(stepContext.Context, "attractor", att[i]);
-                                    await stepContext.Context.SendActivityAsync(MessageFactory.Text(mesg), cancellationToken);
+                                    mesg = Tolog(turnContext, "attractor", att[i]);
+                                    await turnContext.SendActivityAsync(MessageFactory.Text(mesg), cancellationToken);
                                     dynamic w3wResult1 = await Helpers.GetWhat3WordsAddressAsync(incoords);
-                                    await stepContext.Context.SendActivityAsync(ReplyFactory.CreateLocationCardsReply(incoords, w3wResult1), cancellationToken);
+                                    await turnContext.SendActivityAsync(ReplyFactory.CreateLocationCardsReply(incoords, w3wResult1), cancellationToken);
                                 }
 
                                 incoords = new double[] { voi[i].X.center.point.latitude, voi[i].X.center.point.longitude };
@@ -480,38 +559,38 @@ namespace VFatumbot.BotLogic
                                 }
                                 else
                                 {
-                                    mesg = Tolog(stepContext.Context, "void", voi[i]);
-                                    await stepContext.Context.SendActivityAsync(MessageFactory.Text(mesg), cancellationToken);
+                                    mesg = Tolog(turnContext, "void", voi[i]);
+                                    await turnContext.SendActivityAsync(MessageFactory.Text(mesg), cancellationToken);
                                     dynamic w3wResult2 = await Helpers.GetWhat3WordsAddressAsync(incoords);
-                                    await stepContext.Context.SendActivityAsync(ReplyFactory.CreateLocationCardsReply(incoords, w3wResult2), cancellationToken);
+                                    await turnContext.SendActivityAsync(ReplyFactory.CreateLocationCardsReply(incoords, w3wResult2), cancellationToken);
                                 }
                             }
 
                             if (numAttWaterPointsSkipped > 1)
-                                await stepContext.Context.SendActivityAsync(MessageFactory.Text("Number of attractor water points skipped: " + numAttWaterPointsSkipped), cancellationToken);
+                                await turnContext.SendActivityAsync(MessageFactory.Text("Number of attractor water points skipped: " + numAttWaterPointsSkipped), cancellationToken);
                             if (numVoiWaterPointsSkipped > 1)
-                                await stepContext.Context.SendActivityAsync(MessageFactory.Text("Number of void water points skipped: " + numVoiWaterPointsSkipped), cancellationToken);
+                                await turnContext.SendActivityAsync(MessageFactory.Text("Number of void water points skipped: " + numVoiWaterPointsSkipped), cancellationToken);
 
-                            await ((AdapterWithErrorHandler)stepContext.Context.Adapter).RepromptMainDialog(context, mainDialog, cancellationToken);
+                            await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(context, mainDialog, cancellationToken);
                         }
                         else// if (ida.Count() < 1) // TODO: is this needed vs idacou > 1 if ?
                         {
                             mesg = "No Anomalies found at the moment. Try again later.";
-                            await stepContext.Context.SendActivityAsync(MessageFactory.Text(mesg), cancellationToken);
-                            await ((AdapterWithErrorHandler)stepContext.Context.Adapter).RepromptMainDialog(context, mainDialog, cancellationToken);
+                            await turnContext.SendActivityAsync(MessageFactory.Text(mesg), cancellationToken);
+                            await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(context, mainDialog, cancellationToken);
                         }
                     }, cancellationToken);
             });
         }
 
-        public async Task PointActionAsync(WaterfallStepContext stepContext, UserProfile userProfile, CancellationToken cancellationToken, MainDialog mainDialog)
+        public async Task PointActionAsync(ITurnContext turnContext, UserProfile userProfile, CancellationToken cancellationToken, MainDialog mainDialog)
         {
-            await stepContext.Context.SendActivityAsync(MessageFactory.Text("Wait a minute. It will take a while."), cancellationToken);
+            await turnContext.SendActivityAsync(MessageFactory.Text("Wait a minute. It will take a while."), cancellationToken);
 
             DispatchWorkerThread((object sender, DoWorkEventArgs e) =>
             {
-                stepContext.Context.Adapter.ContinueConversationAsync(Consts.APP_ID,
-                    ((Microsoft.Bot.Schema.Activity)stepContext.Context.Activity).GetConversationReference(),
+                turnContext.Adapter.ContinueConversationAsync(Consts.APP_ID,
+                    ((Microsoft.Bot.Schema.Activity)turnContext.Activity).GetConversationReference(),
                     async (context, token) =>
                     {
                         string mesg = "";
@@ -531,11 +610,11 @@ namespace VFatumbot.BotLogic
 
                                 if (numWaterPointsSkipped > Consts.WATER_POINTS_SEARCH_MAX)
                                 {
-                                    await stepContext.Context.SendActivityAsync(MessageFactory.Text("Couldn't find anything but attractor water points. Try again later."), cancellationToken);
+                                    await turnContext.SendActivityAsync(MessageFactory.Text("Couldn't find anything but attractor water points. Try again later."), cancellationToken);
                                     return;
                                 }
 
-                                await stepContext.Context.SendActivityAsync(MessageFactory.Text("Number of attractor water points skipped so far: " + numWaterPointsSkipped), cancellationToken);
+                                await turnContext.SendActivityAsync(MessageFactory.Text("Number of attractor water points skipped so far: " + numWaterPointsSkipped), cancellationToken);
                                 goto redoAtt;
                             }
                         }
@@ -551,11 +630,11 @@ namespace VFatumbot.BotLogic
 
                                 if (numWaterPointsSkipped > Consts.WATER_POINTS_SEARCH_MAX)
                                 {
-                                    await stepContext.Context.SendActivityAsync(MessageFactory.Text("Couldn't find anything but void water points. Try again later."), cancellationToken);
+                                    await turnContext.SendActivityAsync(MessageFactory.Text("Couldn't find anything but void water points. Try again later."), cancellationToken);
                                     return;
                                 }
 
-                                await stepContext.Context.SendActivityAsync(MessageFactory.Text("Number of void water points skipped so far: " + numWaterPointsSkipped), cancellationToken);
+                                await turnContext.SendActivityAsync(MessageFactory.Text("Number of void water points skipped so far: " + numWaterPointsSkipped), cancellationToken);
                                 goto redoVoid;
                             }
                         }
@@ -573,11 +652,11 @@ namespace VFatumbot.BotLogic
 
                                 if (numWaterPointsSkipped > Consts.WATER_POINTS_SEARCH_MAX)
                                 {
-                                    await stepContext.Context.SendActivityAsync(MessageFactory.Text("Couldn't find anything but psuedo water points. Try again later."), cancellationToken);
+                                    await turnContext.SendActivityAsync(MessageFactory.Text("Couldn't find anything but psuedo water points. Try again later."), cancellationToken);
                                     return;
                                 }
 
-                                await stepContext.Context.SendActivityAsync(MessageFactory.Text("Number of attractor psuedo points skipped so far: " + numWaterPointsSkipped), cancellationToken);
+                                await turnContext.SendActivityAsync(MessageFactory.Text("Number of attractor psuedo points skipped so far: " + numWaterPointsSkipped), cancellationToken);
                                 goto redoPsuedo;
                             }
                         }
@@ -593,11 +672,11 @@ namespace VFatumbot.BotLogic
 
                                 if (numWaterPointsSkipped > Consts.WATER_POINTS_SEARCH_MAX)
                                 {
-                                    await stepContext.Context.SendActivityAsync(MessageFactory.Text("Couldn't find anything but quantum water points. Try again later."), cancellationToken);
+                                    await turnContext.SendActivityAsync(MessageFactory.Text("Couldn't find anything but quantum water points. Try again later."), cancellationToken);
                                     return;
                                 }
 
-                                await stepContext.Context.SendActivityAsync(MessageFactory.Text("Number of attractor quantum points skipped so far: " + numWaterPointsSkipped), cancellationToken);
+                                await turnContext.SendActivityAsync(MessageFactory.Text("Number of attractor quantum points skipped so far: " + numWaterPointsSkipped), cancellationToken);
                                 goto redoQuantum;
                             }
                         }
@@ -609,7 +688,7 @@ namespace VFatumbot.BotLogic
                         {
                             incoords[0] = pcoords[0];
                             incoords[1] = pcoords[1];
-                            mesg = Tolog(stepContext.Context, "blind", (float)incoords[0], (float)incoords[1], "pseudo");
+                            mesg = Tolog(turnContext, "blind", (float)incoords[0], (float)incoords[1], "pseudo");
                         }
                         if ((mtd < 40) && (mtd > 20))
                         {
@@ -617,20 +696,20 @@ namespace VFatumbot.BotLogic
                             {
                                 incoords[0] = att[0].X.center.point.latitude;
                                 incoords[1] = att[0].X.center.point.longitude;
-                                mesg = Tolog(stepContext.Context, "blind", att[0]);
+                                mesg = Tolog(turnContext, "blind", att[0]);
                             }
                             else
                             {
                                 incoords[0] = pcoords[0];
                                 incoords[1] = pcoords[1];
-                                mesg = Tolog(stepContext.Context, "blind", (float)incoords[0], (float)incoords[1], "pseudo");
+                                mesg = Tolog(turnContext, "blind", (float)incoords[0], (float)incoords[1], "pseudo");
                             }
                         }
                         if ((mtd < 60) && (mtd > 40))
                         {
                             incoords[0] = qcoords[0];
                             incoords[1] = qcoords[1];
-                            mesg = Tolog(stepContext.Context, "blind", (float)incoords[0], (float)incoords[1], "quantum");
+                            mesg = Tolog(turnContext, "blind", (float)incoords[0], (float)incoords[1], "quantum");
                         }
                         if ((mtd < 80) && (mtd > 60))
                         {
@@ -638,7 +717,7 @@ namespace VFatumbot.BotLogic
                             {
                                 incoords[0] = voi[0].X.center.point.latitude;
                                 incoords[1] = voi[0].X.center.point.longitude;
-                                mesg = Tolog(stepContext.Context, "blind", voi[0]);
+                                mesg = Tolog(turnContext, "blind", voi[0]);
                             }
                             else
                             {
@@ -651,23 +730,23 @@ namespace VFatumbot.BotLogic
                             {
                                 incoords[0] = ida[0].X.center.point.latitude;
                                 incoords[1] = ida[0].X.center.point.longitude;
-                                mesg = Tolog(stepContext.Context, "blind", ida[0]);
+                                mesg = Tolog(turnContext, "blind", ida[0]);
                             }
                             else
                             {
                                 incoords[0] = qcoords[0];
                                 incoords[1] = qcoords[1];
-                                mesg = Tolog(stepContext.Context, "blind", (float)incoords[0], (float)incoords[1], "quantum");
+                                mesg = Tolog(turnContext, "blind", (float)incoords[0], (float)incoords[1], "quantum");
                             }
                         }
 
-                        await stepContext.Context.SendActivityAsync(MessageFactory.Text(mesg), cancellationToken);
+                        await turnContext.SendActivityAsync(MessageFactory.Text(mesg), cancellationToken);
 
                         dynamic w3wResult = await Helpers.GetWhat3WordsAddressAsync(incoords);
 
-                        await stepContext.Context.SendActivityAsync(ReplyFactory.CreateLocationCardsReply(incoords, w3wResult), cancellationToken);
+                        await turnContext.SendActivityAsync(ReplyFactory.CreateLocationCardsReply(incoords, w3wResult), cancellationToken);
 
-                        await ((AdapterWithErrorHandler)stepContext.Context.Adapter).RepromptMainDialog(context, mainDialog, cancellationToken);
+                        await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(context, mainDialog, cancellationToken);
                     }, cancellationToken);
             });
         }

@@ -54,16 +54,16 @@ namespace VFatumbot
             switch (((FoundChoice)stepContext.Result).Value)
             {
                 case "Quantum":
-                    await actionHandler.QuantumActionAsync(stepContext, userProfile, cancellationToken);
+                    await actionHandler.QuantumActionAsync(stepContext.Context, userProfile, cancellationToken);
                     break;
                 case "Quantum Time":
-                    await actionHandler.QuantumActionAsync(stepContext, userProfile, cancellationToken, true);
+                    await actionHandler.QuantumActionAsync(stepContext.Context, userProfile, cancellationToken, true);
                     break;
                 case "Psuedo":
-                    await actionHandler.PsuedoActionAsync(stepContext, userProfile, cancellationToken);
+                    await actionHandler.PsuedoActionAsync(stepContext.Context, userProfile, cancellationToken);
                     break;
                 case "Point":
-                    await actionHandler.PointActionAsync(stepContext, userProfile, cancellationToken, _mainDialog);
+                    await actionHandler.PointActionAsync(stepContext.Context, userProfile, cancellationToken, _mainDialog);
                     break;
                 case "< Back":
                     break;
@@ -82,7 +82,6 @@ namespace VFatumbot
                                     {
                                         "quantum",
                                         "getquantum",
-                                        "/getquantum",
                                     }
                 },
                 new Choice() {
@@ -92,7 +91,6 @@ namespace VFatumbot
                                         "quantumtime",
                                         "getquantumtime",
                                         "qtime",
-                                        "/getqtime",
                                     }
                 },
                 new Choice() {
@@ -101,7 +99,6 @@ namespace VFatumbot
                                     {
                                         "psuedo",
                                         "getpsuedo",
-                                        "/getpsuedo",
                                     }
                 },
                 new Choice() {
@@ -110,7 +107,6 @@ namespace VFatumbot
                                     {
                                         "point",
                                         "getpoint",
-                                        "/getpoint",
                                     }
                 },
                 new Choice() {
