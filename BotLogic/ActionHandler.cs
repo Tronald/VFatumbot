@@ -623,6 +623,7 @@ namespace VFatumbot.BotLogic
                                 if (numWaterPointsSkipped > Consts.WATER_POINTS_SEARCH_MAX)
                                 {
                                     await turnContext.SendActivityAsync(MessageFactory.Text("Couldn't find anything but attractor water points. Try again later."), cancellationToken);
+                                    await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(context, mainDialog, cancellationToken);
                                     return;
                                 }
 
@@ -643,6 +644,7 @@ namespace VFatumbot.BotLogic
                                 if (numWaterPointsSkipped > Consts.WATER_POINTS_SEARCH_MAX)
                                 {
                                     await turnContext.SendActivityAsync(MessageFactory.Text("Couldn't find anything but void water points. Try again later."), cancellationToken);
+                                    await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(context, mainDialog, cancellationToken);
                                     return;
                                 }
 
@@ -665,6 +667,7 @@ namespace VFatumbot.BotLogic
                                 if (numWaterPointsSkipped > Consts.WATER_POINTS_SEARCH_MAX)
                                 {
                                     await turnContext.SendActivityAsync(MessageFactory.Text("Couldn't find anything but psuedo water points. Try again later."), cancellationToken);
+                                    await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(context, mainDialog, cancellationToken);
                                     return;
                                 }
 
@@ -685,6 +688,7 @@ namespace VFatumbot.BotLogic
                                 if (numWaterPointsSkipped > Consts.WATER_POINTS_SEARCH_MAX)
                                 {
                                     await turnContext.SendActivityAsync(MessageFactory.Text("Couldn't find anything but quantum water points. Try again later."), cancellationToken);
+                                    await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(context, mainDialog, cancellationToken);
                                     return;
                                 }
 
