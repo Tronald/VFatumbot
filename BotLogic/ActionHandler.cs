@@ -613,7 +613,7 @@ namespace VFatumbot.BotLogic
 
                     redoAtt:
                         FinalAttractor[] att = SortIDA(ida, "attractor", 1);
-                        if (!userProfile.IsIncludeWaterPoints)
+                        if (att.Length > 0 && !userProfile.IsIncludeWaterPoints)
                         {
                             var isWaterPoint = await Helpers.IsWaterCoordinatesAsync(new double[] { att[0].X.center.point.latitude, att[0].X.center.point.longitude });
                             if (isWaterPoint)
@@ -634,7 +634,7 @@ namespace VFatumbot.BotLogic
 
                     redoVoid:
                         FinalAttractor[] voi = SortIDA(ida, "void", 1);
-                        if (!userProfile.IsIncludeWaterPoints)
+                        if (voi.Length > 0 && !userProfile.IsIncludeWaterPoints)
                         {
                             var isWaterPoint = await Helpers.IsWaterCoordinatesAsync(new double[] { voi[0].X.center.point.latitude, voi[0].X.center.point.longitude });
                             if (isWaterPoint)
