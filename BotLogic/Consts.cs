@@ -38,6 +38,12 @@
         // Default radius to search within (meters)
         public const int DEFAULT_RADIUS = 3000;
 
+        // Max radius
+        public const int RADIUS_MAX = 100000;
+
+        // Min radius
+        public const int RADIUS_MIN = 1000;
+
         // Maximum number of tries to search for non-water points before giving up
         public const int WATER_POINTS_SEARCH_MAX = 10;
 
