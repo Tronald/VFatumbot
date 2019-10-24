@@ -46,7 +46,7 @@ namespace VFatumbot
             {
                 Prompt = MessageFactory.Text("What would you like to get/check?"),
                 RetryPrompt = MessageFactory.Text("That is not a valid action. What would you like to get/check?"),
-                Choices = GetActionChoices(),
+                Choices = GetActionChoices(stepContext.Context),
             };
 
             return await stepContext.PromptAsync(nameof(ChoicePrompt), options, cancellationToken);
@@ -62,6 +62,12 @@ namespace VFatumbot
 
             switch (((FoundChoice)stepContext.Result).Value)
             {
+                // Hack coz Facebook Messenge stopped showing "Send Location" button
+                case "Set Location":
+                    repromptThisRound = true;
+                    await stepContext.Context.SendActivityAsync(CardFactory.CreateGetLocationFromGoogleMapsReply());
+                    break;
+
                 case "Attractor":
                     await actionHandler.AttractorActionAsync(stepContext.Context, userProfile, cancellationToken, this);
                     break;
@@ -100,7 +106,7 @@ namespace VFatumbot
             }
         }
 
-        private IList<Choice> GetActionChoices()
+        private IList<Choice> GetActionChoices(ITurnContext turnContext)
         {
             var actionOptions = new List<Choice>()
             {
@@ -180,6 +186,21 @@ namespace VFatumbot
                                     }
                 },
             };
+
+            // Hack coz Facebook Messenge stopped showing "Send Location" button
+            if (turnContext.Activity.ChannelId.Equals("facebook"))
+            {
+                actionOptions.Insert(0, new Choice()
+                {
+                    Value = "Set Location",
+                    Synonyms = new List<string>()
+                                    {
+                                        "Set location",
+                                        "set location",
+                                        "setlocation"
+                                    }
+                });
+            }
 
             return actionOptions;
         }

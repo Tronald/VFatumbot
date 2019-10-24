@@ -190,7 +190,7 @@ namespace VFatumbot.BotLogic
                                     await turnContext.SendActivityAsync(MessageFactory.Text("Number of water points skipped: " + numWaterPointsSkipped), cancellationToken);
                                 }
 
-                                await turnContext.SendActivityAsync(ReplyFactory.CreateLocationCardsReply(incoords, w3wResult), cancellationToken);
+                                await turnContext.SendActivityAsync(CardFactory.CreateLocationCardsReply(incoords, w3wResult), cancellationToken);
                                 await Helpers.SendPushNotification(userProfile, "Point Generated", mesg);
 
                                 await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(context, mainDialog, cancellationToken);
@@ -286,7 +286,7 @@ namespace VFatumbot.BotLogic
                                     await turnContext.SendActivityAsync(MessageFactory.Text("Number of water points skipped: " + numWaterPointsSkipped), cancellationToken);
                                 }
 
-                                await turnContext.SendActivityAsync(ReplyFactory.CreateLocationCardsReply(incoords, w3wResult), cancellationToken);
+                                await turnContext.SendActivityAsync(CardFactory.CreateLocationCardsReply(incoords, w3wResult), cancellationToken);
                                 await Helpers.SendPushNotification(userProfile, "Point Generated", mesg);
 
                                 await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(context, mainDialog, cancellationToken);
@@ -318,7 +318,7 @@ namespace VFatumbot.BotLogic
 
             dynamic w3wResult = await Helpers.GetWhat3WordsAddressAsync(incoords);
 
-            await turnContext.SendActivityAsync(ReplyFactory.CreateLocationCardsReply(incoords, w3wResult), cancellationToken);
+            await turnContext.SendActivityAsync(CardFactory.CreateLocationCardsReply(incoords, w3wResult), cancellationToken);
         }
 
         public async Task AnomalyActionAsync(ITurnContext turnContext, UserProfile userProfile, CancellationToken cancellationToken, MainDialog mainDialog, bool doScan = true)
@@ -401,7 +401,7 @@ namespace VFatumbot.BotLogic
                                     await turnContext.SendActivityAsync(MessageFactory.Text("Number of water points skipped: " + numWaterPointsSkipped), cancellationToken);
                                 }
 
-                                await turnContext.SendActivityAsync(ReplyFactory.CreateLocationCardsReply(incoords, w3wResult), cancellationToken);
+                                await turnContext.SendActivityAsync(CardFactory.CreateLocationCardsReply(incoords, w3wResult), cancellationToken);
                                 await Helpers.SendPushNotification(userProfile, "Point Generated", mesg);
 
                                 await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(context, mainDialog, cancellationToken);
@@ -465,7 +465,7 @@ namespace VFatumbot.BotLogic
 
             dynamic w3wResult = await Helpers.GetWhat3WordsAddressAsync(incoords);
 
-            await turnContext.SendActivityAsync(ReplyFactory.CreateLocationCardsReply(incoords, w3wResult), cancellationToken);
+            await turnContext.SendActivityAsync(CardFactory.CreateLocationCardsReply(incoords, w3wResult), cancellationToken);
             await Helpers.SendPushNotification(userProfile, "Point Generated", mesg);
         }
 
@@ -500,7 +500,7 @@ namespace VFatumbot.BotLogic
 
             dynamic w3wResult = await Helpers.GetWhat3WordsAddressAsync(incoords);
 
-            await turnContext.SendActivityAsync(ReplyFactory.CreateLocationCardsReply(incoords, w3wResult), cancellationToken);
+            await turnContext.SendActivityAsync(CardFactory.CreateLocationCardsReply(incoords, w3wResult), cancellationToken);
             await Helpers.SendPushNotification(userProfile, "Point Generated", mesg);
         }
 
@@ -566,7 +566,7 @@ namespace VFatumbot.BotLogic
                                     mesg = Tolog(turnContext, "attractor", att[i]);
                                     await turnContext.SendActivityAsync(MessageFactory.Text(mesg), cancellationToken);
                                     dynamic w3wResult1 = await Helpers.GetWhat3WordsAddressAsync(incoords);
-                                    await turnContext.SendActivityAsync(ReplyFactory.CreateLocationCardsReply(incoords, w3wResult1), cancellationToken);
+                                    await turnContext.SendActivityAsync(CardFactory.CreateLocationCardsReply(incoords, w3wResult1), cancellationToken);
                                     await Helpers.SendPushNotification(userProfile, "Point Generated", mesg); // TODO: only send first? summary? 
                                 }
 
@@ -580,7 +580,7 @@ namespace VFatumbot.BotLogic
                                     mesg = Tolog(turnContext, "void", voi[i]);
                                     await turnContext.SendActivityAsync(MessageFactory.Text(mesg), cancellationToken);
                                     dynamic w3wResult2 = await Helpers.GetWhat3WordsAddressAsync(incoords);
-                                    await turnContext.SendActivityAsync(ReplyFactory.CreateLocationCardsReply(incoords, w3wResult2), cancellationToken);
+                                    await turnContext.SendActivityAsync(CardFactory.CreateLocationCardsReply(incoords, w3wResult2), cancellationToken);
                                 }
                             }
 
@@ -766,7 +766,7 @@ namespace VFatumbot.BotLogic
 
                         dynamic w3wResult = await Helpers.GetWhat3WordsAddressAsync(incoords);
 
-                        await turnContext.SendActivityAsync(ReplyFactory.CreateLocationCardsReply(incoords, w3wResult), cancellationToken);
+                        await turnContext.SendActivityAsync(CardFactory.CreateLocationCardsReply(incoords, w3wResult), cancellationToken);
                         await Helpers.SendPushNotification(userProfile, "Point Generated", mesg);
 
                         await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(context, mainDialog, cancellationToken);

@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Threading;
 using System.Threading.Tasks;
+using CoordinateSharp;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Schema;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using VFatumbot.BotLogic;
 
 namespace VFatumbot
@@ -48,6 +50,12 @@ namespace VFatumbot
                     {
                         await turnContext.SendActivityAsync(MessageFactory.Text("Welcome to Fatumbot. This is a tool to experiment with the ideas that the mind and matter are connected in more ways than currently understood, and that by visiting random (in the true sense of the word) places one can journey outside of their normal probability paths."), cancellationToken);
                         await turnContext.SendActivityAsync(MessageFactory.Text("Start off by sending your location, or typing \"search <address>\", or a Google Maps URL. Don't forget you can type \"help\" for more info."), cancellationToken);
+                    }
+
+                    // Hack coz Facebook Messenge stopped showing "Send Location" button
+                    if (turnContext.Activity.ChannelId.Equals("facebook"))
+                    {
+                        await turnContext.SendActivityAsync(CardFactory.CreateGetLocationFromGoogleMapsReply());
                     }
                 }
             }
@@ -114,7 +122,7 @@ namespace VFatumbot
 
                     var incoords = new double[] { lat, lon };
                     var w3wResult = await Helpers.GetWhat3WordsAddressAsync(incoords);
-                    await turnContext.SendActivityAsync(ReplyFactory.CreateLocationCardsReply(incoords, w3wResult), cancellationToken);
+                    await turnContext.SendActivityAsync(CardFactory.CreateLocationCardsReply(incoords, w3wResult), cancellationToken);
 
                     //TODO: FatumFunctions.Tolog(message, "locset");
 
@@ -132,6 +140,13 @@ namespace VFatumbot
                 if (!string.IsNullOrEmpty(turnContext.Activity.Text) && !userProfile.IsLocationSet)
                 {
                     await turnContext.SendActivityAsync(MessageFactory.Text(Consts.NO_LOCATION_SET_MSG), cancellationToken);
+
+                    // Hack coz Facebook Messenge stopped showing "Send Location" button
+                    if (turnContext.Activity.ChannelId.Equals("facebook"))
+                    {
+                        await turnContext.SendActivityAsync(CardFactory.CreateGetLocationFromGoogleMapsReply());
+                    }
+
                     return;
                 }
                 else
@@ -143,6 +158,13 @@ namespace VFatumbot
             else if (!string.IsNullOrEmpty(turnContext.Activity.Text) && !userProfile.IsLocationSet)
             {
                 await turnContext.SendActivityAsync(MessageFactory.Text(Consts.NO_LOCATION_SET_MSG), cancellationToken);
+
+                // Hack coz Facebook Messenge stopped showing "Send Location" button
+                if (turnContext.Activity.ChannelId.Equals("facebook"))
+                {
+                    await turnContext.SendActivityAsync(CardFactory.CreateGetLocationFromGoogleMapsReply());
+                }
+
                 return;
             }
             else if (!string.IsNullOrEmpty(turnContext.Activity.Text) && turnContext.Activity.Text.StartsWith("/", StringComparison.InvariantCulture))
@@ -234,7 +256,56 @@ namespace VFatumbot
             {
                 // dirty hack: get the calling method which is already async to do the Google Geocode async API call
                 lat = lon = Consts.INVALID_COORD;
-                return true;
+                isFound = true;
+            }
+
+            // Fourthly, sometime around late October 2019, about two months after I started coding this bot, Facebook
+            // for whatever reason decided to stop displaying the "Location" button that allowed users to easily send
+            // their location to us. So here's my workaround that intercepts a shared message sent to the bot from
+            // Google Maps with coordinates that we decode here. FYI I could do with some more 酎ハイ right now.
+            if (!isFound && activity.ChannelId.Equals("facebook"))
+            {
+                try
+                {
+                    /* e.g.
+                     * "channelData":{ 
+                                      "sender":{ 
+                                         "id":"2418280911623293"
+                                      },
+                                      "recipient":{ 
+                                         "id":"422185445016594"
+                                      },
+                                      "timestamp":1571933853598,
+                                      "message":{ 
+                                         "mid":"WYvV4Nkos0LXSCT0xhwHz-QWY6PlmXHw1lzdArnJxcDyHORviVvB-22m880-8unGmfNfdwNwANdH4KxHFmVbrQ",
+                                         "seq":0,
+                                         "is_echo":false,
+                                         "attachments":[ 
+                                            { 
+                                               "type":"fallback",
+                                               "title":"33°35'06.1\"N 130°20'24.0\"E",
+                                               "url":"https://l.facebook.com/l.php?u=https%3A%2F%2Fgoo.gl%2Fmaps%2Fzzbjm7nutWjmYdDo9&h=AT1d60WwFvNZF-1afhyRyFlCUZLvJqxlw5bgPcYga8z-oi_sA7RO1fn7OwP8Nn29Vi31OTIoWI-aKSTQe-UEJnTzoPA99f5E5nSnb2yZOxYhFNc6EEglmnflNMQ5vBC8KhWEnDt6dw1R&s=1",
+                                               "payload":null
+                                            }
+                                         ]
+                                      }
+                                   },
+                     */
+                    JObject channelData = JObject.Parse(activity.ChannelData.ToString());
+                    JToken title = channelData["message"]["attachments"][0]["title"];
+
+                    // CoordinateSharp: https://github.com/Tronald/CoordinateSharp
+                    Coordinate coordinates = null;
+                    if (Coordinate.TryParse(title.ToString(), out coordinates))
+                    {
+                        lat = coordinates.Latitude.ToDouble();
+                        lon = coordinates.Longitude.ToDouble();
+                        isFound = true;
+                    }
+                }
+                catch (Exception)
+                {
+                }
             }
 
             return isFound;
