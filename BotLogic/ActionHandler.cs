@@ -23,7 +23,7 @@ namespace VFatumbot.BotLogic
             var command = turnContext.Activity.Text.ToLower();
             if (command.StartsWith("/getattractor", StringComparison.InvariantCulture))
             {
-                await AttractionActionAsync(turnContext, userProfile, cancellationToken, mainDialog);
+                await AttractorActionAsync(turnContext, userProfile, cancellationToken, mainDialog);
             }
             else if (command.StartsWith("/getvoid", StringComparison.InvariantCulture))
             {
@@ -35,7 +35,7 @@ namespace VFatumbot.BotLogic
             }
             else if (command.StartsWith("/getattractor", StringComparison.InvariantCulture))
             {
-                await AttractionActionAsync(turnContext, userProfile, cancellationToken, mainDialog);
+                await AttractorActionAsync(turnContext, userProfile, cancellationToken, mainDialog);
             }
             else if (command.StartsWith("/getpseudo", StringComparison.InvariantCulture))
             {
@@ -60,7 +60,7 @@ namespace VFatumbot.BotLogic
             }
             else if (command.StartsWith("/scanattractor", StringComparison.InvariantCulture))
             {
-                await AttractionActionAsync(turnContext, userProfile, cancellationToken, mainDialog, true);
+                await AttractorActionAsync(turnContext, userProfile, cancellationToken, mainDialog, true);
             }
             else if (command.StartsWith("/scanvoid", StringComparison.InvariantCulture))
             {
@@ -110,7 +110,7 @@ namespace VFatumbot.BotLogic
             }
         }
 
-        public async Task AttractionActionAsync(ITurnContext turnContext, UserProfile userProfile, CancellationToken cancellationToken, MainDialog mainDialog, bool doScan = false)
+        public async Task AttractorActionAsync(ITurnContext turnContext, UserProfile userProfile, CancellationToken cancellationToken, MainDialog mainDialog, bool doScan = false)
         {
             int idacou = 1;
             if (turnContext.Activity.Text.Contains("["))
@@ -191,6 +191,7 @@ namespace VFatumbot.BotLogic
                                 }
 
                                 await turnContext.SendActivityAsync(ReplyFactory.CreateLocationCardsReply(incoords, w3wResult), cancellationToken);
+                                await Helpers.SendPushNotification(userProfile, "Point Generated", mesg);
 
                                 await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(context, mainDialog, cancellationToken);
                             }
@@ -286,6 +287,7 @@ namespace VFatumbot.BotLogic
                                 }
 
                                 await turnContext.SendActivityAsync(ReplyFactory.CreateLocationCardsReply(incoords, w3wResult), cancellationToken);
+                                await Helpers.SendPushNotification(userProfile, "Point Generated", mesg);
 
                                 await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(context, mainDialog, cancellationToken);
 
@@ -400,6 +402,7 @@ namespace VFatumbot.BotLogic
                                 }
 
                                 await turnContext.SendActivityAsync(ReplyFactory.CreateLocationCardsReply(incoords, w3wResult), cancellationToken);
+                                await Helpers.SendPushNotification(userProfile, "Point Generated", mesg);
 
                                 await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(context, mainDialog, cancellationToken);
                             }
@@ -463,6 +466,7 @@ namespace VFatumbot.BotLogic
             dynamic w3wResult = await Helpers.GetWhat3WordsAddressAsync(incoords);
 
             await turnContext.SendActivityAsync(ReplyFactory.CreateLocationCardsReply(incoords, w3wResult), cancellationToken);
+            await Helpers.SendPushNotification(userProfile, "Point Generated", mesg);
         }
 
         public async Task PsuedoActionAsync(ITurnContext turnContext, UserProfile userProfile, CancellationToken cancellationToken)
@@ -497,6 +501,7 @@ namespace VFatumbot.BotLogic
             dynamic w3wResult = await Helpers.GetWhat3WordsAddressAsync(incoords);
 
             await turnContext.SendActivityAsync(ReplyFactory.CreateLocationCardsReply(incoords, w3wResult), cancellationToken);
+            await Helpers.SendPushNotification(userProfile, "Point Generated", mesg);
         }
 
         public async Task PairActionAsync(ITurnContext turnContext, UserProfile userProfile, CancellationToken cancellationToken, MainDialog mainDialog, bool doScan = false)
@@ -562,6 +567,7 @@ namespace VFatumbot.BotLogic
                                     await turnContext.SendActivityAsync(MessageFactory.Text(mesg), cancellationToken);
                                     dynamic w3wResult1 = await Helpers.GetWhat3WordsAddressAsync(incoords);
                                     await turnContext.SendActivityAsync(ReplyFactory.CreateLocationCardsReply(incoords, w3wResult1), cancellationToken);
+                                    await Helpers.SendPushNotification(userProfile, "Point Generated", mesg); // TODO: only send first? summary? 
                                 }
 
                                 incoords = new double[] { voi[i].X.center.point.latitude, voi[i].X.center.point.longitude };
@@ -761,6 +767,7 @@ namespace VFatumbot.BotLogic
                         dynamic w3wResult = await Helpers.GetWhat3WordsAddressAsync(incoords);
 
                         await turnContext.SendActivityAsync(ReplyFactory.CreateLocationCardsReply(incoords, w3wResult), cancellationToken);
+                        await Helpers.SendPushNotification(userProfile, "Point Generated", mesg);
 
                         await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(context, mainDialog, cancellationToken);
                     }, cancellationToken);

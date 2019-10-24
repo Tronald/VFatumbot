@@ -63,7 +63,7 @@ namespace VFatumbot
             switch (((FoundChoice)stepContext.Result).Value)
             {
                 case "Attractor":
-                    await actionHandler.AttractionActionAsync(stepContext.Context, userProfile, cancellationToken, this);
+                    await actionHandler.AttractorActionAsync(stepContext.Context, userProfile, cancellationToken, this);
                     break;
                 case "Void":
                     await actionHandler.VoidActionAsync(stepContext.Context, userProfile, cancellationToken, this);

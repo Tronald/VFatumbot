@@ -5,6 +5,9 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Geocoding;
 using Geocoding.Google;
+using OneSignal.RestAPIv3.Client;
+using OneSignal.RestAPIv3.Client.Resources;
+using OneSignal.RestAPIv3.Client.Resources.Notifications;
 using Newtonsoft.Json;
 
 namespace VFatumbot.BotLogic
@@ -76,6 +79,22 @@ namespace VFatumbot.BotLogic
         public static string ByteArrayToString(byte[] ba)
         {
             return BitConverter.ToString(ba).Replace("-", "");
+        }
+
+        // C# dependency installed via NuGut for access to the OneSignal API is:
+        // https://github.com/Alegrowin/OneSignal.RestAPIv3.Client
+        public static async Task<NotificationCreateResult> SendPushNotification(UserProfile userProfile, string title, string body)
+        {
+            var client = new OneSignalClient(Consts.ONE_SIGNAL_API_KEY); // Use your Api Key
+            var options = new NotificationCreateOptions
+            {
+                AppId = new Guid(Consts.ONE_SIGNAL_APP_ID),
+                IncludePlayerIds = new List<string>() { userProfile.PushUserId },
+                // IncludedSegments = new List<string>() { "All" } // To send to all 
+            };
+            options.Headings.Add(LanguageCodes.English, title);
+            options.Contents.Add(LanguageCodes.English, body);
+            return await client.Notifications.CreateAsync(options);
         }
     }
 }

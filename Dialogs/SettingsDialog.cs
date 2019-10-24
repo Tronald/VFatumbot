@@ -145,6 +145,8 @@ namespace VFatumbot
 
             await stepContext.Context.SendActivityAsync(MessageFactory.Text($"ID is {userProfile.UserId} and name is {userProfile.Username}"), cancellationToken);
 
+            await stepContext.Context.SendActivityAsync(MessageFactory.Text($"Push ID is {userProfile.PushUserId}"), cancellationToken);
+
             await stepContext.Context.SendActivityAsync(MessageFactory.Text("Water points will be " + (userProfile.IsIncludeWaterPoints ? "included" : "skipped")), cancellationToken);
 
             await stepContext.Context.SendActivityAsync(MessageFactory.Text($"Current location is {userProfile.Latitude},{userProfile.Longitude}"), cancellationToken);

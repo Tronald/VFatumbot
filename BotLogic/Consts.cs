@@ -26,6 +26,10 @@
         // Google Maps API key
         public const string GOOGLE_MAPS_API_KEY = "";
 
+        // OneSignal for Push Notifications
+        public const string ONE_SIGNAL_APP_ID = "";
+        public const string ONE_SIGNAL_API_KEY = "";
+
         // https://what3words.com API key
         public const string W3W_API_KEY = "";
 

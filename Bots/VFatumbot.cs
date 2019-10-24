@@ -76,7 +76,16 @@ namespace VFatumbot
             // Maybe one day re-structure/re-factor it to following their middleware patterns...
 
             double lat = 0, lon = 0;
-            if (InterceptLocation(turnContext, out lat, out lon)) // Intercept any locations the user sends us, no matter where in the conversation they are
+            string pushUserId = null;
+            if (InterceptPushNotificationSubscription(turnContext, out pushUserId))
+            {
+                if (userProfile.PushUserId != pushUserId)
+                {
+                    userProfile.PushUserId = pushUserId;
+                    await mUserProfileAccessor.SetAsync(turnContext, userProfile);
+                }
+            }
+            else if (InterceptLocation(turnContext, out lat, out lon)) // Intercept any locations the user sends us, no matter where in the conversation they are
             {
                 bool validCoords = true;
                 if (lat == Consts.INVALID_COORD && lon == Consts.INVALID_COORD)
@@ -112,7 +121,7 @@ namespace VFatumbot
                     await mUserProfileAccessor.SetAsync(turnContext, userProfile);
                     await _userState.SaveChangesAsync(turnContext, false, cancellationToken);
                     await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(turnContext, _mainDialog, cancellationToken);
-           
+
                     return;
                 }
             }
@@ -125,7 +134,7 @@ namespace VFatumbot
                     await turnContext.SendActivityAsync(MessageFactory.Text(Consts.NO_LOCATION_SET_MSG), cancellationToken);
                     return;
                 }
-                else 
+                else
                 {
                     await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(turnContext, _mainDialog, cancellationToken);
                     return;
@@ -162,15 +171,37 @@ namespace VFatumbot
             await _mainDialog.RunAsync(turnContext, _conversationState.CreateProperty<DialogState>(nameof(DialogState)), cancellationToken);
         }
 
+        protected bool InterceptPushNotificationSubscription(ITurnContext turnContext, out string pushUserId)
+        {
+            pushUserId = null;
+
+            var activity = turnContext.Activity;
+
+            if (activity.Properties != null)
+            {
+                var pushUserIdFromClient = (string)activity.Properties.GetValue("pushUserId");
+                if (!string.IsNullOrEmpty(pushUserIdFromClient))
+                {
+                    pushUserId = pushUserIdFromClient;
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         protected bool InterceptLocation(ITurnContext turnContext, out double lat, out double lon)
         {
-            lat = lon = 0;
+            lat = lon = Consts.INVALID_COORD;
+
+            var activity = turnContext.Activity;
+
             bool isFound = false;
 
             // Prioritize geo coordinates sent via entities
-            if (turnContext.Activity.Entities != null)
+            if (activity.Entities != null)
             {
-                foreach (Entity entity in turnContext.Activity.Entities)
+                foreach (Entity entity in activity.Entities)
                 {
                     if (entity.Type == "Place")
                     {
@@ -185,7 +216,7 @@ namespace VFatumbot
             }
 
             // Secondly is if there is a Google Map URL
-            if (!isFound && turnContext.Activity.Text != null && (turnContext.Activity.Text.Contains("google.com/maps/") || turnContext.Activity.Text.Contains("Sending location @")))
+            if (!isFound && activity.Text != null && (activity.Text.Contains("google.com/maps/") || activity.Text.Contains("Sending location @")))
             {
                 string[] seps0 = { "@" };
                 string[] entry0 = turnContext.Activity.Text.Split(seps0, StringSplitOptions.RemoveEmptyEntries);
@@ -199,11 +230,10 @@ namespace VFatumbot
             }
 
             // Thirdly, geocode the address the user sent
-            if (!isFound && !string.IsNullOrEmpty(turnContext.Activity.Text) && turnContext.Activity.Text.ToLower().StartsWith("search"))
+            if (!isFound && !string.IsNullOrEmpty(activity.Text) && activity.Text.ToLower().StartsWith("search", StringComparison.InvariantCulture))
             {
                 // dirty hack: get the calling method which is already async to do the Google Geocode async API call
                 lat = lon = Consts.INVALID_COORD;
-
                 return true;
             }
 

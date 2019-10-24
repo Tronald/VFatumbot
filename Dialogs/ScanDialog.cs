@@ -56,7 +56,7 @@ namespace VFatumbot
             switch (((FoundChoice)stepContext.Result).Value)
             {
                 case "Scan Attractor":
-                    await actionHandler.AttractionActionAsync(stepContext.Context, userProfile, cancellationToken, _mainDialog, true);
+                    await actionHandler.AttractorActionAsync(stepContext.Context, userProfile, cancellationToken, _mainDialog, true);
                     break;
                 case "Scan Void":
                     await actionHandler.VoidActionAsync(stepContext.Context, userProfile, cancellationToken, _mainDialog, true);

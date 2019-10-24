@@ -20,6 +20,9 @@ namespace VFatumbot
         public int Radius { get; set; } = Consts.DEFAULT_RADIUS;
         public bool IsIncludeWaterPoints { get; set; } = true;
 
+        // OneSignal Player/User ID for push notifications
+        public string PushUserId { get; set; }
+
         public bool IsLocationSet
         {
             get
