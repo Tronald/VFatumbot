@@ -30,7 +30,7 @@ namespace VFatumbot
             // Create the Bot Framework Adapter.
             services.AddSingleton<IBotFrameworkHttpAdapter, AdapterWithErrorHandler>();
 
-#if RELEASE
+//#if RELEASE // TODO: doesn't seem to be working so will just use Cosmos for the emulator as well now
             // For the bot running in the Azure cloud, we need to use Cosmos DB (or Azure's Blob Storage service)
             // to keep data persistent, otherwise the stateless nature of the bot would be useless in keeping
             // track of users's locations, radius settings etc.
@@ -48,7 +48,8 @@ namespace VFatumbot
             // Add the states as singletons
             services.AddSingleton(conversationState);
             services.AddSingleton(userState);
-#else
+//#else
+/*
             // Create the storage we'll be using for User and Conversation state. (Memory is great for testing purposes.)
             services.AddSingleton<IStorage, MemoryStorage>();
 
@@ -57,7 +58,8 @@ namespace VFatumbot
 
             // Create the Conversation state.
             services.AddSingleton<ConversationState>();
-#endif
+*/
+//#endif
 
             // The Dialog that will be run by the bot.
             services.AddSingleton<MainDialog>();
