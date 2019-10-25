@@ -69,9 +69,8 @@ namespace VFatumbot
             mConversationDataAccessor = _conversationState.CreateProperty<ConversationData>(nameof(ConversationData));
             var conversationData = await mConversationDataAccessor.GetAsync(turnContext, () => new ConversationData());
 
-            // Save user's IDs
+            // Save user's ID
             userProfile.UserId = turnContext.Activity.From.Id;
-            userProfile.Username = turnContext.Activity.From.Name;
 
             // Add message details to the conversation data.
             var messageTimeOffset = (DateTimeOffset)turnContext.Activity.Timestamp;

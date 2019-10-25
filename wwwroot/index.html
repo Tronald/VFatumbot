@@ -133,11 +133,6 @@
                 userId = generateId();
                 setCookie('userId', userId, 1825);
             }
-            var username = getCookie('username');
-            if (!username) {
-                username = generateId();
-                setCookie('username', username, 1825);
-            }
 
             let directLine = window.WebChat.createDirectLine({
                 // TODO: get this dynamically?
@@ -149,7 +144,6 @@
                 {
                     directLine: directLine,
                     userID: userId,
-                    username: username,
                     locale: 'en', // TODO: get from browser or does framework automatically do that for us?
                 },
                 document.getElementById('webchat')
@@ -160,7 +154,6 @@
             var activity = {
                 from: {
                     id: userId,
-                    name: username
                 },
                 type: 'event',
             };
@@ -183,7 +176,6 @@
                         var activity = {
                             from: {
                                 id: userId,
-                                name: username
                             },
                             type: 'event',
                             pushUserId: pushUserId
@@ -212,7 +204,6 @@
                         var activity = {
                             from: {
                                 id: userId,
-                                name: username
                             },
                             type: 'message',
                             entities: [{

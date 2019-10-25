@@ -7,7 +7,6 @@ namespace VFatumbot
     public class UserProfile
     {
         public string UserId { get; set; }
-        public string Username { get; set; }
 
 #if EMULATORDEBUG
         // Fukuoka, Japan

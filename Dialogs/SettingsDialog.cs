@@ -143,9 +143,11 @@ namespace VFatumbot
             var userProfile = await _userProfileAccessor.GetAsync(stepContext.Context);
             await _userProfileAccessor.SetAsync(stepContext.Context, userProfile);
 
-            await stepContext.Context.SendActivityAsync(MessageFactory.Text($"ID is {userProfile.UserId} and name is {userProfile.Username}"), cancellationToken);
+            await stepContext.Context.SendActivityAsync(MessageFactory.Text($"ID is {userProfile.UserId}"), cancellationToken);
 
             await stepContext.Context.SendActivityAsync(MessageFactory.Text($"Push ID is {userProfile.PushUserId}"), cancellationToken);
+
+            await stepContext.Context.SendActivityAsync(MessageFactory.Text($"Currently scanning? {userProfile.IsScanning}"), cancellationToken);
 
             await stepContext.Context.SendActivityAsync(MessageFactory.Text("Water points will be " + (userProfile.IsIncludeWaterPoints ? "included" : "skipped")), cancellationToken);
 
