@@ -42,5 +42,8 @@ namespace VFatumbot
                 return new LatLng(Latitude, Longitude);
             }
         }
+
+        // Flag to prevent multiple parallel scans (based on original Fatumbot3 logic)
+        public bool IsScanning { get; set; }
     }
 }

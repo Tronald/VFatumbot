@@ -56,16 +56,48 @@ namespace VFatumbot
             switch (((FoundChoice)stepContext.Result).Value)
             {
                 case "Scan Attractor":
-                    await actionHandler.AttractorActionAsync(stepContext.Context, userProfile, cancellationToken, _mainDialog, true);
+                    if (!userProfile.IsScanning)
+                    {
+                        await actionHandler.AttractorActionAsync(stepContext.Context, userProfile, cancellationToken, _mainDialog, true);
+                    }
+                    else
+                    {
+                        goBackMainMenuThisRound = true;
+                        await stepContext.Context.SendActivityAsync(MessageFactory.Text("Your scanning session is already in progress."), cancellationToken);
+                    }
                     break;
                 case "Scan Void":
-                    await actionHandler.VoidActionAsync(stepContext.Context, userProfile, cancellationToken, _mainDialog, true);
+                    if (!userProfile.IsScanning)
+                    {
+                        await actionHandler.VoidActionAsync(stepContext.Context, userProfile, cancellationToken, _mainDialog, true);
+                    }
+                    else
+                    {
+                        goBackMainMenuThisRound = true;
+                        await stepContext.Context.SendActivityAsync(MessageFactory.Text("Your scanning session is already in progress."), cancellationToken);
+                    }
                     break;
                 case "Scan Anomaly":
-                    await actionHandler.AnomalyActionAsync(stepContext.Context, userProfile, cancellationToken, _mainDialog, true);
+                    if (!userProfile.IsScanning)
+                    {
+                        await actionHandler.AnomalyActionAsync(stepContext.Context, userProfile, cancellationToken, _mainDialog, true);
+                    }
+                    else
+                    {
+                        goBackMainMenuThisRound = true;
+                        await stepContext.Context.SendActivityAsync(MessageFactory.Text("Your scanning session is already in progress."), cancellationToken);
+                    }
                     break;
                 case "Scan Pair":
-                    await actionHandler.PairActionAsync(stepContext.Context, userProfile, cancellationToken, _mainDialog, true);
+                    if (!userProfile.IsScanning)
+                    {
+                        await actionHandler.PairActionAsync(stepContext.Context, userProfile, cancellationToken, _mainDialog, true);
+                    }
+                    else
+                    {
+                        goBackMainMenuThisRound = true;
+                        await stepContext.Context.SendActivityAsync(MessageFactory.Text("Your scanning session is already in progress."), cancellationToken);
+                    }
                     break;
                 case "< Back":
                     goBackMainMenuThisRound = true;

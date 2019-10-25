@@ -126,10 +126,7 @@ namespace VFatumbot.BotLogic
 
             if (doScan)
             {
-                // TODO: implement this logic they had ... or check if it's okay to have multiple scans going
-                //if (metasessions.ContainsKey(u) == true)
-                //{ await Bot.SendTextMessageAsync(message.Chat.Id, "Your scanning session is already in progress."); }
-                //else
+                userProfile.IsScanning = true;
                 await turnContext.SendActivityAsync(MessageFactory.Text("Generation may take from 5 to 15 minutes."), cancellationToken);
             }
             else
@@ -149,6 +146,12 @@ namespace VFatumbot.BotLogic
                     redo:
                         FinalAttractor[] ida = GetIDA(userProfile.Location, userProfile.Radius, /*u* not used*/-1, doScan ? 1 : 0);
                         ida = SortIDA(ida, "attractor", idacou);
+
+                        if (doScan)
+                        {
+                            userProfile.IsScanning = false;
+                        }
+
                         if (ida.Length > 0)
                         {
                             for (int i = 0; i < ida.Count(); i++)
@@ -196,7 +199,7 @@ namespace VFatumbot.BotLogic
                                 await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(context, mainDialog, cancellationToken);
                             }
                         }
-                        else if (ida.Count() < 1)
+                        else
                         {
                             mesg = "No Anomalies found at the moment. Try again later.";
                             await turnContext.SendActivityAsync(MessageFactory.Text(mesg), cancellationToken);
@@ -222,10 +225,7 @@ namespace VFatumbot.BotLogic
 
             if (doScan)
             {
-                // TODO: implement this logic they had ... or check if it's okay to have multiple scans going
-                //if (metasessions.ContainsKey(u) == true)
-                //{ await Bot.SendTextMessageAsync(message.Chat.Id, "Your scanning session is already in progress."); }
-                //else
+                userProfile.IsScanning = true;
                 await turnContext.SendActivityAsync(MessageFactory.Text("Generation may take from 5 to 15 minutes."), cancellationToken);
             }
             else
@@ -245,6 +245,12 @@ namespace VFatumbot.BotLogic
                     redo:
                         FinalAttractor[] ida = GetIDA(userProfile.Location, userProfile.Radius, /*u* not used*/-1, doScan ? 1 : 0);
                         ida = SortIDA(ida, "void", idacou);
+
+                        if (doScan)
+                        {
+                            userProfile.IsScanning = false;
+                        }
+
                         if (ida.Length > 0)
                         {
                             for (int i = 0; i < ida.Count(); i++)
@@ -298,7 +304,7 @@ namespace VFatumbot.BotLogic
                                 //await stepContext.BeginDialogAsync(nameof(TripReportDialog), null, cancellationToken);
                             }
                         }
-                        else if (ida.Count() < 1)
+                        else
                         {
                             mesg = "No Anomalies found at the moment. Try again later.";
                             await turnContext.SendActivityAsync(MessageFactory.Text(mesg), cancellationToken);
@@ -337,10 +343,7 @@ namespace VFatumbot.BotLogic
 
             if (doScan)
             {
-                // TODO: implement this logic they had ... or check if it's okay to have multiple scans going
-                //if (metasessions.ContainsKey(u) == true)
-                //{ await Bot.SendTextMessageAsync(message.Chat.Id, "Your scanning session is already in progress."); }
-                //else
+                userProfile.IsScanning = true;
                 await turnContext.SendActivityAsync(MessageFactory.Text("Generation may take from 5 to 15 minutes."), cancellationToken);
             }
             else
@@ -360,6 +363,12 @@ namespace VFatumbot.BotLogic
                     redo:
                         FinalAttractor[] ida = GetIDA(userProfile.Location, userProfile.Radius, /*u* not used*/-1, doScan ? 1 : 0);
                         ida = SortIDA(ida, "any", idacou);
+
+                        if (doScan)
+                        {
+                            userProfile.IsScanning = false;
+                        }
+
                         if (ida.Length > 0)
                         {
                             for (int i = 0; i < ida.Count(); i++)
@@ -407,7 +416,7 @@ namespace VFatumbot.BotLogic
                                 await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(context, mainDialog, cancellationToken);
                             }
                         }
-                        else if (ida.Count() < 1)
+                        else
                         {
                             mesg = "No Anomalies found at the moment. Try again later.";
                             await turnContext.SendActivityAsync(MessageFactory.Text(mesg), cancellationToken);
@@ -520,10 +529,7 @@ namespace VFatumbot.BotLogic
 
             if (doScan)
             {
-                // TODO: implement this logic they had ... or check if it's okay to have multiple scans going
-                //if (metasessions.ContainsKey(u) == true)
-                //{ await Bot.SendTextMessageAsync(message.Chat.Id, "Your scanning session is already in progress."); }
-                //else
+                userProfile.IsScanning = true;
                 await turnContext.SendActivityAsync(MessageFactory.Text("Generation may take from 5 to 15 minutes."), cancellationToken);
             }
             else
@@ -544,6 +550,12 @@ namespace VFatumbot.BotLogic
                         FinalAttractor[] ida = GetIDA(userProfile.Location, userProfile.Radius, /*u* not used*/-1, doScan ? 1 : 0);
                         FinalAttractor[] att = SortIDA(ida, "attractor", idacou);
                         FinalAttractor[] voi = SortIDA(ida, "void", idacou);
+
+                        if (doScan)
+                        {
+                            userProfile.IsScanning = false;
+                        }
+
                         if (att.Count() > voi.Count())
                         {
                             idacou = voi.Count();
@@ -591,7 +603,7 @@ namespace VFatumbot.BotLogic
 
                             await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(context, mainDialog, cancellationToken);
                         }
-                        else// if (ida.Count() < 1) // TODO: is this needed vs idacou > 1 if ?
+                        else
                         {
                             mesg = "No Anomalies found at the moment. Try again later.";
                             await turnContext.SendActivityAsync(MessageFactory.Text(mesg), cancellationToken);
