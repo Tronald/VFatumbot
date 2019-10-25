@@ -52,6 +52,12 @@ namespace VFatumbot
             switch (((FoundChoice)stepContext.Result).Value)
             {
                 case "Yes":
+                    // TODO: a quick hack to reset IsScanning in case it gets stuck in that state
+                    var userProfile = await _userProfileAccessor.GetAsync(stepContext.Context);
+                    userProfile.IsScanning = false;
+                    await _userProfileAccessor.SetAsync(stepContext.Context, userProfile);
+                    // << EOF TODO. Will figure out whether this needs handling properly later on.
+
                     return await stepContext.NextAsync();
                 case "No":
                 default:

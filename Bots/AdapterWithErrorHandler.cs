@@ -46,13 +46,13 @@ namespace VFatumbot
         // Used as a callback to restart the main dialog (i.e. prompt user for next action) after middleware-intercepted actions
         // (like sending a location or sending "help", which interrupt the normal dialog flow) or long tasks like getting attractors etc.
         // have completed their work on a background thread
-        public async Task RepromptMainDialog(ITurnContext turnContext, Dialog dialog, CancellationToken cancellationToken)
+        public async Task RepromptMainDialog(ITurnContext turnContext, Dialog dialog, CancellationToken cancellationToken, bool resetFlag = false)
         {
             var conversationStateAccesor = _conversationState.CreateProperty<DialogState>(nameof(DialogState));
             var dialogSet = new DialogSet(conversationStateAccesor);
             dialogSet.Add(dialog);
             var dialogContext = await dialogSet.CreateContextAsync(turnContext, cancellationToken);
-            await dialogContext.ReplaceDialogAsync(nameof(MainDialog), cancellationToken: cancellationToken);
+            await dialogContext.ReplaceDialogAsync(nameof(MainDialog), resetFlag, cancellationToken);
             await _conversationState.SaveChangesAsync(dialogContext.Context, false, cancellationToken);
         }
     }

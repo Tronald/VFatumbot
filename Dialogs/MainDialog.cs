@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Bot.Builder;
@@ -40,6 +41,25 @@ namespace VFatumbot
 
         private async Task<DialogTurnResult> ChoiceActionStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
         {
+            if (stepContext.Options != null)
+            {
+                // TODO: we'll probably expand Options to include more than just a boolean flag to reset stuff but for now...
+                try
+                {
+                    var resetStuff = (bool)stepContext.Options;
+                    if (resetStuff)
+                    {
+                        var userProfile = await _userProfileAccessor.GetAsync(stepContext.Context, () => new UserProfile());
+                        userProfile.IsScanning = false;
+                        await _userProfileAccessor.SetAsync(stepContext.Context, userProfile, cancellationToken);
+                        await _userState.SaveChangesAsync(stepContext.Context, false, cancellationToken);
+                    }
+                }
+                catch (Exception)
+                {
+                }
+            }
+
             _logger.LogInformation("MainDialog.ChoiceActionStepAsync");
 
             var options = new PromptOptions()
