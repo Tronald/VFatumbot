@@ -99,6 +99,7 @@ namespace VFatumbot
             var cardAction = new CardAction(ActionTypes.OpenUrl, "Open", value: "https://earth.google.com/web/@" + incoords[0] + "," + incoords[1] + ",146.726a,666.616d,35y,0h,45t,0r");
 
             var buttons = new List<CardAction> {
+                cardAction
             };
 
             var heroCard = new HeroCard
