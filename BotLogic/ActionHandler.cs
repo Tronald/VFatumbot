@@ -605,9 +605,9 @@ namespace VFatumbot.BotLogic
                         double[] incoords = new double[2];
                         int numWaterPointsSkipped = 0;
 
+                    redoIDA:
                         FinalAttractor[] ida = GetIDA(userProfile.Location, userProfile.Radius, -1/*not used?*/);
 
-                    redoAtt:
                         FinalAttractor[] att = SortIDA(ida, "attractor", 1);
                         if (att.Length > 0 && !userProfile.IsIncludeWaterPoints)
                         {
@@ -624,11 +624,10 @@ namespace VFatumbot.BotLogic
                                 }
 
                                 await turnContext.SendActivityAsync(MessageFactory.Text("Number of water points skipped so far: " + numWaterPointsSkipped), cancellationToken);
-                                goto redoAtt;
+                                goto redoIDA;
                             }
                         }
 
-                    redoVoid:
                         FinalAttractor[] voi = SortIDA(ida, "void", 1);
                         if (voi.Length > 0 && !userProfile.IsIncludeWaterPoints)
                         {
@@ -645,7 +644,7 @@ namespace VFatumbot.BotLogic
                                 }
 
                                 await turnContext.SendActivityAsync(MessageFactory.Text("Number of water points skipped so far: " + numWaterPointsSkipped), cancellationToken);
-                                goto redoVoid;
+                                goto redoIDA;
                             }
                         }
 
