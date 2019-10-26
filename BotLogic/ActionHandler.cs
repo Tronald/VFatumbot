@@ -618,12 +618,12 @@ namespace VFatumbot.BotLogic
 
                                 if (numWaterPointsSkipped > Consts.WATER_POINTS_SEARCH_MAX)
                                 {
-                                    await turnContext.SendActivityAsync(MessageFactory.Text("Couldn't find anything but attractor water points. Try again later."), cancellationToken);
+                                    await turnContext.SendActivityAsync(MessageFactory.Text("Couldn't find anything but water points. Try again later."), cancellationToken);
                                     await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(context, mainDialog, cancellationToken);
                                     return;
                                 }
 
-                                await turnContext.SendActivityAsync(MessageFactory.Text("Number of attractor water points skipped so far: " + numWaterPointsSkipped), cancellationToken);
+                                await turnContext.SendActivityAsync(MessageFactory.Text("Number of water points skipped so far: " + numWaterPointsSkipped), cancellationToken);
                                 goto redoAtt;
                             }
                         }
@@ -639,12 +639,12 @@ namespace VFatumbot.BotLogic
 
                                 if (numWaterPointsSkipped > Consts.WATER_POINTS_SEARCH_MAX)
                                 {
-                                    await turnContext.SendActivityAsync(MessageFactory.Text("Couldn't find anything but void water points. Try again later."), cancellationToken);
+                                    await turnContext.SendActivityAsync(MessageFactory.Text("Couldn't find anything but water points. Try again later."), cancellationToken);
                                     await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(context, mainDialog, cancellationToken);
                                     return;
                                 }
 
-                                await turnContext.SendActivityAsync(MessageFactory.Text("Number of void water points skipped so far: " + numWaterPointsSkipped), cancellationToken);
+                                await turnContext.SendActivityAsync(MessageFactory.Text("Number of water points skipped so far: " + numWaterPointsSkipped), cancellationToken);
                                 goto redoVoid;
                             }
                         }
@@ -662,12 +662,12 @@ namespace VFatumbot.BotLogic
 
                                 if (numWaterPointsSkipped > Consts.WATER_POINTS_SEARCH_MAX)
                                 {
-                                    await turnContext.SendActivityAsync(MessageFactory.Text("Couldn't find anything but psuedo water points. Try again later."), cancellationToken);
+                                    await turnContext.SendActivityAsync(MessageFactory.Text("Couldn't find anything but water points. Try again later."), cancellationToken);
                                     await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(context, mainDialog, cancellationToken);
                                     return;
                                 }
 
-                                await turnContext.SendActivityAsync(MessageFactory.Text("Number of attractor psuedo points skipped so far: " + numWaterPointsSkipped), cancellationToken);
+                                await turnContext.SendActivityAsync(MessageFactory.Text("Number of water points skipped so far: " + numWaterPointsSkipped), cancellationToken);
                                 goto redoPsuedo;
                             }
                         }
@@ -683,12 +683,12 @@ namespace VFatumbot.BotLogic
 
                                 if (numWaterPointsSkipped > Consts.WATER_POINTS_SEARCH_MAX)
                                 {
-                                    await turnContext.SendActivityAsync(MessageFactory.Text("Couldn't find anything but quantum water points. Try again later."), cancellationToken);
+                                    await turnContext.SendActivityAsync(MessageFactory.Text("Couldn't find anything but water points. Try again later."), cancellationToken);
                                     await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(context, mainDialog, cancellationToken);
                                     return;
                                 }
 
-                                await turnContext.SendActivityAsync(MessageFactory.Text("Number of attractor quantum points skipped so far: " + numWaterPointsSkipped), cancellationToken);
+                                await turnContext.SendActivityAsync(MessageFactory.Text("Number of water points skipped so far: " + numWaterPointsSkipped), cancellationToken);
                                 goto redoQuantum;
                             }
                         }

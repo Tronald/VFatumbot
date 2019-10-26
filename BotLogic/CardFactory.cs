@@ -21,7 +21,7 @@ namespace VFatumbot
             var heroCard = new HeroCard
             {
                 Title = "Facebook's removing the Send Location button",
-                Text = "Maps→Longpress & drop pin→Long-press pin→Share to Messenger→Randonauts",
+                Text = "Maps→Longpress & drop pin→Share to Messenger→Randonauts→Back to chat",
                 Tap = cardAction,
                 Buttons = buttons,
             };
