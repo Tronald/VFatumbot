@@ -36,6 +36,12 @@
         public const string REDDIT_REFRESH_TOKEN = "";
         public const string REDDIT_ACCESS_TOKEN = "";
 
+        // SQL server for posting trip reports/generated points
+        public const string DB_SERVER = "";
+        public const string DB_USER = "";
+        public const string DB_PASSWORD = "";
+        public const string DB_NAME = "";
+
         // https://what3words.com API key
         public const string W3W_API_KEY = "";
 
