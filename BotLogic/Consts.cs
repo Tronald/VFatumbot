@@ -30,6 +30,12 @@
         public const string ONE_SIGNAL_APP_ID = "";
         public const string ONE_SIGNAL_API_KEY = "";
 
+        // Reddit API for posting trip reports
+        public const string REDDIT_APP_ID = "";
+        public const string REDDIT_APP_SECRET = "";
+        public const string REDDIT_REFRESH_TOKEN = "";
+        public const string REDDIT_ACCESS_TOKEN = "";
+
         // https://what3words.com API key
         public const string W3W_API_KEY = "";
 
