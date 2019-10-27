@@ -8,6 +8,7 @@ using Microsoft.Bot.Builder.Dialogs.Choices;
 using Microsoft.Bot.Schema;
 using Microsoft.Extensions.Logging;
 using VFatumbot.BotLogic;
+using static VFatumbot.AdapterWithErrorHandler;
 
 namespace VFatumbot
 {
@@ -43,21 +44,26 @@ namespace VFatumbot
         {
             if (stepContext.Options != null)
             {
-                // TODO: we'll probably expand Options to include more than just a boolean flag to reset stuff but for now...
-                try
-                {
-                    var resetStuff = (bool)stepContext.Options;
-                    if (resetStuff)
+                //try
+                //{
+                    var callbackOptions = (CallbackOptions)stepContext.Options;
+
+                    if (callbackOptions.ResetFlag)
                     {
                         var userProfile = await _userProfileAccessor.GetAsync(stepContext.Context, () => new UserProfile());
                         userProfile.IsScanning = false;
                         await _userProfileAccessor.SetAsync(stepContext.Context, userProfile, cancellationToken);
                         await _userState.SaveChangesAsync(stepContext.Context, false, cancellationToken);
                     }
-                }
-                catch (Exception)
-                {
-                }
+
+                    if (callbackOptions.StartTripReportDialog)
+                    {
+                        return await stepContext.ReplaceDialogAsync(nameof(TripReportDialog), callbackOptions, cancellationToken);
+                    }
+                //}
+                //catch (Exception)
+                //{
+                //}
             }
 
             _logger.LogInformation("MainDialog.ChoiceActionStepAsync");

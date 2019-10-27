@@ -6,6 +6,7 @@ using Microsoft.Bot.Builder;
 using System.Threading.Tasks;
 using Microsoft.Bot.Builder.Dialogs;
 using System.Threading;
+using static VFatumbot.BotLogic.FatumFunctions;
 
 namespace VFatumbot
 {
@@ -43,16 +44,25 @@ namespace VFatumbot
             };
         }
 
+        public class CallbackOptions
+        {
+            public bool ResetFlag { get; set; }
+
+            public bool StartTripReportDialog { get; set; }
+            public FinalAttractor[] GeneratedPoints { get; set; }
+            public int NumWaterPointsSkipped { get; set; }
+        }
+
         // Used as a callback to restart the main dialog (i.e. prompt user for next action) after middleware-intercepted actions
         // (like sending a location or sending "help", which interrupt the normal dialog flow) or long tasks like getting attractors etc.
         // have completed their work on a background thread
-        public async Task RepromptMainDialog(ITurnContext turnContext, Dialog dialog, CancellationToken cancellationToken, bool resetFlag = false)
+        public async Task RepromptMainDialog(ITurnContext turnContext, Dialog dialog, CancellationToken cancellationToken, CallbackOptions callbackOptions = null)
         {
             var conversationStateAccesor = _conversationState.CreateProperty<DialogState>(nameof(DialogState));
             var dialogSet = new DialogSet(conversationStateAccesor);
             dialogSet.Add(dialog);
             var dialogContext = await dialogSet.CreateContextAsync(turnContext, cancellationToken);
-            await dialogContext.ReplaceDialogAsync(nameof(MainDialog), resetFlag, cancellationToken);
+            await dialogContext.ReplaceDialogAsync(nameof(MainDialog), callbackOptions, cancellationToken);
             await _conversationState.SaveChangesAsync(dialogContext.Context, false, cancellationToken);
         }
     }

@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.Dialogs;
+using static VFatumbot.AdapterWithErrorHandler;
 using static VFatumbot.BotLogic.FatumFunctions;
 
 namespace VFatumbot.BotLogic
@@ -163,7 +164,7 @@ namespace VFatumbot.BotLogic
                                         if (numWaterPointsSkipped > Consts.WATER_POINTS_SEARCH_MAX)
                                         {
                                             await turnContext.SendActivityAsync(MessageFactory.Text("Couldn't find anything but water points. Try again later."), cancellationToken);
-                                            await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(context, mainDialog, cancellationToken, doScan ? true : false);
+                                            await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(context, mainDialog, cancellationToken, new CallbackOptions() { ResetFlag = doScan });
                                             return;
                                         }
 
@@ -190,14 +191,21 @@ namespace VFatumbot.BotLogic
                                 await turnContext.SendActivityAsync(CardFactory.CreateLocationCardsReply(incoords, w3wResult), cancellationToken);
                                 await Helpers.SendPushNotification(userProfile, "Point Generated", mesg);
 
-                                await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(context, mainDialog, cancellationToken, doScan ? true : false);
+                                CallbackOptions callbackOptions = new CallbackOptions()
+                                {
+                                    StartTripReportDialog = true,
+                                    GeneratedPoints = ida,
+                                    NumWaterPointsSkipped = numWaterPointsSkipped,
+
+                                };
+                                await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(context, mainDialog, cancellationToken, callbackOptions);
                             }
                         }
                         else
                         {
                             mesg = "No Anomalies found at the moment. Try again later.";
                             await turnContext.SendActivityAsync(MessageFactory.Text(mesg), cancellationToken);
-                            await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(context, mainDialog, cancellationToken, doScan ? true : false);
+                            await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(context, mainDialog, cancellationToken, new CallbackOptions() { ResetFlag = doScan });
                         }
                     }, cancellationToken);
             });
@@ -256,7 +264,7 @@ namespace VFatumbot.BotLogic
                                         if (numWaterPointsSkipped > Consts.WATER_POINTS_SEARCH_MAX)
                                         {
                                             await turnContext.SendActivityAsync(MessageFactory.Text("Couldn't find anything but water points. Try again later."), cancellationToken);
-                                            await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(context, mainDialog, cancellationToken, doScan ? true : false);
+                                            await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(context, mainDialog, cancellationToken, new CallbackOptions() { ResetFlag = doScan });
                                             return;
                                         }
 
@@ -283,20 +291,21 @@ namespace VFatumbot.BotLogic
                                 await turnContext.SendActivityAsync(CardFactory.CreateLocationCardsReply(incoords, w3wResult), cancellationToken);
                                 await Helpers.SendPushNotification(userProfile, "Point Generated", mesg);
 
-                                await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(context, mainDialog, cancellationToken, doScan ? true : false);
-
-                                // TODO: tesing reporting experiences dialog
-                                //await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(context, new TripReportDialog(null, null), cancellationToken);
-
-                                //await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(context, new ReportDialog(), cancellationToken);
-                                //await stepContext.BeginDialogAsync(nameof(TripReportDialog), null, cancellationToken);
+                                CallbackOptions callbackOptions = new CallbackOptions()
+                                {
+                                    StartTripReportDialog = true,
+                                    GeneratedPoints = ida,
+                                    NumWaterPointsSkipped = numWaterPointsSkipped,
+                                    
+                                };
+                                await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(context, mainDialog, cancellationToken, callbackOptions);
                             }
                         }
                         else
                         {
                             mesg = "No Anomalies found at the moment. Try again later.";
                             await turnContext.SendActivityAsync(MessageFactory.Text(mesg), cancellationToken);
-                            await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(context, mainDialog, cancellationToken, doScan ? true : false);
+                            await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(context, mainDialog, cancellationToken, new CallbackOptions() { ResetFlag = doScan });
                         }
                     }, cancellationToken);
             });
@@ -368,7 +377,7 @@ namespace VFatumbot.BotLogic
                                         if (numWaterPointsSkipped > Consts.WATER_POINTS_SEARCH_MAX)
                                         {
                                             await turnContext.SendActivityAsync(MessageFactory.Text("Couldn't find anything but water points. Try again later."), cancellationToken);
-                                            await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(context, mainDialog, cancellationToken, doScan ? true : false);
+                                            await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(context, mainDialog, cancellationToken, new CallbackOptions() { ResetFlag = doScan });
                                             return;
                                         }
 
@@ -395,14 +404,21 @@ namespace VFatumbot.BotLogic
                                 await turnContext.SendActivityAsync(CardFactory.CreateLocationCardsReply(incoords, w3wResult), cancellationToken);
                                 await Helpers.SendPushNotification(userProfile, "Point Generated", mesg);
 
-                                await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(context, mainDialog, cancellationToken, doScan ? true : false);
+                                CallbackOptions callbackOptions = new CallbackOptions()
+                                {
+                                    StartTripReportDialog = true,
+                                    GeneratedPoints = ida,
+                                    NumWaterPointsSkipped = numWaterPointsSkipped,
+
+                                };
+                                await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(context, mainDialog, cancellationToken, callbackOptions);
                             }
                         }
                         else
                         {
                             mesg = "No Anomalies found at the moment. Try again later.";
                             await turnContext.SendActivityAsync(MessageFactory.Text(mesg), cancellationToken);
-                            await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(context, mainDialog, cancellationToken, doScan ? true : false);
+                            await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(context, mainDialog, cancellationToken, new CallbackOptions() { ResetFlag = doScan });
                         }
                     }, cancellationToken);
             });
@@ -420,6 +436,7 @@ namespace VFatumbot.BotLogic
                     {
                         string[] intentSuggestions = await Helpers.GetIntentSuggestionsAsync();
                         var suggestionsStr = string.Join(", ", intentSuggestions);
+                        userProfile.IntentSuggestions = intentSuggestions; // TODO: is this actually being saved?
                         await turnContext.SendActivityAsync(MessageFactory.Text("Intent suggestions: " + suggestionsStr), cancellationToken);
                         await Helpers.SendPushNotification(userProfile, "Intent Suggestions", suggestionsStr);
                         await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(context, mainDialog, cancellationToken);
@@ -579,13 +596,13 @@ namespace VFatumbot.BotLogic
                             if (numVoiWaterPointsSkipped > 1)
                                 await turnContext.SendActivityAsync(MessageFactory.Text("Number of void water points skipped: " + numVoiWaterPointsSkipped), cancellationToken);
 
-                            await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(context, mainDialog, cancellationToken, doScan ? true : false);
+                            await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(context, mainDialog, cancellationToken, new CallbackOptions() { ResetFlag = doScan });
                         }
                         else
                         {
                             mesg = "No Anomalies found at the moment. Try again later.";
                             await turnContext.SendActivityAsync(MessageFactory.Text(mesg), cancellationToken);
-                            await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(context, mainDialog, cancellationToken, doScan ? true : false);
+                            await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(context, mainDialog, cancellationToken, new CallbackOptions() { ResetFlag = doScan });
                         }
                     }, cancellationToken);
             });
