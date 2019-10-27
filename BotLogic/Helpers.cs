@@ -9,6 +9,7 @@ using OneSignal.RestAPIv3.Client;
 using OneSignal.RestAPIv3.Client.Resources;
 using OneSignal.RestAPIv3.Client.Resources.Notifications;
 using Newtonsoft.Json;
+using Reddit;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -97,6 +98,23 @@ namespace VFatumbot.BotLogic
             options.Headings.Add(LanguageCodes.English, title);
             options.Contents.Add(LanguageCodes.English, body);
             return await client.Notifications.CreateAsync(options);
+        }
+
+        // Post a trip report to the /r/randonauts subreddit
+        // Reddit API used: https://github.com/sirkris/Reddit.NET/
+        public static async Task PostTripReportToReddit(string text, string title)
+        {
+            // all posts are done under the user "thereal***REMOVED***"
+            var redditApi = new RedditAPI(appId: Consts.REDDIT_APP_ID,
+                                          appSecret: Consts.REDDIT_APP_SECRET,
+                                          refreshToken: Consts.REDDIT_REFRESH_TOKEN,
+                                          accessToken: Consts.REDDIT_ACCESS_TOKEN);
+            await Task.Run(() =>
+            {
+                //var askReddit = redditApi.Subreddit("randonauts"); // TODO: after go live
+                var askReddit = redditApi.Subreddit("soliaxplayground");
+                askReddit.SelfPost(title, text).Submit();
+            });
         }
 
         // https://www.c-sharpcorner.com/article/compute-sha256-hash-in-c-sharp/
