@@ -31,7 +31,7 @@ namespace VFatumbot
             InitialDialogId = nameof(WaterfallDialog);
         }
 
-        public async Task<DialogTurnResult> ChoiceActionStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
+        private async Task<DialogTurnResult> ChoiceActionStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
         {
             _logger.LogInformation("ScanDialog.ChoiceActionStepAsync");
 
