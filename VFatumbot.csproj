@@ -36,6 +36,7 @@
     <PackageReference Include="OneSignal.RestAPIv3.Client" Version="1.1.0" />
     <PackageReference Include="CoordinateSharp" Version="2.2.2.1" />
     <PackageReference Include="Reddit" Version="1.2.0" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.7.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -44,9 +45,6 @@
     </Content>
   </ItemGroup>
   
-  <ItemGroup>
-    <Compile Remove="Cards2.cs" />
-  </ItemGroup>
   <ItemGroup>
     <Folder Include="BotLogic\" />
     <Folder Include="RNGs\" />
