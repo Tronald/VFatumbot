@@ -60,6 +60,15 @@ namespace VFatumbot
                 {
                     return await stepContext.ReplaceDialogAsync(nameof(TripReportDialog), callbackOptions, cancellationToken);
                 }
+
+                if (callbackOptions.UpdateIntentSuggestions)
+                {
+                    var userProfile = await _userProfileAccessor.GetAsync(stepContext.Context, () => new UserProfile());
+                    userProfile.IntentSuggestions = callbackOptions.IntentSuggestions;
+                    userProfile.TimeIntentSuggestionsSet = callbackOptions.TimeIntentSuggestionsSet;
+                    await _userProfileAccessor.SetAsync(stepContext.Context, userProfile, cancellationToken);
+                    await _userState.SaveChangesAsync(stepContext.Context, false, cancellationToken);
+                }
             }
 
             _logger.LogInformation("MainDialog.ChoiceActionStepAsync");

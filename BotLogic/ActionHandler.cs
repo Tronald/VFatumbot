@@ -440,10 +440,17 @@ namespace VFatumbot.BotLogic
                     {
                         string[] intentSuggestions = await Helpers.GetIntentSuggestionsAsync();
                         var suggestionsStr = string.Join(", ", intentSuggestions);
-                        userProfile.IntentSuggestions = intentSuggestions; // TODO: is this actually being saved?
+
                         await turnContext.SendActivityAsync(MessageFactory.Text("Intent suggestions: " + suggestionsStr), cancellationToken);
                         await Helpers.SendPushNotification(userProfile, "Intent Suggestions", suggestionsStr);
-                        await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(context, mainDialog, cancellationToken);
+
+                        CallbackOptions callbackOptions = new CallbackOptions()
+                        {
+                            UpdateIntentSuggestions = true,
+                            IntentSuggestions = intentSuggestions,
+                            TimeIntentSuggestionsSet = turnContext.Activity.Timestamp.ToString()
+                        };
+                        await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(context, mainDialog, cancellationToken, callbackOptions);
                     }, cancellationToken);
             });
         }

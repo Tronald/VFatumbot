@@ -45,6 +45,7 @@ namespace VFatumbot
         // Flag to prevent multiple parallel scans (based on original Fatumbot3 logic)
         public bool IsScanning { get; set; }
 
-        public string[] IntentSuggestions { get; set; } 
+        public string[] IntentSuggestions { get; set; }
+        public string TimeIntentSuggestionsSet { get; set; }
     }
 }
