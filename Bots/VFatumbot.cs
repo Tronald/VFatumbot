@@ -172,7 +172,6 @@ namespace VFatumbot
 
                 await mUserProfileAccessor.SetAsync(turnContext, userProfile);
                 await _userState.SaveChangesAsync(turnContext, false, cancellationToken);
-                await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(turnContext, _mainDialog, cancellationToken);
 
                 return;
             }
