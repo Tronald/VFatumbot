@@ -88,11 +88,13 @@ namespace VFatumbot.BotLogic
                         if (inputtedRadius < Consts.RADIUS_MIN)
                         {
                             await turnContext.SendActivityAsync(MessageFactory.Text($"Radius must be more than or equal to {Consts.RADIUS_MIN}m"), cancellationToken);
+                            await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(turnContext, mainDialog, cancellationToken);
                             return;
                         }
                         if (inputtedRadius > Consts.RADIUS_MAX)
                         {
                             await turnContext.SendActivityAsync(MessageFactory.Text($"Radius must be less than or equal to {Consts.RADIUS_MAX}m"), cancellationToken);
+                            await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(turnContext, mainDialog, cancellationToken);
                             return;
                         }
 
@@ -108,6 +110,8 @@ namespace VFatumbot.BotLogic
                 {
                     await turnContext.SendActivityAsync(MessageFactory.Text($"Your current radius from is {userProfile.Radius}m"), cancellationToken);
                 }
+
+                await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(turnContext, mainDialog, cancellationToken);
             }
         }
 
