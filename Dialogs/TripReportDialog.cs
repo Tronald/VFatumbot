@@ -163,7 +163,9 @@ namespace VFatumbot
                         if (userProfile.IntentSuggestions != null && userProfile.IntentSuggestions.Length > 0)
                         {
                             isb.Append("intent_suggestions,");
+                            isb.Append("time_intent_suggestions_set,");
                         }
+                        isb.Append("what_3_words,");
                         isb.Append("num_water_points_skipped,");
                         isb.Append("gid,");
                         isb.Append("tid,");
@@ -197,12 +199,11 @@ namespace VFatumbot
                         isb.Append($"'{(answers.PhotoURLs != null ? string.Join(",", answers.PhotoURLs) : "")}',"); // photos
                         if (userProfile.IntentSuggestions != null && userProfile.IntentSuggestions.Length > 0)
                         {
-                            // TODO: ideally we'd like to make sure that the intent suggestions saved in UserProfile
-                            // actually were made before the points being reported upon here.
-                            // Currently logic just takes the last intent suggestions saved to the UserProfile
                             isb.Append($"'{string.Join(",", userProfile.IntentSuggestions)}',"); // intent suggestions
+                            isb.Append($"'{userProfile.TimeIntentSuggestionsSet}',");
                         }
-                        isb.Append($"'{options.NumWaterPointsSkipped}',");
+                        isb.Append($"'{(!string.IsNullOrEmpty(options.What3Words[i])  ? options.What3Words[i] : "")}',");
+                        isb.Append($"'{options.NumWaterPointsSkipped[i]}',");
                         isb.Append($"'{attractor.GID}',");
                         isb.Append($"'{attractor.TID}',");
                         isb.Append($"'{attractor.LID}',");

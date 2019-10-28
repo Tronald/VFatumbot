@@ -44,11 +44,11 @@ namespace VFatumbot.BotLogic
             }
             else if (command.StartsWith("/getquantum", StringComparison.InvariantCulture))
             {
-                await QuantumActionAsync(turnContext, userProfile, cancellationToken);
+                //await QuantumActionAsync(turnContext, userProfile, cancellationToken);
             }
             else if (command.StartsWith("/getqtime", StringComparison.InvariantCulture))
             {
-                await QuantumActionAsync(turnContext, userProfile, cancellationToken, true);
+                //await QuantumActionAsync(turnContext, userProfile, cancellationToken, true);
             }
             else if (command.StartsWith("/getida", StringComparison.InvariantCulture) ||
                      command.StartsWith("/getanomaly", StringComparison.InvariantCulture))
@@ -153,6 +153,9 @@ namespace VFatumbot.BotLogic
                         ida = SortIDA(ida, "attractor", idacou);
                         if (ida.Length > 0)
                         {
+                            var numWaterPointsSkippedArray = new int[ida.Count()];
+                            var what3WordsArray = new string[ida.Count()];
+
                             for (int i = 0; i < ida.Count(); i++)
                             {
                                 var incoords = new double[] { ida[i].X.center.point.latitude, ida[i].X.center.point.longitude };
@@ -192,18 +195,21 @@ namespace VFatumbot.BotLogic
                                     await turnContext.SendActivityAsync(MessageFactory.Text("Number of water points skipped: " + numWaterPointsSkipped), cancellationToken);
                                 }
 
+                                numWaterPointsSkippedArray[i] = numWaterPointsSkipped;
+                                what3WordsArray[i] = ""+w3wResult.words;
+
                                 await turnContext.SendActivityAsync(CardFactory.CreateLocationCardsReply(incoords, w3wResult), cancellationToken);
                                 await Helpers.SendPushNotification(userProfile, "Point Generated", mesg);
-
-                                CallbackOptions callbackOptions = new CallbackOptions()
-                                {
-                                    StartTripReportDialog = true,
-                                    GeneratedPoints = ida,
-                                    NumWaterPointsSkipped = numWaterPointsSkipped,
-
-                                };
-                                await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(context, mainDialog, cancellationToken, callbackOptions);
                             }
+
+                            CallbackOptions callbackOptions = new CallbackOptions()
+                            {
+                                StartTripReportDialog = true,
+                                GeneratedPoints = ida,
+                                NumWaterPointsSkipped = numWaterPointsSkippedArray,
+                                What3Words = what3WordsArray
+                            };
+                            await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(context, mainDialog, cancellationToken, callbackOptions);
                         }
                         else
                         {
@@ -253,6 +259,9 @@ namespace VFatumbot.BotLogic
                         ida = SortIDA(ida, "void", idacou);
                         if (ida.Length > 0)
                         {
+                            var numWaterPointsSkippedArray = new int[ida.Count()];
+                            var what3WordsArray = new string[ida.Count()];
+
                             for (int i = 0; i < ida.Count(); i++)
                             {
                                 var incoords = new double[] { ida[i].X.center.point.latitude, ida[i].X.center.point.longitude };
@@ -292,18 +301,21 @@ namespace VFatumbot.BotLogic
                                     await turnContext.SendActivityAsync(MessageFactory.Text("Number of water points skipped: " + numWaterPointsSkipped), cancellationToken);
                                 }
 
+                                numWaterPointsSkippedArray[i] = numWaterPointsSkipped;
+                                what3WordsArray[i] = "" + w3wResult.words;
+
                                 await turnContext.SendActivityAsync(CardFactory.CreateLocationCardsReply(incoords, w3wResult), cancellationToken);
                                 await Helpers.SendPushNotification(userProfile, "Point Generated", mesg);
-
-                                CallbackOptions callbackOptions = new CallbackOptions()
-                                {
-                                    StartTripReportDialog = true,
-                                    GeneratedPoints = ida,
-                                    NumWaterPointsSkipped = numWaterPointsSkipped,
-                                    
-                                };
-                                await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(context, mainDialog, cancellationToken, callbackOptions);
                             }
+
+                            CallbackOptions callbackOptions = new CallbackOptions()
+                            {
+                                StartTripReportDialog = true,
+                                GeneratedPoints = ida,
+                                NumWaterPointsSkipped = numWaterPointsSkippedArray,
+                                What3Words = what3WordsArray
+                            };
+                            await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(context, mainDialog, cancellationToken, callbackOptions);
                         }
                         else
                         {
@@ -366,6 +378,9 @@ namespace VFatumbot.BotLogic
                         ida = SortIDA(ida, "any", idacou);
                         if (ida.Length > 0)
                         {
+                            var numWaterPointsSkippedArray = new int[ida.Count()];
+                            var what3WordsArray = new string[ida.Count()];
+
                             for (int i = 0; i < ida.Count(); i++)
                             {
                                 var incoords = new double[] { ida[i].X.center.point.latitude, ida[i].X.center.point.longitude };
@@ -405,18 +420,21 @@ namespace VFatumbot.BotLogic
                                     await turnContext.SendActivityAsync(MessageFactory.Text("Number of water points skipped: " + numWaterPointsSkipped), cancellationToken);
                                 }
 
+                                numWaterPointsSkippedArray[i] = numWaterPointsSkipped;
+                                what3WordsArray[i] = "" + w3wResult.words;
+
                                 await turnContext.SendActivityAsync(CardFactory.CreateLocationCardsReply(incoords, w3wResult), cancellationToken);
                                 await Helpers.SendPushNotification(userProfile, "Point Generated", mesg);
-
-                                CallbackOptions callbackOptions = new CallbackOptions()
-                                {
-                                    StartTripReportDialog = true,
-                                    GeneratedPoints = ida,
-                                    NumWaterPointsSkipped = numWaterPointsSkipped,
-
-                                };
-                                await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(context, mainDialog, cancellationToken, callbackOptions);
                             }
+
+                            CallbackOptions callbackOptions = new CallbackOptions()
+                            {
+                                StartTripReportDialog = true,
+                                GeneratedPoints = ida,
+                                NumWaterPointsSkipped = numWaterPointsSkippedArray,
+                                What3Words = what3WordsArray
+                            };
+                            await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(context, mainDialog, cancellationToken, callbackOptions);
                         }
                         else
                         {
@@ -455,7 +473,7 @@ namespace VFatumbot.BotLogic
             });
         }
 
-        public async Task QuantumActionAsync(ITurnContext turnContext, UserProfile userProfile, CancellationToken cancellationToken, bool suggestTime = false)
+        public async Task QuantumActionAsync(ITurnContext turnContext, UserProfile userProfile, CancellationToken cancellationToken, MainDialog mainDialog, bool suggestTime = false)
         {
             int numWaterPointsSkipped = 0;
 
@@ -488,6 +506,28 @@ namespace VFatumbot.BotLogic
 
             await turnContext.SendActivityAsync(CardFactory.CreateLocationCardsReply(incoords, w3wResult), cancellationToken);
             await Helpers.SendPushNotification(userProfile, "Point Generated", mesg);
+
+            CallbackOptions callbackOptions = new CallbackOptions()
+            {
+                StartTripReportDialog = true,
+                GeneratedPoints = new FinalAttractor[] {
+                    // FinalAttractor is just a good wrapper to carry point/type info across the boundary to the TripReportDialog
+                    new FinalAttractor()
+                    {
+                        X = new FinalAttr()
+                        {
+                            center = new Coordinate()
+                            {
+                                point = new LatLng(incoords[0], incoords[1])
+                            },
+                            // TODO: fill in type and other stuff
+                        }
+                    }
+                },
+                NumWaterPointsSkipped = new int[] { numWaterPointsSkipped },
+                What3Words = new string[] { w3wResult.words }
+            };
+            await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(turnContext, mainDialog, cancellationToken, callbackOptions);
         }
 
         public async Task PsuedoActionAsync(ITurnContext turnContext, UserProfile userProfile, CancellationToken cancellationToken)

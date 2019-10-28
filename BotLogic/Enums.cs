@@ -16,6 +16,17 @@ namespace VFatumbot.BotLogic
             line,
         }
 
+        public enum PointTypes
+        {
+            /** IMPORTANT: Don't change order/delete as their corresponding ints are saved in the DB
+              * To add new ones, just add to the bottom of the list.
+              * Most of these will relate to context.Activity.ChannelId
+              */
+            Attractor,
+            Void,
+            Quantum,
+        }
+
         public enum TripRating
         {
             /** IMPORTANT: Don't change order/delete as their corresponding ints are saved in the DB

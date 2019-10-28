@@ -56,10 +56,10 @@ namespace VFatumbot
             switch (((FoundChoice)stepContext.Result).Value)
             {
                 case "Quantum":
-                    await actionHandler.QuantumActionAsync(stepContext.Context, userProfile, cancellationToken);
+                    await actionHandler.QuantumActionAsync(stepContext.Context, userProfile, cancellationToken, _mainDialog);
                     break;
                 case "Quantum Time":
-                    await actionHandler.QuantumActionAsync(stepContext.Context, userProfile, cancellationToken, true);
+                    await actionHandler.QuantumActionAsync(stepContext.Context, userProfile, cancellationToken, _mainDialog, true);
                     break;
                 case "Psuedo":
                     await actionHandler.PsuedoActionAsync(stepContext.Context, userProfile, cancellationToken);

@@ -50,11 +50,13 @@ namespace VFatumbot
 
             public bool StartTripReportDialog { get; set; }
             public FinalAttractor[] GeneratedPoints { get; set; }
-            public int NumWaterPointsSkipped { get; set; }
+            public int[] NumWaterPointsSkipped { get; set; }
 
             public bool UpdateIntentSuggestions { get; set; }
             public string[] IntentSuggestions { get; set; }
             public string TimeIntentSuggestionsSet { get; set; }
+
+            public string[] What3Words { get; set; }
         }
 
         // Used as a callback to restart the main dialog (i.e. prompt user for next action) after middleware-intercepted actions
