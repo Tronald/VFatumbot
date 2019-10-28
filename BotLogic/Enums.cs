@@ -10,7 +10,7 @@ namespace VFatumbot.BotLogic
               * Most of these will relate to context.Activity.ChannelId
               */
             emulator,
-            webchat,
+            directline,
             facebook,
             telegram,
             line,
