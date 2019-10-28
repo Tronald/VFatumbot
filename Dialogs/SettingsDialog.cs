@@ -61,7 +61,7 @@ namespace VFatumbot
                     return await stepContext.NextAsync();
                 case "No":
                 default:
-                    return await stepContext.ReplaceDialogAsync(nameof(MainDialog), cancellationToken);
+                    return await stepContext.ReplaceDialogAsync(nameof(MainDialog), cancellationToken:cancellationToken);
             }
         }
 
@@ -140,7 +140,7 @@ namespace VFatumbot
 
             await stepContext.EndDialogAsync(cancellationToken);
 
-            return await stepContext.ReplaceDialogAsync(nameof(MainDialog), cancellationToken);
+            return await stepContext.ReplaceDialogAsync(nameof(MainDialog), cancellationToken: cancellationToken);
         }
 
         public async Task ShowCurrentSettingsAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)

@@ -74,12 +74,12 @@ namespace VFatumbot
 
             if (goBackMainMenuThisRound)
             {
-                return await stepContext.ReplaceDialogAsync(nameof(MainDialog));
+                return await stepContext.ReplaceDialogAsync(nameof(MainDialog), cancellationToken:cancellationToken);
             }
             else
             {
                 // Long-running tasks like /getattractors etc will make use of ContinueDialog to re-prompt users
-                return await stepContext.EndDialogAsync();
+                return await stepContext.EndDialogAsync(cancellationToken: cancellationToken);
             }
         }
 

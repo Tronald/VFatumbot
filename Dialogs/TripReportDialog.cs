@@ -99,13 +99,13 @@ namespace VFatumbot
                     // At least mark the point as a visited one
                     await StoreReportInDB(stepContext.Context, (CallbackOptions)stepContext.Options, new ReportAnswers() { IsPointVisited = true });
 
-                    await stepContext.EndDialogAsync();
-                    return await stepContext.BeginDialogAsync(nameof(MainDialog), null, cancellationToken);
+                    await stepContext.EndDialogAsync(cancellationToken: cancellationToken);
+                    return await stepContext.BeginDialogAsync(nameof(MainDialog), cancellationToken: cancellationToken);
                 case "No":
                 default:
                     await StoreReportInDB(stepContext.Context, (CallbackOptions) stepContext.Options, new ReportAnswers());
-                    await stepContext.EndDialogAsync();
-                    return await stepContext.BeginDialogAsync(nameof(MainDialog), null, cancellationToken);
+                    await stepContext.EndDialogAsync(cancellationToken: cancellationToken);
+                    return await stepContext.BeginDialogAsync(nameof(MainDialog), cancellationToken: cancellationToken);
             }
 
         }
@@ -113,19 +113,19 @@ namespace VFatumbot
         private async Task<DialogTurnResult> AskIntentStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
         {
             _logger.LogInformation("TripReportDialog.AskIntentStepAsync");
-            return await stepContext.EndDialogAsync();
+            return await stepContext.EndDialogAsync(cancellationToken: cancellationToken);
         }
 
         private async Task<DialogTurnResult> InputIntentStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
         {
             _logger.LogInformation("TripReportDialog.InputIntentStepAsync");
-            return await stepContext.EndDialogAsync();
+            return await stepContext.EndDialogAsync(cancellationToken: cancellationToken);
         }
 
         private async Task<DialogTurnResult> WriteReportSendPhotosStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
         {
             _logger.LogInformation("TripReportDialog.WriteReportSendPhotosStepAsync");
-            return await stepContext.EndDialogAsync();
+            return await stepContext.EndDialogAsync(cancellationToken: cancellationToken);
         }
 
         private async Task StoreReportInDB(ITurnContext context, CallbackOptions options, ReportAnswers answers)

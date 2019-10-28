@@ -44,26 +44,22 @@ namespace VFatumbot
         {
             if (stepContext.Options != null)
             {
-                //try
-                //{
-                    var callbackOptions = (CallbackOptions)stepContext.Options;
+                // Callback options passed after resuming dialog after long-running background threads etc have finished
+                // and resume dialog via the Adapter class's callback method.
+                var callbackOptions = (CallbackOptions)stepContext.Options;
 
-                    if (callbackOptions.ResetFlag)
-                    {
-                        var userProfile = await _userProfileAccessor.GetAsync(stepContext.Context, () => new UserProfile());
-                        userProfile.IsScanning = false;
-                        await _userProfileAccessor.SetAsync(stepContext.Context, userProfile, cancellationToken);
-                        await _userState.SaveChangesAsync(stepContext.Context, false, cancellationToken);
-                    }
+                if (callbackOptions.ResetFlag)
+                {
+                    var userProfile = await _userProfileAccessor.GetAsync(stepContext.Context, () => new UserProfile());
+                    userProfile.IsScanning = false;
+                    await _userProfileAccessor.SetAsync(stepContext.Context, userProfile, cancellationToken);
+                    await _userState.SaveChangesAsync(stepContext.Context, false, cancellationToken);
+                }
 
-                    if (callbackOptions.StartTripReportDialog)
-                    {
-                        return await stepContext.ReplaceDialogAsync(nameof(TripReportDialog), callbackOptions, cancellationToken);
-                    }
-                //}
-                //catch (Exception)
-                //{
-                //}
+                if (callbackOptions.StartTripReportDialog)
+                {
+                    return await stepContext.ReplaceDialogAsync(nameof(TripReportDialog), callbackOptions, cancellationToken);
+                }
             }
 
             _logger.LogInformation("MainDialog.ChoiceActionStepAsync");
@@ -123,12 +119,12 @@ namespace VFatumbot
 
             if (repromptThisRound)
             {
-                return await stepContext.ReplaceDialogAsync(nameof(MainDialog));
+                return await stepContext.ReplaceDialogAsync(nameof(MainDialog), cancellationToken: cancellationToken);
             }
             else
             {
                 // Long-running tasks like /getattractors etc will make use of ContinueDialog to re-prompt users
-                return await stepContext.EndDialogAsync();
+                return await stepContext.EndDialogAsync(cancellationToken: cancellationToken);
             }
         }
 
