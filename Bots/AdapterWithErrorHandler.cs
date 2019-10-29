@@ -8,6 +8,7 @@ using Microsoft.Bot.Builder.Dialogs;
 using System.Threading;
 using static VFatumbot.BotLogic.FatumFunctions;
 using static VFatumbot.BotLogic.Enums;
+using System.IO;
 
 namespace VFatumbot
 {
@@ -25,8 +26,16 @@ namespace VFatumbot
                 // Log any leaked exception from the application.
                 logger.LogError($"Exception caught : {exception.Message} {exception.StackTrace}");
 
-                // Send a catch-all apology to the user.
-                await turnContext.SendActivityAsync("Sorry, it looks like something went wrong. " + exception.Message + " " + exception.StackTrace);
+                if (exception.GetType().Equals(typeof(InvalidDataException)) && "Service did not return random data.".Equals(exception.Message))
+                {
+                    // qrng.anu seems to have connection issues from our side sometimes?
+                    await turnContext.SendActivityAsync("Sorry, there was an error sourcing quantum entropy needed to randomize. Usually when this happens all you need to is try again a little bit later.");
+                }
+                else
+                {
+                    // Send a catch-all apology to the user.
+                    await turnContext.SendActivityAsync("Sorry, it looks like something went wrong. " + exception.Message + " " + exception.StackTrace);
+                }
 
                 if (conversationState != null)
                 {
