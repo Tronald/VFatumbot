@@ -102,7 +102,7 @@ namespace VFatumbot.BotLogic
 
         // Post a trip report to the /r/randonauts subreddit
         // Reddit API used: https://github.com/sirkris/Reddit.NET/
-        public static async Task PostTripReportToReddit(string text, string title)
+        public static async Task PostTripReportToRedditAsync(string title, string text)
         {
             // all posts are done under the user "thereal***REMOVED***"
             var redditApi = new RedditAPI(appId: Consts.REDDIT_APP_ID,
@@ -111,9 +111,9 @@ namespace VFatumbot.BotLogic
                                           accessToken: Consts.REDDIT_ACCESS_TOKEN);
             await Task.Run(() =>
             {
-                //var askReddit = redditApi.Subreddit("randonauts"); // TODO: after go live
-                var askReddit = redditApi.Subreddit("soliaxplayground");
-                askReddit.SelfPost(title, text).Submit();
+                //var subreddit = redditApi.Subreddit("randonauts"); // TODO: after go live. get comrade to add thereal***REMOVED*** as approved submitter
+                var subreddit = redditApi.Subreddit("soliaxplayground");
+                subreddit.SelfPost(title:title, selfText:text).Submit();
             });
         }
 

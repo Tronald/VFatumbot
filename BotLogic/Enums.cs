@@ -24,23 +24,26 @@ namespace VFatumbot.BotLogic
               */
             Attractor,
             Void,
+            Anomaly,
+            Pair,
+            ScanAttractor,
+            ScanVoid,
+            ScanAnomaly,
+            ScanPair,
             Quantum,
+            QuantumTime,
+            Pseudo,
+            MysteryPoint
         }
 
         public enum TripRating
         {
-            /** IMPORTANT: Don't change order/delete as their corresponding ints are saved in the DB
-              * To add new ones, just add to the bottom of the list.
-              */
-            Life_changing,
-            Very_meaningful,
-            Meaningful,
-            Non_meaningful,
-            Pleasant,
-            Plain,
-            Waste_of_time,
-            Unpleasant,
-            Very_unpleasant,
+            A = 1000,
+            B = 2000,
+            C = 3000,
+            D = 4000,
+            E = 5000,
+            F = 6000,
         }
     }
 }

@@ -153,6 +153,7 @@ namespace VFatumbot.BotLogic
                         ida = SortIDA(ida, "attractor", idacou);
                         if (ida.Length > 0)
                         {
+                            var messagesArray = new string[ida.Count()];
                             var numWaterPointsSkippedArray = new int[ida.Count()];
                             var what3WordsArray = new string[ida.Count()];
 
@@ -195,6 +196,7 @@ namespace VFatumbot.BotLogic
                                     await turnContext.SendActivityAsync(MessageFactory.Text("Number of water points skipped: " + numWaterPointsSkipped), cancellationToken);
                                 }
 
+                                messagesArray[i] = mesg;
                                 numWaterPointsSkippedArray[i] = numWaterPointsSkipped;
                                 what3WordsArray[i] = ""+w3wResult.words;
 
@@ -205,6 +207,7 @@ namespace VFatumbot.BotLogic
                             CallbackOptions callbackOptions = new CallbackOptions()
                             {
                                 StartTripReportDialog = true,
+                                Messages = messagesArray,
                                 GeneratedPoints = ida,
                                 NumWaterPointsSkipped = numWaterPointsSkippedArray,
                                 What3Words = what3WordsArray
@@ -259,6 +262,7 @@ namespace VFatumbot.BotLogic
                         ida = SortIDA(ida, "void", idacou);
                         if (ida.Length > 0)
                         {
+                            var messagesArray = new string[ida.Count()];
                             var numWaterPointsSkippedArray = new int[ida.Count()];
                             var what3WordsArray = new string[ida.Count()];
 
@@ -301,6 +305,7 @@ namespace VFatumbot.BotLogic
                                     await turnContext.SendActivityAsync(MessageFactory.Text("Number of water points skipped: " + numWaterPointsSkipped), cancellationToken);
                                 }
 
+                                messagesArray[i] = mesg;
                                 numWaterPointsSkippedArray[i] = numWaterPointsSkipped;
                                 what3WordsArray[i] = "" + w3wResult.words;
 
@@ -311,6 +316,7 @@ namespace VFatumbot.BotLogic
                             CallbackOptions callbackOptions = new CallbackOptions()
                             {
                                 StartTripReportDialog = true,
+                                Messages = messagesArray,
                                 GeneratedPoints = ida,
                                 NumWaterPointsSkipped = numWaterPointsSkippedArray,
                                 What3Words = what3WordsArray
@@ -378,6 +384,7 @@ namespace VFatumbot.BotLogic
                         ida = SortIDA(ida, "any", idacou);
                         if (ida.Length > 0)
                         {
+                            var messagesArray = new string[ida.Count()];
                             var numWaterPointsSkippedArray = new int[ida.Count()];
                             var what3WordsArray = new string[ida.Count()];
 
@@ -420,6 +427,7 @@ namespace VFatumbot.BotLogic
                                     await turnContext.SendActivityAsync(MessageFactory.Text("Number of water points skipped: " + numWaterPointsSkipped), cancellationToken);
                                 }
 
+                                messagesArray[i] = mesg;
                                 numWaterPointsSkippedArray[i] = numWaterPointsSkipped;
                                 what3WordsArray[i] = "" + w3wResult.words;
 
@@ -430,6 +438,7 @@ namespace VFatumbot.BotLogic
                             CallbackOptions callbackOptions = new CallbackOptions()
                             {
                                 StartTripReportDialog = true,
+                                Messages = messagesArray,
                                 GeneratedPoints = ida,
                                 NumWaterPointsSkipped = numWaterPointsSkippedArray,
                                 What3Words = what3WordsArray
@@ -510,6 +519,7 @@ namespace VFatumbot.BotLogic
             CallbackOptions callbackOptions = new CallbackOptions()
             {
                 StartTripReportDialog = true,
+                Messages = new string[] { mesg },
                 GeneratedPoints = new FinalAttractor[] {
                     // FinalAttractor is just a good wrapper to carry point/type info across the boundary to the TripReportDialog
                     new FinalAttractor()

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.Bot.Builder.Dialogs;
 using System.Threading;
 using static VFatumbot.BotLogic.FatumFunctions;
+using static VFatumbot.BotLogic.Enums;
 
 namespace VFatumbot
 {
@@ -50,13 +51,14 @@ namespace VFatumbot
 
             public bool StartTripReportDialog { get; set; }
             public FinalAttractor[] GeneratedPoints { get; set; }
+            public string[] Messages { get; set; }
+            public PointTypes PointType { get; set; }
             public int[] NumWaterPointsSkipped { get; set; }
+            public string[] What3Words { get; set; }
 
             public bool UpdateIntentSuggestions { get; set; }
             public string[] IntentSuggestions { get; set; }
             public string TimeIntentSuggestionsSet { get; set; }
-
-            public string[] What3Words { get; set; }
         }
 
         // Used as a callback to restart the main dialog (i.e. prompt user for next action) after middleware-intercepted actions
