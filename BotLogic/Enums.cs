@@ -35,15 +35,5 @@ namespace VFatumbot.BotLogic
             Pseudo,
             MysteryPoint
         }
-
-        public enum TripRating
-        {
-            A = 1000,
-            B = 2000,
-            C = 3000,
-            D = 4000,
-            E = 5000,
-            F = 6000,
-        }
     }
 }

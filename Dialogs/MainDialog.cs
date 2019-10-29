@@ -42,6 +42,9 @@ namespace VFatumbot
 
         private async Task<DialogTurnResult> ChoiceActionStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
         {
+            // Shortcut to trip report dialog testing
+            //return await stepContext.ReplaceDialogAsync(nameof(TripReportDialog), new CallbackOptions(), cancellationToken);
+
             if (stepContext.Options != null)
             {
                 // Callback options passed after resuming dialog after long-running background threads etc have finished
