@@ -318,8 +318,7 @@ namespace VFatumbot.BotLogic
             else
             if (ida.X.type == 2) { code = "V-"; }
 
-            //code += sessionid + message.Date.Day.ToString() + message.Date.Month.ToString() + usessions[message.Chat.Id] + pointid;
-            code += /*sessionid +*/ context.Activity.Timestamp.ToString() + context.Activity.Id + pointid; // TODO: compare this line to above
+            code += Helpers.Crc32Hash(context.Activity.From.Id + context.Activity.Timestamp);
 
             resp += code + " (" + ida.X.center.point.latitude.ToString("#0.000000", System.Globalization.CultureInfo.InvariantCulture)
                 + " " + ida.X.center.point.longitude.ToString("#0.000000", System.Globalization.CultureInfo.InvariantCulture) + ")" + Environment.NewLine;
@@ -401,8 +400,7 @@ namespace VFatumbot.BotLogic
                 else
             if ((type == "random") && ((ptype == "quantum") || (ptype == "qtime"))) { code = "Q-"; }
 
-            //code += sessionid + message.Date.Day.ToString() + message.Date.Month.ToString() + usessions[message.Chat.Id] + pointid;
-            code += /*sessionid +*/ context.Activity.Timestamp.ToString()  + context.Activity.Id + pointid; // TODO: compare this line to above
+            code += Helpers.Crc32Hash(context.Activity.From.Id + context.Activity.Timestamp);
 
             resp += code + " (" + Lat.ToString("#0.000000", System.Globalization.CultureInfo.InvariantCulture)
                 + " " + Lng.ToString("#0.000000", System.Globalization.CultureInfo.InvariantCulture) + ")" + Environment.NewLine;

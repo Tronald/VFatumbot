@@ -12,6 +12,7 @@ using Newtonsoft.Json;
 using Reddit;
 using System.Security.Cryptography;
 using System.Text;
+using Force.Crc32;
 
 namespace VFatumbot.BotLogic
 {
@@ -134,6 +135,12 @@ namespace VFatumbot.BotLogic
                 }
                 return builder.ToString();
             }
+        }
+
+        public static string Crc32Hash(string rawData)
+        {
+            Crc32Algorithm hasher = new Crc32Algorithm();
+            return string.Format("{0:X8}", BitConverter.ToUInt32(hasher.ComputeHash(Encoding.UTF8.GetBytes(rawData)).Reverse().ToArray()));
         }
     }
 }
