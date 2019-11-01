@@ -26,6 +26,7 @@ namespace VFatumbot
 
         public class ReportAnswers {
             public bool WasPointVisited { get; set; }
+            public int PointNumberVisited { get; set; }
 
             public bool SkipGetIntentStep { get; set; }
             public string Intent { get; set; }
@@ -122,14 +123,18 @@ namespace VFatumbot
                 case "Yes and report!":
                     // Go and start asking them about their trip
 
-                    stepContext.Values[ReportAnswersKey] = new ReportAnswers() { WasPointVisited = true };
+                    var answers = new ReportAnswers() { WasPointVisited = true };
+                    stepContext.Values[ReportAnswersKey] = answers;
 
-                    switch (callbackOptions.PointType)
+                    // TODO: [answers.PointNumberVisited] : implement the dialog steps/logic to ask this.
+
+                    switch (callbackOptions.PointTypes[answers.PointNumberVisited])
                     {
                         case PointTypes.Attractor:
                         case PointTypes.Void:
                         case PointTypes.Anomaly:
-                        case PointTypes.Pair:
+                        case PointTypes.PairAttractor:
+                        case PointTypes.PairVoid:
                         case PointTypes.ScanAttractor:
                         case PointTypes.ScanVoid:
                         case PointTypes.ScanAnomaly:
@@ -171,14 +176,14 @@ namespace VFatumbot
 
         private async Task<DialogTurnResult> SetIntentYesOrNoStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
         {
-            _logger.LogInformation($"TripReportDialog.SetIntentYesOrNoStepAsync[{((FoundChoice)stepContext.Result).Value}]");
-
             var answers = (ReportAnswers)stepContext.Values[ReportAnswersKey];
 
             if (answers.SkipGetIntentStep)
             {
                 return await stepContext.NextAsync(cancellationToken: cancellationToken);
             }
+
+            _logger.LogInformation($"TripReportDialog.SetIntentYesOrNoStepAsync[{((FoundChoice)stepContext.Result).Value}]");
 
             switch (((FoundChoice)stepContext.Result).Value)
             {
@@ -368,6 +373,7 @@ namespace VFatumbot
                                     new Choice() { Value = "Dirk Gently" },
                                     new Choice() { Value = "Mind-blowing" },
                                     new Choice() { Value = "Somewhat" },
+                                    new Choice() { Value = "Nothing" },
                                     new Choice() { Value = "Boredom" },
                                 }
             };
@@ -405,9 +411,10 @@ namespace VFatumbot
             }
 
             await Helpers.PostTripReportToRedditAsync("User Trip Report",
-                callbackOptions.Messages[0].Replace(Environment.NewLine, "\n\n") +
+                callbackOptions.Messages[answers.PointNumberVisited].Replace(Environment.NewLine, "\n\n") +
                 "Intent: " + answers.Intent + "\n\n" +
                 intentSuggestions +
+                "What 3 words address: " + callbackOptions.What3Words[answers.PointNumberVisited] + "\n\n" +
                 "Astounding? " + answers.WasFuckingAmazing + "\n\n" +
                 "Rating scale 1: " + answers.Rating_Meaningfulness + "\n\n" +
                 "Rating scale 2: " + answers.Rating_Emotional + "\n\n" +
@@ -451,6 +458,7 @@ namespace VFatumbot
                         isb.Append("platform,");
                         isb.Append("datetime,");
                         isb.Append("visited,");
+                        isb.Append("point_type,");
                         if (!string.IsNullOrEmpty(answers.Intent))
                         {
                             isb.Append("intent_set,");
@@ -470,6 +478,7 @@ namespace VFatumbot
                             isb.Append("time_intent_suggestions_set,");
                         }
                         isb.Append("what_3_words,");
+                        isb.Append("short_hash_id,");
                         isb.Append("num_water_points_skipped,");
                         isb.Append("gid,");
                         isb.Append("tid,");
@@ -479,7 +488,12 @@ namespace VFatumbot
                         isb.Append("type,");
                         isb.Append("x,");
                         isb.Append("y,");
-                        //isb.Append("center,");
+                        isb.Append("center,");
+                        isb.Append("latitude,");
+                        isb.Append("longitude,");
+                        isb.Append("distance,");
+                        isb.Append("initial_bearing,");
+                        isb.Append("final_bearing,");
                         isb.Append("side,");
                         isb.Append("distance_err,");
                         isb.Append("radiusM,");
@@ -498,6 +512,7 @@ namespace VFatumbot
                         isb.Append($"'{(int)Enum.Parse(typeof(Enums.ChannelPlatform), context.Activity.ChannelId)}',");
                         isb.Append($"'{context.Activity.Timestamp}',"); // datetime
                         isb.Append($"'{(answers.WasPointVisited ? 1 : 0)}',"); // point visited or not?
+                        isb.Append($"'{options.PointTypes[i].ToString()}',"); // point type enum as a string
                         if (!string.IsNullOrEmpty(answers.Intent))
                         {
                             isb.Append($"'{answers.Intent}',"); // intent set by user
@@ -517,6 +532,7 @@ namespace VFatumbot
                             isb.Append($"'{userProfile.TimeIntentSuggestionsSet}',");
                         }
                         isb.Append($"'{(!string.IsNullOrEmpty(options.What3Words[i])  ? options.What3Words[i] : "")}',");
+                        isb.Append($"'{options.ShortCodes[i]}',");
                         isb.Append($"'{options.NumWaterPointsSkipped[i]}',");
                         isb.Append($"'{attractor.GID}',");
                         isb.Append($"'{attractor.TID}',");
@@ -526,7 +542,12 @@ namespace VFatumbot
                         isb.Append($"'{attractor.type}',");
                         isb.Append($"'{attractor.x}',");
                         isb.Append($"'{attractor.y}',");
-                        //isb.Append($"'{attractor.center}',");
+                        isb.Append($"geography::Point({attractor.center.point.latitude},{attractor.center.point.longitude}, 4326),");
+                        isb.Append($"'{attractor.center.point.latitude}',");
+                        isb.Append($"'{attractor.center.point.longitude}',");
+                        isb.Append($"'{attractor.center.bearing.distance}',");
+                        isb.Append($"'{attractor.center.bearing.initialBearing}',");
+                        isb.Append($"'{attractor.center.bearing.finalBearing}',");
                         isb.Append($"'{attractor.side}',");
                         isb.Append($"'{attractor.distanceErr}',");
                         isb.Append($"'{attractor.radiusM}',");

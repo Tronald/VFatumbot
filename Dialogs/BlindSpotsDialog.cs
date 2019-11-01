@@ -51,7 +51,6 @@ namespace VFatumbot
 
             var userProfile = await _userProfileAccessor.GetAsync(stepContext.Context, () => new UserProfile());
             var actionHandler = new ActionHandler();
-            var goBackMainMenuThisRound = true;
 
             switch (((FoundChoice)stepContext.Result).Value)
             {
@@ -62,25 +61,17 @@ namespace VFatumbot
                     await actionHandler.QuantumActionAsync(stepContext.Context, userProfile, cancellationToken, _mainDialog, true);
                     break;
                 case "Psuedo":
-                    await actionHandler.PsuedoActionAsync(stepContext.Context, userProfile, cancellationToken);
+                    await actionHandler.PsuedoActionAsync(stepContext.Context, userProfile, cancellationToken, _mainDialog);
                     break;
                 case "Mystery Point":
-                    goBackMainMenuThisRound = false;
-                    await actionHandler.PointActionAsync(stepContext.Context, userProfile, cancellationToken, _mainDialog);
+                    await actionHandler.MysteryPointActionAsync(stepContext.Context, userProfile, cancellationToken, _mainDialog);
                     break;
                 case "< Back":
-                    break;
+                    return await stepContext.ReplaceDialogAsync(nameof(MainDialog), cancellationToken: cancellationToken);
             }
 
-            if (goBackMainMenuThisRound)
-            {
-                return await stepContext.ReplaceDialogAsync(nameof(MainDialog), cancellationToken:cancellationToken);
-            }
-            else
-            {
-                // Long-running tasks like /getattractors etc will make use of ContinueDialog to re-prompt users
-                return await stepContext.EndDialogAsync(cancellationToken: cancellationToken);
-            }
+            // Long-running tasks like /getattractors etc will make use of ContinueDialog to re-prompt users
+            return await stepContext.EndDialogAsync(cancellationToken: cancellationToken);
         }
 
         private IList<Choice> GetActionChoices()

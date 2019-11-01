@@ -305,20 +305,18 @@ namespace VFatumbot.BotLogic
 //            CheckLogSize();
         //}
 
-        public static string Tolog(ITurnContext context, string type, FinalAttractor ida) //idas
+        public static string Tolog(ITurnContext context, string type, FinalAttractor ida, string code) //idas
         {
             string resp = "Intention Driven Anomaly found" + Environment.NewLine;
             if (type == "blind") { resp = "Mystery Point Generated" + Environment.NewLine; }
 
             pointid++;
-            string code = "";
+            code = "";
             if (type == "blind") { code = "X-"; }
             else
             if (ida.X.type == 1) { code = "A-"; }
             else
             if (ida.X.type == 2) { code = "V-"; }
-
-            code += Helpers.Crc32Hash(context.Activity.From.Id + context.Activity.Timestamp);
 
             resp += code + " (" + ida.X.center.point.latitude.ToString("#0.000000", System.Globalization.CultureInfo.InvariantCulture)
                 + " " + ida.X.center.point.longitude.ToString("#0.000000", System.Globalization.CultureInfo.InvariantCulture) + ")" + Environment.NewLine;
@@ -387,20 +385,17 @@ namespace VFatumbot.BotLogic
             return resp;
         }
 
-        public static string Tolog(ITurnContext context, string type, double Lat, double Lng, string ptype) //randoms
+        public static string Tolog(ITurnContext context, string type, double Lat, double Lng, string ptype, string code) //randoms
         {
             string resp = "Random Point generated" + Environment.NewLine;
             if (type == "blind") { resp = "Mystery Point Generated" + Environment.NewLine; }
 
             pointid++;
-            string code = "";
             if (type == "blind") { code = "X-"; }
             else
             if ((type == "random") && (ptype == "pseudo")) { code = "P-"; }
                 else
             if ((type == "random") && ((ptype == "quantum") || (ptype == "qtime"))) { code = "Q-"; }
-
-            code += Helpers.Crc32Hash(context.Activity.From.Id + context.Activity.Timestamp);
 
             resp += code + " (" + Lat.ToString("#0.000000", System.Globalization.CultureInfo.InvariantCulture)
                 + " " + Lng.ToString("#0.000000", System.Globalization.CultureInfo.InvariantCulture) + ")" + Environment.NewLine;
