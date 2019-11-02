@@ -45,7 +45,7 @@ namespace VFatumbot.BotLogic
             }
             else if (command.StartsWith("/getpseudo", StringComparison.InvariantCulture))
             {
-                await PsuedoActionAsync(turnContext, userProfile, cancellationToken, mainDialog);
+                await PseudoActionAsync(turnContext, userProfile, cancellationToken, mainDialog);
             }
             else if (command.StartsWith("/getquantum", StringComparison.InvariantCulture))
             {
@@ -578,7 +578,7 @@ namespace VFatumbot.BotLogic
             });
         }
 
-        public async Task PsuedoActionAsync(ITurnContext turnContext, UserProfile userProfile, CancellationToken cancellationToken, MainDialog mainDialog)
+        public async Task PseudoActionAsync(ITurnContext turnContext, UserProfile userProfile, CancellationToken cancellationToken, MainDialog mainDialog)
         {
             DispatchWorkerThread((object sender, DoWorkEventArgs e) =>
             {
@@ -840,7 +840,7 @@ namespace VFatumbot.BotLogic
 
                         ida = SortIDA(ida, "any", 1);
 
-                    redoPsuedo:
+                    redoPseudo:
                         double[] pcoords = GetPseudoRandom(userProfile.Location.latitude, userProfile.Location.longitude, userProfile.Radius);
                         if (!userProfile.IsIncludeWaterPoints)
                         {
@@ -857,7 +857,7 @@ namespace VFatumbot.BotLogic
                                 }
 
                                 await turnContext.SendActivityAsync(MessageFactory.Text("Number of water points skipped so far: " + numWaterPointsSkipped), cancellationToken);
-                                goto redoPsuedo;
+                                goto redoPseudo;
                             }
                         }
 

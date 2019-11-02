@@ -60,8 +60,8 @@ namespace VFatumbot
                 case "Quantum Time":
                     await actionHandler.QuantumActionAsync(stepContext.Context, userProfile, cancellationToken, _mainDialog, true);
                     break;
-                case "Psuedo":
-                    await actionHandler.PsuedoActionAsync(stepContext.Context, userProfile, cancellationToken, _mainDialog);
+                case "Pseudo":
+                    await actionHandler.PseudoActionAsync(stepContext.Context, userProfile, cancellationToken, _mainDialog);
                     break;
                 case "Mystery Point":
                     await actionHandler.MysteryPointActionAsync(stepContext.Context, userProfile, cancellationToken, _mainDialog);
@@ -96,11 +96,11 @@ namespace VFatumbot
                                     }
                 },
                 new Choice() {
-                    Value = "Psuedo",
+                    Value = "Pseudo",
                     Synonyms = new List<string>()
                                     {
-                                        "psuedo",
-                                        "getpsuedo",
+                                        "pseudo",
+                                        "getpseudo",
                                     }
                 },
                 new Choice() {
