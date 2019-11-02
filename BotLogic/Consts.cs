@@ -45,6 +45,10 @@
         // https://what3words.com API key
         public const string W3W_API_KEY = "";
 
+        // For uploading user trip report photos
+        public const string IMGUR_API_CLIENT_ID = "";
+        public const string IMGUR_API_CLIENT_SECRET = "";
+
         // Google Maps etc thumbnail sizes to use in reply cards
         public const string THUMBNAIL_SIZE = "400x400";
 
