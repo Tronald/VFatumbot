@@ -737,10 +737,9 @@ namespace VFatumbot.BotLogic
                                 }
                                 else
                                 {
-                                    // TODO: shortCode should be an array
-                                    var shortCode = Helpers.Crc32Hash(context.Activity.From.Id + context.Activity.Timestamp);
+                                    voiShortCodesArray[i] = Helpers.Crc32Hash(context.Activity.From.Id + context.Activity.Timestamp);
 
-                                    mesg = (idacou > 1 ? ("#" + (i + 1) + " ") : "") + Tolog(turnContext, "void", voi[i], shortCode);
+                                    mesg = (idacou > 1 ? ("#" + (i + 1) + " ") : "") + Tolog(turnContext, "void", voi[i], voiShortCodesArray[i]);
                                     await turnContext.SendActivityAsync(MessageFactory.Text(mesg), cancellationToken);
                                     dynamic w3wResult2 = await Helpers.GetWhat3WordsAddressAsync(incoords);
                                     await turnContext.SendActivityAsync(CardFactory.CreateLocationCardsReply(incoords, w3wResult2), cancellationToken);

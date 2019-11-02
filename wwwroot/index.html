@@ -134,7 +134,6 @@
             showSnackbar("Connecting to bot...");
 
             // Re-use credentials if they exist in cookies
-            // TODO: is there a better persistent way than cookies?
             var userId = getCookie('userId');
             if (!userId) {
                 userId = generateId();

@@ -81,7 +81,6 @@ namespace VFatumbot
             var heroCard = new HeroCard
             {
                 Title = "Google Street View",
-                Text = "<TODO?>",
                 Images = images,
                 Buttons = buttons,
                 Tap = cardAction,
@@ -105,7 +104,6 @@ namespace VFatumbot
             var heroCard = new HeroCard
             {
                 Title = "Google Earth View",
-                Text = incoords[0] + "," + incoords[1],
                 Images = images,
                 Buttons = buttons,
                 Tap = cardAction

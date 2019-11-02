@@ -599,8 +599,6 @@ namespace VFatumbot
 
                     for (int i = 0; i < options.GeneratedPoints.Length; i++)
                     {
-                        // TODO: would be good to be able to mark which point they visited if the idacount is > 1 (e.g. pairs, points generated with [>1] etc.)
-
                         var attractor = options.GeneratedPoints[i].X;
 
                         StringBuilder isb = new StringBuilder();

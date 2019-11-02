@@ -129,8 +129,6 @@ namespace VFatumbot
                     var w3wResult = await Helpers.GetWhat3WordsAddressAsync(incoords);
                     await turnContext.SendActivityAsync(CardFactory.CreateLocationCardsReply(incoords, w3wResult), cancellationToken);
 
-                    //TODO: FatumFunctions.Tolog(message, "locset");
-
                     await mUserProfileAccessor.SetAsync(turnContext, userProfile);
                     await _userState.SaveChangesAsync(turnContext, false, cancellationToken);
                     await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(turnContext, _mainDialog, cancellationToken);
