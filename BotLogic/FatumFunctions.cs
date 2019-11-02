@@ -118,15 +118,6 @@ namespace VFatumbot.BotLogic
         //}
         //end of wrapper
 
-        //public class userpresets
-        //{
-        //    public int user_id;
-        //    public LatLng location = London;
-        //    public string mode = "";
-        //    public int radius = 3000;
-        //    public DateTime lastseen = DateTime.Now;
-        //}
-
         [DllImport("libAttract", CallingConvention = CallingConvention.Cdecl)]
         public extern static int getOptimizedDots(double areaRadiusM); //how many coordinates is needed for requested radius, optimized for performance on larger areas
         [DllImport("libAttract", CallingConvention = CallingConvention.Cdecl)]
@@ -196,115 +187,6 @@ namespace VFatumbot.BotLogic
             return result;
         }
 
-        //public static TimeSpan CheckAliveUsers() //something wrong
-        //{
-        //    DateTime Date1 = DateTime.Now;
-        //    TimeSpan result = Date1.Subtract(lastcheck);
-        //    try
-        //    {
-        //        int dd = 0;
-        //        while (dd < upresets.Count)
-        //        {
-        //            TimeSpan ts = Date1.Subtract(upresets[dd].lastseen);
-        //            if (result.TotalHours > ts.TotalHours) { result = ts; }
-        //            if (ts.TotalHours > 12)
-        //            {
-        //                usessions.Remove(upresets[dd].user_id);
-        //                upresets.Remove(upresets[dd]);
-        //            }
-        //            else
-        //            {
-        //                usessions[upresets[dd].user_id] = dd;
-        //                dd++;
-        //            }
-        //        }
-        //        lastcheck = DateTime.Now;
-        //    }
-        //    catch (Exception e) { Console.WriteLine("User Check alive error"); }
-        //    return result;
-        //}
-
-        //public static int CheckUser(Message message, bool reset)
-        //{
-        //    int result = 0;
-        //    try
-        //    {
-        //        int u = message.From.Id;
-        //        int c = (int)message.Chat.Id;
-        //        userpresets def = new userpresets();
-        //        def.user_id = u;
-        //        if ((u != c) && (allchats.ContainsKey(c) == false))
-        //        {
-        //            Tolog(message, "newchat");
-        //            allchats.Add(c, 1);
-        //            System.IO.File.AppendAllText("chats.txt", c.ToString() + Environment.NewLine);
-        //        }
-        //        if (usessions.ContainsKey(u) == true)
-        //        {
-        //            if (reset) { upresets[(int)usessions[u]] = def; }
-        //        }
-        //        else
-        //        {
-        //            //initialize new user
-        //            upresets.Add(def);
-        //            usessions.Add(u, upresets.Count - 1);
-        //            //check presence in db
-        //            if (allchats.ContainsKey(u) == false)
-        //            {
-        //                Tolog(message, "newuser");
-        //                allchats.Add(u, 1);
-        //                System.IO.File.AppendAllText("chats.txt", u.ToString() + Environment.NewLine);
-        //            }
-        //        }
-        //        result = (int)usessions[message.From.Id];
-        //        upresets[result].lastseen = DateTime.Now;
-        //    }
-        //    catch (Exception e) { Console.WriteLine("User Check error"); }
-        //    return result;
-        //}
-
-        // (time - username - event - code (type+sessionid+day+month+u+pointid) - lat - lon - power - userradius - idaradius - significance - zscore - integral_score - probability)
-        //public static void Tolog(Message message, string type) //userops (locset, newuser, newchat)
-        //{
-//            int u = (int)usessions[message.From.Id];
-//            string log = upresets[u].lastseen.ToString() + "\t";
-//            if (type == "newchat")
-//            {
-//                if (message.Chat.Username != null) { log += "(" + message.Chat.Username.ToString() + ")"; }
-//                if (message.Chat.Title != null)
-//                {
-//                    string title = message.Chat.Title.ToString();
-//                    title = title.Replace(System.Environment.NewLine, " ");
-//                    log += " " + title;
-//                }
-//                if ((message.Chat.Username == null) && (message.Chat.Title == null) && (message.Chat.FirstName != null)) { log += " " + message.Chat.FirstName.ToString(); }
-//                log += "\t" + "New chat found" + "\t" + message.Chat.Id.ToString() + "\t" + "\t" + "\t" + "\t" + "\t" + "\t" + "\t" + "\t" + "\t";
-//            }
-//            else
-//            {
-//                if (message.From.FirstName != null) { log += message.From.FirstName.ToString(); }
-//                if (message.From.LastName != null) { log += " " + message.From.FirstName.ToString(); }
-//            }
-//            if (type == "locset")
-//            {
-//                log += "\t" + "location recieved" + "\t" + "\t" + message.Location.Latitude.ToString("#0.000000", System.Globalization.CultureInfo.InvariantCulture)
-//                    + "\t" + message.Location.Longitude.ToString("#0.000000", System.Globalization.CultureInfo.InvariantCulture) + "\t" + "\t" + "\t" + "\t" + "\t" + "\t" + "\t";
-//            }
-//            if (type == "glocset")
-//            {
-//                log += "\t" + "location recieved" + "\t" + "\t" + upresets[(int)usessions[message.From.Id]].location.latitude.ToString("#0.000000", System.Globalization.CultureInfo.InvariantCulture)
-//                    + "\t" + upresets[(int)usessions[message.From.Id]].location.longitude.ToString("#0.000000", System.Globalization.CultureInfo.InvariantCulture) + "\t" + "\t" + "\t" + "\t" + "\t" + "\t" + "\t";
-//            }
-//            else if (type == "newuser")
-//            {
-//                log += "\t" + "New user found" + "\t" + message.From.Id.ToString()
-//+ "\t" + "\t" + "\t" + "\t" + "\t" + "\t" + "\t" + "\t" + "\t";
-//            }
-//            log += Environment.NewLine;
-//            System.IO.File.AppendAllText(logpath, log);
-//            CheckLogSize();
-        //}
-
         public static string Tolog(ITurnContext context, string type, FinalAttractor ida, string shortCode) //idas
         {
             string resp = "Intention Driven Anomaly found" + Environment.NewLine;
@@ -320,10 +202,6 @@ namespace VFatumbot.BotLogic
 
             resp += code + " (" + ida.X.center.point.latitude.ToString("#0.000000", System.Globalization.CultureInfo.InvariantCulture)
                 + " " + ida.X.center.point.longitude.ToString("#0.000000", System.Globalization.CultureInfo.InvariantCulture) + ")" + Environment.NewLine;
-            //int u = (int)usessions[message.From.Id];
-            //string log = upresets[u].lastseen.ToString() + "\t";
-            //if (message.From.FirstName != null) { log += message.From.FirstName.ToString() + " "; }
-            //if (message.From.LastName != null) { log += message.From.FirstName.ToString(); }
             if (ida.X.type == 1)
             {
                 if (type != "blind")
@@ -332,13 +210,6 @@ namespace VFatumbot.BotLogic
                     resp += "Radius: " + (int)(ida.X.radiusM) + "m" + Environment.NewLine;
                     resp += "Power: " + ida.X.power.ToString("#0.00", System.Globalization.CultureInfo.InvariantCulture) + Environment.NewLine;
                 }
-                //log += "\t" + "Attractor found" + "\t" + code + "\t" + ida.X.center.point.latitude.ToString("#0.000000", System.Globalization.CultureInfo.InvariantCulture)
-                //    + "\t" + ida.X.center.point.longitude.ToString("#0.000000", System.Globalization.CultureInfo.InvariantCulture) + "\t"
-                //    + ida.X.power.ToString("#0.00", System.Globalization.CultureInfo.InvariantCulture) + "\t" + (int)(upresets[(int)usessions[message.From.Id]].radius)
-                //    + "\t" + (int)(ida.X.radiusM) + "\t" + ida.X.significance.ToString("#0.000", System.Globalization.CultureInfo.InvariantCulture) + "\t"
-                //    + ida.X.z_score.ToString("#0.000000", System.Globalization.CultureInfo.InvariantCulture) + "\t"
-                //    + ida.X.integral_score.ToString("#0.000000", System.Globalization.CultureInfo.InvariantCulture) + "\t"
-                //    + ida.X.probability.ToString("#0.000000", System.Globalization.CultureInfo.InvariantCulture);
             }
             else if (ida.X.type == 2)
             {
@@ -348,13 +219,6 @@ namespace VFatumbot.BotLogic
                     resp += "Radius: " + (int)(ida.X.radiusM) + "m" + Environment.NewLine;
                     resp += "Power: " + (1 / ida.X.power).ToString("#0.00", System.Globalization.CultureInfo.InvariantCulture) + Environment.NewLine;
                 }
-                //log += "\t" + "Void found" + "\t" + code + "\t" + ida.X.center.point.latitude.ToString("#0.000000", System.Globalization.CultureInfo.InvariantCulture)
-                //        + "\t" + ida.X.center.point.longitude.ToString("#0.000000", System.Globalization.CultureInfo.InvariantCulture) + "\t"
-                //        + ida.X.power.ToString("#0.00", System.Globalization.CultureInfo.InvariantCulture) + "\t" + (int)(upresets[(int)usessions[message.From.Id]].radius)
-                //        + "\t" + (int)(ida.X.radiusM) + "\t" + ida.X.significance.ToString("#0.000", System.Globalization.CultureInfo.InvariantCulture)
-                //        + "\t" + ida.X.z_score.ToString("#0.000000", System.Globalization.CultureInfo.InvariantCulture) + "\t"
-                //        + ida.X.integral_score.ToString("#0.000000", System.Globalization.CultureInfo.InvariantCulture) + "\t"
-                //        + ida.X.probability.ToString("#0.000000", System.Globalization.CultureInfo.InvariantCulture);
             }
             string pl = "";
             if (ida.X.rarity == 0) { pl = @"N/A"; }
@@ -380,8 +244,6 @@ namespace VFatumbot.BotLogic
                 if (ida.X.rarity > 0) { resp += "Abnormality Rank: " + pl + Environment.NewLine; }
                 resp += "z-score: " + ida.X.z_score.ToString("#0.00", System.Globalization.CultureInfo.InvariantCulture) + Environment.NewLine;
             }
-            //log += Environment.NewLine;
-            //System.IO.File.AppendAllText(logpath, log);
             return resp;
         }
 
@@ -405,25 +267,6 @@ namespace VFatumbot.BotLogic
                 QuantumRandomNumberGenerator rnd = new QuantumRandomNumberGenerator();
                 resp += "Suggested time: " + ((int)rnd.Next(23)).ToString("#0") + ":" + ((int)rnd.Next(59)).ToString("00") + Environment.NewLine;
             }
-            //int u = (int)usessions[message.From.Id];
-            //string log = upresets[u].lastseen.ToString() + "\t";
-            //if (message.From.FirstName != null) { log += message.From.FirstName.ToString() + " "; }
-            //if (message.From.LastName != null) { log += message.From.FirstName.ToString(); }
-            //if (ptype == "pseudo")
-            //{
-            //    log += "\t" + "pseudo generated" + "\t" + code + "\t" + Lat.ToString("#0.000000", System.Globalization.CultureInfo.InvariantCulture)
-            //            + "\t" + Lng.ToString("#0.000000", System.Globalization.CultureInfo.InvariantCulture) + "\t"
-            //            + "\t" + (int)(upresets[(int)usessions[message.From.Id]].radius) + "\t" + "\t" + "\t" + "\t" + "\t";
-            //}
-            //else if ((ptype == "quantum") || (ptype == "qtime"))
-            //{
-            //    log += "\t" + "quantum generated" + "\t" + code + "\t" + Lat.ToString("#0.000000", System.Globalization.CultureInfo.InvariantCulture)
-            //            + "\t" + Lng.ToString("#0.000000", System.Globalization.CultureInfo.InvariantCulture) + "\t"
-            //            + "\t" + (int)(upresets[(int)usessions[message.From.Id]].radius) + "\t" + "\t" + "\t" + "\t" + "\t";
-            //}
-
-            //log += Environment.NewLine;
-            //System.IO.File.AppendAllText(logpath, log);
             return resp;
         }
 
