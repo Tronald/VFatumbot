@@ -1,8 +1,6 @@
-Welcome to Fatumbot. This is a tool to experiment with the ideas that the mind and matter are connected in more ways than currently understood, and that by visiting random (in the true sense of the word) places one can journey outside of their normal probability paths.
+Welcome to Fatumbot! This is a tool to experiment with the ideas that the mind and matter are connected in more ways than currently understood, and that by visiting random (in the true sense of the word) places one can journey outside of their normal probability paths.
 
-By using the Fatum Project bot you do so at your own risk! In no way are we responsible or will be held liable for any positive or adverse affects or consequences from the use of this platform.
-
-Some new features this version of the bot is introducing is:
+v3.1.0 is in beta test! There may still be some issues. New features:
 
 - Making it more accessible to people not only on Telegram via Facebook, WebChat etc.
 - Ability to set location by searching addresses.
@@ -10,6 +8,9 @@ Some new features this version of the bot is introducing is:
 - Offering an easy virtual trip to points via Google Street View/Earth (for you lazy ones).
 - Make it a bit easier to use with buttons.
 - Help connect the community more with trip reporting. 
+- Strengthened privacy - use the WebChat interface to the bot at https://bot.randonauts.com for complete anonymity (it anonymizes all your IDs and resets your location info every 24 hours).
+
+By using the Fatum Project bot you do so at your own risk! In no way are we responsible or will be held liable for any positive or adverse affects or consequences from the use of this platform. Use common sense, do not put yourself or others in harms way. Don't tresspass.
 
 Below is the original welcome message from the Telegram-based bot (some parts don't apply, we'll update it in the future):
 

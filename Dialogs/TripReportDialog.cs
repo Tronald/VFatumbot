@@ -556,8 +556,8 @@ namespace VFatumbot
                                           refreshToken: Consts.REDDIT_REFRESH_TOKEN,
                                           accessToken: Consts.REDDIT_ACCESS_TOKEN);
 
-            //var subreddit = redditApi.Subreddit("randonauts"); // TODO: after go live. get comrade to add thereal***REMOVED*** as approved submitter
-            var subreddit = redditApi.Subreddit("soliaxplayground");
+            var subreddit = redditApi.Subreddit("randonauts"); // TODO: after go live. get comrade to add thereal***REMOVED*** as approved submitter
+            //var subreddit = redditApi.Subreddit("soliaxplayground");
 
             // Just seeing if we can upload images, was getting 403 error responses, even so it would be uploaded to the subreddit itself, not the user's post.
             // TODO: one day figure if we can upload images to posts
