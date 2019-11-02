@@ -173,7 +173,7 @@ namespace VFatumbot.BotLogic
         }
         public static string[] SplitIt(string buf, string sep)
         {
-            string[] seps = new string[] { sep, Environment.NewLine };
+            string[] seps = new string[] { sep, "\n\n" };
             string[] buf1 = buf.Split(seps, StringSplitOptions.RemoveEmptyEntries);
             return buf1;
         }
@@ -181,7 +181,7 @@ namespace VFatumbot.BotLogic
         public static string CutCommand(string buf)
         {
             string result = "";
-            string[] seps = new string[] { "@", Environment.NewLine };
+            string[] seps = new string[] { "@", "\n\n" };
             string[] buf1 = buf.Split(seps, StringSplitOptions.RemoveEmptyEntries);
             result = buf1[0];
             return result;
@@ -189,8 +189,8 @@ namespace VFatumbot.BotLogic
 
         public static string Tolog(ITurnContext context, string type, FinalAttractor ida, string shortCode) //idas
         {
-            string resp = "Intention Driven Anomaly found" + Environment.NewLine;
-            if (type == "blind") { resp = "Mystery Point Generated" + Environment.NewLine; }
+            string resp = "Intention Driven Anomaly found" + "\n\n";
+            if (type == "blind") { resp = "Mystery Point Generated" + "\n\n"; }
 
             pointid++;
             var code = "";
@@ -201,23 +201,23 @@ namespace VFatumbot.BotLogic
             if (ida.X.type == 2) { code = "V-" + shortCode; }
 
             resp += code + " (" + ida.X.center.point.latitude.ToString("#0.000000", System.Globalization.CultureInfo.InvariantCulture)
-                + " " + ida.X.center.point.longitude.ToString("#0.000000", System.Globalization.CultureInfo.InvariantCulture) + ")" + Environment.NewLine;
+                + " " + ida.X.center.point.longitude.ToString("#0.000000", System.Globalization.CultureInfo.InvariantCulture) + ")" + "\n\n";
             if (ida.X.type == 1)
             {
                 if (type != "blind")
                 {
-                    resp += "Type: Attractor" + Environment.NewLine;
-                    resp += "Radius: " + (int)(ida.X.radiusM) + "m" + Environment.NewLine;
-                    resp += "Power: " + ida.X.power.ToString("#0.00", System.Globalization.CultureInfo.InvariantCulture) + Environment.NewLine;
+                    resp += "Type: Attractor" + "\n\n";
+                    resp += "Radius: " + (int)(ida.X.radiusM) + "m" + "\n\n";
+                    resp += "Power: " + ida.X.power.ToString("#0.00", System.Globalization.CultureInfo.InvariantCulture) + "\n\n";
                 }
             }
             else if (ida.X.type == 2)
             {
                 if (type != "blind")
                 {
-                    resp += "Type: Void" + Environment.NewLine;
-                    resp += "Radius: " + (int)(ida.X.radiusM) + "m" + Environment.NewLine;
-                    resp += "Power: " + (1 / ida.X.power).ToString("#0.00", System.Globalization.CultureInfo.InvariantCulture) + Environment.NewLine;
+                    resp += "Type: Void" + "\n\n";
+                    resp += "Radius: " + (int)(ida.X.radiusM) + "m" + "\n\n";
+                    resp += "Power: " + (1 / ida.X.power).ToString("#0.00", System.Globalization.CultureInfo.InvariantCulture) + "\n\n";
                 }
             }
             string pl = "";
@@ -241,16 +241,16 @@ namespace VFatumbot.BotLogic
 
             if (type != "blind")
             {
-                if (ida.X.rarity > 0) { resp += "Abnormality Rank: " + pl + Environment.NewLine; }
-                resp += "z-score: " + ida.X.z_score.ToString("#0.00", System.Globalization.CultureInfo.InvariantCulture) + Environment.NewLine;
+                if (ida.X.rarity > 0) { resp += "Abnormality Rank: " + pl + "\n\n"; }
+                resp += "z-score: " + ida.X.z_score.ToString("#0.00", System.Globalization.CultureInfo.InvariantCulture) + "\n\n";
             }
             return resp;
         }
 
         public static string Tolog(ITurnContext context, string type, double Lat, double Lng, string ptype, string shortCode) //randoms
         {
-            string resp = "Random Point generated" + Environment.NewLine;
-            if (type == "blind") { resp = "Mystery Point Generated" + Environment.NewLine; }
+            string resp = "Random Point generated" + "\n\n";
+            if (type == "blind") { resp = "Mystery Point Generated" + "\n\n"; }
 
             pointid++;
             var code = "";
@@ -261,11 +261,11 @@ namespace VFatumbot.BotLogic
             if ((type == "random") && ((ptype == "quantum") || (ptype == "qtime"))) { code = "Q-" + shortCode; }
 
             resp += code + " (" + Lat.ToString("#0.000000", System.Globalization.CultureInfo.InvariantCulture)
-                + " " + Lng.ToString("#0.000000", System.Globalization.CultureInfo.InvariantCulture) + ")" + Environment.NewLine;
+                + " " + Lng.ToString("#0.000000", System.Globalization.CultureInfo.InvariantCulture) + ")" + "\n\n";
             if (ptype == "qtime")
             {
                 QuantumRandomNumberGenerator rnd = new QuantumRandomNumberGenerator();
-                resp += "Suggested time: " + ((int)rnd.Next(23)).ToString("#0") + ":" + ((int)rnd.Next(59)).ToString("00") + Environment.NewLine;
+                resp += "Suggested time: " + ((int)rnd.Next(23)).ToString("#0") + ":" + ((int)rnd.Next(59)).ToString("00") + "\n\n";
             }
             return resp;
         }
