@@ -5,8 +5,6 @@ VisualStudioVersion = 15.0.28307.168
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VFatumbot", "VFatumbot.csproj", "{AE2B9882-1F1C-47C6-A933-D82F11652F14}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Imgur.API.NetCore", "Imgur-NetCore\Imgur.API.NetCore.csproj", "{583BC197-67E3-4929-B9AE-B0C56F98C030}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -20,12 +18,6 @@ Global
 		{AE2B9882-1F1C-47C6-A933-D82F11652F14}.Release|Any CPU.Build.0 = Release|Any CPU
 		{AE2B9882-1F1C-47C6-A933-D82F11652F14}.EmulatorDebug|Any CPU.ActiveCfg = EmulatorDebug|Any CPU
 		{AE2B9882-1F1C-47C6-A933-D82F11652F14}.EmulatorDebug|Any CPU.Build.0 = EmulatorDebug|Any CPU
-		{583BC197-67E3-4929-B9AE-B0C56F98C030}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{583BC197-67E3-4929-B9AE-B0C56F98C030}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{583BC197-67E3-4929-B9AE-B0C56F98C030}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{583BC197-67E3-4929-B9AE-B0C56F98C030}.Release|Any CPU.Build.0 = Release|Any CPU
-		{583BC197-67E3-4929-B9AE-B0C56F98C030}.EmulatorDebug|Any CPU.ActiveCfg = Debug|Any CPU
-		{583BC197-67E3-4929-B9AE-B0C56F98C030}.EmulatorDebug|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

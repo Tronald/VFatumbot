@@ -38,8 +38,15 @@
     <PackageReference Include="Reddit" Version="1.2.0" />
     <PackageReference Include="System.Data.SqlClient" Version="4.7.0" />
     <PackageReference Include="Crc32.NET" Version="1.2.0" />
+    <PackageReference Include="Imgur.API.NetCore" Version="1.0.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Remove="Imgur-NetCore\obj\Imgur.API.NetCore.csproj.nuget.dgspec.json" />
+    <Content Remove="Imgur-NetCore\obj\project.assets.json" />
+    <Content Remove="Imgur-NetCore\bin\Release\netcoreapp2.1\Imgur.API.NetCore.deps.json" />
+    <Content Remove="Imgur-NetCore\bin\Debug\netcoreapp2.1\Imgur.API.NetCore.deps.json" />
+  </ItemGroup>
   <ItemGroup>
     <Content Update="appsettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -49,6 +56,135 @@
   <ItemGroup>
     <Folder Include="BotLogic\" />
     <Folder Include="RNGs\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Imgur-NetCore\Authentication\IApiClient.cs" />
+    <Compile Remove="Imgur-NetCore\ImgurException.cs" />
+    <Compile Remove="Imgur-NetCore\MashapeException.cs" />
+    <Compile Remove="Imgur-NetCore\obj\Release\netcoreapp2.1\Imgur.API.NetCore.AssemblyInfo.cs" />
+    <Compile Remove="Imgur-NetCore\obj\Debug\netcoreapp2.1\Imgur.API.NetCore.AssemblyInfo.cs" />
+    <Compile Remove="Imgur-NetCore\Endpoints\IRateLimitEndpoint.cs" />
+    <Compile Remove="Imgur-NetCore\Endpoints\INotificationEndpoint.cs" />
+    <Compile Remove="Imgur-NetCore\Endpoints\IGalleryEndpoint.cs" />
+    <Compile Remove="Imgur-NetCore\Endpoints\IImageEndpoint.cs" />
+    <Compile Remove="Imgur-NetCore\Endpoints\IConversationEndpoint.cs" />
+    <Compile Remove="Imgur-NetCore\Endpoints\IMemeGenEndpoint.cs" />
+    <Compile Remove="Imgur-NetCore\Endpoints\IEndpoint.cs" />
+    <Compile Remove="Imgur-NetCore\Endpoints\IAccountEndpoint.cs" />
+    <Compile Remove="Imgur-NetCore\Endpoints\IOAuth2Endpoint.cs" />
+    <Compile Remove="Imgur-NetCore\Endpoints\ITopicEndpoint.cs" />
+    <Compile Remove="Imgur-NetCore\Endpoints\ICommentEndpoint.cs" />
+    <Compile Remove="Imgur-NetCore\Endpoints\IAlbumEndpoint.cs" />
+    <Compile Remove="Imgur-NetCore\Endpoints\ICustomGalleryEndpoint.cs" />
+    <Compile Remove="Imgur-NetCore\Endpoints\Impl\GalleryEndpoint.cs" />
+    <Compile Remove="Imgur-NetCore\Endpoints\Impl\ImageEndpoint.cs" />
+    <Compile Remove="Imgur-NetCore\Endpoints\Impl\MemeGenEndpoint.cs" />
+    <Compile Remove="Imgur-NetCore\Endpoints\Impl\NotificationEndpoint.cs" />
+    <Compile Remove="Imgur-NetCore\Endpoints\Impl\AccountEndpoint.cs" />
+    <Compile Remove="Imgur-NetCore\Endpoints\Impl\RateLimitEndpoint.cs" />
+    <Compile Remove="Imgur-NetCore\Endpoints\Impl\CustomGalleryEndpoint.cs" />
+    <Compile Remove="Imgur-NetCore\Endpoints\Impl\EndpointBase.cs" />
+    <Compile Remove="Imgur-NetCore\Endpoints\Impl\TopicEndpoint.cs" />
+    <Compile Remove="Imgur-NetCore\Endpoints\Impl\ConversationEndpoint.cs" />
+    <Compile Remove="Imgur-NetCore\Endpoints\Impl\CommentEndpoint.cs" />
+    <Compile Remove="Imgur-NetCore\Endpoints\Impl\OAuth2Endpoint.cs" />
+    <Compile Remove="Imgur-NetCore\Endpoints\Impl\AlbumEndpoint.cs" />
+    <Compile Remove="Imgur-NetCore\Enums\CommentSortOrder.cs" />
+    <Compile Remove="Imgur-NetCore\Enums\ReportReason.cs" />
+    <Compile Remove="Imgur-NetCore\Enums\GalleryTagSortOrder.cs" />
+    <Compile Remove="Imgur-NetCore\Enums\AccountGallerySortOrder.cs" />
+    <Compile Remove="Imgur-NetCore\Enums\GallerySortOrder.cs" />
+    <Compile Remove="Imgur-NetCore\Enums\OAuth2ResponseType.cs" />
+    <Compile Remove="Imgur-NetCore\Enums\SubredditGallerySortOrder.cs" />
+    <Compile Remove="Imgur-NetCore\Enums\NotorietyLevel.cs" />
+    <Compile Remove="Imgur-NetCore\Enums\MemesGallerySortOrder.cs" />
+    <Compile Remove="Imgur-NetCore\Enums\CustomGallerySortOrder.cs" />
+    <Compile Remove="Imgur-NetCore\Enums\VoteOption.cs" />
+    <Compile Remove="Imgur-NetCore\Enums\ImageSize.cs" />
+    <Compile Remove="Imgur-NetCore\Enums\ImageFileType.cs" />
+    <Compile Remove="Imgur-NetCore\Enums\AlbumPrivacy.cs" />
+    <Compile Remove="Imgur-NetCore\Enums\AlbumLayout.cs" />
+    <Compile Remove="Imgur-NetCore\Enums\TimeWindow.cs" />
+    <Compile Remove="Imgur-NetCore\Enums\GallerySection.cs" />
+    <Compile Remove="Imgur-NetCore\Models\IImgurError.cs" />
+    <Compile Remove="Imgur-NetCore\Models\IAlbum.cs" />
+    <Compile Remove="Imgur-NetCore\Models\IBlockedUser.cs" />
+    <Compile Remove="Imgur-NetCore\Models\IMessage.cs" />
+    <Compile Remove="Imgur-NetCore\Models\ITagVote.cs" />
+    <Compile Remove="Imgur-NetCore\Models\ITopic.cs" />
+    <Compile Remove="Imgur-NetCore\Models\IMessageNotification.cs" />
+    <Compile Remove="Imgur-NetCore\Models\ITagVotes.cs" />
+    <Compile Remove="Imgur-NetCore\Models\IVote.cs" />
+    <Compile Remove="Imgur-NetCore\Models\INotification.cs" />
+    <Compile Remove="Imgur-NetCore\Models\IImage.cs" />
+    <Compile Remove="Imgur-NetCore\Models\IConversation.cs" />
+    <Compile Remove="Imgur-NetCore\Models\IComment.cs" />
+    <Compile Remove="Imgur-NetCore\Models\IBasic`1.cs" />
+    <Compile Remove="Imgur-NetCore\Models\ICommentNotification.cs" />
+    <Compile Remove="Imgur-NetCore\Models\IGalleryImage.cs" />
+    <Compile Remove="Imgur-NetCore\Models\IGalleryItem.cs" />
+    <Compile Remove="Imgur-NetCore\Models\IAccountSettings.cs" />
+    <Compile Remove="Imgur-NetCore\Models\IMashapeError.cs" />
+    <Compile Remove="Imgur-NetCore\Models\ICustomGallery.cs" />
+    <Compile Remove="Imgur-NetCore\Models\IGalleryProfile.cs" />
+    <Compile Remove="Imgur-NetCore\Models\IAccount.cs" />
+    <Compile Remove="Imgur-NetCore\Models\ITrophy.cs" />
+    <Compile Remove="Imgur-NetCore\Models\IOAuth2Token.cs" />
+    <Compile Remove="Imgur-NetCore\Models\ITag.cs" />
+    <Compile Remove="Imgur-NetCore\Models\IDataModel.cs" />
+    <Compile Remove="Imgur-NetCore\Models\IRateLimit.cs" />
+    <Compile Remove="Imgur-NetCore\Models\INotifications.cs" />
+    <Compile Remove="Imgur-NetCore\Models\IGalleryAlbum.cs" />
+    <Compile Remove="Imgur-NetCore\Models\Impl\OAuth2Token.cs" />
+    <Compile Remove="Imgur-NetCore\Models\Impl\Conversation.cs" />
+    <Compile Remove="Imgur-NetCore\Models\Impl\TagVotes.cs" />
+    <Compile Remove="Imgur-NetCore\Models\Impl\Notification.cs" />
+    <Compile Remove="Imgur-NetCore\Models\Impl\Message.cs" />
+    <Compile Remove="Imgur-NetCore\Models\Impl\RateLimit.cs" />
+    <Compile Remove="Imgur-NetCore\Models\Impl\TagVote.cs" />
+    <Compile Remove="Imgur-NetCore\Models\Impl\Comment.cs" />
+    <Compile Remove="Imgur-NetCore\Models\Impl\ImgurError.cs" />
+    <Compile Remove="Imgur-NetCore\Models\Impl\GalleryItem.cs" />
+    <Compile Remove="Imgur-NetCore\Models\Impl\Basic`1.cs" />
+    <Compile Remove="Imgur-NetCore\Models\Impl\GalleryAlbum.cs" />
+    <Compile Remove="Imgur-NetCore\Models\Impl\AccountSettings.cs" />
+    <Compile Remove="Imgur-NetCore\Models\Impl\CustomGallery.cs" />
+    <Compile Remove="Imgur-NetCore\Models\Impl\Trophy.cs" />
+    <Compile Remove="Imgur-NetCore\Models\Impl\CommentNotification.cs" />
+    <Compile Remove="Imgur-NetCore\Models\Impl\Image.cs" />
+    <Compile Remove="Imgur-NetCore\Models\Impl\Tag.cs" />
+    <Compile Remove="Imgur-NetCore\Models\Impl\Account.cs" />
+    <Compile Remove="Imgur-NetCore\Models\Impl\MashapeError.cs" />
+    <Compile Remove="Imgur-NetCore\Models\Impl\Album.cs" />
+    <Compile Remove="Imgur-NetCore\Models\Impl\GalleryProfile.cs" />
+    <Compile Remove="Imgur-NetCore\Models\Impl\BlockedUser.cs" />
+    <Compile Remove="Imgur-NetCore\Models\Impl\GalleryImage.cs" />
+    <Compile Remove="Imgur-NetCore\Models\Impl\MessageNotification.cs" />
+    <Compile Remove="Imgur-NetCore\Models\Impl\Vote.cs" />
+    <Compile Remove="Imgur-NetCore\Models\Impl\Topic.cs" />
+    <Compile Remove="Imgur-NetCore\Models\Impl\Notifications.cs" />
+    <Compile Remove="Imgur-NetCore\RequestBuilders\ImageRequestBuilder.cs" />
+    <Compile Remove="Imgur-NetCore\RequestBuilders\ConversationRequestBuilder.cs" />
+    <Compile Remove="Imgur-NetCore\RequestBuilders\MemeGenRequestBuilder.cs" />
+    <Compile Remove="Imgur-NetCore\RequestBuilders\RequestBuilderBase.cs" />
+    <Compile Remove="Imgur-NetCore\RequestBuilders\OAuth2RequestBuilder.cs" />
+    <Compile Remove="Imgur-NetCore\RequestBuilders\CommentRequestBuilder.cs" />
+    <Compile Remove="Imgur-NetCore\RequestBuilders\GalleryRequestBuilder.cs" />
+    <Compile Remove="Imgur-NetCore\RequestBuilders\CustomGalleryRequestBuilder.cs" />
+    <Compile Remove="Imgur-NetCore\RequestBuilders\AlbumRequestBuilder.cs" />
+    <Compile Remove="Imgur-NetCore\RequestBuilders\TopicRequestBuilder.cs" />
+    <Compile Remove="Imgur-NetCore\RequestBuilders\AccountRequestBuilder.cs" />
+    <Compile Remove="Imgur-NetCore\RequestBuilders\RateLimitRequestBuilder.cs" />
+    <Compile Remove="Imgur-NetCore\RequestBuilders\NotificationRequestBuilder.cs" />
+    <Compile Remove="Imgur-NetCore\Authentication\IImgurClient.cs" />
+    <Compile Remove="Imgur-NetCore\Authentication\IMashapeClient.cs" />
+    <Compile Remove="Imgur-NetCore\Authentication\Impl\ApiClientBase.cs" />
+    <Compile Remove="Imgur-NetCore\Authentication\Impl\ImgurClient.cs" />
+    <Compile Remove="Imgur-NetCore\Authentication\Impl\MashapeClient.cs" />
+    <Compile Remove="Imgur-NetCore\JsonConverters\NotificationConverter.cs" />
+    <Compile Remove="Imgur-NetCore\JsonConverters\TypeConverter`1.cs" />
+    <Compile Remove="Imgur-NetCore\JsonConverters\GalleryItemConverter.cs" />
+    <Compile Remove="Imgur-NetCore\JsonConverters\EpochTimeConverter.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Condition=" '$(EnableDefaultCompileItems)' == 'true' " Update="BotLogic\ActionHandler %28copy%29.cs">
@@ -66,6 +202,30 @@
     <Compile Condition=" '$(EnableDefaultCompileItems)' == 'true' " Update="Dialogs\BlindSpotsDialog.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="Imgur-NetCore\LICENSE" />
+    <None Remove="Imgur-NetCore\README.md" />
+    <None Remove="Imgur-NetCore\obj\Imgur.API.NetCore.csproj.nuget.g.targets" />
+    <None Remove="Imgur-NetCore\obj\Imgur.API.NetCore.csproj.nuget.cache" />
+    <None Remove="Imgur-NetCore\obj\Imgur.API.NetCore.csproj.nuget.g.props" />
+    <None Remove="Imgur-NetCore\obj\Release\netcoreapp2.1\Imgur.API.NetCore.csproj.FileListAbsolute.txt" />
+    <None Remove="Imgur-NetCore\obj\Release\netcoreapp2.1\Imgur.API.NetCore.assets.cache" />
+    <None Remove="Imgur-NetCore\obj\Release\netcoreapp2.1\Imgur.API.NetCore.dll" />
+    <None Remove="Imgur-NetCore\obj\Release\netcoreapp2.1\Imgur.API.NetCore.csprojAssemblyReference.cache" />
+    <None Remove="Imgur-NetCore\obj\Release\netcoreapp2.1\Imgur.API.NetCore.pdb" />
+    <None Remove="Imgur-NetCore\obj\Release\netcoreapp2.1\Imgur.API.NetCore.AssemblyInfoInputs.cache" />
+    <None Remove="Imgur-NetCore\obj\Debug\netcoreapp2.1\Imgur.API.NetCore.csproj.FileListAbsolute.txt" />
+    <None Remove="Imgur-NetCore\obj\Debug\netcoreapp2.1\Imgur.API.NetCore.assets.cache" />
+    <None Remove="Imgur-NetCore\obj\Debug\netcoreapp2.1\Imgur.API.NetCore.dll" />
+    <None Remove="Imgur-NetCore\obj\Debug\netcoreapp2.1\Imgur.API.NetCore.csprojAssemblyReference.cache" />
+    <None Remove="Imgur-NetCore\obj\Debug\netcoreapp2.1\Imgur.API.NetCore.pdb" />
+    <None Remove="Imgur-NetCore\obj\Debug\netcoreapp2.1\Imgur.API.NetCore.AssemblyInfoInputs.cache" />
+    <None Remove="Imgur-NetCore\bin\Release\netcoreapp2.1\Imgur.API.NetCore.dll" />
+    <None Remove="Imgur-NetCore\bin\Release\netcoreapp2.1\Imgur.API.NetCore.pdb" />
+    <None Remove="Imgur-NetCore\bin\Debug\netcoreapp2.1\Imgur.API.NetCore.dll" />
+    <None Remove="Imgur-NetCore\bin\Debug\netcoreapp2.1\Imgur.API.NetCore.pdb" />
+    <None Remove="Imgur-NetCore\Imgur.API.NetCore.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Update="libAttract.dll">

@@ -1,8 +1,0 @@
-/Users/simon/Dropbox (Personal)/Fatum/github/VFatumbot/Imgur-NetCore/bin/Debug/netcoreapp2.1/Imgur.API.NetCore.deps.json
-/Users/simon/Dropbox (Personal)/Fatum/github/VFatumbot/Imgur-NetCore/bin/Debug/netcoreapp2.1/Imgur.API.NetCore.dll
-/Users/simon/Dropbox (Personal)/Fatum/github/VFatumbot/Imgur-NetCore/bin/Debug/netcoreapp2.1/Imgur.API.NetCore.pdb
-/Users/simon/Dropbox (Personal)/Fatum/github/VFatumbot/Imgur-NetCore/obj/Debug/netcoreapp2.1/Imgur.API.NetCore.csprojAssemblyReference.cache
-/Users/simon/Dropbox (Personal)/Fatum/github/VFatumbot/Imgur-NetCore/obj/Debug/netcoreapp2.1/Imgur.API.NetCore.AssemblyInfoInputs.cache
-/Users/simon/Dropbox (Personal)/Fatum/github/VFatumbot/Imgur-NetCore/obj/Debug/netcoreapp2.1/Imgur.API.NetCore.AssemblyInfo.cs
-/Users/simon/Dropbox (Personal)/Fatum/github/VFatumbot/Imgur-NetCore/obj/Debug/netcoreapp2.1/Imgur.API.NetCore.dll
-/Users/simon/Dropbox (Personal)/Fatum/github/VFatumbot/Imgur-NetCore/obj/Debug/netcoreapp2.1/Imgur.API.NetCore.pdb
