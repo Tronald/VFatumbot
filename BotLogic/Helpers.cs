@@ -122,7 +122,8 @@ namespace VFatumbot.BotLogic
         public static string Crc32Hash(string rawData)
         {
             Crc32Algorithm hasher = new Crc32Algorithm();
-            return string.Format("{0:X8}", BitConverter.ToUInt32(hasher.ComputeHash(Encoding.UTF8.GetBytes(rawData)).Reverse().ToArray()));
+            var ret = string.Format("{0:X8}", BitConverter.ToUInt32(hasher.ComputeHash(Encoding.UTF8.GetBytes(rawData)).Reverse().ToArray()));
+            return ret;
         }
     }
 }

@@ -305,18 +305,18 @@ namespace VFatumbot.BotLogic
 //            CheckLogSize();
         //}
 
-        public static string Tolog(ITurnContext context, string type, FinalAttractor ida, string code) //idas
+        public static string Tolog(ITurnContext context, string type, FinalAttractor ida, string shortCode) //idas
         {
             string resp = "Intention Driven Anomaly found" + Environment.NewLine;
             if (type == "blind") { resp = "Mystery Point Generated" + Environment.NewLine; }
 
             pointid++;
-            code = "";
-            if (type == "blind") { code = "X-"; }
+            var code = "";
+            if (type == "blind") { code = "X-" + shortCode; }
             else
-            if (ida.X.type == 1) { code = "A-"; }
+            if (ida.X.type == 1) { code = "A-" + shortCode; }
             else
-            if (ida.X.type == 2) { code = "V-"; }
+            if (ida.X.type == 2) { code = "V-" + shortCode; }
 
             resp += code + " (" + ida.X.center.point.latitude.ToString("#0.000000", System.Globalization.CultureInfo.InvariantCulture)
                 + " " + ida.X.center.point.longitude.ToString("#0.000000", System.Globalization.CultureInfo.InvariantCulture) + ")" + Environment.NewLine;
@@ -385,17 +385,18 @@ namespace VFatumbot.BotLogic
             return resp;
         }
 
-        public static string Tolog(ITurnContext context, string type, double Lat, double Lng, string ptype, string code) //randoms
+        public static string Tolog(ITurnContext context, string type, double Lat, double Lng, string ptype, string shortCode) //randoms
         {
             string resp = "Random Point generated" + Environment.NewLine;
             if (type == "blind") { resp = "Mystery Point Generated" + Environment.NewLine; }
 
             pointid++;
-            if (type == "blind") { code = "X-"; }
+            var code = "";
+            if (type == "blind") { code = "X-" + shortCode; }
             else
-            if ((type == "random") && (ptype == "pseudo")) { code = "P-"; }
+            if ((type == "random") && (ptype == "pseudo")) { code = "P-" + shortCode; }
                 else
-            if ((type == "random") && ((ptype == "quantum") || (ptype == "qtime"))) { code = "Q-"; }
+            if ((type == "random") && ((ptype == "quantum") || (ptype == "qtime"))) { code = "Q-" + shortCode; }
 
             resp += code + " (" + Lat.ToString("#0.000000", System.Globalization.CultureInfo.InvariantCulture)
                 + " " + Lng.ToString("#0.000000", System.Globalization.CultureInfo.InvariantCulture) + ")" + Environment.NewLine;
