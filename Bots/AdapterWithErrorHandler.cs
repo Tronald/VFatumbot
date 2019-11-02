@@ -33,12 +33,12 @@ namespace VFatumbot
                     (exception.GetType().Equals(typeof(WebException)) && exception.Message.Contains("connection attempt failed because the connected party did not properly respond after a period of time")))
                 {
                     // qrng.anu seems to have connection issues from our side sometimes?
-                    await turnContext.SendActivityAsync("Sorry, there was an error sourcing quantum entropy needed to randomize. Usually when this happens all you need to is try again a little bit later.");
+                    await turnContext.SendActivityAsync("Sorry, there was an error sourcing quantum entropy needed to randomize. Try a bit later. If this happens during beta testing tell soliax.");
                 }
                 else
                 {
                     // Send a catch-all apology to the user.
-                    await turnContext.SendActivityAsync("Sorry, it looks like something went wrong. " + exception.Message + " " + exception.StackTrace);
+                    await turnContext.SendActivityAsync($"Sorry, it looks like something went wrong. {exception.GetType().Name}: {exception.Message} {exception.StackTrace}");
                 }
 
                 if (conversationState != null)
@@ -70,6 +70,7 @@ namespace VFatumbot
             public PointTypes[] PointTypes { get; set; }
             public int[] NumWaterPointsSkipped { get; set; }
             public string[] What3Words { get; set; }
+            public string[] NearestPlaces { get; set; }
 
             public bool UpdateIntentSuggestions { get; set; }
             public string[] IntentSuggestions { get; set; }

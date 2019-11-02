@@ -1,6 +1,10 @@
-﻿using System;
+﻿using Reddit;
+using Reddit.Things;
+using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -12,7 +16,8 @@ using Microsoft.Extensions.Logging;
 using VFatumbot.BotLogic;
 using static VFatumbot.AdapterWithErrorHandler;
 using static VFatumbot.BotLogic.Enums;
-using static VFatumbot.BotLogic.FatumFunctions;
+using Imgur.API.Authentication.Impl;
+using Imgur.API.Endpoints.Impl;
 
 namespace VFatumbot
 {
@@ -41,8 +46,9 @@ namespace VFatumbot
             public string Rating_Strangeness { get; set; }
             public string Rating_Synchronicty { get; set; }
 
-            public string Report { get; set; }
             public string[] PhotoURLs { get; set; }
+
+            public string Report { get; set; }
         }
 
         public TripReportDialog(IStatePropertyAccessor<UserProfile> userProfileAccessor, MainDialog mainDialog, ILogger<MainDialog> logger) : base(nameof(TripReportDialog))
@@ -53,6 +59,7 @@ namespace VFatumbot
 
             AddDialog(new ChoicePrompt(nameof(ChoicePrompt), FreetextRatingValidator));
             AddDialog(new TextPrompt(nameof(TextPrompt)));
+            AddDialog(new AttachmentPrompt(nameof(AttachmentPrompt)));
             AddDialog(new WaterfallDialog(nameof(WaterfallDialog), new WaterfallStep[]
             {
                 ReportYesOrNoStepAsync,
@@ -66,6 +73,8 @@ namespace VFatumbot
                 RateImportanceStepAsync,
                 RateStrangenessStepAsync,
                 RateSynchronictyStepAsync,
+                UploadPhotosYesOrNoStepAsync,
+                GetPhotoAttachmentsStepAsync,
                 WriteReportStepAsync,
                 FinishStepAsync
             }));
@@ -171,7 +180,6 @@ namespace VFatumbot
                     await stepContext.EndDialogAsync(cancellationToken: cancellationToken);
                     return await stepContext.BeginDialogAsync(nameof(MainDialog), cancellationToken: cancellationToken);
             }
-
         }
 
         private async Task<DialogTurnResult> SetIntentYesOrNoStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
@@ -381,15 +389,98 @@ namespace VFatumbot
             return await stepContext.PromptAsync(nameof(ChoicePrompt), options, cancellationToken);
         }
 
-        private async Task<DialogTurnResult> WriteReportStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
+        private async Task<DialogTurnResult> UploadPhotosYesOrNoStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
         {
-            _logger.LogInformation($"TripReportDialog.WriteReportStepAsync");
+            _logger.LogInformation($"TripReportDialog.UploadPhotosYesOrNoStepAsync");
 
             var answers = (ReportAnswers)stepContext.Values[ReportAnswersKey];
 
             answers.Rating_Synchronicty = stepContext.Context.Activity.Text;
 
-            var promptOptions = new PromptOptions { Prompt = MessageFactory.Text("Lastly, write up your report. (Limited to being sent in one message.)") };
+            var options = new PromptOptions()
+            {
+                Prompt = MessageFactory.Text("Do you want want to upload any photos?"),
+                RetryPrompt = MessageFactory.Text("That is not a valid choice."),
+                Choices = new List<Choice>()
+                                {
+                                    new Choice() { Value = "Yes" },
+                                    new Choice() { Value = "No" }
+                                }
+            };
+
+            return await stepContext.PromptAsync(nameof(ChoicePrompt), options, cancellationToken);
+        }
+
+        private async Task<DialogTurnResult> GetPhotoAttachmentsStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
+        {
+            _logger.LogInformation($"TripReportDialog.GetPhotoAttachmentsStepAsync[{((FoundChoice)stepContext.Result).Value}]");
+
+            var answers = (ReportAnswers)stepContext.Values[ReportAnswersKey];
+
+            switch (((FoundChoice)stepContext.Result).Value)
+            {
+                case "Yes":
+                    var promptOptions = new PromptOptions {
+                        Prompt = MessageFactory.Text("Upload any photos you took now. Send them all at once as sending is limited to one message."),
+                        RetryPrompt = MessageFactory.Text("That is not a valid upload."),
+                    };
+                    return await stepContext.PromptAsync(nameof(AttachmentPrompt), promptOptions, cancellationToken);
+
+                case "No":
+                default:
+                    return await stepContext.NextAsync(cancellationToken: cancellationToken);
+            }
+        }
+
+        private async Task<DialogTurnResult> WriteReportStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
+        {
+            _logger.LogInformation($"TripReportDialog.WriteReportStepAsync");
+
+            var callbackOptions = (CallbackOptions)stepContext.Options;
+            var answers = (ReportAnswers)stepContext.Values[ReportAnswersKey];
+            var userProfile = await _userProfileAccessor.GetAsync(stepContext.Context);
+
+            try
+            {
+                if (stepContext.Context.Activity.Attachments != null && stepContext.Context.Activity.Attachments.Count >= 1)
+                {
+                    // Intercept image attachments here
+                    foreach (Attachment attachment in stepContext.Context.Activity.Attachments)
+                    {
+                        if (answers.PhotoURLs == null)
+                        {
+                            answers.PhotoURLs = new string[] { };
+                        }
+
+                        if (attachment.ContentType.StartsWith("image/", StringComparison.InvariantCulture))
+                        {
+                            var webClient = new WebClient();
+                            byte[] attachmentImgBytes = webClient.DownloadData(attachment.ContentUrl);
+
+                            // Upload to Imgur
+                            // uses: https://github.com/lauchacarro/Imgur-NetCore
+                            var client = new ImgurClient(Consts.IMGUR_API_CLIENT_ID, Consts.IMGUR_API_CLIENT_SECRET);
+                            var endpoint = new ImageEndpoint(client);
+                            var image = await endpoint.UploadImageUrlAsync(
+                                //"http://randonauts.com/randonauts.jpg",
+                                attachment.ContentUrl,
+                                title: ("Randonaut Trip Report Photo" + ((callbackOptions.NearestPlaces != null && callbackOptions.NearestPlaces.Length >= 1) ? (" from " + callbackOptions.NearestPlaces[answers.PointNumberVisited]) : " from somewhere in the multiverse")), // TODO fuck I should stop trying to condense so much into one line in C#. I'm just drunk and lazy ATM. Now I'm just copy/pasting the same code in the morning sober... I'll come back to this really long one day and laugh :D
+                                description: (userProfile.UserId + " " + callbackOptions.ShortCodes[answers.PointNumberVisited])
+                                );
+                            answers.PhotoURLs = answers.PhotoURLs.Concat(new string[] { image.Link }).ToArray();
+
+                            // Code for if passing the photo URLs over to reddit self posting logic directly
+                            //answers.PhotoURLs = answers.PhotoURLs.Concat(new string[] { attachment.ContentUrl }).ToArray();
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                await stepContext.Context.SendActivityAsync(MessageFactory.Text($"Sorry, there was an error uploading your photo. ({e.GetType().Name}: {e.Message})"));
+            }
+
+            var promptOptions = new PromptOptions { Prompt = MessageFactory.Text("Lastly, write up your report. Typing up your report is limited to being sent in one message.") };
             return await stepContext.PromptAsync(nameof(TextPrompt), promptOptions, cancellationToken);
         }
 
@@ -398,8 +489,8 @@ namespace VFatumbot
             _logger.LogInformation($"TripReportDialog.FinishStepAsync");
 
             var callbackOptions = (CallbackOptions)stepContext.Options;
-            var userProfile = await _userProfileAccessor.GetAsync(stepContext.Context);
             var answers = (ReportAnswers)stepContext.Values[ReportAnswersKey];
+            var userProfile = await _userProfileAccessor.GetAsync(stepContext.Context);
             answers.Report = ""+stepContext.Result;
 
             await StoreReportInDB(stepContext.Context, callbackOptions, answers);
@@ -410,23 +501,84 @@ namespace VFatumbot
                 intentSuggestions = string.Join(", ", userProfile.IntentSuggestions) + "\n\n";
             }
 
-            await Helpers.PostTripReportToRedditAsync("User Trip Report",
+            // Prep photo URLs
+            string photos = "";
+            if (answers.PhotoURLs != null)
+            {
+                int i = 0;
+                foreach (string photoURL in answers.PhotoURLs)
+                {
+                    i++;
+                    photos += $"[Trip Photo #{i}]({photoURL})\n\n";
+                }
+            }
+
+            await PostTripReportToRedditAsync("Randonaut Trip Report"
+                + ((callbackOptions.NearestPlaces != null && callbackOptions.NearestPlaces.Length >= 1) ? (" from " + callbackOptions.NearestPlaces[answers.PointNumberVisited]) : " from somewhere in the multiverse"), // TODO fuck I should stop trying to condense so much into one line in C#. I'm just drunk and lazy ATM.
                 callbackOptions.Messages[answers.PointNumberVisited].Replace(Environment.NewLine, "\n\n") +
-                "Intent: " + answers.Intent + "\n\n" +
-                intentSuggestions +
+                "\n\n" +
+                "Report: " + answers.Report + "\n\n" +
+                "\n\n\n\n" +
+                photos + "\n\n" +
+                "\n\n\n\n" +
                 "What 3 words address: " + callbackOptions.What3Words[answers.PointNumberVisited] + "\n\n" +
-                "Astounding? " + answers.WasFuckingAmazing + "\n\n" +
-                "Rating scale 1: " + answers.Rating_Meaningfulness + "\n\n" +
-                "Rating scale 2: " + answers.Rating_Emotional + "\n\n" +
-                "Rating scale 3: " + answers.Rating_Importance + "\n\n" +
-                "Rating scale 4: " + answers.Rating_Strangeness + "\n\n" +
-                "Rating scale 5: " + answers.Rating_Synchronicty
+                "Intent set: " + answers.Intent + "\n\n" +
+                "Intents suggested: " + intentSuggestions + "\n\n" +
+                "Artifact(s) collected?: " + answers.ArtifactCollected + "\n\n" +
+                "Was a 'wow and astounding' trip? " + answers.WasFuckingAmazing + "\n\n" +
+                "\n\n" +
+                "\n\n" +
+                "Trip ratings:\n\n" +
+                "Meaningfulness: " + answers.Rating_Meaningfulness + "\n\n" +
+                "Emotional: " + answers.Rating_Emotional + "\n\n" +
+                "Importance: " + answers.Rating_Importance + "\n\n" +
+                "Strangeness: " + answers.Rating_Strangeness + "\n\n" +
+                "Synchronicity: " + answers.Rating_Synchronicty + "\n\n" +
+                 "\n\n" +
+                 "\n\n" +
+                 userProfile.UserId + " " + callbackOptions.ShortCodes[answers.PointNumberVisited],
+                answers.PhotoURLs
                 );
 
             await stepContext.Context.SendActivityAsync(MessageFactory.Text("Thanks for the report!"), cancellationToken);
 
             //await ((AdapterWithErrorHandler)stepContext.Context.Adapter).RepromptMainDialog(stepContext.Context, _mainDialog, cancellationToken, callbackOptions);
             return await stepContext.ReplaceDialogAsync(nameof(MainDialog), cancellationToken: cancellationToken);
+        }
+
+        // Post a trip report to the /r/randonauts subreddit
+        // Reddit API used: https://github.com/sirkris/Reddit.NET/
+        protected async Task PostTripReportToRedditAsync(string title, string text, string[] photoURLs)
+        {
+            // all posts are done under the user "thereal***REMOVED***"
+            var redditApi = new RedditAPI(appId: Consts.REDDIT_APP_ID,
+                                          appSecret: Consts.REDDIT_APP_SECRET,
+                                          refreshToken: Consts.REDDIT_REFRESH_TOKEN,
+                                          accessToken: Consts.REDDIT_ACCESS_TOKEN);
+
+            //var subreddit = redditApi.Subreddit("randonauts"); // TODO: after go live. get comrade to add thereal***REMOVED*** as approved submitter
+            var subreddit = redditApi.Subreddit("soliaxplayground");
+
+            // Just seeing if we can upload images, was getting 403 error responses, even so it would be uploaded to the subreddit itself, not the user's post.
+            // TODO: one day figure if we can upload images to posts
+            //string photos = "";
+            //if (photoURLs != null)
+            //{
+            //    int i = 0;
+            //    foreach (string photoURL in photoURLs)
+            //    {
+            //        var webClient = new WebClient();
+            //        byte[] imageBytes = webClient.DownloadData(photoURL);
+
+            //        i++;
+            //        ImageUploadResult imgRes = await subreddit.UploadImgAsync(imageBytes, $"Trip Photo #{i}");
+            //        photos += $"![Trip Photo #{i}]({imgRes.ImgSrc})" + "\n\n";
+            //    }
+
+            //    text += "\n\n" + photos;
+            //}
+
+            await subreddit.SelfPost(title: title, selfText: text).SubmitAsync();
         }
 
         private async Task StoreReportInDB(ITurnContext context, CallbackOptions options, ReportAnswers answers)
@@ -491,9 +643,12 @@ namespace VFatumbot
                         isb.Append("center,");
                         isb.Append("latitude,");
                         isb.Append("longitude,");
-                        isb.Append("distance,");
-                        isb.Append("initial_bearing,");
-                        isb.Append("final_bearing,");
+                        if (attractor.center.bearing != null)
+                        { 
+                            isb.Append("distance,");
+                            isb.Append("initial_bearing,");
+                            isb.Append("final_bearing,");
+                        }
                         isb.Append("side,");
                         isb.Append("distance_err,");
                         isb.Append("radiusM,");
@@ -545,9 +700,12 @@ namespace VFatumbot
                         isb.Append($"geography::Point({attractor.center.point.latitude},{attractor.center.point.longitude}, 4326),");
                         isb.Append($"'{attractor.center.point.latitude}',");
                         isb.Append($"'{attractor.center.point.longitude}',");
-                        isb.Append($"'{attractor.center.bearing.distance}',");
-                        isb.Append($"'{attractor.center.bearing.initialBearing}',");
-                        isb.Append($"'{attractor.center.bearing.finalBearing}',");
+                        if (attractor.center.bearing != null)
+                        {
+                            isb.Append($"'{attractor.center.bearing.distance}',");
+                            isb.Append($"'{attractor.center.bearing.initialBearing}',");
+                            isb.Append($"'{attractor.center.bearing.finalBearing}',");
+                        }
                         isb.Append($"'{attractor.side}',");
                         isb.Append($"'{attractor.distanceErr}',");
                         isb.Append($"'{attractor.radiusM}',");

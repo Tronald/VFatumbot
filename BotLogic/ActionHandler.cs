@@ -162,6 +162,7 @@ namespace VFatumbot.BotLogic
                             var pointTypesArray = new PointTypes[ida.Count()];
                             var numWaterPointsSkippedArray = new int[ida.Count()];
                             var what3WordsArray = new string[ida.Count()];
+                            var nearestPlacesArray = new string[ida.Count()];
 
                             for (int i = 0; i < ida.Count(); i++)
                             {
@@ -207,6 +208,7 @@ namespace VFatumbot.BotLogic
                                 pointTypesArray[i] = PointTypes.Attractor;
                                 numWaterPointsSkippedArray[i] = numWaterPointsSkipped;
                                 what3WordsArray[i] = ""+w3wResult.words;
+                                nearestPlacesArray[i] = "" + w3wResult.nearestPlace;
 
                                 await turnContext.SendActivityAsync(CardFactory.CreateLocationCardsReply(incoords, w3wResult), cancellationToken);
                                 await Helpers.SendPushNotification(userProfile, "Point Generated", mesg);
@@ -220,7 +222,8 @@ namespace VFatumbot.BotLogic
                                 PointTypes = pointTypesArray,
                                 GeneratedPoints = ida,
                                 NumWaterPointsSkipped = numWaterPointsSkippedArray,
-                                What3Words = what3WordsArray
+                                What3Words = what3WordsArray,
+                                NearestPlaces = nearestPlacesArray
                             };
                             await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(context, mainDialog, cancellationToken, callbackOptions);
                         }
@@ -276,6 +279,7 @@ namespace VFatumbot.BotLogic
                             var pointTypesArray = new PointTypes[ida.Count()];
                             var numWaterPointsSkippedArray = new int[ida.Count()];
                             var what3WordsArray = new string[ida.Count()];
+                            var nearestPlacesArray = new string[ida.Count()];
 
                             for (int i = 0; i < ida.Count(); i++)
                             {
@@ -321,6 +325,7 @@ namespace VFatumbot.BotLogic
                                 pointTypesArray[i] = PointTypes.Void;
                                 numWaterPointsSkippedArray[i] = numWaterPointsSkipped;
                                 what3WordsArray[i] = "" + w3wResult.words;
+                                nearestPlacesArray[i] = "" + w3wResult.nearestPlace;
 
                                 await turnContext.SendActivityAsync(CardFactory.CreateLocationCardsReply(incoords, w3wResult), cancellationToken);
                                 await Helpers.SendPushNotification(userProfile, "Point Generated", mesg);
@@ -334,7 +339,8 @@ namespace VFatumbot.BotLogic
                                 PointTypes = pointTypesArray,
                                 GeneratedPoints = ida,
                                 NumWaterPointsSkipped = numWaterPointsSkippedArray,
-                                What3Words = what3WordsArray
+                                What3Words = what3WordsArray,
+                                NearestPlaces = nearestPlacesArray
                             };
                             await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(context, mainDialog, cancellationToken, callbackOptions);
                         }
@@ -403,6 +409,7 @@ namespace VFatumbot.BotLogic
                             var pointTypesArray = new PointTypes[ida.Count()];
                             var numWaterPointsSkippedArray = new int[ida.Count()];
                             var what3WordsArray = new string[ida.Count()];
+                            var nearestPlacesArray = new string[ida.Count()];
 
                             for (int i = 0; i < ida.Count(); i++)
                             {
@@ -448,6 +455,7 @@ namespace VFatumbot.BotLogic
                                 pointTypesArray[i] = PointTypes.Anomaly;
                                 numWaterPointsSkippedArray[i] = numWaterPointsSkipped;
                                 what3WordsArray[i] = "" + w3wResult.words;
+                                nearestPlacesArray[i] = "" + w3wResult.nearestPlace;
 
                                 await turnContext.SendActivityAsync(CardFactory.CreateLocationCardsReply(incoords, w3wResult), cancellationToken);
                                 await Helpers.SendPushNotification(userProfile, "Point Generated", mesg);
@@ -461,7 +469,8 @@ namespace VFatumbot.BotLogic
                                 PointTypes = pointTypesArray,
                                 GeneratedPoints = ida,
                                 NumWaterPointsSkipped = numWaterPointsSkippedArray,
-                                What3Words = what3WordsArray
+                                What3Words = what3WordsArray,
+                                NearestPlaces = nearestPlacesArray
                             };
                             await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(context, mainDialog, cancellationToken, callbackOptions);
                         }
@@ -561,7 +570,8 @@ namespace VFatumbot.BotLogic
                                 }
                             },
                             NumWaterPointsSkipped = new int[] { numWaterPointsSkipped },
-                            What3Words = new string[] { w3wResult.words }
+                            What3Words = new string[] { w3wResult.words },
+                            NearestPlaces = new string[] { w3wResult.nearestPlace }
                         };
                         await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(turnContext, mainDialog, cancellationToken, callbackOptions);
                     }, cancellationToken);
@@ -686,12 +696,14 @@ namespace VFatumbot.BotLogic
                             var attPointTypesArray = new PointTypes[ida.Count()];
                             var attNumWaterPointsSkippedArray = new int[ida.Count()];
                             var attWhat3WordsArray = new string[ida.Count()];
+                            var attNearestPlacesArray = new string[ida.Count()];
 
                             var voiShortCodesArray = new string[ida.Count()];
                             var voiMessagesArray = new string[ida.Count()];
                             var voiPointTypesArray = new PointTypes[ida.Count()];
                             var voiNumWaterPointsSkippedArray = new int[ida.Count()];
                             var voiWhat3WordsArray = new string[ida.Count()];
+                            var voiNearestPlacesArray = new string[ida.Count()];
 
                             for (int i = 0; i < idacou; i++)
                             {
@@ -715,6 +727,7 @@ namespace VFatumbot.BotLogic
                                     attPointTypesArray[i] = PointTypes.PairAttractor;
                                     attNumWaterPointsSkippedArray[i] = numAttWaterPointsSkipped;
                                     attWhat3WordsArray[i] = "" + w3wResult1.words;
+                                    attNearestPlacesArray[i] = "" + w3wResult1.nearestPlace;
                                 }
 
                                 incoords = new double[] { voi[i].X.center.point.latitude, voi[i].X.center.point.longitude };
@@ -736,6 +749,7 @@ namespace VFatumbot.BotLogic
                                     voiPointTypesArray[i] = PointTypes.PairVoid;
                                     voiNumWaterPointsSkippedArray[i] = numAttWaterPointsSkipped;
                                     voiWhat3WordsArray[i] = "" + w3wResult2.words;
+                                    voiNearestPlacesArray[i] = "" + w3wResult2.nearestPlace;
                                 }
                             }
 
@@ -754,7 +768,8 @@ namespace VFatumbot.BotLogic
                                 PointTypes = attPointTypesArray.Concat(voiPointTypesArray).ToArray(),
                                 GeneratedPoints = att.Concat(voi).ToArray(),
                                 NumWaterPointsSkipped = attNumWaterPointsSkippedArray.Concat(voiNumWaterPointsSkippedArray).ToArray(),
-                                What3Words = attWhat3WordsArray.Concat(voiWhat3WordsArray).ToArray()
+                                What3Words = attWhat3WordsArray.Concat(voiWhat3WordsArray).ToArray(),
+                                NearestPlaces = attNearestPlacesArray.Concat(voiNearestPlacesArray).ToArray(),
                             };
                             await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(context, mainDialog, cancellationToken, callbackOptions);
                         }
@@ -943,7 +958,8 @@ namespace VFatumbot.BotLogic
                             PointTypes = new PointTypes[] { PointTypes.MysteryPoint },
                             GeneratedPoints = ida,
                             NumWaterPointsSkipped = new int[] { numWaterPointsSkipped },
-                            What3Words = new string[] { w3wResult.words }
+                            What3Words = new string[] { w3wResult.words },
+                            NearestPlaces = new string[] { w3wResult.nearestPlace }
                         };
                         await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(context, mainDialog, cancellationToken, callbackOptions);
                     }, cancellationToken);

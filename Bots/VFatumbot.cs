@@ -69,6 +69,12 @@ namespace VFatumbot
             mConversationDataAccessor = _conversationState.CreateProperty<ConversationData>(nameof(ConversationData));
             var conversationData = await mConversationDataAccessor.GetAsync(turnContext, () => new ConversationData());
 
+            // Print info about image attachments
+            //if (turnContext.Activity.Attachments != null)
+            //{
+            //    await turnContext.SendActivityAsync(JsonConvert.SerializeObject(turnContext.Activity.Attachments), cancellationToken: cancellationToken);
+            //}
+
             // Save user's ID
             userProfile.UserId = Helpers.Sha256Hash(turnContext.Activity.From.Id);
 

@@ -21,7 +21,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" Version="$(AspNetCoreAppRuntimeFrameworkVersion)">
       <IsImplicitlyDefined>true</IsImplicitlyDefined>
-      <PrivateAssets>All</PrivateAssets>
+      <PrivateAssets>all</PrivateAssets>
       <Publish>true</Publish>
     </PackageReference>
     <PackageReference Include="Microsoft.Bot.Builder.Integration.AspNet.Core" Version="4.5.3" />
