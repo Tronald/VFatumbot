@@ -145,21 +145,14 @@ namespace VFatumbot
 
         public async Task ShowCurrentSettingsAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
         {
-
             var userProfile = await _userProfileAccessor.GetAsync(stepContext.Context);
             await _userProfileAccessor.SetAsync(stepContext.Context, userProfile);
 
-            await stepContext.Context.SendActivityAsync(MessageFactory.Text($"ID is {userProfile.UserId}"), cancellationToken);
-
-            await stepContext.Context.SendActivityAsync(MessageFactory.Text($"Push ID is {userProfile.PushUserId}"), cancellationToken);
-
-            await stepContext.Context.SendActivityAsync(MessageFactory.Text($"Currently scanning? {userProfile.IsScanning}"), cancellationToken);
-
-            await stepContext.Context.SendActivityAsync(MessageFactory.Text("Water points will be " + (userProfile.IsIncludeWaterPoints ? "included" : "skipped")), cancellationToken);
-
-            await stepContext.Context.SendActivityAsync(MessageFactory.Text($"Current location is {userProfile.Latitude},{userProfile.Longitude}"), cancellationToken);
-
-            await stepContext.Context.SendActivityAsync(MessageFactory.Text($"Current radius is {userProfile.Radius}m"), cancellationToken);
+            await stepContext.Context.SendActivityAsync(MessageFactory.Text(
+                $"Your anonymized ID is {userProfile.UserId}.\n\n" +
+                $"Water points will be {(userProfile.IsIncludeWaterPoints ? "included" : "skipped")}.\n\n" +
+                $"Current location is {userProfile.Latitude},{userProfile.Longitude}.\n\n" +
+                $"Current radius is {userProfile.Radius}m.\n\n"));
         }
 
         private PromptOptions GetPromptOptions(string prompt)
