@@ -513,15 +513,19 @@ namespace VFatumbot
                 }
             }
 
+            var incoords = new double[] { callbackOptions.GeneratedPoints[answers.PointNumberVisited].X.center.point.latitude,
+                                          callbackOptions.GeneratedPoints[answers.PointNumberVisited].X.center.point.longitude };
+
             await PostTripReportToRedditAsync("Randonaut Trip Report"
                 + ((callbackOptions.NearestPlaces != null && callbackOptions.NearestPlaces.Length >= 1) ? (" from " + callbackOptions.NearestPlaces[answers.PointNumberVisited]) : " from somewhere in the multiverse"), // TODO fuck I should stop trying to condense so much into one line in C#. I'm just drunk and lazy ATM.
                 callbackOptions.Messages[answers.PointNumberVisited].Replace(Environment.NewLine, "\n\n") +
                 "\n\n" +
                 "Report: " + answers.Report + "\n\n" +
+                "[Map](https://www.google.com/maps/place/" + incoords[0] + "+" + incoords[1] + "/@" + incoords[0] + "+" + incoords[1] + ",18z)\n\n" +
                 "\n\n\n\n" +
                 photos + "\n\n" +
                 "\n\n\n\n" +
-                "What 3 words address: " + callbackOptions.What3Words[answers.PointNumberVisited] + "\n\n" +
+                "What 3 words address: https://what3words.com/" + callbackOptions.What3Words[answers.PointNumberVisited] + "\n\n" +
                 "Intent set: " + answers.Intent + "\n\n" +
                 "Intents suggested: " + intentSuggestions + "\n\n" +
                 "Artifact(s) collected?: " + answers.ArtifactCollected + "\n\n" +
