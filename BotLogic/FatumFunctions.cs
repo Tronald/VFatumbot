@@ -209,6 +209,8 @@ namespace VFatumbot.BotLogic
                     resp += "Type: Attractor" + "\n\n";
                     resp += "Radius: " + (int)(ida.X.radiusM) + "m" + "\n\n";
                     resp += "Power: " + ida.X.power.ToString("#0.00", System.Globalization.CultureInfo.InvariantCulture) + "\n\n";
+                    resp += "Bearing: " + ida.X.center.bearing.distance.ToString("#0.00m", System.Globalization.CultureInfo.InvariantCulture) + "/"
+                                        + ida.X.center.bearing.finalBearing.ToString("#0.00°", System.Globalization.CultureInfo.InvariantCulture) + "\n\n";
                 }
             }
             else if (ida.X.type == 2)
@@ -218,6 +220,8 @@ namespace VFatumbot.BotLogic
                     resp += "Type: Void" + "\n\n";
                     resp += "Radius: " + (int)(ida.X.radiusM) + "m" + "\n\n";
                     resp += "Power: " + (1 / ida.X.power).ToString("#0.00", System.Globalization.CultureInfo.InvariantCulture) + "\n\n";
+                    resp += "Bearing: " + ida.X.center.bearing.distance.ToString("#0.00m", System.Globalization.CultureInfo.InvariantCulture) + "/"
+                                        + ida.X.center.bearing.finalBearing.ToString("#0.00°", System.Globalization.CultureInfo.InvariantCulture) + "\n\n";
                 }
             }
             string pl = "";
