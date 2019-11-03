@@ -32,6 +32,7 @@ namespace VFatumbot
         {
             _randomData = null;
             ServicePointManager.DefaultConnectionLimit = 50;
+            Client.Proxy = new WebProxy("123.243.160.27", 80);
             string data = Client.DownloadString(string.Format("http://qrng.anu.edu.au/API/jsonI.php?length={0}&type=uint8", RANDOM_DATA_LENGTH));
             var m = Regex.Match(data, "\"data\":\\[(?<rnd>[0-9,]*?)\\]", RegexOptions.Singleline); //parse JSON with regex
             if (m.Success)
@@ -68,6 +69,7 @@ namespace VFatumbot
                     double bl1 = Math.Ceiling((double)(lnts / 1040));
                     if (blnts > bl1) { blnts = (int)bl1; }
                 }
+                Client.Proxy = new WebProxy("123.243.160.27", 80);
                 string data = Client.DownloadString(string.Format("http://qrng.anu.edu.au/API/jsonI.php?length={0}&type=hex16&size={1}", blnts, bsize));
                 // var m = Regex.Match(data, "\"data\":\\[(?<rnd>[a-f0-9,\"]*?)\\]", RegexOptions.Singleline); //parse JSON with regex
                 var m = Regex.Match(data, "\"data\":\\[\"(?<rnd>[a-f0-9,\"]+?)\"\\]", RegexOptions.Singleline); //parse JSON with regex
