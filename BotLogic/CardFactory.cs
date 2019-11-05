@@ -37,8 +37,8 @@ namespace VFatumbot
             var reply = MessageFactory.Attachment(attachments);
             reply.AttachmentLayout = AttachmentLayoutTypes.Carousel;
             reply.Attachments.Add(CreateGoogleMapCard(incoords, w3wResult));
-            reply.Attachments.Add(CreateGoogleStreetViewCard(incoords));
-            reply.Attachments.Add(CreateGoogleEarthCard(incoords));
+            //reply.Attachments.Add(CreateGoogleStreetViewCard(incoords));
+            //reply.Attachments.Add(CreateGoogleEarthCard(incoords));
             return reply;
         }
 
@@ -48,16 +48,19 @@ namespace VFatumbot
                 new CardImage("https://maps.googleapis.com/maps/api/staticmap?&markers=color:red%7Clabel:C%7C" + incoords[0] + "+" + incoords[1] + "&zoom=15&size=" + Consts.THUMBNAIL_SIZE + "&maptype=roadmap&key=" + Consts.GOOGLE_MAPS_API_KEY),
             };
 
-            var cardAction = new CardAction(ActionTypes.OpenUrl, "Open", value: "https://www.google.com/maps/place/" + incoords[0] + "+" + incoords[1] + "/@" + incoords[0] + "+" + incoords[1] + ",18z");
+            var cardAction = new CardAction(ActionTypes.OpenUrl, "Maps", value: "https://www.google.com/maps/place/" + incoords[0] + "+" + incoords[1] + "/@" + incoords[0] + "+" + incoords[1] + ",18z");
 
             var buttons = new List<CardAction> {
-                cardAction
+                cardAction,
+                new CardAction(ActionTypes.OpenUrl, "Street View", value: "https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=" + incoords[0] + "," + incoords[1] + "&fov=90&heading=235&pitch=10"),
+                new CardAction(ActionTypes.OpenUrl, "Earth", value: "https://earth.google.com/web/@" + incoords[0] + "," + incoords[1] + ",146.726a,666.616d,35y,0h,45t,0r")
             };
 
             var heroCard = new HeroCard
             {
-                Title = "Google Map",
-                Text = w3wResult != null ? ("What 3 Words address: " + w3wResult.words) : null,
+                //Title = "Google Map",
+                //Text = w3wResult != null ? ("What 3 Words address: " + w3wResult.words) : null,
+                Title = w3wResult != null ? ("What 3 Words address: " + w3wResult.words) : null,
                 Images = images,
                 Buttons = buttons,
                 Tap = cardAction
