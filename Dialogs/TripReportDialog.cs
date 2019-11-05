@@ -734,14 +734,15 @@ namespace VFatumbot
 
                         using (SqlCommand command = new SqlCommand(insertSql, connection))
                         {
+                            // TODO: another way to execute the command? As it's only insert and don't need to read the results here
                             using (SqlDataReader reader = command.ExecuteReader())
                             {
                                 string commandResult = "";
                                 while (reader.Read())
                                 {
-                                    commandResult += $"{reader.GetString(0)} {reader.GetString(1)}\n";
+                                    //commandResult += $"{reader.GetString(0)} {reader.GetString(1)}\n";
                                 }
-                                context.SendActivityAsync(commandResult);
+                                //context.SendActivityAsync(commandResult);
                             }
                         }
                     }

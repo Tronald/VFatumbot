@@ -1,6 +1,8 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Data.SqlClient;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Bot.Builder;
@@ -118,7 +120,53 @@ namespace VFatumbot.BotLogic
 
                 await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(turnContext, mainDialog, cancellationToken);
             }
+            else if (command.Equals("/kpi"))
+            {
+                // Quick hack to see KPIs
+
+                // TODO: get more like DAU etc
+
+                // How many reports today?
+                await Task.Run(() =>
+                {
+                    SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
+                    builder.DataSource = Consts.DB_SERVER;
+                    builder.UserID = Consts.DB_USER;
+                    builder.Password = Consts.DB_PASSWORD;
+                    builder.InitialCatalog = Consts.DB_NAME;
+
+                    using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+                    {
+                        connection.Open();
+
+                        StringBuilder ssb = new StringBuilder();
+                        ssb.Append("SELECT COUNT(*) FROM ");
+#if RELEASE_PROD
+                        ssb.Append("reports);
+#else
+                        ssb.Append("reports_dev");
+#endif
+                        ssb.Append(";");
+                        Console.WriteLine("SQL:" + ssb.ToString());
+
+                        using (SqlCommand command = new SqlCommand(ssb.ToString(), connection))
+                        {
+                            using (SqlDataReader reader = command.ExecuteReader())
+                            {
+                                string commandResult = "";
+                                while (reader.Read())
+                                {
+                                    commandResult += $"{reader.GetInt32(0)}\n";
+                                }
+                                turnContext.SendActivityAsync(MessageFactory.Text(commandResult));
+                            }
+                        }
+                    }
+                });
+
+                await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(turnContext, mainDialog, cancellationToken);
         }
+    }
 
         public async Task AttractorActionAsync(ITurnContext turnContext, UserProfile userProfile, CancellationToken cancellationToken, MainDialog mainDialog, bool doScan = false)
         {
