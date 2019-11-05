@@ -525,7 +525,7 @@ namespace VFatumbot
                 "\n\n\n\n" +
                 photos + "\n\n" +
                 "\n\n\n\n" +
-                "What 3 words address: https://what3words.com/" + callbackOptions.What3Words[answers.PointNumberVisited] + "\n\n" +
+                "What 3 words address: ["+ callbackOptions.What3Words[answers.PointNumberVisited] + "](https://what3words.com/" + callbackOptions.What3Words[answers.PointNumberVisited] + ")\n\n" +
                 "Intent set: " + answers.Intent + "\n\n" +
                 "Intents suggested: " + intentSuggestions + "\n\n" +
                 "Artifact(s) collected?: " + answers.ArtifactCollected + "\n\n" +
