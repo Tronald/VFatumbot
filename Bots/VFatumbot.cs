@@ -138,8 +138,25 @@ namespace VFatumbot
             }
             else if (!string.IsNullOrEmpty(turnContext.Activity.Text) && turnContext.Activity.Text.EndsWith("help", StringComparison.InvariantCultureIgnoreCase))
             {
-                var reply = MessageFactory.Text(System.IO.File.ReadAllText("help.txt"));
-                await turnContext.SendActivityAsync(reply, cancellationToken);
+                if (turnContext.Activity.ChannelId.Equals("telegram"))
+                {
+                    /* Beta test report from Telegram users sending the help command:
+                     * Sorry, it looks like something went wrong. ErrorResponseException: Operation returned an invalid status code 'BadRequest'    at Microsoft.Bot.Connector.Conversations.ReplyToActivityWithHttpMessagesAsync(String conversationId, String activityId, Activity activity, Dictionary2 customHeaders, CancellationToken cancellationToken)    at Microsoft.Bot.Connector.ConversationsExtensions.ReplyToActivityAsync(IConversations operations, String conversationId, String activityId, Activity activity, CancellationToken cancellationToken)    at Microsoft.Bot.Builder.BotFrameworkAdapter.SendActivitiesAsync(ITurnContext turnContext, Activity[] activities, CancellationToken cancellationToken)    at Microsoft.Bot.Builder.TurnContext.<>c__DisplayClass22_0.<<SendActivitiesAsync>g__SendActivitiesThroughAdapter|1>d.MoveNext() --- End of stack trace from previous location where exception was thrown ---    at Microsoft.Bot.Builder.TurnContext.SendActivityAsync(IActivity activity, CancellationToken cancellationToken)    at VFatumbot.VFatumbot1.OnTurnAsync(ITurnContext turnContext, CancellationToken cancellationToken) in /Users/simon/Dropbox (Personal)/Fatum/github/VFatumbot/Bots/VFatumbot.cs:line 142    at Microsoft.Bot.Builder.BotFrameworkAdapter.TenantIdWorkaroundForTeamsMiddleware.OnTurnAsync(ITurnContext turnContext, NextDelegate next, CancellationToken cancellationToken)    at Microsoft.Bot.Builder.MiddlewareSet.ReceiveActivityWithStatusAsync(ITurnContext turnContext, BotCallbackHandler callback, CancellationToken cancellationToken)    at Microsoft.Bot.Builder.BotAdapter.RunPipelineAsync(ITurnContext turnContext, BotCallbackHandler callback, CancellationToken cancellationToken)
+                     * I think the message is too long so will split it up here...
+                     * another drunk quick fix :D
+                     */
+                    var help = System.IO.File.ReadAllText("help.txt");
+                    var first = help.Substring(0, (int)(help.Length / 2));
+                    var last = help.Substring((int)(help.Length / 2), (int)(help.Length / 2));
+
+                    await turnContext.SendActivityAsync(MessageFactory.Text(first), cancellationToken);
+                    await turnContext.SendActivityAsync(MessageFactory.Text(last), cancellationToken);
+                }
+                else
+                {
+                    var reply = MessageFactory.Text(System.IO.File.ReadAllText("help.txt"));
+                    await turnContext.SendActivityAsync(reply, cancellationToken);
+                }
                 if (!string.IsNullOrEmpty(turnContext.Activity.Text) && !userProfile.IsLocationSet)
                 {
                     await turnContext.SendActivityAsync(MessageFactory.Text(Consts.NO_LOCATION_SET_MSG), cancellationToken);
