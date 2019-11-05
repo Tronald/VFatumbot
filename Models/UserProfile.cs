@@ -18,6 +18,7 @@ namespace VFatumbot
 #endif
         public int Radius { get; set; } = Consts.DEFAULT_RADIUS;
         public bool IsIncludeWaterPoints { get; set; } = true;
+        public bool IsDisplayGoogleThumbnails { get; set; } = false;
 
         // OneSignal Player/User ID for push notifications
         public string PushUserId { get; set; }

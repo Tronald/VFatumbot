@@ -127,7 +127,7 @@ namespace VFatumbot
 
                     var incoords = new double[] { lat, lon };
                     var w3wResult = await Helpers.GetWhat3WordsAddressAsync(incoords);
-                    await turnContext.SendActivityAsync(CardFactory.CreateLocationCardsReply(incoords, w3wResult), cancellationToken);
+                    await turnContext.SendActivityAsync(CardFactory.CreateLocationCardsReply(incoords, userProfile.IsDisplayGoogleThumbnails, w3wResult), cancellationToken);
 
                     await mUserProfileAccessor.SetAsync(turnContext, userProfile);
                     await _userState.SaveChangesAsync(turnContext, false, cancellationToken);

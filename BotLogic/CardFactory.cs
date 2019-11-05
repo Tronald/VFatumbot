@@ -31,30 +31,37 @@ namespace VFatumbot
             return reply;
         }
 
-        public static IMessageActivity CreateLocationCardsReply(double[] incoords, dynamic w3wResult = null)
+        public static IMessageActivity CreateLocationCardsReply(double[] incoords, bool streetAndEarthThumbnails = false, dynamic w3wResult = null)
         {
             var attachments = new List<Attachment>();
             var reply = MessageFactory.Attachment(attachments);
             reply.AttachmentLayout = AttachmentLayoutTypes.Carousel;
-            reply.Attachments.Add(CreateGoogleMapCard(incoords, w3wResult));
-            //reply.Attachments.Add(CreateGoogleStreetViewCard(incoords));
-            //reply.Attachments.Add(CreateGoogleEarthCard(incoords));
+            reply.Attachments.Add(CreateGoogleMapCard(incoords, streetAndEarthThumbnails, w3wResult));
+            if (streetAndEarthThumbnails)
+            {
+                reply.Attachments.Add(CreateGoogleStreetViewCard(incoords));
+                reply.Attachments.Add(CreateGoogleEarthCard(incoords));
+            }
             return reply;
         }
 
-        public static Attachment CreateGoogleMapCard(double[] incoords, dynamic w3wResult = null)
+        public static Attachment CreateGoogleMapCard(double[] incoords, bool streetAndEarthThumbnails = false, dynamic w3wResult = null)
         {
             var images = new List<CardImage> {
                 new CardImage("https://maps.googleapis.com/maps/api/staticmap?&markers=color:red%7Clabel:C%7C" + incoords[0] + "+" + incoords[1] + "&zoom=15&size=" + Consts.THUMBNAIL_SIZE + "&maptype=roadmap&key=" + Consts.GOOGLE_MAPS_API_KEY),
             };
 
-            var cardAction = new CardAction(ActionTypes.OpenUrl, "Maps", value: "https://www.google.com/maps/place/" + incoords[0] + "+" + incoords[1] + "/@" + incoords[0] + "+" + incoords[1] + ",18z");
+            var cardAction = new CardAction(ActionTypes.OpenUrl, streetAndEarthThumbnails ? "Open" : "Map", value: "https://www.google.com/maps/place/" + incoords[0] + "+" + incoords[1] + "/@" + incoords[0] + "+" + incoords[1] + ",18z");
 
             var buttons = new List<CardAction> {
                 cardAction,
-                new CardAction(ActionTypes.OpenUrl, "Street View", value: "https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=" + incoords[0] + "," + incoords[1] + "&fov=90&heading=235&pitch=10"),
-                new CardAction(ActionTypes.OpenUrl, "Earth", value: "https://earth.google.com/web/@" + incoords[0] + "," + incoords[1] + ",146.726a,666.616d,35y,0h,45t,0r")
             };
+
+            if (!streetAndEarthThumbnails)
+            {
+                buttons.Add(new CardAction(ActionTypes.OpenUrl, "Street View", value: "https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=" + incoords[0] + "," + incoords[1] + "&fov=90&heading=235&pitch=10"));
+                buttons.Add(new CardAction(ActionTypes.OpenUrl, "Earth", value: "https://earth.google.com/web/@" + incoords[0] + "," + incoords[1] + ",146.726a,666.616d,35y,0h,45t,0r"));
+            }
 
             var heroCard = new HeroCard
             {

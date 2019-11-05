@@ -30,6 +30,7 @@ namespace VFatumbot
                 RadiusStepAsync,
                 WaterPointsStepAsync,
                 UpdateWaterPointsYesOrNoStepAsync,
+                GoogleThumbnailsDisplayToggleStepAsync,
                 FinishSettingsStepAsync
             }));
 
@@ -129,6 +130,29 @@ namespace VFatumbot
 
             await _userProfileAccessor.SetAsync(stepContext.Context, userProfile);
 
+            return await stepContext.PromptAsync(nameof(ChoicePrompt), GetPromptOptions("Also display Google Street View and Earth thumbnails?"), cancellationToken);
+        }
+
+        private async Task<DialogTurnResult> GoogleThumbnailsDisplayToggleStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
+        {
+            _logger.LogInformation("SettingsDialog.UpdateGoogleThumbnailsDisplayToggleStepAsync[{((FoundChoice)stepContext.Result).Value}]");
+
+            var userProfile = await _userProfileAccessor.GetAsync(stepContext.Context);
+            await _userProfileAccessor.SetAsync(stepContext.Context, userProfile);
+
+            switch (((FoundChoice)stepContext.Result).Value)
+            {
+                case "Yes":
+                    userProfile.IsDisplayGoogleThumbnails = true;
+                    break;
+                case "No":
+                default:
+                    userProfile.IsDisplayGoogleThumbnails = false;
+                    break;
+            }
+
+            await _userProfileAccessor.SetAsync(stepContext.Context, userProfile);
+
             return await stepContext.NextAsync();
         }
 
@@ -151,6 +175,7 @@ namespace VFatumbot
             await stepContext.Context.SendActivityAsync(MessageFactory.Text(
                 $"Your anonymized ID is {userProfile.UserId}.\n\n" +
                 $"Water points will be {(userProfile.IsIncludeWaterPoints ? "included" : "skipped")}.\n\n" +
+                $"Street View and Earth thumbnails will be {(userProfile.IsDisplayGoogleThumbnails ? "displayed" : "hidden")}.\n\n" +
                 $"Current location is {userProfile.Latitude},{userProfile.Longitude}.\n\n" +
                 $"Current radius is {userProfile.Radius}m.\n\n"));
         }
