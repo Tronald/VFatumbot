@@ -4,50 +4,50 @@
     {
         // Azure App ID
 
-//#if RELEASE_PROD
-        public const string APP_ID = "";
-/*#else
-        public const string APP_ID = "";
-#endif*/
+#if RELEASE_PROD
+        public const string APP_ID = "***REMOVED***";
+#else
+        public const string APP_ID = "***REMOVED***";
+#endif
 
         // Azure Cosmos DB credentials
-//#if RELEASE_PROD
-        public const string COSMOS_DB_NAME = "";
-        public const string COSMOS_CONTAINER_NAME = "";
-        public const string COSMOS_DB_URI = "";
-        public const string COSMOS_DB_KEY = "";
-/*#else
-        public const string COSMOS_DB_NAME = "";
-        public const string COSMOS_CONTAINER_NAME = "";
-        public const string COSMOS_DB_URI = "";
-        public const string COSMOS_DB_KEY = "";
-#endif*/
+#if RELEASE_PROD
+        public const string COSMOS_DB_NAME = "***REMOVED***";
+        public const string COSMOS_CONTAINER_NAME = "botdata";
+        public const string COSMOS_DB_URI = "***REMOVED***";
+        public const string COSMOS_DB_KEY = "***REMOVED***";
+#else
+        public const string COSMOS_DB_NAME = "v***REMOVED***";
+        public const string COSMOS_CONTAINER_NAME = "botdata";
+        public const string COSMOS_DB_URI = "https://v***REMOVED***.documents.azure.com:443/";
+        public const string COSMOS_DB_KEY = "***REMOVED***";
+#endif
 
         // Google Maps API key
-        public const string GOOGLE_MAPS_API_KEY = "";
+        public const string GOOGLE_MAPS_API_KEY = "***REMOVED***";
 
         // OneSignal for Push Notifications
-        public const string ONE_SIGNAL_APP_ID = "";
-        public const string ONE_SIGNAL_API_KEY = "";
+        public const string ONE_SIGNAL_APP_ID = "***REMOVED***";
+        public const string ONE_SIGNAL_API_KEY = "***REMOVED***";
 
         // Reddit API for posting trip reports
-        public const string REDDIT_APP_ID = "";
-        public const string REDDIT_APP_SECRET = "";
-        public const string REDDIT_REFRESH_TOKEN = "";
-        public const string REDDIT_ACCESS_TOKEN = "";
+        public const string REDDIT_APP_ID = "***REMOVED***";
+        public const string REDDIT_APP_SECRET = "***REMOVED***";
+        public const string REDDIT_REFRESH_TOKEN = "***REMOVED***";
+        public const string REDDIT_ACCESS_TOKEN = "***REMOVED***";
 
         // SQL server for posting trip reports/generated points
-        public const string DB_SERVER = "";
-        public const string DB_USER = "";
-        public const string DB_PASSWORD = "";
-        public const string DB_NAME = "";
+        public const string DB_SERVER = "***REMOVED***";
+        public const string DB_USER = "***REMOVED***";
+        public const string DB_PASSWORD = "***REMOVED***";
+        public const string DB_NAME = "***REMOVED***";
 
         // https://what3words.com API key
-        public const string W3W_API_KEY = "";
+        public const string W3W_API_KEY = "***REMOVED***";
 
         // For uploading user trip report photos
-        public const string IMGUR_API_CLIENT_ID = "";
-        public const string IMGUR_API_CLIENT_SECRET = "";
+        public const string IMGUR_API_CLIENT_ID = "***REMOVED***";
+        public const string IMGUR_API_CLIENT_SECRET = "***REMOVED***";
 
         // Google Maps etc thumbnail sizes to use in reply cards
         public const string THUMBNAIL_SIZE = "400x400";

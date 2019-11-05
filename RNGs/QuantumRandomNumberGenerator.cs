@@ -32,8 +32,12 @@ namespace VFatumbot
         {
             _randomData = null;
             ServicePointManager.DefaultConnectionLimit = 50;
+#if RELEASE_PROD
             Client.Proxy = new WebProxy("123.243.160.27", 80);
             string data = Client.DownloadString(string.Format("http://qrng.anu.edu.au/API/jsonI.php?length={0}&type=uint8", RANDOM_DATA_LENGTH));
+#else
+            string data = Client.DownloadString(string.Format("http://fatumemeplex.randonauts.com/anu/API/jsonI.php?length={0}&type=uint8", RANDOM_DATA_LENGTH));
+#endif
             var m = Regex.Match(data, "\"data\":\\[(?<rnd>[0-9,]*?)\\]", RegexOptions.Singleline); //parse JSON with regex
             if (m.Success)
             {
@@ -69,8 +73,12 @@ namespace VFatumbot
                     double bl1 = Math.Ceiling((double)(lnts / 1040));
                     if (blnts > bl1) { blnts = (int)bl1; }
                 }
+#if RELEASE_PROD
                 Client.Proxy = new WebProxy("123.243.160.27", 80);
                 string data = Client.DownloadString(string.Format("http://qrng.anu.edu.au/API/jsonI.php?length={0}&type=hex16&size={1}", blnts, bsize));
+#else
+                string data = Client.DownloadString(string.Format("http://fatumemeplex.randonauts.com/anu/API/jsonI.php?length={0}&type=hex16&size={1}", blnts, bsize));
+#endif
                 // var m = Regex.Match(data, "\"data\":\\[(?<rnd>[a-f0-9,\"]*?)\\]", RegexOptions.Singleline); //parse JSON with regex
                 var m = Regex.Match(data, "\"data\":\\[\"(?<rnd>[a-f0-9,\"]+?)\"\\]", RegexOptions.Singleline); //parse JSON with regex
                 if (m.Success)
@@ -132,7 +140,7 @@ namespace VFatumbot
         }
         private WebClient _client;
 
-        #region Dispose
+#region Dispose
         protected virtual void Dispose(bool disposing)
         {
             if (disposing)
@@ -159,7 +167,7 @@ namespace VFatumbot
         }
 
         private bool _disposed;
-        #endregion
+#endregion
     }
 
     public abstract class BaseRandomProvider : Random

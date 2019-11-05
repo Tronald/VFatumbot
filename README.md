@@ -70,11 +70,13 @@ let directLine = window.WebChat.createDirectLine({
 });
 `
 1. Goto Configuration under App Service Settings in the left-menu, and set the copy the `MicrosoftAppId` to Consts.cs and appsettings.json. Copy the `MicrosoftAppPassword` to appsettings.json too.
+1. Goto the App Service -> Configuration -> Application settings -> "New application setting" and add key:ASPNETCORE_ENVIRONMENT with a value of "production" or "development". This determines which appsettings.<env>.json is used.
 1. Download the Bot Framework Emulator if you want to test it locally.
 1. Make sure the project can build with no errors in Visual Studio.
 1. If so you're ready to deploy, click Build -> Publish to Azure. Log in with your Azure credentials and then chose the App Service you created above and publish it. Further deployments can be done from Build -> Publish to \<botname\> Web Deploy.
 1. Try accessing https://\<your bot name\>.azurewebsites.net/bot.html to try out your bot!
 1. If you want to integrate it with Facebook etc, look into the documentation on setting up other Channels.
+
 
 
 
