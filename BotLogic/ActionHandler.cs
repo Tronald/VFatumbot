@@ -28,6 +28,7 @@ namespace VFatumbot.BotLogic
             if (command.StartsWith("/ongshat", StringComparison.InvariantCulture))
             {
                 await turnContext.SendActivityAsync("You're not authorized to do that!");
+                await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(turnContext, mainDialog, cancellationToken);
             }
             else if (command.StartsWith("/getattractor", StringComparison.InvariantCulture))
             {
