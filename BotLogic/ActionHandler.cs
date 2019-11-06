@@ -143,7 +143,7 @@ namespace VFatumbot.BotLogic
                         StringBuilder ssb = new StringBuilder();
                         ssb.Append("SELECT COUNT(*) FROM ");
 #if RELEASE_PROD
-                        ssb.Append("reports);
+                        ssb.Append("reports");
 #else
                         ssb.Append("reports_dev");
 #endif
