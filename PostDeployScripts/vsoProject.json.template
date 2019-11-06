@@ -1,0 +1,12 @@
+{
+  "name": "{WEB_SITE_NAME}",
+  "description": "{WEB_SITE_NAME} Azure Bot Service Code",
+  "capabilities": {
+    "versioncontrol": {
+      "sourceControlType": "Git"
+    },
+    "processTemplate": {
+      "templateTypeId": "***REMOVED***"
+    }
+  }
+}

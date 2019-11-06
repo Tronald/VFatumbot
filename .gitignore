@@ -4,9 +4,5 @@ obj/**
 bin/**
 runtimes/**
 libAttract*
-deploy.sh
-publish.cmd
-Properties/PublishProfiles/**
-PostDeployScripts/*
 .DS_Store
 .vs/*
