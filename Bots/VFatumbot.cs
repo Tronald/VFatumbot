@@ -138,6 +138,11 @@ namespace VFatumbot
             }
             else if (!string.IsNullOrEmpty(turnContext.Activity.Text) && turnContext.Activity.Text.EndsWith("help", StringComparison.InvariantCultureIgnoreCase))
             {
+#if RELEASE_PROD
+                var help = System.IO.File.ReadAllText("help-prod.txt");
+#else
+                var help = System.IO.File.ReadAllText("help-dev.txt");
+#endif
                 if (turnContext.Activity.ChannelId.Equals("telegram"))
                 {
                     /* Beta test report from Telegram users sending the help command:
@@ -145,7 +150,7 @@ namespace VFatumbot
                      * I think the message is too long so will split it up here...
                      * another drunk quick fix :D
                      */
-                    var help = System.IO.File.ReadAllText("help.txt");
+
                     var first = help.Substring(0, (int)(help.Length / 2));
                     var last = help.Substring((int)(help.Length / 2), (int)(help.Length / 2));
 
@@ -154,8 +159,7 @@ namespace VFatumbot
                 }
                 else
                 {
-                    var reply = MessageFactory.Text(System.IO.File.ReadAllText("help.txt"));
-                    await turnContext.SendActivityAsync(reply, cancellationToken);
+                    await turnContext.SendActivityAsync(MessageFactory.Text(help), cancellationToken);
                 }
                 if (!string.IsNullOrEmpty(turnContext.Activity.Text) && !userProfile.IsLocationSet)
                 {
