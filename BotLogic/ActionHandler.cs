@@ -166,8 +166,38 @@ namespace VFatumbot.BotLogic
                 });
 
                 await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(turnContext, mainDialog, cancellationToken);
+            }
+            else if (command.Equals("/resetflags"))
+            {
+                userProfile.IsScanning = false;
+
+                await turnContext.SendActivityAsync(MessageFactory.Text($"Flags reset"), cancellationToken);
+
+                await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(turnContext, mainDialog, cancellationToken);
+            }
+            else if (command.Equals("/test"))
+            {
+                await turnContext.SendActivityAsync(MessageFactory.Text($"Fatumbot {Consts.APP_VERSION} is alive. Checking QRNG source too..."), cancellationToken);
+
+                await turnContext.Adapter.ContinueConversationAsync(Consts.APP_ID, turnContext.Activity.GetConversationReference(),
+                   async (context, token) =>
+                   {
+                       QuantumRandomNumberGenerator rnd = new QuantumRandomNumberGenerator();
+                       try
+                       {
+                           rnd.NextHex(10);
+                           await turnContext.SendActivityAsync(MessageFactory.Text($"QRNG source is alive too!"), cancellationToken);
+                       }
+                       catch (Exception e)
+                       {
+                           await turnContext.SendActivityAsync(MessageFactory.Text($"QRNG source seems dead at the moment :("), cancellationToken);
+                       }
+                   },
+                   cancellationToken);
+
+                await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(turnContext, mainDialog, cancellationToken);
+            }
         }
-    }
 
         public async Task AttractorActionAsync(ITurnContext turnContext, UserProfile userProfile, CancellationToken cancellationToken, MainDialog mainDialog, bool doScan = false)
         {
