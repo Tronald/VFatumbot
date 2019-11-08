@@ -139,9 +139,9 @@ namespace VFatumbot
             else if (!string.IsNullOrEmpty(turnContext.Activity.Text) && turnContext.Activity.Text.EndsWith("help", StringComparison.InvariantCultureIgnoreCase))
             {
 #if RELEASE_PROD
-                var help = System.IO.File.ReadAllText("help-prod.txt");
+                var help = System.IO.File.ReadAllText("help-prod.txt").Replace("APP_VERISON", Consts.APP_VERSION);
 #else
-                var help = System.IO.File.ReadAllText("help-dev.txt");
+                var help = System.IO.File.ReadAllText("help-dev.txt").Replace("APP_VERISON", Consts.APP_VERSION);
 #endif
                 if (turnContext.Activity.ChannelId.Equals("telegram"))
                 {

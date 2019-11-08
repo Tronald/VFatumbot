@@ -1,6 +1,6 @@
 Welcome to Fatumbot! This is a tool to experiment with the ideas that the mind and matter are connected in more ways than currently understood, and that by visiting random (in the true sense of the word) places one can journey outside of their normal probability paths.
 
-v3.1.1 is in beta test! There may still be some issues. New features:
+APP_VERSION is in beta test! There may still be some issues. New features:
 
 - Making it more accessible to people not only on Telegram via Facebook, WebChat etc.
 - Ability to set location by searching addresses.

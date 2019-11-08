@@ -2,8 +2,13 @@
 {
     public class Consts
     {
-        // Azure App ID
+#if RELEASE_PROD
+        public const string APP_VERSION = "3.1.2β";
+#else
+        public const string APP_VERSION = "3.1.3β";
+#endif
 
+        // Azure App ID
 #if RELEASE_PROD
         public const string APP_ID = "***REMOVED***";
 #else
