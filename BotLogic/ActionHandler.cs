@@ -150,9 +150,9 @@ namespace VFatumbot.BotLogic
                         ssb.Append(";");
                         Console.WriteLine("SQL:" + ssb.ToString());
 
-                        using (SqlCommand command = new SqlCommand(ssb.ToString(), connection))
+                        using (SqlCommand sqlCommand = new SqlCommand(ssb.ToString(), connection))
                         {
-                            using (SqlDataReader reader = command.ExecuteReader())
+                            using (SqlDataReader reader = sqlCommand.ExecuteReader())
                             {
                                 string commandResult = "";
                                 while (reader.Read())
