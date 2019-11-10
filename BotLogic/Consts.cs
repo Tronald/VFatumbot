@@ -54,6 +54,14 @@
         public const string IMGUR_API_CLIENT_ID = "***REMOVED***";
         public const string IMGUR_API_CLIENT_SECRET = "***REMOVED***";
 
+#if RELEASE_PROD
+        //public const string PROXY = "***REMOVED***";
+        public const string PROXY = "***REMOVED***";
+#else
+        //public const string PROXY = "***REMOVED***";
+        public const string PROXY = "***REMOVED***";
+#endif
+
         // Google Maps etc thumbnail sizes to use in reply cards
         public const string THUMBNAIL_SIZE = "400x400";
 

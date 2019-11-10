@@ -31,24 +31,8 @@ namespace VFatumbot
         private void FetchRandomData()
         {
             _randomData = null;
-#if RELEASE_PROD
             ServicePointManager.DefaultConnectionLimit = 50;
-
-            Client.Proxy = new WebProxy("123.243.160.27", 80);
-            //Client.Proxy = new WebProxy("127.0.0.1", 6683);
             string data = Client.DownloadString(string.Format("http://qrng.anu.edu.au/API/jsonI.php?length={0}&type=uint8", RANDOM_DATA_LENGTH));
-
-            Dispose();
-#else
-            ServicePointManager.DefaultConnectionLimit = 50;
-
-            //string data = Client.DownloadString(string.Format("http://fatumemeplex.randonauts.com/anu/API/jsonI.php?length={0}&type=uint8", RANDOM_DATA_LENGTH));
-
-            //Client.Proxy = new WebProxy("123.243.160.27", 80);
-            string data = Client.DownloadString(string.Format("http://qrng.anu.edu.au/API/jsonI.php?length={0}&type=uint8", RANDOM_DATA_LENGTH));
-
-            Dispose();
-#endif
             var m = Regex.Match(data, "\"data\":\\[(?<rnd>[0-9,]*?)\\]", RegexOptions.Singleline); //parse JSON with regex
             if (m.Success)
             {
@@ -73,6 +57,7 @@ namespace VFatumbot
             _randomData = null;
             string result = "";
             int cou = 0;
+            ServicePointManager.DefaultConnectionLimit = 50;
             while ((lnts > 0) && (cou < 3))
             {
                 int blnts = 500;
@@ -83,24 +68,7 @@ namespace VFatumbot
                     double bl1 = Math.Ceiling((double)(lnts / 1040));
                     if (blnts > bl1) { blnts = (int)bl1; }
                 }
-#if RELEASE_PROD
-                ServicePointManager.DefaultConnectionLimit = 50;
-
-                Client.Proxy = new WebProxy("123.243.160.27", 80);
-                //Client.Proxy = new WebProxy("127.0.0.1", 6683);
                 string data = Client.DownloadString(string.Format("http://qrng.anu.edu.au/API/jsonI.php?length={0}&type=hex16&size={1}", blnts, bsize));
-
-                Dispose();
-#else
-                ServicePointManager.DefaultConnectionLimit = 50;
-
-                //string data = Client.DownloadString(string.Format("http://fatumemeplex.randonauts.com/anu/API/jsonI.php?length={0}&type=hex16&size={1}", blnts, bsize));
-
-                //Client.Proxy = new WebProxy("123.243.160.27", 80);
-                string data = Client.DownloadString(string.Format("http://qrng.anu.edu.au/API/jsonI.php?length={0}&type=hex16&size={1}", blnts, bsize));
-
-                Dispose();
-#endif
                 // var m = Regex.Match(data, "\"data\":\\[(?<rnd>[a-f0-9,\"]*?)\\]", RegexOptions.Singleline); //parse JSON with regex
                 var m = Regex.Match(data, "\"data\":\\[\"(?<rnd>[a-f0-9,\"]+?)\"\\]", RegexOptions.Singleline); //parse JSON with regex
                 if (m.Success)
@@ -158,7 +126,10 @@ namespace VFatumbot
 
         protected WebClient Client
         {
-            get { return _client ?? (_client = new WebClient()); }
+            get { return _client ?? (_client = new WebClient() {
+                                                    //Proxy = new WebProxy(Consts.PROXY)
+                                                });
+            }
             set { _client = value; }
         }
         private WebClient _client;
