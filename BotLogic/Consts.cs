@@ -59,7 +59,7 @@
         public const string PROXY = "***REMOVED***";
 #else
         //public const string PROXY = "***REMOVED***";
-        public const string PROXY = "***REMOVED***";
+        //public const string PROXY = "***REMOVED***";
 #endif
 
         // Google Maps etc thumbnail sizes to use in reply cards
