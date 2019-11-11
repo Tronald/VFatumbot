@@ -752,6 +752,9 @@ namespace VFatumbot
 
         private string SanitizeString(string input)
         {
+            if (input == null)
+                return "";
+
             return input.Replace(",", "\'");
         }
 
