@@ -755,7 +755,7 @@ namespace VFatumbot
             if (input == null)
                 return "";
 
-            return input.Replace(",", "\'");
+            return input.Replace(",", "\\'");
         }
 
         private string[] SanitizeString(string [] input)
@@ -763,7 +763,7 @@ namespace VFatumbot
             string[] result = new string[input.Length];
             for (int i = 0; i < input.Length; i++)
             {
-                result[i] = input[i].Replace(",", "\'");
+                result[i] = input[i].Replace(",", "\\'");
             }
             return result;
         }
