@@ -16,16 +16,13 @@
 #endif
 
         // Azure Cosmos DB credentials
-#if RELEASE_PROD
         public const string COSMOS_DB_NAME = "***REMOVED***";
-        public const string COSMOS_CONTAINER_NAME = "botdata";
         public const string COSMOS_DB_URI = "***REMOVED***";
         public const string COSMOS_DB_KEY = "***REMOVED***";
-#else
-        public const string COSMOS_DB_NAME = "v***REMOVED***";
+#if RELEASE_PROD
         public const string COSMOS_CONTAINER_NAME = "botdata";
-        public const string COSMOS_DB_URI = "https://v***REMOVED***.documents.azure.com:443/";
-        public const string COSMOS_DB_KEY = "***REMOVED***";
+#else
+        public const string COSMOS_CONTAINER_NAME = "devbotdata";
 #endif
 
         // Google Maps API key
