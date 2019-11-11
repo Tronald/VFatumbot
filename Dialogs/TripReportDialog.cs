@@ -679,20 +679,20 @@ namespace VFatumbot
                         isb.Append($"'{options.PointTypes[i].ToString()}',"); // point type enum as a string
                         if (!string.IsNullOrEmpty(answers.Intent))
                         {
-                            isb.Append($"'{answers.Intent}',"); // intent set by user
+                            isb.Append($"'{SanitizeString(answers.Intent)}',"); // intent set by user
                         }
                         isb.Append($"'{(answers.ArtifactCollected ? 1 : 0)}',"); // were artifact(s) collected?
                         isb.Append($"'{(answers.WasFuckingAmazing ? 1 : 0)}',"); // "yes" or "no" to the was it wow and astounding question
-                        isb.Append($"'{answers.Rating_Meaningfulness}',"); // Rating_Meaningfulness
-                        isb.Append($"'{answers.Rating_Emotional}',"); // Rating_Emotional
-                        isb.Append($"'{answers.Rating_Importance}',"); // Rating_Importance
-                        isb.Append($"'{answers.Rating_Strangeness}',"); // Rating_Strangeness
-                        isb.Append($"'{answers.Rating_Synchronicty}',"); // Rating_Synchronicty
-                        isb.Append($"'{answers.Report}',"); // text
+                        isb.Append($"'{SanitizeString(answers.Rating_Meaningfulness)}',"); // Rating_Meaningfulness
+                        isb.Append($"'{SanitizeString(answers.Rating_Emotional)}',"); // Rating_Emotional
+                        isb.Append($"'{SanitizeString(answers.Rating_Importance)}',"); // Rating_Importance
+                        isb.Append($"'{SanitizeString(answers.Rating_Strangeness)}',"); // Rating_Strangeness
+                        isb.Append($"'{SanitizeString(answers.Rating_Synchronicty)}',"); // Rating_Synchronicty
+                        isb.Append($"'{SanitizeString(answers.Report)}',"); // text
                         isb.Append($"'{(answers.PhotoURLs != null ? string.Join(",", answers.PhotoURLs) : "")}',"); // photos
                         if (userProfile.IntentSuggestions != null && userProfile.IntentSuggestions.Length > 0)
                         {
-                            isb.Append($"'{string.Join(",", userProfile.IntentSuggestions)}',"); // intent suggestions
+                            isb.Append($"'{string.Join(",", SanitizeString(userProfile.IntentSuggestions))}',"); // intent suggestions
                             isb.Append($"'{userProfile.TimeIntentSuggestionsSet}',");
                         }
                         isb.Append($"'{(!string.IsNullOrEmpty(options.What3Words[i])  ? options.What3Words[i] : "")}',");
@@ -748,6 +748,21 @@ namespace VFatumbot
                     }
                 }
             });
+        }
+
+        private string SanitizeString(string input)
+        {
+            return input.Replace(",", "\'");
+        }
+
+        private string[] SanitizeString(string [] input)
+        {
+            string[] result = new string[input.Length];
+            for (int i = 0; i < input.Length; i++)
+            {
+                result[i] = input[i].Replace(",", "\'");
+            }
+            return result;
         }
     }
 }
