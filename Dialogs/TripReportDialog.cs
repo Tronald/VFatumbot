@@ -693,7 +693,6 @@ namespace VFatumbot
                         if (userProfile.IntentSuggestions != null && userProfile.IntentSuggestions.Length > 0)
                         {
                             isb.Append($"'{string.Join(",", SanitizeString(userProfile.IntentSuggestions))}',"); // intent suggestions
-                            isb.Append($"'{userProfile.TimeIntentSuggestionsSet}',");
                         }
                         isb.Append($"'{(!string.IsNullOrEmpty(options.What3Words[i])  ? options.What3Words[i] : "")}',");
                         isb.Append($"'{options.ShortCodes[i]}',");
