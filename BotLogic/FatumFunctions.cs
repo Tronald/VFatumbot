@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Globalization;
 using System.Runtime.InteropServices;
 using Microsoft.Bot.Builder;
 
@@ -10,11 +9,6 @@ namespace VFatumbot.BotLogic
     {
         public static double significance = 2.5; //significance absolute threshold for calculation, recommended value is in [2.5, 3.0]. Higher value speeds up the calculation resulting in less findings.
         public static double filtering_significance = 4.0; //significance absolute threshold for filtering of results, recommended value is 4.0 or higher, this usualy produces 0..10 results
-        public static int pointid = 0;
-        public static int busythreads = 0;
-        public static bool resetdone = true;
-
-        public static NumberFormatInfo nfi = new NumberFormatInfo();
 
         [StructLayout(LayoutKind.Explicit)]
         public struct LatLng
@@ -82,42 +76,6 @@ namespace VFatumbot.BotLogic
             public FinalAttr X;
         }
 
-        //wrapper to prevent windows error dialog
-        //[Flags]
-        //public enum ErrorModes
-        //{
-        //    Default = 0x0,
-        //    FailCriticalErrors = 0x1,
-        //    NoGpFaultErrorBox = 0x2,
-        //    NoAlignmentFaultExcept = 0x4,
-        //    NoOpenFileErrorBox = 0x8000,
-        //}
-
-        //public class ErrorModeContext : IDisposable
-        //{
-        //    private readonly int _oldMode;
-        //    public ErrorModeContext(ErrorModes mode)
-        //    {
-        //        _oldMode = SetErrorMode((int)mode);
-        //    }
-        //    ~ErrorModeContext()
-        //    {
-        //        Dispose(false);
-        //    }
-        //    private void Dispose(bool disposing)
-        //    {
-        //        SetErrorMode(_oldMode);
-        //    }
-        //    public void Dispose()
-        //    {
-        //        Dispose(true);
-        //        GC.SuppressFinalize(this);
-        //    }
-        //    [DllImport("kernel32.dll")]
-        //    private static extern int SetErrorMode(int newMode);
-        //}
-        //end of wrapper
-
         [DllImport("libAttract", CallingConvention = CallingConvention.Cdecl)]
         public extern static int getOptimizedDots(double areaRadiusM); //how many coordinates is needed for requested radius, optimized for performance on larger areas
         [DllImport("libAttract", CallingConvention = CallingConvention.Cdecl)]
@@ -165,34 +123,11 @@ namespace VFatumbot.BotLogic
         [DllImport("libAttract", CallingConvention = CallingConvention.Cdecl)]
         private extern static void finalize(); // !!!CAUTION!!! this frees all engines systemwide, call before unloading the dll
 
-        public static string[] SplitIt1(string buf)
-        {
-            string[] seps = new string[] { "[", "]" };
-            string[] buf1 = buf.Split(seps, StringSplitOptions.RemoveEmptyEntries);
-            return buf1;
-        }
-        public static string[] SplitIt(string buf, string sep)
-        {
-            string[] seps = new string[] { sep, "\n\n" };
-            string[] buf1 = buf.Split(seps, StringSplitOptions.RemoveEmptyEntries);
-            return buf1;
-        }
-
-        public static string CutCommand(string buf)
-        {
-            string result = "";
-            string[] seps = new string[] { "@", "\n\n" };
-            string[] buf1 = buf.Split(seps, StringSplitOptions.RemoveEmptyEntries);
-            result = buf1[0];
-            return result;
-        }
-
         public static string Tolog(ITurnContext context, string type, FinalAttractor ida, string shortCode) //idas
         {
             string resp = "Intention Driven Anomaly found" + "\n\n";
             if (type == "blind") { resp = "Mystery Point Generated" + "\n\n"; }
 
-            pointid++;
             var code = "";
             if (type == "blind") { code = "X-" + shortCode; }
             else
@@ -268,7 +203,6 @@ namespace VFatumbot.BotLogic
             string resp = "Random Point generated" + "\n\n";
             if (type == "blind") { resp = "Mystery Point Generated" + "\n\n"; }
 
-            pointid++;
             var code = "";
             if (type == "blind") { code = "X-" + shortCode; }
             else
@@ -295,47 +229,38 @@ namespace VFatumbot.BotLogic
         {
             FinalAttractor[] result = new FinalAttractor[0];
             QuantumRandomNumberGenerator rnd = new QuantumRandomNumberGenerator();
-            resetdone = false;
-            //using (new ErrorModeContext(ErrorModes.FailCriticalErrors | ErrorModes.NoGpFaultErrorBox))
-            //{
-            //    try
-            //    {
-                    int al = 0; int cou = 0;
-                    while ((al == 0) && (cou < 10))
+            int al = 0; int cou = 0;
+            while ((al == 0) && (cou < 10))
+            {
+                cou++;
+                int No = getOptimizedDots(radius);
+                int bytesSize = requiredEnthropyBytes(No);
+                //byte[] byteinput = new byte[No]; // todo use byte or hex dependent on sourcetype
+                //rnd.NextBytes(byteinput); 
+                byte[] byteinput = rnd.NextHexBytes((int)bytesSize, meta);
+                if (meta == 1) { bytesSize = bytesSize * 10; }
+                int engin1 = initWithBytes(getHandle(), byteinput, bytesSize);
+                int fa = findAttractors(engin1, significance, filtering_significance);
+                al = getAttractorsLength(engin1);
+                result = new FinalAttractor[al];
+                unsafe
+                {
+                    IntPtr value;
+                    value = getAttractors(engin1, radius, startcoord, 23);
+                    if (value != null)
                     {
-                        cou++;
-                        int No = getOptimizedDots(radius);
-                        int bytesSize = requiredEnthropyBytes(No);
-                        //byte[] byteinput = new byte[No]; // todo use byte or hex dependent on sourcetype
-                        //rnd.NextBytes(byteinput); 
-                        byte[] byteinput = rnd.NextHexBytes((int)bytesSize, meta);
-                        if (meta == 1) { bytesSize = bytesSize * 10; }
-                        int engin1 = initWithBytes(getHandle(), byteinput, bytesSize);
-                        int fa = findAttractors(engin1, significance, filtering_significance);
-                        al = getAttractorsLength(engin1);
-                        result = new FinalAttractor[al];
-                        unsafe
+                        for (int j = 0; j < (int)al; j++)
                         {
-                            IntPtr value;
-                            value = getAttractors(engin1, radius, startcoord, 23);
-                            if (value != null)
-                            {
-                                for (int j = 0; j < (int)al; j++)
-                                {
-                                    result[j] = new FinalAttractor();
-                                    Marshal.PtrToStructure(value, result[j]);
-                                    value += 192;
-                                }
-                            }
-                            //releaseAttractors(value, al);
-                            //todo make release stuff here
+                            result[j] = new FinalAttractor();
+                            Marshal.PtrToStructure(value, result[j]);
+                            value += 192;
                         }
-                        releaseEngine(engin1);
                     }
-                    Console.WriteLine("IDA Calculation succeeded with " + result.Count() + " results");
-            //    }
-            //    catch (Exception e) { Console.WriteLine("IDA calculation error"); }
-            //}
+                    //releaseAttractors(value, al);
+                    //todo make release stuff here
+                }
+                releaseEngine(engin1);
+            }
             return result;
         }
 
@@ -364,68 +289,62 @@ namespace VFatumbot.BotLogic
             return source;
         }
 
-
         public static FinalAttractor[] SortIDA(FinalAttractor[] source, string idatype, int idacount)
         {
             FinalAttractor[] result = new FinalAttractor[0];
-            //try
-            //{
-                int att = 0; int voi = 0;
-                foreach (FinalAttractor ida in source)
-                {
-                    if (ida.X.type == 1) { att++; }
-                    else if (ida.X.type == 2) { voi++; }
-                }
-                FinalAttractor[] aatt = new FinalAttractor[att];
-                FinalAttractor[] avoi = new FinalAttractor[voi];
-                att = 0; voi = 0;
-                foreach (FinalAttractor ida in source)
-                {
-                    if (ida.X.type == 1) { aatt[att] = ida; att++; }
-                    else if (ida.X.type == 2) { avoi[voi] = ida; voi++; }
-                }
+            int att = 0; int voi = 0;
+            foreach (FinalAttractor ida in source)
+            {
+                if (ida.X.type == 1) { att++; }
+                else if (ida.X.type == 2) { voi++; }
+            }
+            FinalAttractor[] aatt = new FinalAttractor[att];
+            FinalAttractor[] avoi = new FinalAttractor[voi];
+            att = 0; voi = 0;
+            foreach (FinalAttractor ida in source)
+            {
+                if (ida.X.type == 1) { aatt[att] = ida; att++; }
+                else if (ida.X.type == 2) { avoi[voi] = ida; voi++; }
+            }
 
-                if ((idatype == "attractor") && (att > 0))
+            if ((idatype == "attractor") && (att > 0))
+            {
+                aatt = BubbleSort(aatt, att);
+                if (att < idacount) { idacount = att; }
+                result = new FinalAttractor[idacount];
+                for (int j = 0; j < idacount; j++)
                 {
-                    aatt = BubbleSort(aatt, att);
-                    if (att < idacount) { idacount = att; }
-                    result = new FinalAttractor[idacount];
-                    for (int j = 0; j < idacount; j++)
-                    {
-                        result[j] = aatt[j];
-                    }
+                    result[j] = aatt[j];
                 }
-                else
-                if ((idatype == "void") && (voi > 0))
+            }
+            else
+            if ((idatype == "void") && (voi > 0))
+            {
+                avoi = BubbleSort(avoi, voi);
+                if (voi < idacount) { idacount = voi; }
+                result = new FinalAttractor[idacount];
+                for (int j = 0; j < idacount; j++)
                 {
-                    avoi = BubbleSort(avoi, voi);
-                    if (voi < idacount) { idacount = voi; }
-                    result = new FinalAttractor[idacount];
-                    for (int j = 0; j < idacount; j++)
-                    {
-                        result[j] = avoi[j];
-                    }
+                    result[j] = avoi[j];
                 }
-                else
-                if ((idatype == "any") && ((att > 0) || (voi > 0)))
+            }
+            else
+            if ((idatype == "any") && ((att > 0) || (voi > 0)))
+            {
+                source = BubbleSort(source, source.Count());
+                if ((att + voi) < idacount) { idacount = att + voi; }
+                result = new FinalAttractor[idacount];
+                int c = 0;
+                int j = 0;
+                while ((j < source.Count()) && (c < idacount))
                 {
-                    source = BubbleSort(source, source.Count());
-                    if ((att + voi) < idacount) { idacount = att + voi; }
-                    result = new FinalAttractor[idacount];
-                    int c = 0;
-                    int j = 0;
-                    while ((j < source.Count()) && (c < idacount))
-                    {
-                        if ((source[j].X.type == 1) || (source[j].X.type == 2))
-                        { result[c] = source[j]; c++; j++; }
-                        else { j++; }
-                    }
+                    if ((source[j].X.type == 1) || (source[j].X.type == 2))
+                    { result[c] = source[j]; c++; j++; }
+                    else { j++; }
                 }
-            //}
-            //catch (Exception e) { Console.WriteLine("Sorting error"); }
+            }
             return result;
         }
-
 
         public static int GetDistance(double lat0, double lon0, double lat1, double lon1)
         {
@@ -465,7 +384,6 @@ namespace VFatumbot.BotLogic
                     dnn = true;
                 }
             }
-            Console.WriteLine("Pseudorandom Link Created");
             return result;
         }
 
@@ -487,10 +405,8 @@ namespace VFatumbot.BotLogic
                 double rlat;
                 double rlon;
 
-
                 rlat = rnd.Next(0, (int)dlat);
                 rlon = rnd.Next(0, (int)dlon);
-
 
                 lat1 = lat01 + (rlat / 1000000);
                 lon1 = lon01 + (rlon / 1000000);
@@ -503,7 +419,6 @@ namespace VFatumbot.BotLogic
                     dnn = true;
                 }
             }
-            Console.WriteLine("Quantum Link Created");
             return result;
         }
     }
