@@ -10,6 +10,7 @@ using Microsoft.Bot.Builder.Dialogs;
 using static VFatumbot.AdapterWithErrorHandler;
 using static VFatumbot.BotLogic.Enums;
 using static VFatumbot.BotLogic.FatumFunctions;
+using static VFatumbot.QuantumRandomNumberGeneratorWrapper;
 
 namespace VFatumbot.BotLogic
 {
@@ -182,7 +183,7 @@ namespace VFatumbot.BotLogic
                 await turnContext.Adapter.ContinueConversationAsync(Consts.APP_ID, turnContext.Activity.GetConversationReference(),
                    async (context, token) =>
                    {
-                       QuantumRandomNumberGenerator rnd = new QuantumRandomNumberGenerator();
+                       QuantumRandomNumberGeneratorWrapper rnd = new QuantumRandomNumberGeneratorWrapper(turnContext, mainDialog, cancellationToken); ;
                        try
                        {
                            rnd.NextHex(10);
@@ -190,12 +191,13 @@ namespace VFatumbot.BotLogic
                        }
                        catch (Exception e)
                        {
-                           await turnContext.SendActivityAsync(MessageFactory.Text($"QRNG source seems dead at the moment :("), cancellationToken);
+                           if (!e.GetType().Equals(typeof(CanIgnoreException)))
+                           {
+                               await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(turnContext, mainDialog, cancellationToken);
+                           }
                        }
                    },
                    cancellationToken);
-
-                await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(turnContext, mainDialog, cancellationToken);
             }
         }
 
@@ -232,7 +234,7 @@ namespace VFatumbot.BotLogic
                         int numWaterPointsSkipped = 0;
 
                     redo:
-                        FinalAttractor[] ida = GetIDA(userProfile.Location, userProfile.Radius, /*u* not used*/-1, doScan ? 1 : 0);
+                        FinalAttractor[] ida = GetIDA(userProfile.Location, userProfile.Radius, doScan ? 1 : 0, new QuantumRandomNumberGeneratorWrapper(context, mainDialog, token));
                         ida = SortIDA(ida, "attractor", idacou);
                         if (ida.Length > 0)
                         {
@@ -350,7 +352,7 @@ namespace VFatumbot.BotLogic
                         int numWaterPointsSkipped = 0;
 
                     redo:
-                        FinalAttractor[] ida = GetIDA(userProfile.Location, userProfile.Radius, /*u* not used*/-1, doScan ? 1 : 0);
+                        FinalAttractor[] ida = GetIDA(userProfile.Location, userProfile.Radius, doScan ? 1 : 0, new QuantumRandomNumberGeneratorWrapper(context, mainDialog, token));
                         ida = SortIDA(ida, "void", idacou);
                         if (ida.Length > 0)
                         {
@@ -481,7 +483,7 @@ namespace VFatumbot.BotLogic
                         int numWaterPointsSkipped = 0;
 
                     redo:
-                        FinalAttractor[] ida = GetIDA(userProfile.Location, userProfile.Radius, /*u* not used*/-1, doScan ? 1 : 0);
+                        FinalAttractor[] ida = GetIDA(userProfile.Location, userProfile.Radius, doScan ? 1 : 0, new QuantumRandomNumberGeneratorWrapper(context, mainDialog, token));
                         ida = SortIDA(ida, "any", idacou);
                         if (ida.Length > 0)
                         {
@@ -575,7 +577,7 @@ namespace VFatumbot.BotLogic
                 turnContext.Adapter.ContinueConversationAsync(Consts.APP_ID, turnContext.Activity.GetConversationReference(),
                     async (context, token) =>
                     {
-                        string[] intentSuggestions = await Helpers.GetIntentSuggestionsAsync();
+                        string[] intentSuggestions = await Helpers.GetIntentSuggestionsAsync(new QuantumRandomNumberGeneratorWrapper(context, mainDialog, token));
                         var suggestionsStr = string.Join(", ", intentSuggestions);
 
                         await turnContext.SendActivityAsync(MessageFactory.Text("Intent suggestions: " + suggestionsStr), cancellationToken);
@@ -602,7 +604,7 @@ namespace VFatumbot.BotLogic
                         int numWaterPointsSkipped = 0;
 
                     redo:
-                        double[] incoords = GetQuantumRandom(userProfile.Latitude, userProfile.Longitude, userProfile.Radius);
+                        double[] incoords = GetQuantumRandom(userProfile.Latitude, userProfile.Longitude, userProfile.Radius, new QuantumRandomNumberGeneratorWrapper(context, mainDialog, token));
 
                         // Skip water points?
                         if (!userProfile.IsIncludeWaterPoints)
@@ -624,7 +626,7 @@ namespace VFatumbot.BotLogic
                         }
 
                         string shortCode = Helpers.Crc32Hash(turnContext.Activity.From.Id + turnContext.Activity.Timestamp);
-                        string mesg = Tolog(turnContext, "random", (float)incoords[0], (float)incoords[1], suggestTime ? "qtime" : "quantum", shortCode);
+                        string mesg = Tolog(turnContext, "random", (float)incoords[0], (float)incoords[1], suggestTime ? "qtime" : "quantum", shortCode, new QuantumRandomNumberGeneratorWrapper(context, mainDialog, token));
                         await turnContext.SendActivityAsync(MessageFactory.Text(mesg), cancellationToken);
 
                         dynamic w3wResult = await Helpers.GetWhat3WordsAddressAsync(incoords);
@@ -692,7 +694,7 @@ namespace VFatumbot.BotLogic
                         }
 
                         string shortCode = Helpers.Crc32Hash(turnContext.Activity.From.Id + turnContext.Activity.Timestamp);
-                        string mesg = Tolog(turnContext, "random", (float)incoords[0], (float)incoords[1], "pseudo", shortCode);
+                        string mesg = Tolog(turnContext, "random", (float)incoords[0], (float)incoords[1], "pseudo", shortCode, new QuantumRandomNumberGeneratorWrapper(context, mainDialog, token));
                         await turnContext.SendActivityAsync(MessageFactory.Text(mesg), cancellationToken);
 
                         dynamic w3wResult = await Helpers.GetWhat3WordsAddressAsync(incoords);
@@ -760,7 +762,7 @@ namespace VFatumbot.BotLogic
                         int numVoiWaterPointsSkipped = 0;
                         string mesg = "";
 
-                        FinalAttractor[] ida = GetIDA(userProfile.Location, userProfile.Radius, /*u* not used*/-1, doScan ? 1 : 0);
+                        FinalAttractor[] ida = GetIDA(userProfile.Location, userProfile.Radius, doScan ? 1 : 0, new QuantumRandomNumberGeneratorWrapper(context, mainDialog, token));
                         FinalAttractor[] att = SortIDA(ida, "attractor", idacou);
                         FinalAttractor[] voi = SortIDA(ida, "void", idacou);
                         if (att.Count() > voi.Count())
@@ -879,7 +881,7 @@ namespace VFatumbot.BotLogic
                         int numWaterPointsSkipped = 0;
 
                     redoIDA:
-                        FinalAttractor[] ida = GetIDA(userProfile.Location, userProfile.Radius, -1/*not used?*/);
+                        FinalAttractor[] ida = GetIDA(userProfile.Location, userProfile.Radius, 0, new QuantumRandomNumberGeneratorWrapper(context, mainDialog, token));
 
                         FinalAttractor[] att = SortIDA(ida, "attractor", 1);
                         if (att.Length > 0 && !userProfile.IsIncludeWaterPoints)
@@ -945,7 +947,7 @@ namespace VFatumbot.BotLogic
                         }
 
                     redoQuantum:
-                        double[] qcoords = GetQuantumRandom(userProfile.Location.latitude, userProfile.Location.longitude, userProfile.Radius);
+                        double[] qcoords = GetQuantumRandom(userProfile.Location.latitude, userProfile.Location.longitude, userProfile.Radius, new QuantumRandomNumberGeneratorWrapper(context, mainDialog, token));
                         if (!userProfile.IsIncludeWaterPoints)
                         {
                             var isWaterPoint = await Helpers.IsWaterCoordinatesAsync(qcoords);
@@ -973,7 +975,7 @@ namespace VFatumbot.BotLogic
                         {
                             incoords[0] = pcoords[0];
                             incoords[1] = pcoords[1];
-                            mesg = Tolog(turnContext, "blind", (float)incoords[0], (float)incoords[1], "pseudo", shortCode);
+                            mesg = Tolog(turnContext, "blind", (float)incoords[0], (float)incoords[1], "pseudo", shortCode, new QuantumRandomNumberGeneratorWrapper(context, mainDialog, token));
                         }
                         if ((mtd < 40) && (mtd > 20))
                         {
@@ -987,14 +989,14 @@ namespace VFatumbot.BotLogic
                             {
                                 incoords[0] = pcoords[0];
                                 incoords[1] = pcoords[1];
-                                mesg = Tolog(turnContext, "blind", (float)incoords[0], (float)incoords[1], "pseudo", shortCode);
+                                mesg = Tolog(turnContext, "blind", (float)incoords[0], (float)incoords[1], "pseudo", shortCode, new QuantumRandomNumberGeneratorWrapper(context, mainDialog, token));
                             }
                         }
                         if ((mtd < 60) && (mtd > 40))
                         {
                             incoords[0] = qcoords[0];
                             incoords[1] = qcoords[1];
-                            mesg = Tolog(turnContext, "blind", (float)incoords[0], (float)incoords[1], "quantum", shortCode);
+                            mesg = Tolog(turnContext, "blind", (float)incoords[0], (float)incoords[1], "quantum", shortCode, new QuantumRandomNumberGeneratorWrapper(context, mainDialog, token));
                         }
                         if ((mtd < 80) && (mtd > 60))
                         {
@@ -1021,7 +1023,7 @@ namespace VFatumbot.BotLogic
                             {
                                 incoords[0] = qcoords[0];
                                 incoords[1] = qcoords[1];
-                                mesg = Tolog(turnContext, "blind", (float)incoords[0], (float)incoords[1], "quantum", shortCode);
+                                mesg = Tolog(turnContext, "blind", (float)incoords[0], (float)incoords[1], "quantum", shortCode, new QuantumRandomNumberGeneratorWrapper(context, mainDialog, token));
                             }
                         }
 

@@ -198,7 +198,7 @@ namespace VFatumbot.BotLogic
             return resp;
         }
 
-        public static string Tolog(ITurnContext context, string type, double Lat, double Lng, string ptype, string shortCode) //randoms
+        public static string Tolog(ITurnContext context, string type, double Lat, double Lng, string ptype, string shortCode, QuantumRandomNumberGeneratorWrapper rnd) //randoms
         {
             string resp = "Random Point generated" + "\n\n";
             if (type == "blind") { resp = "Mystery Point Generated" + "\n\n"; }
@@ -214,21 +214,14 @@ namespace VFatumbot.BotLogic
                 + " " + Lng.ToString("#0.000000", System.Globalization.CultureInfo.InvariantCulture) + ")" + "\n\n";
             if (ptype == "qtime")
             {
-                QuantumRandomNumberGenerator rnd = new QuantumRandomNumberGenerator();
                 resp += "Suggested time: " + ((int)rnd.Next(23)).ToString("#0") + ":" + ((int)rnd.Next(59)).ToString("00") + "\n\n";
             }
             return resp;
         }
 
-        public static FinalAttractor[] GetIDA(LatLng startcoord, double radius, int u)
-        {
-            return GetIDA(startcoord, radius, u, 0);
-        }
-
-        public static FinalAttractor[] GetIDA(LatLng startcoord, double radius, int u, int meta)
+        public static FinalAttractor[] GetIDA(LatLng startcoord, double radius, int meta, QuantumRandomNumberGeneratorWrapper rnd)
         {
             FinalAttractor[] result = new FinalAttractor[0];
-            QuantumRandomNumberGenerator rnd = new QuantumRandomNumberGenerator();
             int al = 0; int cou = 0;
             while ((al == 0) && (cou < 10))
             {
@@ -387,10 +380,9 @@ namespace VFatumbot.BotLogic
             return result;
         }
 
-        public static double[] GetQuantumRandom(double lat, double lon, int radius)
+        public static double[] GetQuantumRandom(double lat, double lon, int radius, QuantumRandomNumberGeneratorWrapper rnd)
         {
             double[] result = new double[2];
-            QuantumRandomNumberGenerator rnd = new QuantumRandomNumberGenerator();
             Random prnd = new Random();
 
             bool dnn = false;

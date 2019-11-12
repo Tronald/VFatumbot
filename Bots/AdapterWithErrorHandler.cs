@@ -11,6 +11,7 @@ using static VFatumbot.BotLogic.Enums;
 using System.IO;
 using System.Net;
 using VFatumbot.BotLogic;
+using static VFatumbot.QuantumRandomNumberGeneratorWrapper;
 
 namespace VFatumbot
 {
@@ -25,22 +26,17 @@ namespace VFatumbot
 
             OnTurnError = async (turnContext, exception) =>
             {
+                if (exception.GetType().Equals(typeof(CanIgnoreException)))
+                {
+                    // QRNG source related exceptions are handled elsewhere
+                    return;
+                }
+
                 // Log any leaked exception from the application.
                 logger.LogError($"Exception caught : {exception.Message} {exception.StackTrace}");
 
-                // TODO: if we ever use similar logic to QuantumRandomNumberGenerator.cs to connect to external sources they may also have their exceptions caught here,
-                // so consider checking the stacktrace for the class name or ideally come up with a better error handling system than just catching things here coz it's convenient :)
-                if ((exception.GetType().Equals(typeof(InvalidDataException)) && "Service did not return random data.".Equals(exception.Message)) ||
-                    (exception.GetType().Equals(typeof(WebException)) && exception.Message.Contains("connection attempt failed because the connected party did not properly respond after a period of time")))
-                {
-                    // qrng.anu seems to have connection issues from our side sometimes?
-                    await turnContext.SendActivityAsync("Sorry, there was an error sourcing quantum entropy needed to randomize. Try a bit later. If this happens during beta testing tell soliax.");
-                }
-                else
-                {
-                    // Send a catch-all apology to the user.
-                    await turnContext.SendActivityAsync($"Sorry, it looks like something went wrong. {exception.GetType().Name}: {exception.Message} {exception.StackTrace}");
-                }
+                // Send a catch-all apology to the user.
+                await turnContext.SendActivityAsync($"Sorry, it looks like something went wrong. {exception.GetType().Name}: {exception.Message} {exception.StackTrace}");
 
                 if (conversationState != null)
                 {
