@@ -66,6 +66,9 @@
     <Folder Include="RNGs\" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Remove="RNGs\QuantumRandomNumberGenerator.cs" />
+  </ItemGroup>
+  <ItemGroup>
     <Compile Condition=" '$(EnableDefaultCompileItems)' == 'true' " Update="BotLogic\ActionHandler %28copy%29.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
