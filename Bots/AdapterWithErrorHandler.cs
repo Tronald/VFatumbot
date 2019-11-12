@@ -10,6 +10,7 @@ using static VFatumbot.BotLogic.FatumFunctions;
 using static VFatumbot.BotLogic.Enums;
 using System.IO;
 using System.Net;
+using VFatumbot.BotLogic;
 
 namespace VFatumbot
 {
@@ -56,25 +57,6 @@ namespace VFatumbot
                     }
                 }
             };
-        }
-
-        // TODO: split into a file of its own
-        public class CallbackOptions
-        {
-            public bool ResetFlag { get; set; }
-
-            public bool StartTripReportDialog { get; set; }
-            public string[] ShortCodes { get; set; } // short hash IDs (using CRC32 so the string isn't too long)
-            public FinalAttractor[] GeneratedPoints { get; set; }
-            public string[] Messages { get; set; }
-            public PointTypes[] PointTypes { get; set; }
-            public int[] NumWaterPointsSkipped { get; set; }
-            public string[] What3Words { get; set; }
-            public string[] NearestPlaces { get; set; }
-
-            public bool UpdateIntentSuggestions { get; set; }
-            public string[] IntentSuggestions { get; set; }
-            public string TimeIntentSuggestionsSet { get; set; }
         }
 
         // Used as a callback to restart the main dialog (i.e. prompt user for next action) after middleware-intercepted actions
