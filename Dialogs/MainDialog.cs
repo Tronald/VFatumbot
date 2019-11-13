@@ -88,13 +88,13 @@ namespace VFatumbot
 
         private async Task<DialogTurnResult> PerformActionStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
         {
-            _logger.LogInformation($"MainDialog.PerformActionStepAsync[{((FoundChoice)stepContext.Result).Value}]");
+            _logger.LogInformation($"MainDialog.PerformActionStepAsync[{((FoundChoice)stepContext.Result)?.Value}]");
 
             var userProfile = await _userProfileAccessor.GetAsync(stepContext.Context, () => new UserProfile());
             var actionHandler = new ActionHandler();
             var repromptThisRound = false;
 
-            switch (((FoundChoice)stepContext.Result).Value)
+            switch (((FoundChoice)stepContext.Result)?.Value)
             {
                 // Hack coz Facebook Messenge stopped showing "Send Location" button
                 case "Set Location":

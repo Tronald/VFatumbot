@@ -48,9 +48,9 @@ namespace VFatumbot
 
         private async Task<DialogTurnResult> UpdateSettingsYesOrNoStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
         {
-            _logger.LogInformation($"SettingsDialog.UpdateSettingsYesOrNoStepAsync[{((FoundChoice)stepContext.Result).Value}]");
+            _logger.LogInformation($"SettingsDialog.UpdateSettingsYesOrNoStepAsync[{((FoundChoice)stepContext.Result)?.Value}]");
 
-            switch (((FoundChoice)stepContext.Result).Value)
+            switch (((FoundChoice)stepContext.Result)?.Value)
             {
                 case "Yes":
                     // TODO: a quick hack to reset IsScanning in case it gets stuck in that state
@@ -117,7 +117,7 @@ namespace VFatumbot
             var userProfile = await _userProfileAccessor.GetAsync(stepContext.Context);
             await _userProfileAccessor.SetAsync(stepContext.Context, userProfile);
 
-            switch (((FoundChoice)stepContext.Result).Value)
+            switch (((FoundChoice)stepContext.Result)?.Value)
             {
                 case "Yes":
                     userProfile.IsIncludeWaterPoints = true;
@@ -135,12 +135,12 @@ namespace VFatumbot
 
         private async Task<DialogTurnResult> GoogleThumbnailsDisplayToggleStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
         {
-            _logger.LogInformation("SettingsDialog.UpdateGoogleThumbnailsDisplayToggleStepAsync[{((FoundChoice)stepContext.Result).Value}]");
+            _logger.LogInformation($"SettingsDialog.UpdateGoogleThumbnailsDisplayToggleStepAsync[{((FoundChoice)stepContext.Result)?.Value}]");
 
             var userProfile = await _userProfileAccessor.GetAsync(stepContext.Context);
             await _userProfileAccessor.SetAsync(stepContext.Context, userProfile);
 
-            switch (((FoundChoice)stepContext.Result).Value)
+            switch (((FoundChoice)stepContext.Result)?.Value)
             {
                 case "Yes":
                     userProfile.IsDisplayGoogleThumbnails = true;

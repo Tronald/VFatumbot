@@ -47,12 +47,12 @@ namespace VFatumbot
 
         private async Task<DialogTurnResult> PerformActionStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
         {
-            _logger.LogInformation($"BlindSpotsDialog.PerformActionStepAsync[{((FoundChoice)stepContext.Result).Value}]");
+            _logger.LogInformation($"BlindSpotsDialog.PerformActionStepAsync[{((FoundChoice)stepContext.Result)?.Value}]");
 
             var userProfile = await _userProfileAccessor.GetAsync(stepContext.Context, () => new UserProfile());
             var actionHandler = new ActionHandler();
 
-            switch (((FoundChoice)stepContext.Result).Value)
+            switch (((FoundChoice)stepContext.Result)?.Value)
             {
                 case "Quantum":
                     await actionHandler.QuantumActionAsync(stepContext.Context, userProfile, cancellationToken, _mainDialog);

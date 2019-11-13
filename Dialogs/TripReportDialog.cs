@@ -123,11 +123,11 @@ namespace VFatumbot
 
         private async Task<DialogTurnResult> StartReportStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
         {
-            _logger.LogInformation($"TripReportDialog.StartReportStepAsync[{((FoundChoice)stepContext.Result).Value}]");
+            _logger.LogInformation($"TripReportDialog.StartReportStepAsync[{((FoundChoice)stepContext.Result)?.Value}]");
 
             var callbackOptions = (CallbackOptions)stepContext.Options;
 
-            switch (((FoundChoice)stepContext.Result).Value)
+            switch (((FoundChoice)stepContext.Result)?.Value)
             {
                 case "Yes and report!":
                     // Go and start asking them about their trip
@@ -191,9 +191,9 @@ namespace VFatumbot
                 return await stepContext.NextAsync(cancellationToken: cancellationToken);
             }
 
-            _logger.LogInformation($"TripReportDialog.SetIntentYesOrNoStepAsync[{((FoundChoice)stepContext.Result).Value}]");
+            _logger.LogInformation($"TripReportDialog.SetIntentYesOrNoStepAsync[{((FoundChoice)stepContext.Result)?.Value}]");
 
-            switch (((FoundChoice)stepContext.Result).Value)
+            switch (((FoundChoice)stepContext.Result)?.Value)
             {
                 case "Yes":
                     var promptOptions = new PromptOptions { Prompt = MessageFactory.Text("What did you set your intent to?") };
@@ -241,11 +241,11 @@ namespace VFatumbot
 
         private async Task<DialogTurnResult> FuckingAmazingYesOrNoStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
         {
-            _logger.LogInformation($"TripReportDialog.FuckingAmazingYesOrNoStepAsync[{((FoundChoice)stepContext.Result).Value}]");
+            _logger.LogInformation($"TripReportDialog.FuckingAmazingYesOrNoStepAsync[{((FoundChoice)stepContext.Result)?.Value}]");
 
             var answers = (ReportAnswers)stepContext.Values[ReportAnswersKey];
 
-            switch (((FoundChoice)stepContext.Result).Value)
+            switch (((FoundChoice)stepContext.Result)?.Value)
             {
                 case "Yes":
                     answers.ArtifactCollected = true;
@@ -268,11 +268,11 @@ namespace VFatumbot
 
         private async Task<DialogTurnResult> RateMeaningfulnessStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
         {
-            _logger.LogInformation($"TripReportDialog.RateMeaningfulnessStepAsync[{((FoundChoice)stepContext.Result).Value}]");
+            _logger.LogInformation($"TripReportDialog.RateMeaningfulnessStepAsync[{((FoundChoice)stepContext.Result)?.Value}]");
 
             var answers = (ReportAnswers)stepContext.Values[ReportAnswersKey];
 
-            switch (((FoundChoice)stepContext.Result).Value)
+            switch (((FoundChoice)stepContext.Result)?.Value)
             {
                 case "Yes":
                     answers.WasFuckingAmazing = true;
@@ -413,11 +413,11 @@ namespace VFatumbot
 
         private async Task<DialogTurnResult> GetPhotoAttachmentsStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
         {
-            _logger.LogInformation($"TripReportDialog.GetPhotoAttachmentsStepAsync[{((FoundChoice)stepContext.Result).Value}]");
+            _logger.LogInformation($"TripReportDialog.GetPhotoAttachmentsStepAsync[{((FoundChoice)stepContext.Result)?.Value}]");
 
             var answers = (ReportAnswers)stepContext.Values[ReportAnswersKey];
 
-            switch (((FoundChoice)stepContext.Result).Value)
+            switch (((FoundChoice)stepContext.Result)?.Value)
             {
                 case "Yes":
                     var promptOptions = new PromptOptions {
