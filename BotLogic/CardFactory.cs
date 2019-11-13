@@ -34,7 +34,16 @@ namespace VFatumbot
         public static IMessageActivity CreateLocationCardsReply(double[] incoords, bool streetAndEarthThumbnails = false, dynamic w3wResult = null)
         {
             var attachments = new List<Attachment>();
+            
             var reply = MessageFactory.Attachment(attachments);
+
+            var entity = new Entity("Place");
+            entity.SetAs(new Place(geo: new GeoCoordinates(latitude: incoords[0], longitude: incoords[1])));
+            reply.Entities = new List<Entity>()
+            {
+                entity
+            };
+
             reply.AttachmentLayout = AttachmentLayoutTypes.Carousel;
             reply.Attachments.Add(CreateGoogleMapCard(incoords, streetAndEarthThumbnails, w3wResult));
             if (streetAndEarthThumbnails)
