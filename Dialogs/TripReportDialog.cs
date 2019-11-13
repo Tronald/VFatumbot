@@ -1,5 +1,4 @@
 ﻿using Reddit;
-using Reddit.Things;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
@@ -14,7 +13,6 @@ using Microsoft.Bot.Builder.Dialogs.Choices;
 using Microsoft.Bot.Schema;
 using Microsoft.Extensions.Logging;
 using VFatumbot.BotLogic;
-using static VFatumbot.AdapterWithErrorHandler;
 using static VFatumbot.BotLogic.Enums;
 using Imgur.API.Authentication.Impl;
 using Imgur.API.Endpoints.Impl;
@@ -57,7 +55,13 @@ namespace VFatumbot
             _userProfileAccessor = userProfileAccessor;
             _mainDialog = mainDialog;
 
-            AddDialog(new ChoicePrompt(nameof(ChoicePrompt), FreetextRatingValidator));
+            AddDialog(new ChoicePrompt(nameof(ChoicePrompt)));
+            AddDialog(new ChoicePrompt("AllowFreetextTooChoicePrompt",
+                (PromptValidatorContext<FoundChoice> promptContext, CancellationToken cancellationToken) =>
+                    {
+                        // forced true validater result to also allow free text entry for ratings
+                        return Task.FromResult(true);
+                    }));
             AddDialog(new TextPrompt(nameof(TextPrompt)));
             AddDialog(new AttachmentPrompt(nameof(AttachmentPrompt)));
             AddDialog(new WaterfallDialog(nameof(WaterfallDialog), new WaterfallStep[]
@@ -80,11 +84,6 @@ namespace VFatumbot
             }));
 
             InitialDialogId = nameof(WaterfallDialog);
-        }
-
-        private async Task<bool> FreetextRatingValidator(PromptValidatorContext<FoundChoice> promptContext, CancellationToken cancellationToken)
-        {
-            return true;
         }
 
         private async Task<DialogTurnResult> ReportYesOrNoStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
@@ -291,7 +290,7 @@ namespace VFatumbot
                                 },
             };
 
-            return await stepContext.PromptAsync(nameof(ChoicePrompt), options, cancellationToken);
+            return await stepContext.PromptAsync("AllowFreetextTooChoicePrompt", options, cancellationToken);
         }
 
         private async Task<DialogTurnResult> RateEmotionalStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
@@ -316,7 +315,7 @@ namespace VFatumbot
                                 }
             };
 
-            return await stepContext.PromptAsync(nameof(ChoicePrompt), options, cancellationToken);
+            return await stepContext.PromptAsync("AllowFreetextTooChoicePrompt", options, cancellationToken);
         }
 
         private async Task<DialogTurnResult> RateImportanceStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
@@ -339,7 +338,7 @@ namespace VFatumbot
                                 }
             };
 
-            return await stepContext.PromptAsync(nameof(ChoicePrompt), options, cancellationToken);
+            return await stepContext.PromptAsync("AllowFreetextTooChoicePrompt", options, cancellationToken);
         }
 
         private async Task<DialogTurnResult> RateStrangenessStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
@@ -362,7 +361,7 @@ namespace VFatumbot
                                 }
             };
 
-            return await stepContext.PromptAsync(nameof(ChoicePrompt), options, cancellationToken);
+            return await stepContext.PromptAsync("AllowFreetextTooChoicePrompt", options, cancellationToken);
         }
 
         private async Task<DialogTurnResult> RateSynchronictyStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
@@ -386,7 +385,7 @@ namespace VFatumbot
                                 }
             };
 
-            return await stepContext.PromptAsync(nameof(ChoicePrompt), options, cancellationToken);
+            return await stepContext.PromptAsync("AllowFreetextTooChoicePrompt", options, cancellationToken);
         }
 
         private async Task<DialogTurnResult> UploadPhotosYesOrNoStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
