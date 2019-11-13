@@ -92,6 +92,7 @@ namespace VFatumbot
             var heroCard = new HeroCard
             {
                 Title = !showStreetAndEarthThumbnails ? "View with Google:" : "Google Maps",
+                Text = w3wResult?.words,
                 Images = images,
                 Buttons = buttons,
                 Tap = cardAction

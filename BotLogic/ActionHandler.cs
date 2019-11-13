@@ -6,8 +6,6 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Bot.Builder;
-using Microsoft.Bot.Builder.Dialogs;
-using static VFatumbot.AdapterWithErrorHandler;
 using static VFatumbot.BotLogic.Enums;
 using static VFatumbot.BotLogic.FatumFunctions;
 using static VFatumbot.QuantumRandomNumberGeneratorWrapper;
@@ -288,8 +286,8 @@ namespace VFatumbot.BotLogic
                                 messagesArray[i] = mesg;
                                 pointTypesArray[i] = PointTypes.Attractor;
                                 numWaterPointsSkippedArray[i] = numWaterPointsSkipped;
-                                what3WordsArray[i] = ""+w3wResult.words;
-                                nearestPlacesArray[i] = "" + w3wResult.nearestPlace;
+                                what3WordsArray[i] = ""+w3wResult?.words;
+                                nearestPlacesArray[i] = "" + w3wResult?.nearestPlace;
 
                                 await turnContext.SendActivitiesAsync(CardFactory.CreateLocationCardsReply(Enum.Parse<ChannelPlatform>(turnContext.Activity.ChannelId), incoords, userProfile.IsDisplayGoogleThumbnails, w3wResult), cancellationToken);
                                 await Helpers.SendPushNotification(userProfile, "Point Generated", mesg);
@@ -406,8 +404,8 @@ namespace VFatumbot.BotLogic
                                 messagesArray[i] = mesg;
                                 pointTypesArray[i] = PointTypes.Void;
                                 numWaterPointsSkippedArray[i] = numWaterPointsSkipped;
-                                what3WordsArray[i] = "" + w3wResult.words;
-                                nearestPlacesArray[i] = "" + w3wResult.nearestPlace;
+                                what3WordsArray[i] = "" + w3wResult?.words;
+                                nearestPlacesArray[i] = "" + w3wResult?.nearestPlace;
 
                                 await turnContext.SendActivitiesAsync(CardFactory.CreateLocationCardsReply(Enum.Parse<ChannelPlatform>(turnContext.Activity.ChannelId), incoords, userProfile.IsDisplayGoogleThumbnails, w3wResult), cancellationToken);
                                 await Helpers.SendPushNotification(userProfile, "Point Generated", mesg);
@@ -445,7 +443,7 @@ namespace VFatumbot.BotLogic
 
             await turnContext.SendActivityAsync(MessageFactory.Text($"Your current radius is {userProfile.Radius}m.\n\n" +
                                                                     $"Your current location is {userProfile.Latitude},{userProfile.Longitude}.\n\n" +
-                                                                    (w3wResult != null ? $"What 3 Words address: {w3wResult.words}" : "")
+                                                                    (w3wResult != null ? $"What 3 Words address: {w3wResult?.words}" : "")
                                                                     ), cancellationToken);
 
             await turnContext.SendActivitiesAsync(CardFactory.CreateLocationCardsReply(Enum.Parse<ChannelPlatform>(turnContext.Activity.ChannelId), incoords, userProfile.IsDisplayGoogleThumbnails, w3wResult), cancellationToken);
@@ -538,8 +536,8 @@ namespace VFatumbot.BotLogic
                                 messagesArray[i] = mesg;
                                 pointTypesArray[i] = PointTypes.Anomaly;
                                 numWaterPointsSkippedArray[i] = numWaterPointsSkipped;
-                                what3WordsArray[i] = "" + w3wResult.words;
-                                nearestPlacesArray[i] = "" + w3wResult.nearestPlace;
+                                what3WordsArray[i] = "" + w3wResult?.words;
+                                nearestPlacesArray[i] = "" + w3wResult?.nearestPlace;
 
                                 await turnContext.SendActivitiesAsync(CardFactory.CreateLocationCardsReply(Enum.Parse<ChannelPlatform>(turnContext.Activity.ChannelId), incoords, userProfile.IsDisplayGoogleThumbnails, w3wResult), cancellationToken);
                                 await Helpers.SendPushNotification(userProfile, "Point Generated", mesg);
@@ -655,8 +653,8 @@ namespace VFatumbot.BotLogic
                                 }
                             },
                             NumWaterPointsSkipped = new int[] { numWaterPointsSkipped },
-                            What3Words = new string[] { w3wResult.words },
-                            NearestPlaces = new string[] { w3wResult.nearestPlace },
+                            What3Words = new string[] { w3wResult?.words },
+                            NearestPlaces = new string[] { w3wResult?.nearestPlace },
                         };
                         await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(turnContext, mainDialog, cancellationToken, callbackOptions);
                     }, cancellationToken);
@@ -723,7 +721,7 @@ namespace VFatumbot.BotLogic
                                 }
                             },
                             NumWaterPointsSkipped = new int[] { numWaterPointsSkipped },
-                            What3Words = new string[] { w3wResult.words },
+                            What3Words = new string[] { w3wResult?.words },
                         };
                         await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(turnContext, mainDialog, cancellationToken, callbackOptions);
                     }, cancellationToken);
@@ -1043,8 +1041,8 @@ namespace VFatumbot.BotLogic
                             PointTypes = new PointTypes[] { PointTypes.MysteryPoint },
                             GeneratedPoints = ida,
                             NumWaterPointsSkipped = new int[] { numWaterPointsSkipped },
-                            What3Words = new string[] { w3wResult.words },
-                            NearestPlaces = new string[] { w3wResult.nearestPlace },
+                            What3Words = new string[] { w3wResult?.words },
+                            NearestPlaces = new string[] { w3wResult?.nearestPlace },
                         };
                         await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(context, mainDialog, cancellationToken, callbackOptions);
                     }, cancellationToken);
