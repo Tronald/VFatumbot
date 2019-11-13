@@ -11,6 +11,7 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using VFatumbot.BotLogic;
+using static VFatumbot.BotLogic.Enums;
 
 namespace VFatumbot
 {
@@ -127,7 +128,7 @@ namespace VFatumbot
 
                     var incoords = new double[] { lat, lon };
                     var w3wResult = await Helpers.GetWhat3WordsAddressAsync(incoords);
-                    await turnContext.SendActivityAsync(CardFactory.CreateLocationCardsReply(incoords, userProfile.IsDisplayGoogleThumbnails, w3wResult), cancellationToken);
+                    await turnContext.SendActivitiesAsync(CardFactory.CreateLocationCardsReply(Enum.Parse<ChannelPlatform>(turnContext.Activity.ChannelId), incoords, userProfile.IsDisplayGoogleThumbnails, w3wResult), cancellationToken);
 
                     await mUserProfileAccessor.SetAsync(turnContext, userProfile);
                     await _userState.SaveChangesAsync(turnContext, false, cancellationToken);

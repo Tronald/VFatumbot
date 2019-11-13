@@ -2,6 +2,7 @@
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Schema;
 using VFatumbot.BotLogic;
+using static VFatumbot.BotLogic.Enums;
 
 namespace VFatumbot
 {
@@ -31,50 +32,59 @@ namespace VFatumbot
             return reply;
         }
 
-        public static IMessageActivity CreateLocationCardsReply(double[] incoords, bool streetAndEarthThumbnails = false, dynamic w3wResult = null)
+        public static IMessageActivity[] CreateLocationCardsReply(ChannelPlatform platform, double[] incoords, bool showStreetAndEarthThumbnails = false, dynamic w3wResult = null)
         {
-            var attachments = new List<Attachment>();
-            
-            var reply = MessageFactory.Attachment(attachments);
+            var useNativeLocationWidget = platform == ChannelPlatform.telegram || platform == ChannelPlatform.line;
 
-            var entity = new Entity("Place");
-            var geo = new GeoCoordinates(latitude: incoords[0],
-                                        longitude: incoords[1],
-                                        elevation: 0,
-                                        type: "GeoCoordinates",
-                                        name: "GeoCoordinates");
-            entity.SetAs(new Place(type: "Place",
-                                   name: "Place",
-                                   geo: geo,
-                                   hasMap: true));
-            reply.Entities = new List<Entity>()
-            {
-                entity
-            };
+            var replies = new IMessageActivity[useNativeLocationWidget ? 2 : 1];
 
-            reply.AttachmentLayout = AttachmentLayoutTypes.Carousel;
-            reply.Attachments.Add(CreateGoogleMapCard(incoords, streetAndEarthThumbnails, w3wResult));
-            if (streetAndEarthThumbnails)
+            if (useNativeLocationWidget)
             {
-                reply.Attachments.Add(CreateGoogleStreetViewCard(incoords));
-                reply.Attachments.Add(CreateGoogleEarthCard(incoords));
+                var nativeLocationWidgetReply = MessageFactory.Text("");
+                var entity = new Entity();
+                var geo = new GeoCoordinates(latitude: incoords[0],
+                                             longitude: incoords[1],
+                                             elevation: 0);
+                var place = new Place(name: w3wResult != null ? "What 3 Words Address" : "Location",
+                                       address: w3wResult != null ? w3wResult.words : "",
+                                       geo: geo);
+                entity.SetAs(place);
+                nativeLocationWidgetReply.Entities = new List<Entity>() { entity };
+                replies[0] = nativeLocationWidgetReply;
             }
-            return reply;
+
+            var attachments = new List<Attachment>();
+            var attachmentReply = MessageFactory.Attachment(attachments);
+            replies[useNativeLocationWidget ? 1 : 0] = attachmentReply;
+
+            attachmentReply.AttachmentLayout = AttachmentLayoutTypes.Carousel;
+            attachmentReply.Attachments.Add(CreateGoogleMapCard(incoords, !useNativeLocationWidget, showStreetAndEarthThumbnails, w3wResult));
+
+            if (showStreetAndEarthThumbnails)
+            {
+                attachmentReply.Attachments.Add(CreateGoogleStreetViewCard(incoords));
+                attachmentReply.Attachments.Add(CreateGoogleEarthCard(incoords));
+            }
+
+            return replies;
         }
 
-        public static Attachment CreateGoogleMapCard(double[] incoords, bool streetAndEarthThumbnails = false, dynamic w3wResult = null)
+        public static Attachment CreateGoogleMapCard(double[] incoords, bool showMapsThumbnail, bool showStreetAndEarthThumbnails = false, dynamic w3wResult = null)
         {
-            var images = new List<CardImage> {
-                new CardImage("https://maps.googleapis.com/maps/api/staticmap?&markers=color:red%7Clabel:C%7C" + incoords[0] + "+" + incoords[1] + "&zoom=15&size=" + Consts.THUMBNAIL_SIZE + "&maptype=roadmap&key=" + Consts.GOOGLE_MAPS_API_KEY),
-            };
+            var images = new List<CardImage>();
 
-            var cardAction = new CardAction(ActionTypes.OpenUrl, streetAndEarthThumbnails ? "Open" : "Map", value: "https://www.google.com/maps/place/" + incoords[0] + "+" + incoords[1] + "/@" + incoords[0] + "+" + incoords[1] + ",18z");
+            if (showMapsThumbnail)
+            {
+                images.Add(new CardImage("https://maps.googleapis.com/maps/api/staticmap?&markers=color:red%7Clabel:C%7C" + incoords[0] + "+" + incoords[1] + "&zoom=15&size=" + Consts.THUMBNAIL_SIZE + "&maptype=roadmap&key=" + Consts.GOOGLE_MAPS_API_KEY));
+            }
+
+            var cardAction = new CardAction(ActionTypes.OpenUrl, showStreetAndEarthThumbnails ? "Open" : "Maps", value: "https://www.google.com/maps/place/" + incoords[0] + "+" + incoords[1] + "/@" + incoords[0] + "+" + incoords[1] + ",14z");
 
             var buttons = new List<CardAction> {
                 cardAction,
             };
 
-            if (!streetAndEarthThumbnails)
+            if (!showStreetAndEarthThumbnails)
             {
                 buttons.Add(new CardAction(ActionTypes.OpenUrl, "Street View", value: "https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=" + incoords[0] + "," + incoords[1] + "&fov=90&heading=235&pitch=10"));
                 buttons.Add(new CardAction(ActionTypes.OpenUrl, "Earth", value: "https://earth.google.com/web/@" + incoords[0] + "," + incoords[1] + ",146.726a,666.616d,35y,0h,45t,0r"));
@@ -82,9 +92,7 @@ namespace VFatumbot
 
             var heroCard = new HeroCard
             {
-                //Title = "Google Map",
-                //Text = w3wResult != null ? ("What 3 Words address: " + w3wResult.words) : null,
-                Title = w3wResult != null ? ("W3W: " + w3wResult.words) : null,
+                Title = !showStreetAndEarthThumbnails ? "View with Google" : "Google Maps",
                 Images = images,
                 Buttons = buttons,
                 Tap = cardAction
