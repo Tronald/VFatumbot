@@ -50,15 +50,15 @@ namespace VFatumbot
                                        geo: geo);
                 entity.SetAs(place);
                 nativeLocationWidgetReply.Entities = new List<Entity>() { entity };
-                replies[0] = nativeLocationWidgetReply;
+                replies[1] = nativeLocationWidgetReply;
             }
 
             var attachments = new List<Attachment>();
             var attachmentReply = MessageFactory.Attachment(attachments);
-            replies[useNativeLocationWidget ? 1 : 0] = attachmentReply;
+            replies[useNativeLocationWidget ? 0 : 1] = attachmentReply;
 
             attachmentReply.AttachmentLayout = AttachmentLayoutTypes.Carousel;
-            attachmentReply.Attachments.Add(CreateGoogleMapCard(incoords, !useNativeLocationWidget, showStreetAndEarthThumbnails, w3wResult));
+            attachmentReply.Attachments.Add(CreateGoogleMapCard(incoords, !useNativeLocationWidget || showStreetAndEarthThumbnails, showStreetAndEarthThumbnails, w3wResult));
 
             if (showStreetAndEarthThumbnails)
             {
@@ -72,7 +72,6 @@ namespace VFatumbot
         public static Attachment CreateGoogleMapCard(double[] incoords, bool showMapsThumbnail, bool showStreetAndEarthThumbnails = false, dynamic w3wResult = null)
         {
             var images = new List<CardImage>();
-
             if (showMapsThumbnail)
             {
                 images.Add(new CardImage("https://maps.googleapis.com/maps/api/staticmap?&markers=color:red%7Clabel:C%7C" + incoords[0] + "+" + incoords[1] + "&zoom=15&size=" + Consts.THUMBNAIL_SIZE + "&maptype=roadmap&key=" + Consts.GOOGLE_MAPS_API_KEY));
@@ -92,7 +91,7 @@ namespace VFatumbot
 
             var heroCard = new HeroCard
             {
-                Title = !showStreetAndEarthThumbnails ? "View with Google" : "Google Maps",
+                Title = !showStreetAndEarthThumbnails ? "View with Google:" : "Google Maps",
                 Images = images,
                 Buttons = buttons,
                 Tap = cardAction
