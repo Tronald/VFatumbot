@@ -33,7 +33,7 @@ namespace VFatumbot
 
         private async Task<DialogTurnResult> ChoiceActionStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
         {
-            _logger.LogInformation($"BlindSpotsDialog.ChoiceActionStepAsync[{stepContext.Result}]");
+            //_logger.LogInformation($"BlindSpotsDialog.ChoiceActionStepAsync[{stepContext.Result}]");
 
             var options = new PromptOptions()
             {
@@ -47,7 +47,7 @@ namespace VFatumbot
 
         private async Task<DialogTurnResult> PerformActionStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
         {
-            _logger.LogInformation($"BlindSpotsDialog.PerformActionStepAsync[{((FoundChoice)stepContext.Result)?.Value}]");
+            //_logger.LogInformation($"BlindSpotsDialog.PerformActionStepAsync[{((FoundChoice)stepContext.Result)?.Value}]");
 
             var userProfile = await _userProfileAccessor.GetAsync(stepContext.Context, () => new UserProfile());
             var actionHandler = new ActionHandler();

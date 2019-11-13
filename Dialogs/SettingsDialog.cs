@@ -39,7 +39,7 @@ namespace VFatumbot
 
         private async Task<DialogTurnResult> CurrentSettingsStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
         {
-            _logger.LogInformation("SettingsDialog.CurrentSettingsStepAsync");
+            //_logger.LogInformation("SettingsDialog.CurrentSettingsStepAsync");
 
             await ShowCurrentSettingsAsync(stepContext, cancellationToken);
 
@@ -48,7 +48,7 @@ namespace VFatumbot
 
         private async Task<DialogTurnResult> UpdateSettingsYesOrNoStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
         {
-            _logger.LogInformation($"SettingsDialog.UpdateSettingsYesOrNoStepAsync[{((FoundChoice)stepContext.Result)?.Value}]");
+            //_logger.LogInformation($"SettingsDialog.UpdateSettingsYesOrNoStepAsync[{((FoundChoice)stepContext.Result)?.Value}]");
 
             switch (((FoundChoice)stepContext.Result)?.Value)
             {
@@ -68,7 +68,7 @@ namespace VFatumbot
 
         private async Task<DialogTurnResult> RadiusStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
         {
-            _logger.LogInformation("SettingsDialog.RadiusStepAsync");
+            //_logger.LogInformation("SettingsDialog.RadiusStepAsync");
 
             var promptOptions = new PromptOptions { Prompt = MessageFactory.Text("Enter desired radius in meters:") };
             return await stepContext.PromptAsync(nameof(NumberPrompt<int>), promptOptions, cancellationToken);
@@ -100,7 +100,7 @@ namespace VFatumbot
 
         private async Task<DialogTurnResult> WaterPointsStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
         {
-            _logger.LogInformation($"SettingsDialog.WaterPointsStepAsync");
+            //_logger.LogInformation($"SettingsDialog.WaterPointsStepAsync");
 
             var inputtedRadius = (int)stepContext.Result;
             var userProfile = await _userProfileAccessor.GetAsync(stepContext.Context);
@@ -112,7 +112,7 @@ namespace VFatumbot
 
         private async Task<DialogTurnResult> UpdateWaterPointsYesOrNoStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
         {
-            _logger.LogInformation("SettingsDialog.UpdateWaterPointsYesOrNoStepAsync");
+            //_logger.LogInformation("SettingsDialog.UpdateWaterPointsYesOrNoStepAsync");
 
             var userProfile = await _userProfileAccessor.GetAsync(stepContext.Context);
             await _userProfileAccessor.SetAsync(stepContext.Context, userProfile);
@@ -135,7 +135,7 @@ namespace VFatumbot
 
         private async Task<DialogTurnResult> GoogleThumbnailsDisplayToggleStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
         {
-            _logger.LogInformation($"SettingsDialog.UpdateGoogleThumbnailsDisplayToggleStepAsync[{((FoundChoice)stepContext.Result)?.Value}]");
+            //_logger.LogInformation($"SettingsDialog.UpdateGoogleThumbnailsDisplayToggleStepAsync[{((FoundChoice)stepContext.Result)?.Value}]");
 
             var userProfile = await _userProfileAccessor.GetAsync(stepContext.Context);
             await _userProfileAccessor.SetAsync(stepContext.Context, userProfile);
@@ -158,7 +158,7 @@ namespace VFatumbot
 
         private async Task<DialogTurnResult> FinishSettingsStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
         {
-            _logger.LogInformation("SettingsDialog.FinishSettingsStepAsync");
+            //_logger.LogInformation("SettingsDialog.FinishSettingsStepAsync");
 
             await ShowCurrentSettingsAsync(stepContext, cancellationToken);
 

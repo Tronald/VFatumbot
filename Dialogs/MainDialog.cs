@@ -74,7 +74,7 @@ namespace VFatumbot
                 }
             }
 
-            _logger.LogInformation("MainDialog.ChoiceActionStepAsync");
+            //_logger.LogInformation("MainDialog.ChoiceActionStepAsync");
 
             var options = new PromptOptions()
             {
@@ -88,7 +88,7 @@ namespace VFatumbot
 
         private async Task<DialogTurnResult> PerformActionStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
         {
-            _logger.LogInformation($"MainDialog.PerformActionStepAsync[{((FoundChoice)stepContext.Result)?.Value}]");
+            //_logger.LogInformation($"MainDialog.PerformActionStepAsync[{((FoundChoice)stepContext.Result)?.Value}]");
 
             var userProfile = await _userProfileAccessor.GetAsync(stepContext.Context, () => new UserProfile());
             var actionHandler = new ActionHandler();

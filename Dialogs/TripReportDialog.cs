@@ -89,7 +89,7 @@ namespace VFatumbot
 
         private async Task<DialogTurnResult> ReportYesOrNoStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
         {
-            _logger.LogInformation("TripReportDialog.ReportYesOrNoStepAsync");
+            //_logger.LogInformation("TripReportDialog.ReportYesOrNoStepAsync");
 
             var options = new PromptOptions()
             {
@@ -123,7 +123,7 @@ namespace VFatumbot
 
         private async Task<DialogTurnResult> StartReportStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
         {
-            _logger.LogInformation($"TripReportDialog.StartReportStepAsync[{((FoundChoice)stepContext.Result)?.Value}]");
+            //_logger.LogInformation($"TripReportDialog.StartReportStepAsync[{((FoundChoice)stepContext.Result)?.Value}]");
 
             var callbackOptions = (CallbackOptions)stepContext.Options;
 
@@ -191,7 +191,7 @@ namespace VFatumbot
                 return await stepContext.NextAsync(cancellationToken: cancellationToken);
             }
 
-            _logger.LogInformation($"TripReportDialog.SetIntentYesOrNoStepAsync[{((FoundChoice)stepContext.Result)?.Value}]");
+            //_logger.LogInformation($"TripReportDialog.SetIntentYesOrNoStepAsync[{((FoundChoice)stepContext.Result)?.Value}]");
 
             switch (((FoundChoice)stepContext.Result)?.Value)
             {
@@ -207,7 +207,7 @@ namespace VFatumbot
 
         private async Task<DialogTurnResult> GetIntentStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
         {
-            _logger.LogInformation($"TripReportDialog.GetIntentStepAsync");
+            //_logger.LogInformation($"TripReportDialog.GetIntentStepAsync");
 
             if (!string.IsNullOrEmpty(""+stepContext.Result))
             {
@@ -223,7 +223,7 @@ namespace VFatumbot
 
         private async Task<DialogTurnResult> ArtifactsCollectedYesOrNoStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
         {
-            _logger.LogInformation($"TripReportDialog.ArtifactsCollectedYesOrNoStepAsync");
+            //_logger.LogInformation($"TripReportDialog.ArtifactsCollectedYesOrNoStepAsync");
 
             var options = new PromptOptions()
             {
@@ -241,7 +241,7 @@ namespace VFatumbot
 
         private async Task<DialogTurnResult> FuckingAmazingYesOrNoStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
         {
-            _logger.LogInformation($"TripReportDialog.FuckingAmazingYesOrNoStepAsync[{((FoundChoice)stepContext.Result)?.Value}]");
+            //_logger.LogInformation($"TripReportDialog.FuckingAmazingYesOrNoStepAsync[{((FoundChoice)stepContext.Result)?.Value}]");
 
             var answers = (ReportAnswers)stepContext.Values[ReportAnswersKey];
 
@@ -268,7 +268,7 @@ namespace VFatumbot
 
         private async Task<DialogTurnResult> RateMeaningfulnessStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
         {
-            _logger.LogInformation($"TripReportDialog.RateMeaningfulnessStepAsync[{((FoundChoice)stepContext.Result)?.Value}]");
+            //_logger.LogInformation($"TripReportDialog.RateMeaningfulnessStepAsync[{((FoundChoice)stepContext.Result)?.Value}]");
 
             var answers = (ReportAnswers)stepContext.Values[ReportAnswersKey];
 
@@ -296,7 +296,7 @@ namespace VFatumbot
 
         private async Task<DialogTurnResult> RateEmotionalStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
         {
-            _logger.LogInformation($"TripReportDialog.RateEmotionalStepAsync");
+            //_logger.LogInformation($"TripReportDialog.RateEmotionalStepAsync");
 
             var answers = (ReportAnswers)stepContext.Values[ReportAnswersKey];
 
@@ -321,7 +321,7 @@ namespace VFatumbot
 
         private async Task<DialogTurnResult> RateImportanceStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
         {
-            _logger.LogInformation($"TripReportDialog.RateImportanceStepAsync");
+            //_logger.LogInformation($"TripReportDialog.RateImportanceStepAsync");
 
             var answers = (ReportAnswers)stepContext.Values[ReportAnswersKey];
 
@@ -344,7 +344,7 @@ namespace VFatumbot
 
         private async Task<DialogTurnResult> RateStrangenessStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
         {
-            _logger.LogInformation($"TripReportDialog.RateStrangenessStepAsync");
+            //_logger.LogInformation($"TripReportDialog.RateStrangenessStepAsync");
 
             var answers = (ReportAnswers)stepContext.Values[ReportAnswersKey];
 
@@ -367,7 +367,7 @@ namespace VFatumbot
 
         private async Task<DialogTurnResult> RateSynchronictyStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
         {
-            _logger.LogInformation($"TripReportDialog.RateSynchronictyStepAsync");
+            //_logger.LogInformation($"TripReportDialog.RateSynchronictyStepAsync");
 
             var answers = (ReportAnswers)stepContext.Values[ReportAnswersKey];
 
@@ -391,7 +391,7 @@ namespace VFatumbot
 
         private async Task<DialogTurnResult> UploadPhotosYesOrNoStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
         {
-            _logger.LogInformation($"TripReportDialog.UploadPhotosYesOrNoStepAsync");
+            //_logger.LogInformation($"TripReportDialog.UploadPhotosYesOrNoStepAsync");
 
             var answers = (ReportAnswers)stepContext.Values[ReportAnswersKey];
 
@@ -413,7 +413,7 @@ namespace VFatumbot
 
         private async Task<DialogTurnResult> GetPhotoAttachmentsStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
         {
-            _logger.LogInformation($"TripReportDialog.GetPhotoAttachmentsStepAsync[{((FoundChoice)stepContext.Result)?.Value}]");
+            //_logger.LogInformation($"TripReportDialog.GetPhotoAttachmentsStepAsync[{((FoundChoice)stepContext.Result)?.Value}]");
 
             var answers = (ReportAnswers)stepContext.Values[ReportAnswersKey];
 
@@ -434,7 +434,7 @@ namespace VFatumbot
 
         private async Task<DialogTurnResult> WriteReportStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
         {
-            _logger.LogInformation($"TripReportDialog.WriteReportStepAsync");
+            //_logger.LogInformation($"TripReportDialog.WriteReportStepAsync");
 
             var callbackOptions = (CallbackOptions)stepContext.Options;
             var answers = (ReportAnswers)stepContext.Values[ReportAnswersKey];
@@ -486,7 +486,7 @@ namespace VFatumbot
 
         private async Task<DialogTurnResult> FinishStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
         {
-            _logger.LogInformation($"TripReportDialog.FinishStepAsync");
+            //_logger.LogInformation($"TripReportDialog.FinishStepAsync");
 
             var callbackOptions = (CallbackOptions)stepContext.Options;
             var answers = (ReportAnswers)stepContext.Values[ReportAnswersKey];

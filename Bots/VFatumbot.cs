@@ -210,7 +210,7 @@ namespace VFatumbot
 
         protected override async Task OnMessageActivityAsync(ITurnContext<IMessageActivity> turnContext, CancellationToken cancellationToken)
         {
-            _logger.LogInformation("Running dialog with Message Activity.");
+            //_logger.LogInformation("Running dialog with Message Activity.");
 
             // Run the MainDialog with the new message Activity
             await _mainDialog.RunAsync(turnContext, _conversationState.CreateProperty<DialogState>(nameof(DialogState)), cancellationToken);
