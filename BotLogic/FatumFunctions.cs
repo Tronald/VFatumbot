@@ -10,12 +10,12 @@ namespace VFatumbot.BotLogic
         public static double significance = 2.5; //significance absolute threshold for calculation, recommended value is in [2.5, 3.0]. Higher value speeds up the calculation resulting in less findings.
         public static double filtering_significance = 4.0; //significance absolute threshold for filtering of results, recommended value is 4.0 or higher, this usualy produces 0..10 results
 
-        [StructLayout(LayoutKind.Explicit)]
+        [StructLayout(LayoutKind.Sequential)]
         public struct LatLng
         {
-            [FieldOffset(0)]
+            //[FieldOffset(0)]
             public double latitude;
-            [FieldOffset(8)]
+            //[FieldOffset(8)]
             public double longitude;
 
             public LatLng(double Latitude, double Longitude) : this()
@@ -25,49 +25,69 @@ namespace VFatumbot.BotLogic
             }
         }
 
-        [StructLayout(LayoutKind.Explicit)]
+        [StructLayout(LayoutKind.Sequential)]
         public class DistanceBearring
         {
-            [FieldOffset(0)]
+            //[FieldOffset(0)]
             public double distance;
-            [FieldOffset(8)]
+            //[FieldOffset(8)]
             public double initialBearing;
-            [FieldOffset(16)]
+            //[FieldOffset(16)]
             public double finalBearing;
         }
 
-        [StructLayout(LayoutKind.Explicit)]
+        [StructLayout(LayoutKind.Sequential)]
         public struct Coordinate
         {
-            [FieldOffset(0)]
+            //[FieldOffset(0)]
             public LatLng point;
-            [FieldOffset(16)]
+            //[FieldOffset(16)]
             public DistanceBearring bearing; //how it was calculated
         }
 
-        [StructLayout(LayoutKind.Explicit)]
+        [StructLayout(LayoutKind.Sequential)]
         public struct FinalAttr
         {
-            [FieldOffset(0)] public ulong GID; //global id, defined by user (for databases)
-            [FieldOffset(8)] public ulong TID; //timestamp id
-            [FieldOffset(16)] public ulong LID; //local id, i.e number in array
-            [FieldOffset(24)] public uint type;
-            [FieldOffset(32)] public double x;
-            [FieldOffset(40)] public double y;
-            [FieldOffset(48)] public Coordinate center; //center of attractor peak
-            [FieldOffset(88)] public uint side;
-            [FieldOffset(96)] public double distanceErr; //calculation error due to neglected curvature etc
-            [FieldOffset(104)] public double radiusM; //radius of attractor peak
-            [FieldOffset(112)] public ulong n; //number of points
-            [FieldOffset(120)] public double mean; //mean average
-            [FieldOffset(128)] public uint rarity; //significance simplified ;)
-            [FieldOffset(136)] public double power_old; //oldstyle power - area taken by 10 central points of attractor/mean value for that area
-            [FieldOffset(144)] public double power; //area taken by all points of attractor/mean value for the area
-            [FieldOffset(152)] public double z_score; // poisson z-score of single random event, if we chose this area on random and got this distribution
-            [FieldOffset(160)] public double probability_single; //exact probability of the above event being random.
-            [FieldOffset(168)] public double integral_score; //abstract value of integral significance - how z-score varies with growth of radius, along with power characterises the density of condentsation/rarefaction
-            [FieldOffset(176)] public double significance; // poisson z-score of entire random event, i.e how possible is, that the event of finding this one attractor after the whole calculation was random.
-            [FieldOffset(184)] public double probability; //exact probability of the above event being random.
+            //[FieldOffset(0)]
+            public ulong GID; //global id, defined by user (for databases)
+            //[FieldOffset(8)]
+            public ulong TID; //timestamp id
+            //[FieldOffset(16)]
+            public ulong LID; //local id, i.e number in array
+            //[FieldOffset(24)]
+            public uint type;
+            //[FieldOffset(32)]
+            public double x;
+            //[FieldOffset(40)]
+            public double y;
+            //[FieldOffset(48)]
+            public Coordinate center; //center of attractor peak
+            //[FieldOffset(88)]
+            public uint side;
+            //[FieldOffset(96)]
+            public double distanceErr; //calculation error due to neglected curvature etc
+            //[FieldOffset(104)]
+            public double radiusM; //radius of attractor peak
+            //[FieldOffset(112)]
+            public ulong n; //number of points
+            //[FieldOffset(120)]
+            public double mean; //mean average
+            //[FieldOffset(128)]
+            public uint rarity; //significance simplified ;)
+            //[FieldOffset(136)]
+            public double power_old; //oldstyle power - area taken by 10 central points of attractor/mean value for that area
+            //[FieldOffset(144)]
+            public double power; //area taken by all points of attractor/mean value for the area
+            //[FieldOffset(152)]
+            public double z_score; // poisson z-score of single random event, if we chose this area on random and got this distribution
+            //[FieldOffset(160)]
+            public double probability_single; //exact probability of the above event being random.
+            //[FieldOffset(168)]
+            public double integral_score; //abstract value of integral significance - how z-score varies with growth of radius, along with power characterises the density of condentsation/rarefaction
+            //[FieldOffset(176)]
+            public double significance; // poisson z-score of entire random event, i.e how possible is, that the event of finding this one attractor after the whole calculation was random.
+            //[FieldOffset(184)]
+            public double probability; //exact probability of the above event being random.
         }
 
         [StructLayout(LayoutKind.Sequential)]
@@ -246,7 +266,7 @@ namespace VFatumbot.BotLogic
                         {
                             result[j] = new FinalAttractor();
                             Marshal.PtrToStructure(value, result[j]);
-                            value += 192;
+                            value += Marshal.SizeOf<FinalAttractor>() /* == 192 */ + 16 /* need this to fix alignment on non-Windows platforms */;
                         }
                     }
                     //releaseAttractors(value, al);
