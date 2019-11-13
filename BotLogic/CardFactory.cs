@@ -55,7 +55,7 @@ namespace VFatumbot
 
             var attachments = new List<Attachment>();
             var attachmentReply = MessageFactory.Attachment(attachments);
-            replies[useNativeLocationWidget ? 0 : 1] = attachmentReply;
+            replies[0] = attachmentReply;
 
             attachmentReply.AttachmentLayout = AttachmentLayoutTypes.Carousel;
             attachmentReply.Attachments.Add(CreateGoogleMapCard(incoords, !useNativeLocationWidget || showStreetAndEarthThumbnails, showStreetAndEarthThumbnails, w3wResult));
