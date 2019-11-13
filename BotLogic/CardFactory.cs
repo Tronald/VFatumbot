@@ -38,7 +38,15 @@ namespace VFatumbot
             var reply = MessageFactory.Attachment(attachments);
 
             var entity = new Entity("Place");
-            entity.SetAs(new Place(geo: new GeoCoordinates(latitude: incoords[0], longitude: incoords[1])));
+            var geo = new GeoCoordinates(latitude: incoords[0],
+                                        longitude: incoords[1],
+                                        elevation: 0,
+                                        type: "GeoCoordinates",
+                                        name: "GeoCoordinates");
+            entity.SetAs(new Place(type: "Place",
+                                   name: "Place",
+                                   geo: geo,
+                                   hasMap: true));
             reply.Entities = new List<Entity>()
             {
                 entity
