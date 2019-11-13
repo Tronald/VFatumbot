@@ -439,13 +439,14 @@ namespace VFatumbot.BotLogic
 
         public async Task LocationActionAsync(ITurnContext turnContext, UserProfile userProfile, CancellationToken cancellationToken)
         {
-            await turnContext.SendActivityAsync(MessageFactory.Text($"Your current radius is {userProfile.Radius}m"), cancellationToken);
-
-            await turnContext.SendActivityAsync(MessageFactory.Text($"Your current location is {userProfile.Latitude},{userProfile.Longitude}"), cancellationToken);
-
             var incoords = new double[] { userProfile.Latitude, userProfile.Longitude };
 
             dynamic w3wResult = await Helpers.GetWhat3WordsAddressAsync(incoords);
+
+            await turnContext.SendActivityAsync(MessageFactory.Text($"Your current radius is {userProfile.Radius}m\n\n  " +
+                                                                    $"Your current location is {userProfile.Latitude},{userProfile.Longitude}\n\n  " +
+                                                                    w3wResult != null ? $"What 3 Words address: {w3wResult.words}" : ""
+                                                                    ), cancellationToken);
 
             await turnContext.SendActivitiesAsync(CardFactory.CreateLocationCardsReply(Enum.Parse<ChannelPlatform>(turnContext.Activity.ChannelId), incoords, userProfile.IsDisplayGoogleThumbnails, w3wResult), cancellationToken);
         }
