@@ -443,9 +443,9 @@ namespace VFatumbot.BotLogic
 
             dynamic w3wResult = await Helpers.GetWhat3WordsAddressAsync(incoords);
 
-            await turnContext.SendActivityAsync(MessageFactory.Text($"Your current radius is {userProfile.Radius}m\n\n  " +
-                                                                    $"Your current location is {userProfile.Latitude},{userProfile.Longitude}\n\n  " +
-                                                                    w3wResult != null ? $"What 3 Words address: {w3wResult.words}" : ""
+            await turnContext.SendActivityAsync(MessageFactory.Text($"Your current radius is {userProfile.Radius}m.\n\n" +
+                                                                    $"Your current location is {userProfile.Latitude},{userProfile.Longitude}.\n\n" +
+                                                                    (w3wResult != null ? $"What 3 Words address: {w3wResult.words}" : "")
                                                                     ), cancellationToken);
 
             await turnContext.SendActivitiesAsync(CardFactory.CreateLocationCardsReply(Enum.Parse<ChannelPlatform>(turnContext.Activity.ChannelId), incoords, userProfile.IsDisplayGoogleThumbnails, w3wResult), cancellationToken);
