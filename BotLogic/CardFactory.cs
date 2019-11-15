@@ -86,7 +86,7 @@ namespace VFatumbot
             if (!showStreetAndEarthThumbnails)
             {
                 buttons.Add(new CardAction(ActionTypes.OpenUrl, "Street View", value: "https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=" + incoords[0] + "," + incoords[1] + "&fov=90&heading=235&pitch=10"));
-                buttons.Add(new CardAction(ActionTypes.OpenUrl, "Earth", value: "https://earth.google.com/web/@" + incoords[0] + "," + incoords[1] + ",146.726a,666.616d,35y,0h,45t,0r"));
+                buttons.Add(new CardAction(ActionTypes.OpenUrl, "Earth", value: "https://earth.google.com/web/search/" + incoords[0] + "," + incoords[1]));
             }
 
             var heroCard = new HeroCard
@@ -130,7 +130,7 @@ namespace VFatumbot
                 new CardImage("https://maps.googleapis.com/maps/api/staticmap?&markers=color:red%7Clabel:C%7C" + incoords[0] + "+" + incoords[1] + "&zoom=18&size=" + Consts.THUMBNAIL_SIZE + "&maptype=satellite&key=" + Consts.GOOGLE_MAPS_API_KEY),
             };
 
-            var cardAction = new CardAction(ActionTypes.OpenUrl, "Open", value: "https://earth.google.com/web/@" + incoords[0] + "," + incoords[1] + ",146.726a,666.616d,35y,0h,45t,0r");
+            var cardAction = new CardAction(ActionTypes.OpenUrl, "Open", value: "https://earth.google.com/web/search/" + incoords[0] + "," + incoords[1]);
 
             var buttons = new List<CardAction> {
                 cardAction
