@@ -29,8 +29,13 @@
         public const string GOOGLE_MAPS_API_KEY = "***REMOVED***";
 
         // OneSignal for Push Notifications
+#if RELEASE_PROD
         public const string ONE_SIGNAL_APP_ID = "***REMOVED***";
         public const string ONE_SIGNAL_API_KEY = "***REMOVED***";
+#else
+        public const string ONE_SIGNAL_APP_ID = "***REMOVED***";
+        public const string ONE_SIGNAL_API_KEY = "***REMOVED***";
+#endif
 
         // Reddit API for posting trip reports
         public const string REDDIT_APP_ID = "***REMOVED***";
