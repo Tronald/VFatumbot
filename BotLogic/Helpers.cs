@@ -26,7 +26,7 @@ namespace VFatumbot.BotLogic
             }
             else
             {
-                return "<br/>";
+                return "<br/><br/>";
             }
         }
 
