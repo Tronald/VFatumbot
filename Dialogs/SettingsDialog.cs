@@ -176,11 +176,11 @@ namespace VFatumbot
             await _userProfileTemporaryAccessor.SetAsync(stepContext.Context, userProfileTemporary);
 
             await stepContext.Context.SendActivityAsync(MessageFactory.Text(
-                $"Your anonymized ID is {userProfileTemporary.UserId}.\n\n" +
-                $"Water points will be {(userProfileTemporary.IsIncludeWaterPoints ? "included" : "skipped")}.\n\n" +
-                $"Street View and Earth thumbnails will be {(userProfileTemporary.IsDisplayGoogleThumbnails ? "displayed" : "hidden")}.\n\n" +
-                $"Current location is {userProfileTemporary.Latitude},{userProfileTemporary.Longitude}.\n\n" +
-                $"Current radius is {userProfileTemporary.Radius}m.\n\n"));
+                $"Your anonymized ID is {userProfileTemporary.UserId}.{Helpers.GetNewLine(stepContext.Context)}" +
+                $"Water points will be {(userProfileTemporary.IsIncludeWaterPoints ? "included" : "skipped")}.{Helpers.GetNewLine(stepContext.Context)}" +
+                $"Street View and Earth thumbnails will be {(userProfileTemporary.IsDisplayGoogleThumbnails ? "displayed" : "hidden")}.{Helpers.GetNewLine(stepContext.Context)}" +
+                $"Current location is {userProfileTemporary.Latitude},{userProfileTemporary.Longitude}.{Helpers.GetNewLine(stepContext.Context)}" +
+                $"Current radius is {userProfileTemporary.Radius}m.{Helpers.GetNewLine(stepContext.Context)}"));
         }
 
         private PromptOptions GetPromptOptions(string prompt)

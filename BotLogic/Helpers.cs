@@ -12,11 +12,24 @@ using Newtonsoft.Json;
 using System.Security.Cryptography;
 using System.Text;
 using Force.Crc32;
+using Microsoft.Bot.Builder;
 
 namespace VFatumbot.BotLogic
 {
     public static class Helpers
     {
+        public static string GetNewLine(ITurnContext context)
+        {
+            if (context.Activity.ChannelId == Enums.ChannelPlatform.directline.ToString())
+            {
+                return "\n\n";
+            }
+            else
+            {
+                return "<br/>";
+            }
+        }
+
         public static async Task<object> GetWhat3WordsAddressAsync(double[] incoords)
         {
             var response = await new HttpClient().GetAsync("https://api.what3words.com/v3/convert-to-3wa?coordinates=" + incoords[0] + "%2C" + incoords[1] + "&key=" + Consts.W3W_API_KEY);
