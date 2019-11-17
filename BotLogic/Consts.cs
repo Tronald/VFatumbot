@@ -20,9 +20,11 @@
         public const string COSMOS_DB_URI = "***REMOVED***";
         public const string COSMOS_DB_KEY = "***REMOVED***";
 #if RELEASE_PROD
-        public const string COSMOS_CONTAINER_NAME = "botdata";
+        public const string COSMOS_CONTAINER_NAME_PERSISTENT = "prod_persistent";
+        public const string COSMOS_CONTAINER_NAME_TEMPORARY = "prod_temporary";
 #else
-        public const string COSMOS_CONTAINER_NAME = "devbotdata";
+        public const string COSMOS_CONTAINER_NAME_PERSISTENT = "dev_persistent";
+        public const string COSMOS_CONTAINER_NAME_TEMPORARY = "dev_temporary";
 #endif
 
         // Google Maps API key

@@ -85,13 +85,13 @@ namespace VFatumbot.BotLogic
 
         // C# dependency installed via NuGut for access to the OneSignal API is:
         // https://github.com/Alegrowin/OneSignal.RestAPIv3.Client
-        public static async Task<NotificationCreateResult> SendPushNotification(UserProfile userProfile, string title, string body)
+        public static async Task<NotificationCreateResult> SendPushNotification(UserProfileTemporary userProfileTemporary, string title, string body)
         {
             var client = new OneSignalClient(Consts.ONE_SIGNAL_API_KEY); // Use your Api Key
             var options = new NotificationCreateOptions
             {
                 AppId = new Guid(Consts.ONE_SIGNAL_APP_ID),
-                IncludePlayerIds = new List<string>() { userProfile.PushUserId },
+                IncludePlayerIds = new List<string>() { userProfileTemporary.PushUserId },
                 // IncludedSegments = new List<string>() { "All" } // To send to all 
             };
             options.Headings.Add(LanguageCodes.English, title);

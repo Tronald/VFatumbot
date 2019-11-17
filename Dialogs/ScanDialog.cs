@@ -12,13 +12,13 @@ namespace VFatumbot
     public class ScanDialog : ComponentDialog
     {
         protected readonly ILogger _logger;
-        protected readonly IStatePropertyAccessor<UserProfile> _userProfileAccessor;
+        protected readonly IStatePropertyAccessor<UserProfileTemporary> _userProfileTemporaryAccessor;
         protected readonly MainDialog _mainDialog;
 
-        public ScanDialog(IStatePropertyAccessor<UserProfile> userProfileAccessor, MainDialog mainDialog, ILogger<MainDialog> logger) : base(nameof(ScanDialog))
+        public ScanDialog(IStatePropertyAccessor<UserProfileTemporary> userProfileTemporaryAccessor, MainDialog mainDialog, ILogger<MainDialog> logger) : base(nameof(ScanDialog))
         {
             _logger = logger;
-            _userProfileAccessor = userProfileAccessor;
+            _userProfileTemporaryAccessor = userProfileTemporaryAccessor;
             _mainDialog = mainDialog;
 
             AddDialog(new ChoicePrompt(nameof(ChoicePrompt)));
@@ -50,15 +50,15 @@ namespace VFatumbot
             //_logger.LogInformation($"ScanDialog.PerformActionStepAsync[{((FoundChoice)stepContext.Result)?.Value}]");
 
             var actionHandler = new ActionHandler();
-            var userProfile = await _userProfileAccessor.GetAsync(stepContext.Context, () => new UserProfile());
+            var userProfileTemporary = await _userProfileTemporaryAccessor.GetAsync(stepContext.Context, () => new UserProfileTemporary());
             var goBackMainMenuThisRound = false;
 
             switch (((FoundChoice)stepContext.Result)?.Value)
             {
                 case "Scan Attractor":
-                    if (!userProfile.IsScanning)
+                    if (!userProfileTemporary.IsScanning)
                     {
-                        await actionHandler.AttractorActionAsync(stepContext.Context, userProfile, cancellationToken, _mainDialog, true);
+                        await actionHandler.AttractorActionAsync(stepContext.Context, userProfileTemporary, cancellationToken, _mainDialog, true);
                     }
                     else
                     {
@@ -67,9 +67,9 @@ namespace VFatumbot
                     }
                     break;
                 case "Scan Void":
-                    if (!userProfile.IsScanning)
+                    if (!userProfileTemporary.IsScanning)
                     {
-                        await actionHandler.VoidActionAsync(stepContext.Context, userProfile, cancellationToken, _mainDialog, true);
+                        await actionHandler.VoidActionAsync(stepContext.Context, userProfileTemporary, cancellationToken, _mainDialog, true);
                     }
                     else
                     {
@@ -78,9 +78,9 @@ namespace VFatumbot
                     }
                     break;
                 case "Scan Anomaly":
-                    if (!userProfile.IsScanning)
+                    if (!userProfileTemporary.IsScanning)
                     {
-                        await actionHandler.AnomalyActionAsync(stepContext.Context, userProfile, cancellationToken, _mainDialog, true);
+                        await actionHandler.AnomalyActionAsync(stepContext.Context, userProfileTemporary, cancellationToken, _mainDialog, true);
                     }
                     else
                     {
@@ -89,9 +89,9 @@ namespace VFatumbot
                     }
                     break;
                 case "Scan Pair":
-                    if (!userProfile.IsScanning)
+                    if (!userProfileTemporary.IsScanning)
                     {
-                        await actionHandler.PairActionAsync(stepContext.Context, userProfile, cancellationToken, _mainDialog, true);
+                        await actionHandler.PairActionAsync(stepContext.Context, userProfileTemporary, cancellationToken, _mainDialog, true);
                     }
                     else
                     {

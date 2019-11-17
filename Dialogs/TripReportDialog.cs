@@ -22,7 +22,7 @@ namespace VFatumbot
     public class TripReportDialog : ComponentDialog
     {
         protected readonly ILogger _logger;
-        protected readonly IStatePropertyAccessor<UserProfile> _userProfileAccessor;
+        protected readonly IStatePropertyAccessor<UserProfileTemporary> _userProfileTemporaryAccessor;
         protected readonly MainDialog _mainDialog;
 
         private const string ReportAnswersKey = "value-ReportAnswers";
@@ -49,10 +49,10 @@ namespace VFatumbot
             public string Report { get; set; }
         }
 
-        public TripReportDialog(IStatePropertyAccessor<UserProfile> userProfileAccessor, MainDialog mainDialog, ILogger<MainDialog> logger) : base(nameof(TripReportDialog))
+        public TripReportDialog(IStatePropertyAccessor<UserProfileTemporary> userProfileTemporaryAccessor, MainDialog mainDialog, ILogger<MainDialog> logger) : base(nameof(TripReportDialog))
         {
             _logger = logger;
-            _userProfileAccessor = userProfileAccessor;
+            _userProfileTemporaryAccessor = userProfileTemporaryAccessor;
             _mainDialog = mainDialog;
 
             AddDialog(new ChoicePrompt(nameof(ChoicePrompt)));
@@ -437,7 +437,7 @@ namespace VFatumbot
 
             var callbackOptions = (CallbackOptions)stepContext.Options;
             var answers = (ReportAnswers)stepContext.Values[ReportAnswersKey];
-            var userProfile = await _userProfileAccessor.GetAsync(stepContext.Context);
+            var userProfileTemporary = await _userProfileTemporaryAccessor.GetAsync(stepContext.Context);
 
             try
             {
@@ -464,7 +464,7 @@ namespace VFatumbot
                                 //"http://randonauts.com/randonauts.jpg",
                                 attachment.ContentUrl,
                                 title: ("Randonaut Trip Report Photo" + ((callbackOptions.NearestPlaces != null && callbackOptions.NearestPlaces.Length >= 1) ? (" from " + callbackOptions.NearestPlaces[answers.PointNumberVisited]) : " from somewhere in the multiverse")), // TODO fuck I should stop trying to condense so much into one line in C#. I'm just drunk and lazy ATM. Now I'm just copy/pasting the same code in the morning sober... I'll come back to this really long one day and laugh :D
-                                description: (userProfile.UserId + " " + callbackOptions.ShortCodes[answers.PointNumberVisited])
+                                description: (userProfileTemporary.UserId + " " + callbackOptions.ShortCodes[answers.PointNumberVisited])
                                 );
                             answers.PhotoURLs = answers.PhotoURLs.Concat(new string[] { image.Link }).ToArray();
 
@@ -489,15 +489,15 @@ namespace VFatumbot
 
             var callbackOptions = (CallbackOptions)stepContext.Options;
             var answers = (ReportAnswers)stepContext.Values[ReportAnswersKey];
-            var userProfile = await _userProfileAccessor.GetAsync(stepContext.Context);
+            var userProfileTemporary = await _userProfileTemporaryAccessor.GetAsync(stepContext.Context);
             answers.Report = ""+stepContext.Result;
 
             await StoreReportInDB(stepContext.Context, callbackOptions, answers);
 
             var intentSuggestions = "";
-            if (userProfile.IntentSuggestions != null && userProfile.IntentSuggestions.Length > 0)
+            if (userProfileTemporary.IntentSuggestions != null && userProfileTemporary.IntentSuggestions.Length > 0)
             {
-                intentSuggestions = string.Join(", ", userProfile.IntentSuggestions) + "\n\n";
+                intentSuggestions = string.Join(", ", userProfileTemporary.IntentSuggestions) + "\n\n";
             }
 
             // Prep photo URLs
@@ -539,7 +539,7 @@ namespace VFatumbot
                 "Synchronicity: " + answers.Rating_Synchronicty + "\n\n" +
                  "\n\n" +
                  "\n\n" +
-                 userProfile.UserId + " " + callbackOptions.ShortCodes[answers.PointNumberVisited],
+                 userProfileTemporary.UserId + " " + callbackOptions.ShortCodes[answers.PointNumberVisited],
                 answers.PhotoURLs
                 );
 
@@ -589,7 +589,7 @@ namespace VFatumbot
 
         private async Task StoreReportInDB(ITurnContext context, CallbackOptions options, ReportAnswers answers)
         {
-            var userProfile = await _userProfileAccessor.GetAsync(context);
+            var userProfileTemporary = await _userProfileTemporaryAccessor.GetAsync(context);
 
             await Task.Run(() =>
             {
@@ -632,7 +632,7 @@ namespace VFatumbot
                         isb.Append("rating_synchroncity,");
                         isb.Append("text,");
                         isb.Append("photos,");
-                        if (userProfile.IntentSuggestions != null && userProfile.IntentSuggestions.Length > 0)
+                        if (userProfileTemporary.IntentSuggestions != null && userProfileTemporary.IntentSuggestions.Length > 0)
                         {
                             isb.Append("intent_suggestions,");
                             isb.Append("time_intent_suggestions_set,");
@@ -671,7 +671,7 @@ namespace VFatumbot
                         isb.Append("significance,");
                         isb.Append("probability");
                         isb.Append(") VALUES (");
-                        isb.Append($"'{userProfile.UserId}',"); // sha256 hash of channel-issued userId
+                        isb.Append($"'{userProfileTemporary.UserId}',"); // sha256 hash of channel-issued userId
                         isb.Append($"'{(int)Enum.Parse(typeof(Enums.ChannelPlatform), context.Activity.ChannelId)}',");
                         isb.Append($"'{context.Activity.Timestamp}',"); // datetime
                         isb.Append($"'{(answers.WasPointVisited ? 1 : 0)}',"); // point visited or not?
@@ -689,10 +689,10 @@ namespace VFatumbot
                         isb.Append($"'{SanitizeString(answers.Rating_Synchronicty)}',"); // Rating_Synchronicty
                         isb.Append($"'{SanitizeString(answers.Report)}',"); // text
                         isb.Append($"'{(answers.PhotoURLs != null ? string.Join(",", answers.PhotoURLs) : "")}',"); // photos
-                        if (userProfile.IntentSuggestions != null && userProfile.IntentSuggestions.Length > 0)
+                        if (userProfileTemporary.IntentSuggestions != null && userProfileTemporary.IntentSuggestions.Length > 0)
                         {
-                            isb.Append($"'{string.Join(",", SanitizeString(userProfile.IntentSuggestions))}',"); // intent suggestions
-                            isb.Append($"'{userProfile.TimeIntentSuggestionsSet}',");
+                            isb.Append($"'{string.Join(",", SanitizeString(userProfileTemporary.IntentSuggestions))}',"); // intent suggestions
+                            isb.Append($"'{userProfileTemporary.TimeIntentSuggestionsSet}',");
                         }
                         isb.Append($"'{(!string.IsNullOrEmpty(options.What3Words[i])  ? options.What3Words[i] : "")}',");
                         isb.Append($"'{options.ShortCodes[i]}',");

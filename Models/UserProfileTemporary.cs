@@ -3,10 +3,18 @@ using static VFatumbot.BotLogic.FatumFunctions;
 
 namespace VFatumbot
 {
-    // Defines a state property used to track information about the user.
-    public class UserProfile
+    // Defines a state property used to track information about the user that is only stored temporarily (stuff that should be reset every now and then).
+    public class UserProfileTemporary
     {
+        // TODO: I split UserProfile into Persistent and Temporary so Temporary could help us strengthen our approach to privacy and anonymity by
+        // leveraging the Time-To-Live (TTL) feature of the Azure Cosmos DB (NOSQL) database. Basically the temporary state property holds stuff
+        // like users' current location which is private data we have no need do hold onto permanently. But by the time I got to this stage of dev
+        // and with all the shit going on I decided to write probably the longest comment in this whole codebase.
+        // TL/DR; to avoid having to refactor a shit load we just temporarily set some of the persistent stuff like PushId and some settings here.
         public string UserId { get; set; }
+        public string PushUserId { get; set; }
+        public bool IsIncludeWaterPoints { get; set; } = true;
+        public bool IsDisplayGoogleThumbnails { get; set; } = false;
 
 #if EMULATORDEBUG
         // Fukuoka, Japan
@@ -17,11 +25,6 @@ namespace VFatumbot
         public double Longitude = Consts.INVALID_COORD;
 #endif
         public int Radius { get; set; } = Consts.DEFAULT_RADIUS;
-        public bool IsIncludeWaterPoints { get; set; } = true;
-        public bool IsDisplayGoogleThumbnails { get; set; } = false;
-
-        // OneSignal Player/User ID for push notifications
-        public string PushUserId { get; set; }
 
         public bool IsLocationSet
         {

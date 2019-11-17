@@ -30,26 +30,38 @@ namespace VFatumbot
             // Create the Bot Framework Adapter.
             services.AddSingleton<IBotFrameworkHttpAdapter, AdapterWithErrorHandler>();
 
-//#if RELEASE // TODO: doesn't seem to be working so will just use Cosmos for the emulator as well now
             // For the bot running in the Azure cloud, we need to use Cosmos DB (or Azure's Blob Storage service)
             // to keep data persistent, otherwise the stateless nature of the bot would be useless in keeping
             // track of users's locations, radius settings etc.
-            var storage = new CosmosDbStorage(new CosmosDbStorageOptions
+            var persistentStorage = new CosmosDbStorage(new CosmosDbStorageOptions
             {
                 AuthKey = Consts.COSMOS_DB_KEY,
-                CollectionId = Consts.COSMOS_CONTAINER_NAME,
+                CollectionId = Consts.COSMOS_CONTAINER_NAME_PERSISTENT,
                 CosmosDBEndpoint = new Uri(Consts.COSMOS_DB_URI),
                 DatabaseId = Consts.COSMOS_DB_NAME,
             });
 
-            var conversationState = new ConversationState(storage);
-            var userState = new UserState(storage);
+            var temporaryStorage = new CosmosDbStorage(new CosmosDbStorageOptions
+            {
+                AuthKey = Consts.COSMOS_DB_KEY,
+                CollectionId = Consts.COSMOS_CONTAINER_NAME_TEMPORARY,
+                CosmosDBEndpoint = new Uri(Consts.COSMOS_DB_URI),
+                DatabaseId = Consts.COSMOS_DB_NAME,
+            });
+
+            var conversationState = new ConversationState(persistentStorage);
+            var userPersistentState = new UserState(persistentStorage);
+            var userTemporaryState = new UserState(temporaryStorage);
 
             // Add the states as singletons
             services.AddSingleton(conversationState);
-            services.AddSingleton(userState);
-//#else
+            services.AddSingleton(userPersistentState);
+            services.AddSingleton(userTemporaryState);
+
 /*
+            //
+            // In-mem only way
+            //
             // Create the storage we'll be using for User and Conversation state. (Memory is great for testing purposes.)
             services.AddSingleton<IStorage, MemoryStorage>();
 
@@ -59,7 +71,7 @@ namespace VFatumbot
             // Create the Conversation state.
             services.AddSingleton<ConversationState>();
 */
-//#endif
+
 
             // The Dialog that will be run by the bot.
             services.AddSingleton<MainDialog>();

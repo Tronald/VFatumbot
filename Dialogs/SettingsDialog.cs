@@ -12,12 +12,12 @@ namespace VFatumbot
     public class SettingsDialog : ComponentDialog
     {
         protected readonly ILogger _logger;
-        protected readonly IStatePropertyAccessor<UserProfile> _userProfileAccessor;
+        protected readonly IStatePropertyAccessor<UserProfileTemporary> _userProfileTemporaryAccessor;
 
-        public SettingsDialog(IStatePropertyAccessor<UserProfile> userProfileAccessor, ILogger<MainDialog> logger) : base(nameof(SettingsDialog))
+        public SettingsDialog(IStatePropertyAccessor<UserProfileTemporary> userProfileTemporaryAccessor, ILogger<MainDialog> logger) : base(nameof(SettingsDialog))
         {
             _logger = logger;
-            _userProfileAccessor = userProfileAccessor;
+            _userProfileTemporaryAccessor = userProfileTemporaryAccessor;
 
             AddDialog(new ChoicePrompt(nameof(ChoicePrompt)));
             AddDialog(new NumberPrompt<int>(nameof(NumberPrompt<int>), RadiusValidatorAsync));
@@ -54,9 +54,9 @@ namespace VFatumbot
             {
                 case "Yes":
                     // TODO: a quick hack to reset IsScanning in case it gets stuck in that state
-                    var userProfile = await _userProfileAccessor.GetAsync(stepContext.Context);
-                    userProfile.IsScanning = false;
-                    await _userProfileAccessor.SetAsync(stepContext.Context, userProfile);
+                    var userProfileTemporary = await _userProfileTemporaryAccessor.GetAsync(stepContext.Context);
+                    userProfileTemporary.IsScanning = false;
+                    await _userProfileTemporaryAccessor.SetAsync(stepContext.Context, userProfileTemporary);
                     // << EOF TODO. Will figure out whether this needs handling properly later on.
 
                     return await stepContext.NextAsync();
@@ -103,9 +103,9 @@ namespace VFatumbot
             //_logger.LogInformation($"SettingsDialog.WaterPointsStepAsync");
 
             var inputtedRadius = (int)stepContext.Result;
-            var userProfile = await _userProfileAccessor.GetAsync(stepContext.Context);
-            userProfile.Radius = inputtedRadius;
-            await _userProfileAccessor.SetAsync(stepContext.Context, userProfile);
+            var userProfileTemporary = await _userProfileTemporaryAccessor.GetAsync(stepContext.Context);
+            userProfileTemporary.Radius = inputtedRadius;
+            await _userProfileTemporaryAccessor.SetAsync(stepContext.Context, userProfileTemporary);
 
             return await stepContext.PromptAsync(nameof(ChoicePrompt), GetPromptOptions("Include water points?"), cancellationToken);
         }
@@ -114,21 +114,21 @@ namespace VFatumbot
         {
             //_logger.LogInformation("SettingsDialog.UpdateWaterPointsYesOrNoStepAsync");
 
-            var userProfile = await _userProfileAccessor.GetAsync(stepContext.Context);
-            await _userProfileAccessor.SetAsync(stepContext.Context, userProfile);
+            var userProfileTemporary = await _userProfileTemporaryAccessor.GetAsync(stepContext.Context);
+            await _userProfileTemporaryAccessor.SetAsync(stepContext.Context, userProfileTemporary);
 
             switch (((FoundChoice)stepContext.Result)?.Value)
             {
                 case "Yes":
-                    userProfile.IsIncludeWaterPoints = true;
+                    userProfileTemporary.IsIncludeWaterPoints = true;
                     break;
                 case "No":
                 default:
-                    userProfile.IsIncludeWaterPoints = false;
+                    userProfileTemporary.IsIncludeWaterPoints = false;
                     break;
             }
 
-            await _userProfileAccessor.SetAsync(stepContext.Context, userProfile);
+            await _userProfileTemporaryAccessor.SetAsync(stepContext.Context, userProfileTemporary);
 
             return await stepContext.PromptAsync(nameof(ChoicePrompt), GetPromptOptions("Also display Google Street View and Earth thumbnails?"), cancellationToken);
         }
@@ -137,21 +137,21 @@ namespace VFatumbot
         {
             //_logger.LogInformation($"SettingsDialog.UpdateGoogleThumbnailsDisplayToggleStepAsync[{((FoundChoice)stepContext.Result)?.Value}]");
 
-            var userProfile = await _userProfileAccessor.GetAsync(stepContext.Context);
-            await _userProfileAccessor.SetAsync(stepContext.Context, userProfile);
+            var userProfileTemporary = await _userProfileTemporaryAccessor.GetAsync(stepContext.Context);
+            await _userProfileTemporaryAccessor.SetAsync(stepContext.Context, userProfileTemporary);
 
             switch (((FoundChoice)stepContext.Result)?.Value)
             {
                 case "Yes":
-                    userProfile.IsDisplayGoogleThumbnails = true;
+                    userProfileTemporary.IsDisplayGoogleThumbnails = true;
                     break;
                 case "No":
                 default:
-                    userProfile.IsDisplayGoogleThumbnails = false;
+                    userProfileTemporary.IsDisplayGoogleThumbnails = false;
                     break;
             }
 
-            await _userProfileAccessor.SetAsync(stepContext.Context, userProfile);
+            await _userProfileTemporaryAccessor.SetAsync(stepContext.Context, userProfileTemporary);
 
             return await stepContext.NextAsync();
         }
@@ -164,20 +164,23 @@ namespace VFatumbot
 
             await stepContext.EndDialogAsync(cancellationToken);
 
-            return await stepContext.ReplaceDialogAsync(nameof(MainDialog), cancellationToken: cancellationToken);
+            var callbackOptions = new CallbackOptions();
+            callbackOptions.UpdateSettings = true;
+
+            return await stepContext.ReplaceDialogAsync(nameof(MainDialog), callbackOptions, cancellationToken);
         }
 
         public async Task ShowCurrentSettingsAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
         {
-            var userProfile = await _userProfileAccessor.GetAsync(stepContext.Context);
-            await _userProfileAccessor.SetAsync(stepContext.Context, userProfile);
+            var userProfileTemporary = await _userProfileTemporaryAccessor.GetAsync(stepContext.Context);
+            await _userProfileTemporaryAccessor.SetAsync(stepContext.Context, userProfileTemporary);
 
             await stepContext.Context.SendActivityAsync(MessageFactory.Text(
-                $"Your anonymized ID is {userProfile.UserId}.\n\n" +
-                $"Water points will be {(userProfile.IsIncludeWaterPoints ? "included" : "skipped")}.\n\n" +
-                $"Street View and Earth thumbnails will be {(userProfile.IsDisplayGoogleThumbnails ? "displayed" : "hidden")}.\n\n" +
-                $"Current location is {userProfile.Latitude},{userProfile.Longitude}.\n\n" +
-                $"Current radius is {userProfile.Radius}m.\n\n"));
+                $"Your anonymized ID is {userProfileTemporary.UserId}.\n\n" +
+                $"Water points will be {(userProfileTemporary.IsIncludeWaterPoints ? "included" : "skipped")}.\n\n" +
+                $"Street View and Earth thumbnails will be {(userProfileTemporary.IsDisplayGoogleThumbnails ? "displayed" : "hidden")}.\n\n" +
+                $"Current location is {userProfileTemporary.Latitude},{userProfileTemporary.Longitude}.\n\n" +
+                $"Current radius is {userProfileTemporary.Radius}m.\n\n"));
         }
 
         private PromptOptions GetPromptOptions(string prompt)

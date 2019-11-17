@@ -15,21 +15,27 @@ namespace VFatumbot
     public class MainDialog : ComponentDialog
     {
         protected readonly ILogger _logger;
-        protected readonly UserState _userState;
-        protected readonly IStatePropertyAccessor<UserProfile> _userProfileAccessor;
+        protected readonly UserState _userPersistentState;
+        protected readonly UserState _userTemporaryState;
+        protected readonly IStatePropertyAccessor<UserProfilePersistent> _userProfilePersistentAccessor;
+        protected readonly IStatePropertyAccessor<UserProfileTemporary> _userProfileTemporaryAccessor;
 
-        public MainDialog(UserState userState, ConversationState conversationState, ILogger<MainDialog> logger) : base(nameof(MainDialog))
+        public MainDialog(UserState userPersistentState, UserState userTemporaryState, ConversationState conversationState, ILogger<MainDialog> logger) : base(nameof(MainDialog))
         {
             _logger = logger;
-            _userState = userState;
+            _userPersistentState = userPersistentState;
+            _userTemporaryState = userTemporaryState;
 
-            if (userState != null)
-                _userProfileAccessor = userState.CreateProperty<UserProfile>(nameof(UserProfile));
+            if (_userPersistentState != null)
+                _userProfilePersistentAccessor = userPersistentState.CreateProperty<UserProfilePersistent>(nameof(UserProfilePersistent));
 
-            AddDialog(new BlindSpotsDialog(_userProfileAccessor, this, logger));
-            AddDialog(new TripReportDialog(_userProfileAccessor, this, logger));
-            AddDialog(new ScanDialog(_userProfileAccessor, this, logger));
-            AddDialog(new SettingsDialog(_userProfileAccessor, logger));
+            if (userTemporaryState != null)
+                _userProfileTemporaryAccessor = userTemporaryState.CreateProperty<UserProfileTemporary>(nameof(UserProfileTemporary));
+
+            AddDialog(new BlindSpotsDialog(_userProfileTemporaryAccessor, this, logger));
+            AddDialog(new TripReportDialog(_userProfileTemporaryAccessor, this, logger));
+            AddDialog(new ScanDialog(_userProfileTemporaryAccessor, this, logger));
+            AddDialog(new SettingsDialog(_userProfileTemporaryAccessor, logger));
             AddDialog(new ChoicePrompt(nameof(ChoicePrompt)));
             AddDialog(new WaterfallDialog(nameof(WaterfallDialog), new WaterfallStep[]
             {
@@ -53,10 +59,10 @@ namespace VFatumbot
 
                 if (callbackOptions.ResetFlag)
                 {
-                    var userProfile = await _userProfileAccessor.GetAsync(stepContext.Context, () => new UserProfile());
-                    userProfile.IsScanning = false;
-                    await _userProfileAccessor.SetAsync(stepContext.Context, userProfile, cancellationToken);
-                    await _userState.SaveChangesAsync(stepContext.Context, false, cancellationToken);
+                    var userProfileTemporary = await _userProfileTemporaryAccessor.GetAsync(stepContext.Context, () => new UserProfileTemporary());
+                    userProfileTemporary.IsScanning = false;
+                    await _userProfileTemporaryAccessor.SetAsync(stepContext.Context, userProfileTemporary, cancellationToken);
+                    await _userTemporaryState.SaveChangesAsync(stepContext.Context, false, cancellationToken);
                 }
 
                 if (callbackOptions.StartTripReportDialog)
@@ -66,11 +72,23 @@ namespace VFatumbot
 
                 if (callbackOptions.UpdateIntentSuggestions)
                 {
-                    var userProfile = await _userProfileAccessor.GetAsync(stepContext.Context, () => new UserProfile());
-                    userProfile.IntentSuggestions = callbackOptions.IntentSuggestions;
-                    userProfile.TimeIntentSuggestionsSet = callbackOptions.TimeIntentSuggestionsSet;
-                    await _userProfileAccessor.SetAsync(stepContext.Context, userProfile, cancellationToken);
-                    await _userState.SaveChangesAsync(stepContext.Context, false, cancellationToken);
+                    var userProfileTemporary = await _userProfileTemporaryAccessor.GetAsync(stepContext.Context, () => new UserProfileTemporary());
+                    userProfileTemporary.IntentSuggestions = callbackOptions.IntentSuggestions;
+                    userProfileTemporary.TimeIntentSuggestionsSet = callbackOptions.TimeIntentSuggestionsSet;
+                    await _userProfileTemporaryAccessor.SetAsync(stepContext.Context, userProfileTemporary, cancellationToken);
+                    await _userTemporaryState.SaveChangesAsync(stepContext.Context, false, cancellationToken);
+                }
+
+                if (callbackOptions.UpdateSettings)
+                {
+                    var userProfilePersistent = await _userProfilePersistentAccessor.GetAsync(stepContext.Context, () => new UserProfilePersistent());
+                    var userProfileTemporary = await _userProfileTemporaryAccessor.GetAsync(stepContext.Context, () => new UserProfileTemporary());
+
+                    userProfilePersistent.IsIncludeWaterPoints = userProfileTemporary.IsIncludeWaterPoints;
+                    userProfilePersistent.IsDisplayGoogleThumbnails = userProfileTemporary.IsDisplayGoogleThumbnails;
+
+                    await _userProfilePersistentAccessor.SetAsync(stepContext.Context, userProfilePersistent, cancellationToken);
+                    await _userPersistentState.SaveChangesAsync(stepContext.Context, false, cancellationToken);
                 }
             }
 
@@ -90,7 +108,7 @@ namespace VFatumbot
         {
             //_logger.LogInformation($"MainDialog.PerformActionStepAsync[{((FoundChoice)stepContext.Result)?.Value}]");
 
-            var userProfile = await _userProfileAccessor.GetAsync(stepContext.Context, () => new UserProfile());
+            var userProfileTemporary = await _userProfileTemporaryAccessor.GetAsync(stepContext.Context, () => new UserProfileTemporary());
             var actionHandler = new ActionHandler();
             var repromptThisRound = false;
 
@@ -103,19 +121,19 @@ namespace VFatumbot
                     break;
 
                 case "Attractor":
-                    await actionHandler.AttractorActionAsync(stepContext.Context, userProfile, cancellationToken, this);
+                    await actionHandler.AttractorActionAsync(stepContext.Context, userProfileTemporary, cancellationToken, this);
                     break;
                 case "Void":
-                    await actionHandler.VoidActionAsync(stepContext.Context, userProfile, cancellationToken, this);
+                    await actionHandler.VoidActionAsync(stepContext.Context, userProfileTemporary, cancellationToken, this);
                     break;
                 case "Anomaly":
-                    await actionHandler.AnomalyActionAsync(stepContext.Context, userProfile, cancellationToken, this);
+                    await actionHandler.AnomalyActionAsync(stepContext.Context, userProfileTemporary, cancellationToken, this);
                     break;
                 case "Intent Suggestions":
-                    await actionHandler.IntentSuggestionActionAsync(stepContext.Context, userProfile, cancellationToken, this);
+                    await actionHandler.IntentSuggestionActionAsync(stepContext.Context, userProfileTemporary, cancellationToken, this);
                     break;
                 case "Pair":
-                    await actionHandler.PairActionAsync(stepContext.Context, userProfile, cancellationToken, this);
+                    await actionHandler.PairActionAsync(stepContext.Context, userProfileTemporary, cancellationToken, this);
                     break;
                 case "Blind Spots":
                     return await stepContext.BeginDialogAsync(nameof(BlindSpotsDialog), this, cancellationToken);
@@ -123,7 +141,7 @@ namespace VFatumbot
                     return await stepContext.BeginDialogAsync(nameof(ScanDialog), this, cancellationToken);
                 case "My Location":
                     repromptThisRound = true;
-                    await actionHandler.LocationActionAsync(stepContext.Context, userProfile, cancellationToken);
+                    await actionHandler.LocationActionAsync(stepContext.Context, userProfileTemporary, cancellationToken);
                     break;
                 case "Settings":
                     return await stepContext.BeginDialogAsync(nameof(SettingsDialog), this, cancellationToken);

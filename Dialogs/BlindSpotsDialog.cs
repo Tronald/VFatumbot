@@ -12,13 +12,13 @@ namespace VFatumbot
     public class BlindSpotsDialog : ComponentDialog
     {
         protected readonly ILogger _logger;
-        protected readonly IStatePropertyAccessor<UserProfile> _userProfileAccessor;
+        protected readonly IStatePropertyAccessor<UserProfileTemporary> _userProfileTemporaryAccessor;
         protected readonly MainDialog _mainDialog;
 
-        public BlindSpotsDialog(IStatePropertyAccessor<UserProfile> userProfileAccessor, MainDialog mainDialog, ILogger<MainDialog> logger) : base(nameof(BlindSpotsDialog))
+        public BlindSpotsDialog(IStatePropertyAccessor<UserProfileTemporary> userProfileTemporaryAccessor, MainDialog mainDialog, ILogger<MainDialog> logger) : base(nameof(BlindSpotsDialog))
         {
             _logger = logger;
-            _userProfileAccessor = userProfileAccessor;
+            _userProfileTemporaryAccessor = userProfileTemporaryAccessor;
             _mainDialog = mainDialog;
 
             AddDialog(new ChoicePrompt(nameof(ChoicePrompt)));
@@ -49,22 +49,22 @@ namespace VFatumbot
         {
             //_logger.LogInformation($"BlindSpotsDialog.PerformActionStepAsync[{((FoundChoice)stepContext.Result)?.Value}]");
 
-            var userProfile = await _userProfileAccessor.GetAsync(stepContext.Context, () => new UserProfile());
+            var userProfileTemporary = await _userProfileTemporaryAccessor.GetAsync(stepContext.Context, () => new UserProfileTemporary());
             var actionHandler = new ActionHandler();
 
             switch (((FoundChoice)stepContext.Result)?.Value)
             {
                 case "Quantum":
-                    await actionHandler.QuantumActionAsync(stepContext.Context, userProfile, cancellationToken, _mainDialog);
+                    await actionHandler.QuantumActionAsync(stepContext.Context, userProfileTemporary, cancellationToken, _mainDialog);
                     break;
                 case "Quantum Time":
-                    await actionHandler.QuantumActionAsync(stepContext.Context, userProfile, cancellationToken, _mainDialog, true);
+                    await actionHandler.QuantumActionAsync(stepContext.Context, userProfileTemporary, cancellationToken, _mainDialog, true);
                     break;
                 case "Pseudo":
-                    await actionHandler.PseudoActionAsync(stepContext.Context, userProfile, cancellationToken, _mainDialog);
+                    await actionHandler.PseudoActionAsync(stepContext.Context, userProfileTemporary, cancellationToken, _mainDialog);
                     break;
                 case "Mystery Point":
-                    await actionHandler.MysteryPointActionAsync(stepContext.Context, userProfile, cancellationToken, _mainDialog);
+                    await actionHandler.MysteryPointActionAsync(stepContext.Context, userProfileTemporary, cancellationToken, _mainDialog);
                     break;
                 case "< Back":
                     return await stepContext.ReplaceDialogAsync(nameof(MainDialog), cancellationToken: cancellationToken);

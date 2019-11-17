@@ -19,5 +19,7 @@ namespace VFatumbot.BotLogic
         public bool UpdateIntentSuggestions { get; set; }
         public string[] IntentSuggestions { get; set; }
         public string TimeIntentSuggestionsSet { get; set; }
+
+        public bool UpdateSettings { get; set; }
     }
 }

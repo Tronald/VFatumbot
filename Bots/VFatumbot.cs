@@ -17,18 +17,21 @@ namespace VFatumbot
 {
     public class VFatumbot<T> : ActivityHandler where T : Dialog
     {
-        protected readonly ConversationState _conversationState;
         protected readonly MainDialog _mainDialog;
         protected readonly ILogger _logger;
-        protected readonly UserState _userState;
+        protected readonly ConversationState _conversationState;
+        protected readonly UserState _userPersistentState;
+        protected readonly UserState _userTemporaryState;
 
-        protected IStatePropertyAccessor<UserProfile> mUserProfileAccessor;
-        protected IStatePropertyAccessor<ConversationData> mConversationDataAccessor;
+        protected IStatePropertyAccessor<ConversationData> _conversationDataAccessor;
+        protected IStatePropertyAccessor<UserProfilePersistent> _userProfilePersistentAccessor;
+        protected IStatePropertyAccessor<UserProfileTemporary> _userProfileTemporaryAccessor;
 
-        public VFatumbot(ConversationState conversationState, UserState userState, MainDialog dialog, ILogger<VFatumbot<MainDialog>> logger)
+        public VFatumbot(ConversationState conversationState, UserState userPersistentState, UserState userTemporaryState, MainDialog dialog, ILogger<VFatumbot<MainDialog>> logger)
         {
             _conversationState = conversationState;
-            _userState = userState;
+            _userPersistentState = userPersistentState;
+            _userTemporaryState = userTemporaryState;
             _mainDialog = dialog;
             _logger = logger;
         }
@@ -39,18 +42,24 @@ namespace VFatumbot
             {
                 if (member.Id != turnContext.Activity.Recipient.Id)
                 {
-                    var userProfile = await mUserProfileAccessor.GetAsync(turnContext, () => new UserProfile());
+                    var userProfilePersistent = await _userProfilePersistentAccessor.GetAsync(turnContext, () => new UserProfilePersistent());
+                    var userProfileTemporary = await _userProfileTemporaryAccessor.GetAsync(turnContext, () => new UserProfileTemporary());
 
-                    if (userProfile.IsLocationSet)
+                    if (userProfileTemporary.IsLocationSet)
                     {
                         await turnContext.SendActivityAsync(MessageFactory.Text("Welcome back to Fatumbot!"), cancellationToken);
                         await turnContext.SendActivityAsync(MessageFactory.Text("Don't forget to send your current location."), cancellationToken);
                         await _mainDialog.RunAsync(turnContext, _conversationState.CreateProperty<DialogState>(nameof(DialogState)), cancellationToken);
                     }
+                    else if (userProfilePersistent.HasSetLocationOnce)
+                    {
+                        await turnContext.SendActivityAsync(MessageFactory.Text("Welcome back to Fatumbot!"), cancellationToken);
+                        await turnContext.SendActivityAsync(MessageFactory.Text(Consts.NO_LOCATION_SET_MSG), cancellationToken);
+                    }
                     else
                     {
                         await turnContext.SendActivityAsync(MessageFactory.Text("Welcome to Fatumbot. This is a tool to experiment with the ideas that the mind and matter are connected in more ways than currently understood, and that by visiting random (in the true sense of the word) places one can journey outside of their normal probability paths."), cancellationToken);
-                        await turnContext.SendActivityAsync(MessageFactory.Text("Start off by sending your location, or typing \"search <address>\", or a Google Maps URL. Don't forget you can type \"help\" for more info."), cancellationToken);
+                        await turnContext.SendActivityAsync(MessageFactory.Text("Start off by sending your location from the app (hint: you can do so by tapping the 🌍/::/＋/📎 icon in your app), or type \"search <address>\", or send a Google Maps URL. Don't forget you can type \"help\" for more info."), cancellationToken);
                     }
 
                     // Hack coz Facebook Messenge stopped showing "Send Location" button
@@ -64,11 +73,14 @@ namespace VFatumbot
 
         public override async Task OnTurnAsync(ITurnContext turnContext, CancellationToken cancellationToken = default(CancellationToken))
         {
-            mUserProfileAccessor = _userState.CreateProperty<UserProfile>(nameof(UserProfile));
-            var userProfile = await mUserProfileAccessor.GetAsync(turnContext, () => new UserProfile());
+            _userProfilePersistentAccessor = _userPersistentState.CreateProperty<UserProfilePersistent>(nameof(UserProfilePersistent));
+            var userProfilePersistent = await _userProfilePersistentAccessor.GetAsync(turnContext, () => new UserProfilePersistent());
 
-            mConversationDataAccessor = _conversationState.CreateProperty<ConversationData>(nameof(ConversationData));
-            var conversationData = await mConversationDataAccessor.GetAsync(turnContext, () => new ConversationData());
+            _userProfileTemporaryAccessor = _userTemporaryState.CreateProperty<UserProfileTemporary>(nameof(UserProfileTemporary));
+            var userProfileTemporary = await _userProfileTemporaryAccessor.GetAsync(turnContext, () => new UserProfileTemporary());
+
+            _conversationDataAccessor = _conversationState.CreateProperty<ConversationData>(nameof(ConversationData));
+            var conversationData = await _conversationDataAccessor.GetAsync(turnContext, () => new ConversationData());
 
             // Print info about image attachments
             //if (turnContext.Activity.Attachments != null)
@@ -77,26 +89,37 @@ namespace VFatumbot
             //}
 
             // Save user's ID
-            userProfile.UserId = Helpers.Sha256Hash(turnContext.Activity.From.Id);
+            if (string.IsNullOrEmpty(userProfilePersistent.UserId))
+            {
+                userProfilePersistent.UserId = userProfileTemporary.UserId = Helpers.Sha256Hash(turnContext.Activity.From.Id);
+            }
+            else
+            {
+                userProfileTemporary.UserId = userProfilePersistent.UserId;
+            }
 
             // Add message details to the conversation data.
             var messageTimeOffset = (DateTimeOffset)turnContext.Activity.Timestamp;
             var localMessageTime = messageTimeOffset.ToLocalTime();
             conversationData.Timestamp = localMessageTime.ToString();
-            conversationData.ChannelId = turnContext.Activity.ChannelId.ToString();
-            await mConversationDataAccessor.SetAsync(turnContext, conversationData);
+            await _conversationDataAccessor.SetAsync(turnContext, conversationData);
+
+            userProfileTemporary.IsIncludeWaterPoints = userProfilePersistent.IsIncludeWaterPoints;
+            userProfileTemporary.IsDisplayGoogleThumbnails = userProfilePersistent.IsDisplayGoogleThumbnails;
 
             // TODO: most of the logic/functionalioty in the following if statements I realised later on should probably be structured in the way the Bot Framework SDK talks about "middleware".
             // Maybe one day re-structure/re-factor it to following their middleware patterns...
 
             double lat = 0, lon = 0;
             string pushUserId = null;
+            userProfileTemporary.PushUserId = userProfilePersistent.PushUserId;
             if (InterceptPushNotificationSubscription(turnContext, out pushUserId))
             {
-                if (userProfile.PushUserId != pushUserId)
+                if (userProfilePersistent.PushUserId != pushUserId)
                 {
-                    userProfile.PushUserId = pushUserId;
-                    await mUserProfileAccessor.SetAsync(turnContext, userProfile);
+                    userProfilePersistent.PushUserId = userProfileTemporary.PushUserId = pushUserId;
+                    await _userProfilePersistentAccessor.SetAsync(turnContext, userProfilePersistent);
+                    await _userProfileTemporaryAccessor.SetAsync(turnContext, userProfileTemporary);
                 }
             }
             else if (InterceptLocation(turnContext, out lat, out lon)) // Intercept any locations the user sends us, no matter where in the conversation they are
@@ -121,17 +144,21 @@ namespace VFatumbot
                 if (validCoords)
                 {
                     // Update user's location
-                    userProfile.Latitude = lat;
-                    userProfile.Longitude = lon;
+                    userProfileTemporary.Latitude = lat;
+                    userProfileTemporary.Longitude = lon;
 
                     await turnContext.SendActivityAsync(MessageFactory.Text($"New location confirmed @ {lat},{lon}"), cancellationToken);
 
                     var incoords = new double[] { lat, lon };
                     var w3wResult = await Helpers.GetWhat3WordsAddressAsync(incoords);
-                    await turnContext.SendActivitiesAsync(CardFactory.CreateLocationCardsReply(Enum.Parse<ChannelPlatform>(turnContext.Activity.ChannelId), incoords, userProfile.IsDisplayGoogleThumbnails, w3wResult), cancellationToken);
+                    await turnContext.SendActivitiesAsync(CardFactory.CreateLocationCardsReply(Enum.Parse<ChannelPlatform>(turnContext.Activity.ChannelId), incoords, userProfileTemporary.IsDisplayGoogleThumbnails, w3wResult), cancellationToken);
 
-                    await mUserProfileAccessor.SetAsync(turnContext, userProfile);
-                    await _userState.SaveChangesAsync(turnContext, false, cancellationToken);
+                    await _userProfileTemporaryAccessor.SetAsync(turnContext, userProfileTemporary);
+                    await _userTemporaryState.SaveChangesAsync(turnContext, false, cancellationToken);
+
+                    userProfilePersistent.HasSetLocationOnce = true;
+                    await _userPersistentState.SaveChangesAsync(turnContext, false, cancellationToken);
+
                     await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(turnContext, _mainDialog, cancellationToken);
 
                     return;
@@ -162,7 +189,7 @@ namespace VFatumbot
                 {
                     await turnContext.SendActivityAsync(MessageFactory.Text(help), cancellationToken);
                 }
-                if (!string.IsNullOrEmpty(turnContext.Activity.Text) && !userProfile.IsLocationSet)
+                if (!string.IsNullOrEmpty(turnContext.Activity.Text) && !userProfileTemporary.IsLocationSet)
                 {
                     await turnContext.SendActivityAsync(MessageFactory.Text(Consts.NO_LOCATION_SET_MSG), cancellationToken);
 
@@ -180,7 +207,7 @@ namespace VFatumbot
                     return;
                 }
             }
-            else if (!string.IsNullOrEmpty(turnContext.Activity.Text) && !userProfile.IsLocationSet)
+            else if (!string.IsNullOrEmpty(turnContext.Activity.Text) && !userProfileTemporary.IsLocationSet)
             {
                 await turnContext.SendActivityAsync(MessageFactory.Text(Consts.NO_LOCATION_SET_MSG), cancellationToken);
 
@@ -194,10 +221,11 @@ namespace VFatumbot
             }
             else if (!string.IsNullOrEmpty(turnContext.Activity.Text) && turnContext.Activity.Text.StartsWith("/", StringComparison.InvariantCulture))
             {
-                await new ActionHandler().ParseSlashCommands(turnContext, userProfile, cancellationToken, _mainDialog);
+                await new ActionHandler().ParseSlashCommands(turnContext, userProfileTemporary, cancellationToken, _mainDialog);
 
-                await mUserProfileAccessor.SetAsync(turnContext, userProfile);
-                await _userState.SaveChangesAsync(turnContext, false, cancellationToken);
+                await _userProfileTemporaryAccessor.SetAsync(turnContext, userProfileTemporary);
+                await _userPersistentState.SaveChangesAsync(turnContext, false, cancellationToken);
+                await _userTemporaryState.SaveChangesAsync(turnContext, false, cancellationToken);
 
                 return;
             }
@@ -206,7 +234,8 @@ namespace VFatumbot
 
             // Save any state changes that might have occured during the turn.
             await _conversationState.SaveChangesAsync(turnContext, false, cancellationToken);
-            await _userState.SaveChangesAsync(turnContext, false, cancellationToken);
+            await _userPersistentState.SaveChangesAsync(turnContext, false, cancellationToken);
+            await _userTemporaryState.SaveChangesAsync(turnContext, false, cancellationToken);
         }
 
         protected override async Task OnMessageActivityAsync(ITurnContext<IMessageActivity> turnContext, CancellationToken cancellationToken)
