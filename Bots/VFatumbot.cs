@@ -110,11 +110,7 @@ namespace VFatumbot
             double lat = 0, lon = 0;
             string pushUserId = null;
             userProfileTemporary.PushUserId = userProfilePersistent.PushUserId;
-            if (turnContext.Activity.ChannelId == "telegram" && turnContext.Activity.Text == "/start")
-            {
-                // skip all middleware-if-logic below
-            }
-            else if (InterceptPushNotificationSubscription(turnContext, out pushUserId))
+            if (InterceptPushNotificationSubscription(turnContext, out pushUserId))
             {
                 if (userProfilePersistent.PushUserId != pushUserId)
                 {
