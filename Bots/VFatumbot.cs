@@ -20,14 +20,14 @@ namespace VFatumbot
         protected readonly MainDialog _mainDialog;
         protected readonly ILogger _logger;
         protected readonly ConversationState _conversationState;
-        protected readonly UserState _userPersistentState;
-        protected readonly UserState _userTemporaryState;
+        protected readonly UserPersistentState _userPersistentState;
+        protected readonly UserTemporaryState _userTemporaryState;
 
         protected IStatePropertyAccessor<ConversationData> _conversationDataAccessor;
         protected IStatePropertyAccessor<UserProfilePersistent> _userProfilePersistentAccessor;
         protected IStatePropertyAccessor<UserProfileTemporary> _userProfileTemporaryAccessor;
 
-        public VFatumbot(ConversationState conversationState, UserState userPersistentState, UserState userTemporaryState, MainDialog dialog, ILogger<VFatumbot<MainDialog>> logger)
+        public VFatumbot(ConversationState conversationState, UserPersistentState userPersistentState, UserTemporaryState userTemporaryState, MainDialog dialog, ILogger<VFatumbot<MainDialog>> logger)
         {
             _conversationState = conversationState;
             _userPersistentState = userPersistentState;
@@ -89,14 +89,7 @@ namespace VFatumbot
             //}
 
             // Save user's ID
-            if (string.IsNullOrEmpty(userProfilePersistent.UserId))
-            {
-                userProfilePersistent.UserId = userProfileTemporary.UserId = Helpers.Sha256Hash(turnContext.Activity.From.Id);
-            }
-            else
-            {
-                userProfileTemporary.UserId = userProfilePersistent.UserId;
-            }
+            userProfilePersistent.UserId = userProfileTemporary.UserId = Helpers.Sha256Hash(turnContext.Activity.From.Id);
 
             // Add message details to the conversation data.
             var messageTimeOffset = (DateTimeOffset)turnContext.Activity.Timestamp;

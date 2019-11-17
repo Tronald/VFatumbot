@@ -15,12 +15,12 @@ namespace VFatumbot
     public class MainDialog : ComponentDialog
     {
         protected readonly ILogger _logger;
-        protected readonly UserState _userPersistentState;
-        protected readonly UserState _userTemporaryState;
+        protected readonly UserPersistentState _userPersistentState;
+        protected readonly UserTemporaryState _userTemporaryState;
         protected readonly IStatePropertyAccessor<UserProfilePersistent> _userProfilePersistentAccessor;
         protected readonly IStatePropertyAccessor<UserProfileTemporary> _userProfileTemporaryAccessor;
 
-        public MainDialog(UserState userPersistentState, UserState userTemporaryState, ConversationState conversationState, ILogger<MainDialog> logger) : base(nameof(MainDialog))
+        public MainDialog(UserPersistentState userPersistentState, UserTemporaryState userTemporaryState, ConversationState conversationState, ILogger<MainDialog> logger) : base(nameof(MainDialog))
         {
             _logger = logger;
             _userPersistentState = userPersistentState;
@@ -84,7 +84,6 @@ namespace VFatumbot
                 {
                     userProfilePersistent.IsIncludeWaterPoints = userProfileTemporary.IsIncludeWaterPoints;
                     userProfilePersistent.IsDisplayGoogleThumbnails = userProfileTemporary.IsDisplayGoogleThumbnails;
-
                     await _userProfilePersistentAccessor.SetAsync(stepContext.Context, userProfilePersistent, cancellationToken);
                     await _userPersistentState.SaveChangesAsync(stepContext.Context, false, cancellationToken);
                 }

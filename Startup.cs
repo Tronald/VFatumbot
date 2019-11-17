@@ -50,8 +50,8 @@ namespace VFatumbot
             });
 
             var conversationState = new ConversationState(persistentStorage);
-            var userPersistentState = new UserState(persistentStorage);
-            var userTemporaryState = new UserState(temporaryStorage);
+            var userPersistentState = new UserPersistentState(persistentStorage);
+            var userTemporaryState = new UserTemporaryState(temporaryStorage);
 
             // Add the states as singletons
             services.AddSingleton(conversationState);

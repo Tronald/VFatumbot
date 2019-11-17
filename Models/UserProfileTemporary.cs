@@ -1,8 +1,22 @@
-﻿using VFatumbot.BotLogic;
+﻿using System;
+using Microsoft.Bot.Builder;
+using VFatumbot.BotLogic;
 using static VFatumbot.BotLogic.FatumFunctions;
 
 namespace VFatumbot
 {
+    public class UserTemporaryState : BotState
+    {
+        public UserTemporaryState(IStorage storage) : base(storage, nameof(UserTemporaryState)) { }
+
+        protected override string GetStorageKey(ITurnContext turnContext)
+        {
+            var channelId = turnContext.Activity.ChannelId ?? throw new ArgumentNullException("invalid activity-missing channelId");
+            var userId = turnContext.Activity.From?.Id ?? throw new ArgumentNullException("invalid activity-missing From.Id");
+            return $"{channelId}/users/{userId}";
+        }
+    }
+
     // Defines a state property used to track information about the user that is only stored temporarily (stuff that should be reset every now and then).
     public class UserProfileTemporary
     {
