@@ -8,8 +8,8 @@ namespace VFatumbot
     {
         public string UserId { get; set; }
 
-        public bool IsIncludeWaterPoints { get; set; }
-        public bool IsDisplayGoogleThumbnails { get; set; }
+        public bool IsIncludeWaterPoints { get; set; } = true;
+        public bool IsDisplayGoogleThumbnails { get; set; } = false;
 
         // OneSignal Player/User ID for push notifications
         public string PushUserId { get; set; }

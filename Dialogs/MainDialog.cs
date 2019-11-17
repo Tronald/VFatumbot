@@ -51,6 +51,9 @@ namespace VFatumbot
             // Shortcut to trip report dialog testing
             //return await stepContext.ReplaceDialogAsync(nameof(TripReportDialog), new CallbackOptions(), cancellationToken);
 
+            var userProfilePersistent = await _userProfilePersistentAccessor.GetAsync(stepContext.Context, () => new UserProfilePersistent());
+            var userProfileTemporary = await _userProfileTemporaryAccessor.GetAsync(stepContext.Context, () => new UserProfileTemporary());
+
             if (stepContext.Options != null)
             {
                 // Callback options passed after resuming dialog after long-running background threads etc have finished
@@ -59,7 +62,6 @@ namespace VFatumbot
 
                 if (callbackOptions.ResetFlag)
                 {
-                    var userProfileTemporary = await _userProfileTemporaryAccessor.GetAsync(stepContext.Context, () => new UserProfileTemporary());
                     userProfileTemporary.IsScanning = false;
                     await _userProfileTemporaryAccessor.SetAsync(stepContext.Context, userProfileTemporary, cancellationToken);
                     await _userTemporaryState.SaveChangesAsync(stepContext.Context, false, cancellationToken);
@@ -72,7 +74,6 @@ namespace VFatumbot
 
                 if (callbackOptions.UpdateIntentSuggestions)
                 {
-                    var userProfileTemporary = await _userProfileTemporaryAccessor.GetAsync(stepContext.Context, () => new UserProfileTemporary());
                     userProfileTemporary.IntentSuggestions = callbackOptions.IntentSuggestions;
                     userProfileTemporary.TimeIntentSuggestionsSet = callbackOptions.TimeIntentSuggestionsSet;
                     await _userProfileTemporaryAccessor.SetAsync(stepContext.Context, userProfileTemporary, cancellationToken);
@@ -81,15 +82,29 @@ namespace VFatumbot
 
                 if (callbackOptions.UpdateSettings)
                 {
-                    var userProfilePersistent = await _userProfilePersistentAccessor.GetAsync(stepContext.Context, () => new UserProfilePersistent());
-                    var userProfileTemporary = await _userProfileTemporaryAccessor.GetAsync(stepContext.Context, () => new UserProfileTemporary());
-
                     userProfilePersistent.IsIncludeWaterPoints = userProfileTemporary.IsIncludeWaterPoints;
                     userProfilePersistent.IsDisplayGoogleThumbnails = userProfileTemporary.IsDisplayGoogleThumbnails;
 
                     await _userProfilePersistentAccessor.SetAsync(stepContext.Context, userProfilePersistent, cancellationToken);
                     await _userPersistentState.SaveChangesAsync(stepContext.Context, false, cancellationToken);
                 }
+            }
+
+            // Make sure the persistent settings are in synch with the temporary ones
+            bool doSync = false;
+            if (userProfileTemporary.IsIncludeWaterPoints != userProfilePersistent.IsIncludeWaterPoints)
+            {
+                userProfileTemporary.IsIncludeWaterPoints = userProfilePersistent.IsIncludeWaterPoints;
+                doSync = true;
+            }
+            if (userProfileTemporary.IsDisplayGoogleThumbnails != userProfilePersistent.IsDisplayGoogleThumbnails)
+            {
+                userProfileTemporary.IsDisplayGoogleThumbnails = userProfilePersistent.IsDisplayGoogleThumbnails;
+                doSync = true;
+            }
+            if (doSync)
+            {
+                await _userTemporaryState.SaveChangesAsync(stepContext.Context, false, cancellationToken);
             }
 
             //_logger.LogInformation("MainDialog.ChoiceActionStepAsync");

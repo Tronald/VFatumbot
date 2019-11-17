@@ -104,9 +104,6 @@ namespace VFatumbot
             conversationData.Timestamp = localMessageTime.ToString();
             await _conversationDataAccessor.SetAsync(turnContext, conversationData);
 
-            userProfileTemporary.IsIncludeWaterPoints = userProfilePersistent.IsIncludeWaterPoints;
-            userProfileTemporary.IsDisplayGoogleThumbnails = userProfilePersistent.IsDisplayGoogleThumbnails;
-
             // TODO: most of the logic/functionalioty in the following if statements I realised later on should probably be structured in the way the Bot Framework SDK talks about "middleware".
             // Maybe one day re-structure/re-factor it to following their middleware patterns...
 
@@ -157,6 +154,7 @@ namespace VFatumbot
                     await _userTemporaryState.SaveChangesAsync(turnContext, false, cancellationToken);
 
                     userProfilePersistent.HasSetLocationOnce = true;
+                    await _userProfilePersistentAccessor.SetAsync(turnContext, userProfilePersistent);
                     await _userPersistentState.SaveChangesAsync(turnContext, false, cancellationToken);
 
                     await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(turnContext, _mainDialog, cancellationToken);
