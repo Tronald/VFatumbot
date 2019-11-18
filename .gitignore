@@ -3,6 +3,5 @@
 obj/**
 bin/**
 runtimes/**
-libAttract*
 .DS_Store
 .vs/*
