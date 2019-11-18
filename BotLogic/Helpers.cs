@@ -36,10 +36,10 @@ namespace VFatumbot.BotLogic
             if (w3wresult == null || w3wresult.country == null)
                 return "";
 
-            Country country = Bia.Countries.Iso3166.Countries.GetCountryByAlpha2(w3wresult.country.ToString().Replace("{","").Replace("}",""));
+            var country = Bia.Countries.Iso3166.Countries.GetCountryByAlpha2(w3wresult.country.ToString().Replace("{","").Replace("}",""));
 
-            if (!string.IsNullOrEmpty(country.FullName))
-                return $" ({country})";
+            if (country != null)
+                return $" ({country.ShortName})";
 
             return "";
         }
