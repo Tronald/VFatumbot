@@ -560,7 +560,7 @@ namespace VFatumbot
                                           accessToken: Consts.REDDIT_ACCESS_TOKEN);
 
 #if RELEASE_PROD
-            var subreddit = redditApi.Subreddit("randonauts");
+            var subreddit = redditApi.Subreddit("randonaut_reports");
 #else
             var subreddit = redditApi.Subreddit("soliaxplayground");
 #endif
