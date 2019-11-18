@@ -35,7 +35,7 @@ namespace VFatumbot.BotLogic
             if (w3wresult == null || w3wresult.country == null)
                 return "";
 
-            var country = Bia.Countries.Iso3166.Countries.GetCountryByAlpha2(w3wresult.country);
+            var country = Bia.Countries.Iso3166.Countries.GetCountryByAlpha2(w3wresult.country.Replace("{","").Replace("}",""));
 
             if (!string.IsNullOrEmpty(country))
                 return $" ({country})";
