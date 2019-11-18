@@ -273,8 +273,8 @@ namespace VFatumbot.BotLogic
                                 }
 
                                 shortCodesArray[i] = Helpers.Crc32Hash(context.Activity.From.Id + context.Activity.Timestamp);
-                                mesg = (idacou > 1 ? ("#"+(i+1)+" ") : "") + Tolog(turnContext, "attractor", ida[i], shortCodesArray[i]);
-                                await turnContext.SendActivityAsync(MessageFactory.Text(mesg), cancellationToken);
+                                mesg = Tolog(turnContext, "attractor", ida[i], shortCodesArray[i]);
+                                await turnContext.SendActivityAsync(MessageFactory.Text((idacou > 1 ? ("#" + (i + 1) + " ") : "") + mesg), cancellationToken);
 
                                 dynamic w3wResult = await Helpers.GetWhat3WordsAddressAsync(incoords);
 
@@ -287,7 +287,7 @@ namespace VFatumbot.BotLogic
                                 pointTypesArray[i] = PointTypes.Attractor;
                                 numWaterPointsSkippedArray[i] = numWaterPointsSkipped;
                                 what3WordsArray[i] = ""+w3wResult?.words;
-                                nearestPlacesArray[i] = "" + w3wResult?.nearestPlace;
+                                nearestPlacesArray[i] = "" + w3wResult?.nearestPlace + Helpers.GetCountryFromW3W(w3wResult);
 
                                 await turnContext.SendActivitiesAsync(CardFactory.CreateLocationCardsReply(Enum.Parse<ChannelPlatform>(turnContext.Activity.ChannelId), incoords, userProfileTemporary.IsDisplayGoogleThumbnails, w3wResult), cancellationToken);
                                 await Helpers.SendPushNotification(userProfileTemporary, "Point Generated", mesg);
@@ -391,8 +391,8 @@ namespace VFatumbot.BotLogic
                                 }
 
                                 shortCodesArray[i] = Helpers.Crc32Hash(context.Activity.From.Id + context.Activity.Timestamp);
-                                mesg = (idacou > 1 ? ("#" + (i + 1) + " ") : "") + Tolog(turnContext, "void", ida[i], shortCodesArray[i]);
-                                await turnContext.SendActivityAsync(MessageFactory.Text(mesg), cancellationToken);
+                                mesg = Tolog(turnContext, "void", ida[i], shortCodesArray[i]);
+                                await turnContext.SendActivityAsync(MessageFactory.Text((idacou > 1 ? ("#" + (i + 1) + " ") : "") + mesg), cancellationToken);
 
                                 dynamic w3wResult = await Helpers.GetWhat3WordsAddressAsync(incoords);
 
@@ -405,7 +405,7 @@ namespace VFatumbot.BotLogic
                                 pointTypesArray[i] = PointTypes.Void;
                                 numWaterPointsSkippedArray[i] = numWaterPointsSkipped;
                                 what3WordsArray[i] = "" + w3wResult?.words;
-                                nearestPlacesArray[i] = "" + w3wResult?.nearestPlace;
+                                nearestPlacesArray[i] = "" + w3wResult?.nearestPlace + Helpers.GetCountryFromW3W(w3wResult);
 
                                 await turnContext.SendActivitiesAsync(CardFactory.CreateLocationCardsReply(Enum.Parse<ChannelPlatform>(turnContext.Activity.ChannelId), incoords, userProfileTemporary.IsDisplayGoogleThumbnails, w3wResult), cancellationToken);
                                 await Helpers.SendPushNotification(userProfileTemporary, "Point Generated", mesg);
@@ -523,8 +523,8 @@ namespace VFatumbot.BotLogic
                                 }
 
                                 shortCodesArray[i] = Helpers.Crc32Hash(context.Activity.From.Id + context.Activity.Timestamp);
-                                mesg = (idacou > 1 ? ("#" + (i + 1) + " ") : "") + Tolog(turnContext, "ida", ida[i], shortCodesArray[i]);
-                                await turnContext.SendActivityAsync(MessageFactory.Text(mesg), cancellationToken);
+                                mesg = Tolog(turnContext, "ida", ida[i], shortCodesArray[i]);
+                                await turnContext.SendActivityAsync(MessageFactory.Text((idacou > 1 ? ("#" + (i + 1) + " ") : "") + mesg), cancellationToken);
 
                                 dynamic w3wResult = await Helpers.GetWhat3WordsAddressAsync(incoords);
 
@@ -537,7 +537,7 @@ namespace VFatumbot.BotLogic
                                 pointTypesArray[i] = PointTypes.Anomaly;
                                 numWaterPointsSkippedArray[i] = numWaterPointsSkipped;
                                 what3WordsArray[i] = "" + w3wResult?.words;
-                                nearestPlacesArray[i] = "" + w3wResult?.nearestPlace;
+                                nearestPlacesArray[i] = "" + w3wResult?.nearestPlace + Helpers.GetCountryFromW3W(w3wResult);
 
                                 await turnContext.SendActivitiesAsync(CardFactory.CreateLocationCardsReply(Enum.Parse<ChannelPlatform>(turnContext.Activity.ChannelId), incoords, userProfileTemporary.IsDisplayGoogleThumbnails, w3wResult), cancellationToken);
                                 await Helpers.SendPushNotification(userProfileTemporary, "Point Generated", mesg);
@@ -654,7 +654,7 @@ namespace VFatumbot.BotLogic
                             },
                             NumWaterPointsSkipped = new int[] { numWaterPointsSkipped },
                             What3Words = new string[] { w3wResult?.words },
-                            NearestPlaces = new string[] { w3wResult?.nearestPlace },
+                            NearestPlaces = new string[] { w3wResult?.nearestPlace + Helpers.GetCountryFromW3W(w3wResult) },
                         };
                         await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(turnContext, mainDialog, cancellationToken, callbackOptions);
                     }, cancellationToken);
@@ -801,8 +801,8 @@ namespace VFatumbot.BotLogic
                                 {
                                     attShortCodesArray[i] = Helpers.Crc32Hash(context.Activity.From.Id + context.Activity.Timestamp);
 
-                                    mesg = (idacou > 1 ? ("#" + (i + 1) + " ") : "") + Tolog(turnContext, "attractor", att[i], attShortCodesArray[i]);
-                                    await turnContext.SendActivityAsync(MessageFactory.Text(mesg), cancellationToken);
+                                    mesg = Tolog(turnContext, "attractor", att[i], attShortCodesArray[i]);
+                                    await turnContext.SendActivityAsync(MessageFactory.Text((idacou > 1 ? ("#" + (i + 1) + " ") : "") + mesg), cancellationToken);
                                     dynamic w3wResult1 = await Helpers.GetWhat3WordsAddressAsync(incoords);
                                     await turnContext.SendActivitiesAsync(CardFactory.CreateLocationCardsReply(Enum.Parse<ChannelPlatform>(turnContext.Activity.ChannelId), incoords, userProfileTemporary.IsDisplayGoogleThumbnails, w3wResult1), cancellationToken);
 
@@ -810,7 +810,7 @@ namespace VFatumbot.BotLogic
                                     attPointTypesArray[i] = PointTypes.PairAttractor;
                                     attNumWaterPointsSkippedArray[i] = numAttWaterPointsSkipped;
                                     attWhat3WordsArray[i] = "" + w3wResult1.words;
-                                    attNearestPlacesArray[i] = "" + w3wResult1.nearestPlace;
+                                    attNearestPlacesArray[i] = "" + w3wResult1.nearestPlace + Helpers.GetCountryFromW3W(w3wResult1);
                                 }
 
                                 incoords = new double[] { voi[i].X.center.point.latitude, voi[i].X.center.point.longitude };
@@ -822,8 +822,8 @@ namespace VFatumbot.BotLogic
                                 {
                                     voiShortCodesArray[i] = Helpers.Crc32Hash(context.Activity.From.Id + context.Activity.Timestamp);
 
-                                    mesg = (idacou > 1 ? ("#" + (i + 1) + " ") : "") + Tolog(turnContext, "void", voi[i], voiShortCodesArray[i]);
-                                    await turnContext.SendActivityAsync(MessageFactory.Text(mesg), cancellationToken);
+                                    mesg = Tolog(turnContext, "void", voi[i], voiShortCodesArray[i]);
+                                    await turnContext.SendActivityAsync(MessageFactory.Text((idacou > 1 ? ("#" + (i + 1) + " ") : "") + mesg), cancellationToken);
                                     dynamic w3wResult2 = await Helpers.GetWhat3WordsAddressAsync(incoords);
                                     await turnContext.SendActivitiesAsync(CardFactory.CreateLocationCardsReply(Enum.Parse<ChannelPlatform>(turnContext.Activity.ChannelId), incoords, userProfileTemporary.IsDisplayGoogleThumbnails, w3wResult2), cancellationToken);
 
@@ -831,7 +831,7 @@ namespace VFatumbot.BotLogic
                                     voiPointTypesArray[i] = PointTypes.PairVoid;
                                     voiNumWaterPointsSkippedArray[i] = numAttWaterPointsSkipped;
                                     voiWhat3WordsArray[i] = "" + w3wResult2.words;
-                                    voiNearestPlacesArray[i] = "" + w3wResult2.nearestPlace;
+                                    voiNearestPlacesArray[i] = "" + w3wResult2.nearestPlace + Helpers.GetCountryFromW3W(w3wResult2);
                                 }
                             }
 
@@ -1042,7 +1042,7 @@ namespace VFatumbot.BotLogic
                             GeneratedPoints = ida,
                             NumWaterPointsSkipped = new int[] { numWaterPointsSkipped },
                             What3Words = new string[] { w3wResult?.words },
-                            NearestPlaces = new string[] { w3wResult?.nearestPlace },
+                            NearestPlaces = new string[] { w3wResult?.nearestPlace + Helpers.GetCountryFromW3W(w3wResult) },
                         };
                         await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(context, mainDialog, cancellationToken, callbackOptions);
                     }, cancellationToken);

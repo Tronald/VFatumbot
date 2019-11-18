@@ -208,7 +208,7 @@ namespace VFatumbot
         {
             //_logger.LogInformation($"TripReportDialog.GetIntentStepAsync");
 
-            if (!string.IsNullOrEmpty(""+stepContext.Result))
+            if (stepContext.Result == null)
             {
                 // Assume they selected "No" for no intent set and skip
                 return await stepContext.NextAsync(cancellationToken: cancellationToken);
@@ -517,29 +517,25 @@ namespace VFatumbot
 
             await PostTripReportToRedditAsync("Randonaut Trip Report"
                 + ((callbackOptions.NearestPlaces != null && callbackOptions.NearestPlaces.Length >= 1) ? (" from " + callbackOptions.NearestPlaces[answers.PointNumberVisited]) : " from somewhere in the multiverse"), // TODO fuck I should stop trying to condense so much into one line in C#. I'm just drunk and lazy ATM.
-                callbackOptions.Messages[answers.PointNumberVisited].Replace(Environment.NewLine, "\n\n") +
-                "\n\n" +
+                callbackOptions.Messages[answers.PointNumberVisited].Replace("\n\n", "  \n") +
+                (!string.IsNullOrEmpty(callbackOptions.What3Words[answers.PointNumberVisited]) ? "What 3 words address: [" + callbackOptions.What3Words[answers.PointNumberVisited] + "](https://what3words.com/" + callbackOptions.What3Words[answers.PointNumberVisited] + ")\n\n" : "\n\n") +
                 "Report: " + answers.Report + "\n\n" +
-                "[Map](https://www.google.com/maps/place/" + incoords[0] + "+" + incoords[1] + "/@" + incoords[0] + "+" + incoords[1] + ",18z)\n\n" +
-                "\n\n\n\n" +
-                photos + "\n\n" +
-                "\n\n\n\n" +
-                "What 3 words address: ["+ callbackOptions.What3Words[answers.PointNumberVisited] + "](https://what3words.com/" + callbackOptions.What3Words[answers.PointNumberVisited] + ")\n\n" +
-                "Intent set: " + answers.Intent + "\n\n" +
-                "Intents suggested: " + intentSuggestions + "\n\n" +
-                "Artifact(s) collected?: " + answers.ArtifactCollected + "\n\n" +
-                "Was a 'wow and astounding' trip? " + answers.WasFuckingAmazing + "\n\n" +
+                "[Google Maps](https://www.google.com/maps/place/" + incoords[0] + "+" + incoords[1] + "/@" + incoords[0] + "+" + incoords[1] + ",18z)  |  " +
+                "[Google Earth](https://earth.google.com/web/search/" + incoords[0] + "," + incoords[1] + ")  \n" +
+                (!string.IsNullOrEmpty(photos) ? photos + "  \n" : "  \n") +
+                (!string.IsNullOrEmpty(answers.Intent) ? "Intent set: " + answers.Intent + "  \n" : "") +
+                (!string.IsNullOrEmpty(intentSuggestions) ? "Intents suggested: " + intentSuggestions + "  \n" : "") +
+                "Artifact(s) collected? " + (answers.ArtifactCollected ? "Yes" : "No") + "  \n" +
+                "Was a 'wow and astounding' trip? " + (answers.WasFuckingAmazing ? "Yes" : "No") + "  \n" +
                 "\n\n" +
-                "\n\n" +
-                "Trip ratings:\n\n" +
-                "Meaningfulness: " + answers.Rating_Meaningfulness + "\n\n" +
-                "Emotional: " + answers.Rating_Emotional + "\n\n" +
-                "Importance: " + answers.Rating_Importance + "\n\n" +
-                "Strangeness: " + answers.Rating_Strangeness + "\n\n" +
-                "Synchronicity: " + answers.Rating_Synchronicty + "\n\n" +
+                "## Trip ratings  \n" +
+                "Meaningfulness: " + answers.Rating_Meaningfulness + "  \n" +
+                "Emotional: " + answers.Rating_Emotional + "  \n" +
+                "Importance: " + answers.Rating_Importance + "  \n" +
+                "Strangeness: " + answers.Rating_Strangeness + "  \n" +
+                "Synchronicity: " + answers.Rating_Synchronicty + "  \n" +
                  "\n\n" +
-                 "\n\n" +
-                 userProfileTemporary.UserId + " " + callbackOptions.ShortCodes[answers.PointNumberVisited],
+                userProfileTemporary.UserId + " " + callbackOptions.ShortCodes[answers.PointNumberVisited],
                 answers.PhotoURLs
                 );
 

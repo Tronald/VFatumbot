@@ -47,7 +47,7 @@ namespace VFatumbot
                         // ConversationState should be thought of as similar to "cookie-state" in a Web pages.
                         await conversationState.DeleteAsync(turnContext);
                     }
-                    catch (Exception e)
+                        catch (Exception e)
                     {
                         logger.LogError($"Exception caught on attempting to Delete ConversationState : {e.Message}");
                     }

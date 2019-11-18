@@ -30,6 +30,19 @@ namespace VFatumbot.BotLogic
             }
         }
 
+        public static string GetCountryFromW3W(dynamic w3wresult)
+        {
+            if (w3wresult == null || w3wresult.country == null)
+                return "";
+
+            var country = Bia.Countries.Iso3166.Countries.GetCountryByAlpha2(w3wresult.country);
+
+            if (!string.IsNullOrEmpty(country))
+                return $" ({country})";
+
+            return "";
+        }
+
         public static async Task<object> GetWhat3WordsAddressAsync(double[] incoords)
         {
             var response = await new HttpClient().GetAsync("https://api.what3words.com/v3/convert-to-3wa?coordinates=" + incoords[0] + "%2C" + incoords[1] + "&key=" + Consts.W3W_API_KEY);

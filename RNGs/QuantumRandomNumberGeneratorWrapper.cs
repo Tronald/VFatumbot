@@ -79,9 +79,10 @@ namespace VFatumbot
         {
             try
             {
+                //return File.ReadAllBytes("entropy");
                 var res = qRNG.NextHexBytes(len, meta);
                 //TODO: delete me! investigating libAttract crash
-                File.WriteAllBytes("entropy" + ((Int32)DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalSeconds), res);
+                //File.WriteAllBytes("entropy" + ((Int32)DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalSeconds), res);
                 return res;
             }
             catch (Exception e)
