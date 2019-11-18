@@ -638,7 +638,7 @@ namespace VFatumbot.BotLogic
                             StartTripReportDialog = true,
                             ShortCodes = new string[] { shortCode },
                             Messages = new string[] { mesg },
-                            PointTypes = new PointTypes[] { PointTypes.Quantum },
+                            PointTypes = new PointTypes[] { suggestTime ? PointTypes.QuantumTime : PointTypes.Quantum },
                             GeneratedPoints = new FinalAttractor[] {
                                 // FinalAttractor is just a good wrapper to carry point/type info across the boundary to the TripReportDialog
                                 new FinalAttractor()
@@ -706,7 +706,7 @@ namespace VFatumbot.BotLogic
                             StartTripReportDialog = true,
                             ShortCodes = new string[] { shortCode },
                             Messages = new string[] { mesg },
-                            PointTypes = new PointTypes[] { PointTypes.QuantumTime },
+                            PointTypes = new PointTypes[] { PointTypes.Pseudo },
                             GeneratedPoints = new FinalAttractor[] {
                                 // FinalAttractor is just a good wrapper to carry point/type info across the boundary to the TripReportDialog
                                 new FinalAttractor()
