@@ -13,6 +13,7 @@ using System.Security.Cryptography;
 using System.Text;
 using Force.Crc32;
 using Microsoft.Bot.Builder;
+using Bia.Countries.Iso3166;
 
 namespace VFatumbot.BotLogic
 {
@@ -35,9 +36,9 @@ namespace VFatumbot.BotLogic
             if (w3wresult == null || w3wresult.country == null)
                 return "";
 
-            var country = Bia.Countries.Iso3166.Countries.GetCountryByAlpha2(w3wresult.country.ToString().Replace("{","").Replace("}",""));
+            Country country = Bia.Countries.Iso3166.Countries.GetCountryByAlpha2(w3wresult.country.ToString().Replace("{","").Replace("}",""));
 
-            if (!string.IsNullOrEmpty(country))
+            if (!string.IsNullOrEmpty(country.FullName))
                 return $" ({country})";
 
             return "";
