@@ -186,7 +186,7 @@ namespace VFatumbot.BotLogic
             {
                 await turnContext.SendActivityAsync(MessageFactory.Text(
                     $"Fatumbot {Consts.APP_VERSION} is alive.{Helpers.GetNewLine(turnContext)}" +
-                    $"Entangled waypoint coordinate calculations being done with the hyper quantum flux capacitor libAttract v{getVersionMajor()}.{getVersionMinor()}.{getVersionPatch()}{Helpers.GetNewLine(turnContext)}." +
+                    $"Entangled waypoint coordinate calculations being done with the hyper quantum flux capacitor libAttract v{getVersionMajor()}.{getVersionMinor()}.{getVersionPatch()}.{Helpers.GetNewLine(turnContext)}" +
                     "Checking QRNG source too..."),
                     cancellationToken);
 
