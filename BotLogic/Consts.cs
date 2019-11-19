@@ -3,9 +3,9 @@
     public class Consts
     {
 #if RELEASE_PROD
-        public const string APP_VERSION = "3.1.3β";
+        public const string APP_VERSION = "3.1.4";
 #else
-        public const string APP_VERSION = "3.1.4β";
+        public const string APP_VERSION = "3.1.5β";
 #endif
 
         // Azure App ID
@@ -85,6 +85,6 @@
         public const int WATER_POINTS_SEARCH_MAX = 10;
 
         // TODO: move later when localization is implemented
-        public const string NO_LOCATION_SET_MSG = "You haven't set a location, or it was reset. Send your location from the app (hint: you can do so by tapping the 🌍/::/＋/📎 icon in your app), or type \"search <address>\", or send a Google Maps URL. Don't forget you can type \"help\" for more info.";
+        public const string NO_LOCATION_SET_MSG = "You haven't set a location, or it was reset. Send your location from the app (hint: you can do so by tapping the 🌍/::/＋/📎 icon), or type \"search <address/place name>\", or send a Google Maps URL. Don't forget you can type \"help\" for more info.";
     }
 }
