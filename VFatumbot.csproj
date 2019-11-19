@@ -20,17 +20,6 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'ReleaseProd|AnyCPU' ">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <IntermediateOutputPath>obj\Release\netcoreapp2.1</IntermediateOutputPath>
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>portable</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\ReleaseProd\netcoreapp2.1</OutputPath>
-    <DefineConstants>TRACE;RELEASE;NETCOREAPP;NETCOREAPP2_1;RELEASE_PROD</DefineConstants>
-    <WarningLevel>4</WarningLevel>
-    <DocumentationFile></DocumentationFile>
-    <NoWarn>1701;1702</NoWarn>
-    <LangVersion>latest</LangVersion>
-    <NoStdLib>true</NoStdLib>
     <DefineConstants>RELEASE_PROD</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
