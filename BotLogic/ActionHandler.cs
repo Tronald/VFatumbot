@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -14,6 +15,13 @@ namespace VFatumbot.BotLogic
 {
     public class ActionHandler
     {
+        [DllImport("libAttract", CallingConvention = CallingConvention.Cdecl)]
+        public extern static int getVersionMajor();
+        [DllImport("libAttract", CallingConvention = CallingConvention.Cdecl)]
+        public extern static int getVersionMinor();
+        [DllImport("libAttract", CallingConvention = CallingConvention.Cdecl)]
+        public extern static int getVersionPatch();
+
         public void DispatchWorkerThread(DoWorkEventHandler handler)
         {
             var backgroundWorker = new BackgroundWorker();
@@ -176,7 +184,11 @@ namespace VFatumbot.BotLogic
             }
             else if (command.Equals("/test"))
             {
-                await turnContext.SendActivityAsync(MessageFactory.Text($"Fatumbot {Consts.APP_VERSION} is alive. Checking QRNG source too..."), cancellationToken);
+                await turnContext.SendActivityAsync(MessageFactory.Text(
+                    $"Fatumbot {Consts.APP_VERSION} is alive.{Helpers.GetNewLine(turnContext)}" +
+                    $"Entangled waypoint coordinate calculations being done with the hyper quantum flux capacitor libAttract v{getVersionMajor()}.{getVersionMinor()}.{getVersionPatch()}{Helpers.GetNewLine(turnContext)}." +
+                    "Checking QRNG source too..."),
+                    cancellationToken);
 
                 await turnContext.Adapter.ContinueConversationAsync(Consts.APP_ID, turnContext.Activity.GetConversationReference(),
                    async (context, token) =>
@@ -186,6 +198,9 @@ namespace VFatumbot.BotLogic
                        {
                            rnd.NextHex(10);
                            await turnContext.SendActivityAsync(MessageFactory.Text($"QRNG source is alive too!"), cancellationToken);
+
+                           await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(turnContext, mainDialog, cancellationToken);
+
                        }
                        catch (Exception e)
                        {
