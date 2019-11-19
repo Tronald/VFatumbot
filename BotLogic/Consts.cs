@@ -60,7 +60,7 @@
 
 #if RELEASE_PROD
         //public const string PROXY = "***REMOVED***";
-        public const string PROXY = "***REMOVED***";
+        //public const string PROXY = "***REMOVED***";
 #else
         //public const string PROXY = "***REMOVED***";
         //public const string PROXY = "***REMOVED***";
