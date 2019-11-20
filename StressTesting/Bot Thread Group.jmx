@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jmeterTestPlan version="1.2" properties="5.0" jmeter="5.2">
+  <hashTree>
+    <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="Test Plan" enabled="true">
+      <stringProp name="TestPlan.comments"></stringProp>
+      <boolProp name="TestPlan.functional_mode">false</boolProp>
+      <boolProp name="TestPlan.tearDown_on_shutdown">true</boolProp>
+      <boolProp name="TestPlan.serialize_threadgroups">false</boolProp>
+      <elementProp name="TestPlan.user_defined_variables" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+        <collectionProp name="Arguments.arguments"/>
+      </elementProp>
+      <stringProp name="TestPlan.user_define_classpath"></stringProp>
+    </TestPlan>
+    <hashTree>
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Bot Thread Group" enabled="true">
+        <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
+        <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
+          <boolProp name="LoopController.continue_forever">false</boolProp>
+          <stringProp name="LoopController.loops">1</stringProp>
+        </elementProp>
+        <stringProp name="ThreadGroup.num_threads">1</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">1</stringProp>
+        <boolProp name="ThreadGroup.scheduler">false</boolProp>
+        <stringProp name="ThreadGroup.duration"></stringProp>
+        <stringProp name="ThreadGroup.delay"></stringProp>
+        <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
+      </ThreadGroup>
+      <hashTree>
+        <br.com.microsoft.ocp.bot.service.jmeter.config.BotServiceConfig guiclass="br.com.microsoft.ocp.bot.service.jmeter.config.gui.BotServiceConfigDefaultsGui" testclass="br.com.microsoft.ocp.bot.service.jmeter.config.BotServiceConfig" testname="Bot Service: Configuration" enabled="true">
+          <stringProp name="BOT_URL">https://devbot.randonauts.com/api/messages</stringProp>
+          <stringProp name="CALLBACK_URL">http://20.37.50.255:45000</stringProp>
+          <stringProp name="CHANNEL_ID">emulator</stringProp>
+          <stringProp name="CALLBACK_SERVER_HOST"></stringProp>
+          <stringProp name="CALLBACK_SERVER_PORT">45000</stringProp>
+          <stringProp name="FROM_MEMBER_ID">default-user</stringProp>
+          <stringProp name="RECIPIENT_MEMBER_ID">default-bot</stringProp>
+          <boolProp name="GEN_RANDOM_ID_PER_THREAD">true</boolProp>
+          <intProp name="RESPONSE_TIMEOUT">300</intProp>
+        </br.com.microsoft.ocp.bot.service.jmeter.config.BotServiceConfig>
+        <hashTree/>
+        <br.com.microsoft.ocp.bot.service.jmeter.sampler.ConversationUpdateSampler guiclass="br.com.microsoft.ocp.bot.service.jmeter.sampler.gui.ConversationUpdateSamplerGui" testclass="br.com.microsoft.ocp.bot.service.jmeter.sampler.ConversationUpdateSampler" testname="Bot Service: Conversation Update" enabled="true">
+          <stringProp name="MEMBERS_ADDED">${user}, default-bot</stringProp>
+          <intProp name="NUM_OF_EXPECTED_RESPONSES">2</intProp>
+        </br.com.microsoft.ocp.bot.service.jmeter.sampler.ConversationUpdateSampler>
+        <hashTree>
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+            <collectionProp name="Asserion.test_strings">
+              <stringProp name="1901043637">location</stringProp>
+            </collectionProp>
+            <stringProp name="Assertion.custom_message"></stringProp>
+            <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+            <boolProp name="Assertion.assume_success">false</boolProp>
+            <intProp name="Assertion.test_type">2</intProp>
+          </ResponseAssertion>
+          <hashTree/>
+        </hashTree>
+        <br.com.microsoft.ocp.bot.service.jmeter.sampler.MessageSampler guiclass="br.com.microsoft.ocp.bot.service.jmeter.sampler.gui.MessageSamplerGui" testclass="br.com.microsoft.ocp.bot.service.jmeter.sampler.MessageSampler" testname="Bot Service: Message search Ongs Hat" enabled="true">
+          <intProp name="NUM_OF_EXPECTED_RESPONSES_FOR_MESSAGE">3</intProp>
+          <stringProp name="MESSAGE_TEXT">search Ongs Hat</stringProp>
+          <stringProp name="MESSAGE_TEXT_FORMAT">plain</stringProp>
+          <stringProp name="LOCALE">en-US</stringProp>
+        </br.com.microsoft.ocp.bot.service.jmeter.sampler.MessageSampler>
+        <hashTree>
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+            <collectionProp name="Asserion.test_strings">
+              <stringProp name="1529233236">New location confirmed</stringProp>
+            </collectionProp>
+            <stringProp name="Assertion.custom_message"></stringProp>
+            <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+            <boolProp name="Assertion.assume_success">false</boolProp>
+            <intProp name="Assertion.test_type">2</intProp>
+          </ResponseAssertion>
+          <hashTree/>
+        </hashTree>
+        <br.com.microsoft.ocp.bot.service.jmeter.sampler.MessageSampler guiclass="br.com.microsoft.ocp.bot.service.jmeter.sampler.gui.MessageSamplerGui" testclass="br.com.microsoft.ocp.bot.service.jmeter.sampler.MessageSampler" testname="Bot Service: Message Blind Spots" enabled="true">
+          <intProp name="NUM_OF_EXPECTED_RESPONSES_FOR_MESSAGE">1</intProp>
+          <stringProp name="MESSAGE_TEXT">Blind Spots</stringProp>
+          <stringProp name="MESSAGE_TEXT_FORMAT">plain</stringProp>
+          <stringProp name="LOCALE">en-US</stringProp>
+        </br.com.microsoft.ocp.bot.service.jmeter.sampler.MessageSampler>
+        <hashTree>
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+            <collectionProp name="Asserion.test_strings">
+              <stringProp name="-719082728">Choose the kind of blind spot:</stringProp>
+            </collectionProp>
+            <stringProp name="Assertion.custom_message"></stringProp>
+            <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+            <boolProp name="Assertion.assume_success">false</boolProp>
+            <intProp name="Assertion.test_type">2</intProp>
+          </ResponseAssertion>
+          <hashTree/>
+        </hashTree>
+        <br.com.microsoft.ocp.bot.service.jmeter.sampler.MessageSampler guiclass="br.com.microsoft.ocp.bot.service.jmeter.sampler.gui.MessageSamplerGui" testclass="br.com.microsoft.ocp.bot.service.jmeter.sampler.MessageSampler" testname="Bot Service: Message Pseudo" enabled="true">
+          <intProp name="NUM_OF_EXPECTED_RESPONSES_FOR_MESSAGE">3</intProp>
+          <stringProp name="MESSAGE_TEXT">Pseudo</stringProp>
+          <stringProp name="MESSAGE_TEXT_FORMAT">plain</stringProp>
+          <stringProp name="LOCALE">en-US</stringProp>
+        </br.com.microsoft.ocp.bot.service.jmeter.sampler.MessageSampler>
+        <hashTree>
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+            <collectionProp name="Asserion.test_strings">
+              <stringProp name="-1200915038">Random Point generated</stringProp>
+            </collectionProp>
+            <stringProp name="Assertion.custom_message"></stringProp>
+            <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+            <boolProp name="Assertion.assume_success">false</boolProp>
+            <intProp name="Assertion.test_type">2</intProp>
+          </ResponseAssertion>
+          <hashTree/>
+        </hashTree>
+        <br.com.microsoft.ocp.bot.service.jmeter.sampler.MessageSampler guiclass="br.com.microsoft.ocp.bot.service.jmeter.sampler.gui.MessageSamplerGui" testclass="br.com.microsoft.ocp.bot.service.jmeter.sampler.MessageSampler" testname="Bot Service: Message No" enabled="true">
+          <intProp name="NUM_OF_EXPECTED_RESPONSES_FOR_MESSAGE">1</intProp>
+          <stringProp name="MESSAGE_TEXT">/setradius 100000</stringProp>
+          <stringProp name="MESSAGE_TEXT_FORMAT">plain</stringProp>
+          <stringProp name="LOCALE">en-US</stringProp>
+        </br.com.microsoft.ocp.bot.service.jmeter.sampler.MessageSampler>
+        <hashTree/>
+        <br.com.microsoft.ocp.bot.service.jmeter.sampler.MessageSampler guiclass="br.com.microsoft.ocp.bot.service.jmeter.sampler.gui.MessageSamplerGui" testclass="br.com.microsoft.ocp.bot.service.jmeter.sampler.MessageSampler" testname="Bot Service: Message Attractor" enabled="true">
+          <intProp name="NUM_OF_EXPECTED_RESPONSES_FOR_MESSAGE">1</intProp>
+          <stringProp name="MESSAGE_TEXT">/scanattractor[10]</stringProp>
+          <stringProp name="MESSAGE_TEXT_FORMAT">plain</stringProp>
+          <stringProp name="LOCALE">en-US</stringProp>
+        </br.com.microsoft.ocp.bot.service.jmeter.sampler.MessageSampler>
+        <hashTree/>
+      </hashTree>
+      <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
+        <boolProp name="ResultCollector.error_logging">false</boolProp>
+        <objProp>
+          <name>saveConfig</name>
+          <value class="SampleSaveConfiguration">
+            <time>true</time>
+            <latency>true</latency>
+            <timestamp>true</timestamp>
+            <success>true</success>
+            <label>true</label>
+            <code>true</code>
+            <message>true</message>
+            <threadName>true</threadName>
+            <dataType>true</dataType>
+            <encoding>false</encoding>
+            <assertions>true</assertions>
+            <subresults>true</subresults>
+            <responseData>false</responseData>
+            <samplerData>false</samplerData>
+            <xml>false</xml>
+            <fieldNames>true</fieldNames>
+            <responseHeaders>false</responseHeaders>
+            <requestHeaders>false</requestHeaders>
+            <responseDataOnError>false</responseDataOnError>
+            <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
+            <assertionsResultsToSave>0</assertionsResultsToSave>
+            <bytes>true</bytes>
+            <sentBytes>true</sentBytes>
+            <url>true</url>
+            <threadCounts>true</threadCounts>
+            <idleTime>true</idleTime>
+            <connectTime>true</connectTime>
+          </value>
+        </objProp>
+        <stringProp name="filename"></stringProp>
+      </ResultCollector>
+      <hashTree/>
+      <ResultCollector guiclass="StatVisualizer" testclass="ResultCollector" testname="Aggregate Report" enabled="true">
+        <boolProp name="ResultCollector.error_logging">false</boolProp>
+        <objProp>
+          <name>saveConfig</name>
+          <value class="SampleSaveConfiguration">
+            <time>true</time>
+            <latency>true</latency>
+            <timestamp>true</timestamp>
+            <success>true</success>
+            <label>true</label>
+            <code>true</code>
+            <message>true</message>
+            <threadName>true</threadName>
+            <dataType>true</dataType>
+            <encoding>false</encoding>
+            <assertions>true</assertions>
+            <subresults>true</subresults>
+            <responseData>false</responseData>
+            <samplerData>false</samplerData>
+            <xml>false</xml>
+            <fieldNames>true</fieldNames>
+            <responseHeaders>false</responseHeaders>
+            <requestHeaders>false</requestHeaders>
+            <responseDataOnError>false</responseDataOnError>
+            <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
+            <assertionsResultsToSave>0</assertionsResultsToSave>
+            <bytes>true</bytes>
+            <sentBytes>true</sentBytes>
+            <url>true</url>
+            <threadCounts>true</threadCounts>
+            <idleTime>true</idleTime>
+            <connectTime>true</connectTime>
+          </value>
+        </objProp>
+        <stringProp name="filename"></stringProp>
+      </ResultCollector>
+      <hashTree/>
+    </hashTree>
+  </hashTree>
+</jmeterTestPlan>

@@ -1,0 +1,301 @@
+timeStamp,elapsed,label,responseCode,responseMessage,threadName,dataType,success,failureMessage,bytes,sentBytes,grpThreads,allThreads,URL,Latency,IdleTime,Connect
+1574213310543,3499,Bot Service: Conversation Update,,,Bot Thread Group 1-20,text,true,,593,0,50,50,null,0,0,0
+1574213310229,3817,Bot Service: Conversation Update,,,Bot Thread Group 1-4,text,true,,594,0,50,50,null,0,0,0
+1574213310693,3388,Bot Service: Conversation Update,,,Bot Thread Group 1-29,text,true,,592,0,50,50,null,0,0,0
+1574213311073,3009,Bot Service: Conversation Update,,,Bot Thread Group 1-48,text,true,,595,0,50,50,null,0,0,0
+1574213310634,3451,Bot Service: Conversation Update,,,Bot Thread Group 1-26,text,true,,593,0,50,50,null,0,0,0
+1574213310579,3501,Bot Service: Conversation Update,,,Bot Thread Group 1-23,text,true,,595,0,50,50,null,0,0,0
+1574213310206,3880,Bot Service: Conversation Update,,,Bot Thread Group 1-1,text,true,,595,0,50,50,null,0,0,0
+1574213310551,3539,Bot Service: Conversation Update,,,Bot Thread Group 1-22,text,true,,594,0,50,50,null,0,0,0
+1574213310871,3217,Bot Service: Conversation Update,,,Bot Thread Group 1-38,text,true,,592,0,50,50,null,0,0,0
+1574213310911,3179,Bot Service: Conversation Update,,,Bot Thread Group 1-40,text,true,,595,0,50,50,null,0,0,0
+1574213310831,3256,Bot Service: Conversation Update,,,Bot Thread Group 1-36,text,true,,595,0,50,50,null,0,0,0
+1574213310542,3549,Bot Service: Conversation Update,,,Bot Thread Group 1-21,text,true,,593,0,50,50,null,0,0,0
+1574213310452,3649,Bot Service: Conversation Update,,,Bot Thread Group 1-17,text,true,,593,0,50,50,null,0,0,0
+1574213310207,3898,Bot Service: Conversation Update,,,Bot Thread Group 1-2,text,true,,592,0,50,50,null,0,0,0
+1574213310855,3257,Bot Service: Conversation Update,,,Bot Thread Group 1-37,text,true,,593,0,50,50,null,0,0,0
+1574213310399,3714,Bot Service: Conversation Update,,,Bot Thread Group 1-14,text,true,,594,0,50,50,null,0,0,0
+1574213310675,3440,Bot Service: Conversation Update,,,Bot Thread Group 1-28,text,true,,593,0,50,50,null,0,0,0
+1574213310891,3228,Bot Service: Conversation Update,,,Bot Thread Group 1-39,text,true,,595,0,50,50,null,0,0,0
+1574213310307,3818,Bot Service: Conversation Update,,,Bot Thread Group 1-8,text,true,,595,0,50,50,null,0,0,0
+1574213310269,3862,Bot Service: Conversation Update,,,Bot Thread Group 1-6,text,true,,594,0,50,50,null,0,0,0
+1574213310812,3410,Bot Service: Conversation Update,,,Bot Thread Group 1-35,text,true,,595,0,50,50,null,0,0,0
+1574213311051,3197,Bot Service: Conversation Update,,,Bot Thread Group 1-47,text,true,,593,0,50,50,null,0,0,0
+1574213310349,3916,Bot Service: Conversation Update,,,Bot Thread Group 1-11,text,true,,595,0,50,50,null,0,0,0
+1574213310771,3514,Bot Service: Conversation Update,,,Bot Thread Group 1-33,text,true,,593,0,50,50,null,0,0,0
+1574213310328,3965,Bot Service: Conversation Update,,,Bot Thread Group 1-9,text,true,,593,0,50,50,null,0,0,0
+1574213310931,3495,Bot Service: Conversation Update,,,Bot Thread Group 1-41,text,true,,593,0,50,50,null,0,0,0
+1574213310387,4100,Bot Service: Conversation Update,,,Bot Thread Group 1-13,text,true,,593,0,50,50,null,0,0,0
+1574213311092,3499,Bot Service: Conversation Update,,,Bot Thread Group 1-49,text,true,,594,0,50,50,null,0,0,0
+1574213310491,4112,Bot Service: Conversation Update,,,Bot Thread Group 1-19,text,true,,595,0,50,50,null,0,0,0
+1574213310998,3609,Bot Service: Conversation Update,,,Bot Thread Group 1-44,text,true,,594,0,50,50,null,0,0,0
+1574213311138,3508,Bot Service: Conversation Update,,,Bot Thread Group 1-50,text,true,,594,0,50,50,null,0,0,0
+1574213310436,4256,Bot Service: Conversation Update,,,Bot Thread Group 1-16,text,true,,593,0,50,50,null,0,0,0
+1574213310609,4270,Bot Service: Conversation Update,,,Bot Thread Group 1-24,text,true,,593,0,50,50,null,0,0,0
+1574213310363,4513,Bot Service: Conversation Update,,,Bot Thread Group 1-12,text,true,,592,0,50,50,null,0,0,0
+1574213310471,4454,Bot Service: Conversation Update,,,Bot Thread Group 1-18,text,true,,594,0,50,50,null,0,0,0
+1574213310210,4767,Bot Service: Conversation Update,,,Bot Thread Group 1-3,text,true,,593,0,50,50,null,0,0,0
+1574213310614,4467,Bot Service: Conversation Update,,,Bot Thread Group 1-25,text,true,,593,0,50,50,null,0,0,0
+1574213310345,4955,Bot Service: Conversation Update,,,Bot Thread Group 1-10,text,true,,594,0,50,50,null,0,0,0
+1574213310951,4361,Bot Service: Conversation Update,,,Bot Thread Group 1-42,text,true,,595,0,50,50,null,0,0,0
+1574213310792,4603,Bot Service: Conversation Update,,,Bot Thread Group 1-34,text,true,,595,0,50,50,null,0,0,0
+1574213310767,4634,Bot Service: Conversation Update,,,Bot Thread Group 1-32,text,true,,594,0,50,50,null,0,0,0
+1574213310735,4681,Bot Service: Conversation Update,,,Bot Thread Group 1-31,text,true,,594,0,50,50,null,0,0,0
+1574213314608,1322,Bot Service: Message search Ongs Hat,,,Bot Thread Group 1-44,text,true,,1787,0,50,50,null,0,0,0
+1574213314879,1052,Bot Service: Message search Ongs Hat,,,Bot Thread Group 1-24,text,true,,1786,0,50,50,null,0,0,0
+1574213314603,1329,Bot Service: Message search Ongs Hat,,,Bot Thread Group 1-19,text,true,,1788,0,50,50,null,0,0,0
+1574213314249,1686,Bot Service: Message search Ongs Hat,,,Bot Thread Group 1-47,text,true,,1786,0,50,50,null,0,0,0
+1574213314101,1835,Bot Service: Message search Ongs Hat,,,Bot Thread Group 1-29,text,true,,1785,0,50,50,null,0,0,0
+1574213314101,2109,Bot Service: Message search Ongs Hat,,,Bot Thread Group 1-4,text,true,,1787,0,50,50,null,0,0,0
+1574213314120,2230,Bot Service: Message search Ongs Hat,,,Bot Thread Group 1-36,text,true,,1788,0,50,50,null,0,0,0
+1574213314110,2418,Bot Service: Message search Ongs Hat,,,Bot Thread Group 1-1,text,true,,1788,0,50,50,null,0,0,0
+1574213314156,2606,Bot Service: Message search Ongs Hat,,,Bot Thread Group 1-14,text,true,,1787,0,50,50,null,0,0,0
+1574213314119,2821,Bot Service: Message search Ongs Hat,,,Bot Thread Group 1-39,text,true,,1788,0,50,50,null,0,0,0
+1574213310249,6845,Bot Service: Conversation Update,,,Bot Thread Group 1-5,text,true,,594,0,50,50,null,0,0,0
+1574213314131,2997,Bot Service: Message search Ongs Hat,,,Bot Thread Group 1-6,text,true,,1787,0,50,50,null,0,0,0
+1574213310417,6848,Bot Service: Conversation Update,,,Bot Thread Group 1-15,text,true,,594,0,50,50,null,0,0,0
+1574213310655,6616,Bot Service: Conversation Update,,,Bot Thread Group 1-27,text,true,,594,0,50,50,null,0,0,0
+1574213314116,3223,Bot Service: Message search Ongs Hat,,,Bot Thread Group 1-28,text,true,,1786,0,50,50,null,0,0,0
+1574213314114,3339,Bot Service: Message search Ongs Hat,,,Bot Thread Group 1-38,text,true,,1785,0,50,50,null,0,0,0
+1574213315395,2059,Bot Service: Message search Ongs Hat,,,Bot Thread Group 1-34,text,true,,1788,0,50,50,null,0,0,0
+1574213314125,3592,Bot Service: Message search Ongs Hat,,,Bot Thread Group 1-8,text,true,,1788,0,50,50,null,0,0,0
+1574213314978,2818,Bot Service: Message search Ongs Hat,,,Bot Thread Group 1-3,text,true,,1786,0,50,50,null,0,0,0
+1574213314114,3862,Bot Service: Message search Ongs Hat,,,Bot Thread Group 1-40,text,true,,1788,0,50,50,null,0,0,0
+1574213311031,7042,Bot Service: Conversation Update,,,Bot Thread Group 1-46,text,true,,595,0,50,50,null,0,0,0
+1574213314102,3972,Bot Service: Message search Ongs Hat,,,Bot Thread Group 1-26,text,true,,1786,0,50,50,null,0,0,0
+1574213314592,3636,Bot Service: Message search Ongs Hat,,,Bot Thread Group 1-49,text,true,,1787,0,50,50,null,0,0,0
+1574213314122,4258,Bot Service: Message search Ongs Hat,,,Bot Thread Group 1-21,text,true,,1786,0,50,50,null,0,0,0
+1574213317094,1409,Bot Service: Message search Ongs Hat,,,Bot Thread Group 1-5,text,true,,1787,0,50,50,null,0,0,0
+1574213314101,4590,Bot Service: Message search Ongs Hat,,,Bot Thread Group 1-48,text,true,,1788,0,50,50,null,0,0,0
+1574213314095,4815,Bot Service: Message search Ongs Hat,,,Bot Thread Group 1-20,text,true,,1786,0,50,50,null,0,0,0
+1574213314223,4887,Bot Service: Message search Ongs Hat,,,Bot Thread Group 1-35,text,true,,1788,0,50,50,null,0,0,0
+1574213319110,82,Bot Service: Message Blind Spots,,,Bot Thread Group 1-35,text,true,,511,0,50,50,null,0,0,0
+1574213310978,8379,Bot Service: Conversation Update,,,Bot Thread Group 1-43,text,true,,594,0,50,50,null,0,0,0
+1574213314102,5282,Bot Service: Message search Ongs Hat,,,Bot Thread Group 1-17,text,true,,1786,0,50,50,null,0,0,0
+1574213314646,4893,Bot Service: Message search Ongs Hat,,,Bot Thread Group 1-50,text,true,,1787,0,50,50,null,0,0,0
+1574213314266,5445,Bot Service: Message search Ongs Hat,,,Bot Thread Group 1-11,text,true,,1788,0,50,50,null,0,0,0
+1574213314293,5549,Bot Service: Message search Ongs Hat,,,Bot Thread Group 1-9,text,true,,1786,0,50,50,null,0,0,0
+1574213314692,5254,Bot Service: Message search Ongs Hat,,,Bot Thread Group 1-16,text,true,,1786,0,50,50,null,0,0,0
+1574213314107,5976,Bot Service: Message search Ongs Hat,,,Bot Thread Group 1-23,text,true,,1788,0,50,50,null,0,0,0
+1574213310293,9793,Bot Service: Conversation Update,,,Bot Thread Group 1-7,text,true,,594,0,50,50,null,0,0,0
+1574213314285,5944,Bot Service: Message search Ongs Hat,,,Bot Thread Group 1-33,text,true,,1786,0,50,50,null,0,0,0
+1574213314925,5512,Bot Service: Message search Ongs Hat,,,Bot Thread Group 1-18,text,true,,1787,0,50,50,null,0,0,0
+1574213319384,1119,Bot Service: Message Blind Spots,,,Bot Thread Group 1-17,text,true,,509,0,50,50,null,0,0,0
+1574213310714,9842,Bot Service: Conversation Update,,,Bot Thread Group 1-30,text,true,,595,0,50,50,null,0,0,0
+1574213314112,6445,Bot Service: Message search Ongs Hat,,,Bot Thread Group 1-37,text,true,,6697,0,50,50,null,0,0,0
+1574213315300,5428,Bot Service: Message search Ongs Hat,,,Bot Thread Group 1-10,text,true,,1787,0,50,50,null,0,0,0
+1574213314114,6908,Bot Service: Message search Ongs Hat,,,Bot Thread Group 1-22,text,true,,1787,0,50,50,null,0,0,0
+1574213315416,5617,Bot Service: Message search Ongs Hat,,,Bot Thread Group 1-31,text,true,,1787,0,50,50,null,0,0,0
+1574213314488,6549,Bot Service: Message search Ongs Hat,,,Bot Thread Group 1-13,text,true,,1786,0,50,50,null,0,0,0
+1574213314105,7155,Bot Service: Message search Ongs Hat,,,Bot Thread Group 1-2,text,true,,1785,0,50,50,null,0,0,0
+1574213318691,2709,Bot Service: Message Blind Spots,,,Bot Thread Group 1-48,text,true,,511,0,50,50,null,0,0,0
+1574213314883,6518,Bot Service: Message search Ongs Hat,,,Bot Thread Group 1-12,text,true,,1785,0,50,50,null,0,0,0
+1574213321022,626,Bot Service: Message Blind Spots,,,Bot Thread Group 1-22,text,true,,510,0,50,50,null,0,0,0
+1574213320729,1055,Bot Service: Message Blind Spots,,,Bot Thread Group 1-10,text,true,,510,0,50,50,null,0,0,0
+1574213315935,6066,Bot Service: Message Blind Spots,,,Bot Thread Group 1-47,text,true,,509,0,50,50,null,0,0,0
+1574213320558,1540,Bot Service: Message Blind Spots,,,Bot Thread Group 1-37,text,false,Test failed: text expected to contain /Choose the kind of blind spot:/,339,0,50,50,null,0,0,0
+1574213315936,6248,Bot Service: Message Blind Spots,,,Bot Thread Group 1-29,text,true,,508,0,50,50,null,0,0,0
+1574213311017,11279,Bot Service: Conversation Update,,,Bot Thread Group 1-45,text,true,,592,0,50,50,null,0,0,0
+1574213317271,5088,Bot Service: Message search Ongs Hat,,,Bot Thread Group 1-27,text,true,,1787,0,50,50,null,0,0,0
+1574213318228,4177,Bot Service: Message Blind Spots,,,Bot Thread Group 1-49,text,true,,510,0,50,50,null,0,0,0
+1574213319946,2663,Bot Service: Message Blind Spots,,,Bot Thread Group 1-16,text,true,,509,0,50,50,null,0,0,0
+1574213315931,6681,Bot Service: Message Blind Spots,,,Bot Thread Group 1-24,text,true,,509,0,50,50,null,0,0,0
+1574213320229,2705,Bot Service: Message Blind Spots,,,Bot Thread Group 1-33,text,true,,509,0,50,50,null,0,0,0
+1574213315081,8154,Bot Service: Message search Ongs Hat,,,Bot Thread Group 1-25,text,true,,1786,0,50,50,null,0,0,0
+1574213320438,2796,Bot Service: Message Blind Spots,,,Bot Thread Group 1-18,text,true,,510,0,50,50,null,0,0,0
+1574213320503,2930,Bot Service: Message Blind Spots,,,Bot Thread Group 1-17,text,true,,1464,0,50,50,null,0,0,0
+1574213316210,7369,Bot Service: Message Blind Spots,,,Bot Thread Group 1-4,text,true,,510,0,50,50,null,0,0,0
+1574213321034,2773,Bot Service: Message Blind Spots,,,Bot Thread Group 1-31,text,true,,510,0,50,50,null,0,0,0
+1574213319192,4780,Bot Service: Message Blind Spots,,,Bot Thread Group 1-35,text,true,,1461,0,50,50,null,0,0,0
+1574213314426,9652,Bot Service: Message search Ongs Hat,,,Bot Thread Group 1-41,text,true,,1786,0,50,50,null,0,0,0
+1574213315401,8767,Bot Service: Message search Ongs Hat,,,Bot Thread Group 1-32,text,true,,1787,0,50,50,null,0,0,0
+1574213321401,2885,Bot Service: Message Blind Spots,,,Bot Thread Group 1-12,text,true,,508,0,50,50,null,0,0,0
+1574213315932,8400,Bot Service: Message Blind Spots,,,Bot Thread Group 1-19,text,true,,511,0,50,50,null,0,0,0
+1574213320084,4321,Bot Service: Message Blind Spots,,,Bot Thread Group 1-23,text,true,,511,0,50,50,null,0,0,0
+1574213316763,7682,Bot Service: Message Blind Spots,,,Bot Thread Group 1-14,text,true,,510,0,50,50,null,0,0,0
+1574213317976,6471,Bot Service: Message Blind Spots,,,Bot Thread Group 1-40,text,true,,511,0,50,50,null,0,0,0
+1574213321648,2815,Bot Service: Message Blind Spots,,,Bot Thread Group 1-22,text,true,,1464,0,50,50,null,0,0,0
+1574213321785,2872,Bot Service: Message Blind Spots,,,Bot Thread Group 1-10,text,true,,1467,0,50,50,null,0,0,0
+1574213316529,8351,Bot Service: Message Blind Spots,,,Bot Thread Group 1-1,text,true,,511,0,50,50,null,0,0,0
+1574213316351,8716,Bot Service: Message Blind Spots,,,Bot Thread Group 1-36,text,true,,511,0,50,50,null,0,0,0
+1574213321260,3965,Bot Service: Message Blind Spots,,,Bot Thread Group 1-2,text,true,,508,0,50,50,null,0,0,0
+1574213317796,7429,Bot Service: Message Blind Spots,,,Bot Thread Group 1-3,text,true,,509,0,50,50,null,0,0,0
+1574213315312,10090,Bot Service: Message search Ongs Hat,,,Bot Thread Group 1-42,text,true,,6699,0,50,50,null,0,0,0
+1574213319843,5705,Bot Service: Message Blind Spots,,,Bot Thread Group 1-9,text,true,,509,0,50,50,null,0,0,0
+1574213317339,8352,Bot Service: Message Blind Spots,,,Bot Thread Group 1-28,text,true,,509,0,50,50,null,0,0,0
+1574213322002,3986,Bot Service: Message Blind Spots,,,Bot Thread Group 1-47,text,true,,1465,0,50,50,null,0,0,0
+1574213319711,6467,Bot Service: Message Blind Spots,,,Bot Thread Group 1-11,text,true,,511,0,50,50,null,0,0,0
+1574213323235,3118,Bot Service: Message Blind Spots,,,Bot Thread Group 1-25,text,true,,509,0,50,50,null,0,0,0
+1574213315930,10539,Bot Service: Message Blind Spots,,,Bot Thread Group 1-44,text,true,,510,0,50,50,null,0,0,0
+1574213317128,9376,Bot Service: Message Blind Spots,,,Bot Thread Group 1-6,text,true,,510,0,50,50,null,0,0,0
+1574213321401,5170,Bot Service: Message Blind Spots,,,Bot Thread Group 1-48,text,true,,1468,0,50,50,null,0,0,0
+1574213322613,4115,Bot Service: Message Blind Spots,,,Bot Thread Group 1-24,text,true,,1460,0,50,50,null,0,0,0
+1574213320557,6523,Bot Service: Message search Ongs Hat,,,Bot Thread Group 1-30,text,true,,6699,0,50,50,null,0,0,0
+1574213323235,4100,Bot Service: Message Blind Spots,,,Bot Thread Group 1-18,text,true,,1457,0,50,50,null,0,0,0
+1574213327080,419,Bot Service: Message Blind Spots,,,Bot Thread Group 1-30,text,false,Test failed: text expected to contain /Choose the kind of blind spot:/,341,0,50,50,null,0,0,0
+1574213322184,5316,Bot Service: Message Blind Spots,,,Bot Thread Group 1-29,text,true,,1462,0,50,50,null,0,0,0
+1574213321037,6478,Bot Service: Message Blind Spots,,,Bot Thread Group 1-13,text,true,,509,0,50,50,null,0,0,0
+1574213318910,8656,Bot Service: Message Blind Spots,,,Bot Thread Group 1-20,text,true,,509,0,50,50,null,0,0,0
+1574213322610,5039,Bot Service: Message Blind Spots,,,Bot Thread Group 1-16,text,true,,1461,0,50,50,null,0,0,0
+1574213323808,3989,Bot Service: Message Blind Spots,,,Bot Thread Group 1-31,text,true,,1464,0,50,50,null,0,0,0
+1574213322296,5682,Bot Service: Message search Ongs Hat,,,Bot Thread Group 1-45,text,true,,1785,0,50,50,null,0,0,0
+1574213317454,10646,Bot Service: Message Blind Spots,,,Bot Thread Group 1-38,text,true,,508,0,50,50,null,0,0,0
+1574213322934,5580,Bot Service: Message Blind Spots,,,Bot Thread Group 1-33,text,true,,1467,0,50,50,null,0,0,0
+1574213317454,11075,Bot Service: Message Blind Spots,,,Bot Thread Group 1-34,text,true,,511,0,50,50,null,0,0,0
+1574213322359,6294,Bot Service: Message Blind Spots,,,Bot Thread Group 1-27,text,true,,510,0,50,50,null,0,0,0
+1574213323972,5069,Bot Service: Message No,,,Bot Thread Group 1-35,text,true,,822,0,50,50,null,0,0,0
+1574213324658,4884,Bot Service: Message No,,,Bot Thread Group 1-10,text,true,,821,0,50,50,null,0,0,0
+1574213326353,3199,Bot Service: Message Blind Spots,,,Bot Thread Group 1-25,text,true,,1457,0,50,50,null,0,0,0
+1574213320086,9509,Bot Service: Message search Ongs Hat,,,Bot Thread Group 1-7,text,true,,6698,0,50,50,null,0,0,0
+1574213324446,5185,Bot Service: Message Blind Spots,,,Bot Thread Group 1-14,text,true,,1466,0,50,50,null,0,0,0
+1574213324286,5556,Bot Service: Message Blind Spots,,,Bot Thread Group 1-12,text,true,,1471,0,50,50,null,0,0,0
+1574213324448,5412,Bot Service: Message Blind Spots,,,Bot Thread Group 1-40,text,true,,1465,0,50,50,null,0,0,0
+1574213324464,5474,Bot Service: Message No,,,Bot Thread Group 1-22,text,true,,821,0,50,50,null,0,0,0
+1574213324169,5901,Bot Service: Message Blind Spots,,,Bot Thread Group 1-32,text,true,,510,0,50,50,null,0,0,0
+1574213325989,4084,Bot Service: Message No,,,Bot Thread Group 1-47,text,true,,820,0,50,50,null,0,0,0
+1574213316940,13149,Bot Service: Message Blind Spots,,,Bot Thread Group 1-39,text,true,,511,0,50,50,null,0,0,0
+1574213319539,10595,Bot Service: Message Blind Spots,,,Bot Thread Group 1-50,text,true,,510,0,50,50,null,0,0,0
+1574213324880,5538,Bot Service: Message Blind Spots,,,Bot Thread Group 1-1,text,true,,1470,0,50,50,null,0,0,0
+1574213317266,13356,Bot Service: Message search Ongs Hat,,,Bot Thread Group 1-15,text,true,,6698,0,50,50,null,0,0,0
+1574213318504,12175,Bot Service: Message Blind Spots,,,Bot Thread Group 1-5,text,true,,510,0,50,50,null,0,0,0
+1574213323433,7550,Bot Service: Message No,,,Bot Thread Group 1-17,text,true,,820,0,50,50,null,0,0,0
+1574213319358,11738,Bot Service: Message search Ongs Hat,,,Bot Thread Group 1-43,text,true,,6698,0,50,50,null,0,0,0
+1574213325403,5825,Bot Service: Message Blind Spots,,,Bot Thread Group 1-42,text,false,Test failed: text expected to contain /Choose the kind of blind spot:/,341,0,50,50,null,0,0,0
+1574213329595,1705,Bot Service: Message Blind Spots,,,Bot Thread Group 1-7,text,false,Test failed: text expected to contain /Choose the kind of blind spot:/,340,0,50,50,null,0,0,0
+1574213330073,1318,Bot Service: Message Attractor,,,Bot Thread Group 1-47,text,false,Test failed: text expected to contain /Wait a minute. It will take a while./,129,0,50,50,null,0,0,0
+1574213326571,4902,Bot Service: Message No,,,Bot Thread Group 1-48,text,true,,822,0,49,49,null,0,0,0
+1574213323579,8001,Bot Service: Message Blind Spots,,,Bot Thread Group 1-4,text,true,,1461,0,49,49,null,0,0,0
+1574213318074,13689,Bot Service: Message Blind Spots,,,Bot Thread Group 1-26,text,true,,509,0,49,49,null,0,0,0
+1574213325548,6376,Bot Service: Message Blind Spots,,,Bot Thread Group 1-9,text,true,,1466,0,49,49,null,0,0,0
+1574213325691,7234,Bot Service: Message Blind Spots,,,Bot Thread Group 1-28,text,true,,1459,0,49,49,null,0,0,0
+1574213328101,4844,Bot Service: Message Blind Spots,,,Bot Thread Group 1-38,text,true,,1463,0,49,49,null,0,0,0
+1574213327500,5448,Bot Service: Message No,,,Bot Thread Group 1-29,text,true,,819,0,49,49,null,0,0,0
+1574213318381,14570,Bot Service: Message Blind Spots,,,Bot Thread Group 1-21,text,true,,509,0,49,49,null,0,0,0
+1574213324079,8876,Bot Service: Message Blind Spots,,,Bot Thread Group 1-41,text,true,,509,0,49,49,null,0,0,0
+1574213317717,15238,Bot Service: Message Blind Spots,,,Bot Thread Group 1-8,text,true,,511,0,49,49,null,0,0,0
+1574213326178,7156,Bot Service: Message Blind Spots,,,Bot Thread Group 1-11,text,true,,1468,0,49,49,null,0,0,0
+1574213325225,8218,Bot Service: Message Blind Spots,,,Bot Thread Group 1-2,text,true,,1463,0,49,49,null,0,0,0
+1574213330071,3372,Bot Service: Message Blind Spots,,,Bot Thread Group 1-32,text,true,,1464,0,49,49,null,0,0,0
+1574213331764,2021,Bot Service: Message Blind Spots,,,Bot Thread Group 1-26,text,true,,1463,0,49,49,null,0,0,0
+1574213329542,4853,Bot Service: Message Attractor,,,Bot Thread Group 1-10,text,false,Test failed: text expected to contain /Wait a minute. It will take a while./,130,0,49,49,null,0,0,0
+1574213325068,9331,Bot Service: Message Blind Spots,,,Bot Thread Group 1-36,text,true,,1465,0,48,48,null,0,0,0
+1574213327335,7075,Bot Service: Message No,,,Bot Thread Group 1-18,text,true,,821,0,48,48,null,0,0,0
+1574213325225,9187,Bot Service: Message Blind Spots,,,Bot Thread Group 1-3,text,true,,1457,0,48,48,null,0,0,0
+1574213333334,1239,Bot Service: Message No,,,Bot Thread Group 1-11,text,true,,822,0,48,48,null,0,0,0
+1574213326504,8130,Bot Service: Message Blind Spots,,,Bot Thread Group 1-6,text,true,,1465,0,48,48,null,0,0,0
+1574213330623,4119,Bot Service: Message Blind Spots,,,Bot Thread Group 1-15,text,false,Test failed: text expected to contain /Choose the kind of blind spot:/,821,0,48,48,null,0,0,0
+1574213334412,543,Bot Service: Message No,,,Bot Thread Group 1-3,text,true,,820,0,48,48,null,0,0,0
+1574213329552,5403,Bot Service: Message No,,,Bot Thread Group 1-25,text,true,,820,0,48,48,null,0,0,0
+1574213329939,5392,Bot Service: Message Attractor,,,Bot Thread Group 1-22,text,false,Test failed: text expected to contain /Wait a minute. It will take a while./,130,0,48,48,null,0,0,0
+1574213326728,8609,Bot Service: Message No,,,Bot Thread Group 1-24,text,true,,820,0,47,47,null,0,0,0
+1574213328530,7008,Bot Service: Message Blind Spots,,,Bot Thread Group 1-34,text,true,,1466,0,47,47,null,0,0,0
+1574213331473,4212,Bot Service: Message Attractor,,,Bot Thread Group 1-48,text,false,Test failed: text expected to contain /Wait a minute. It will take a while./,131,0,47,47,null,0,0,0
+1574213330983,4753,Bot Service: Message Attractor,,,Bot Thread Group 1-17,text,false,Test failed: text expected to contain /Wait a minute. It will take a while./,129,0,46,46,null,0,0,0
+1574213331097,4651,Bot Service: Message Blind Spots,,,Bot Thread Group 1-43,text,false,Test failed: text expected to contain /Choose the kind of blind spot:/,340,0,45,45,null,0,0,0
+1574213332945,2891,Bot Service: Message No,,,Bot Thread Group 1-38,text,true,,819,0,45,45,null,0,0,0
+1574213332951,2989,Bot Service: Message Blind Spots,,,Bot Thread Group 1-21,text,true,,1458,0,45,45,null,0,0,0
+1574213332926,3015,Bot Service: Message No,,,Bot Thread Group 1-28,text,true,,820,0,45,45,null,0,0,0
+1574213332948,3348,Bot Service: Message Attractor,,,Bot Thread Group 1-29,text,false,Test failed: text expected to contain /Wait a minute. It will take a while./,128,0,45,45,null,0,0,0
+1574213334955,1372,Bot Service: Message Attractor,,,Bot Thread Group 1-3,text,false,Test failed: text expected to contain /Wait a minute. It will take a while./,129,0,44,44,null,0,0,0
+1574213333785,2590,Bot Service: Message No,,,Bot Thread Group 1-26,text,true,,820,0,43,43,null,0,0,0
+1574213334399,2024,Bot Service: Message No,,,Bot Thread Group 1-36,text,true,,822,0,43,43,null,0,0,0
+1574213330679,5789,Bot Service: Message Blind Spots,,,Bot Thread Group 1-5,text,true,,1456,0,43,43,null,0,0,0
+1574213331581,5040,Bot Service: Message No,,,Bot Thread Group 1-4,text,true,,821,0,43,43,null,0,0,0
+1574213334574,2247,Bot Service: Message Attractor,,,Bot Thread Group 1-11,text,false,Test failed: text expected to contain /Wait a minute. It will take a while./,131,0,43,43,null,0,0,0
+1574213334634,2238,Bot Service: Message No,,,Bot Thread Group 1-6,text,true,,821,0,42,42,null,0,0,0
+1574213335941,1082,Bot Service: Message No,,,Bot Thread Group 1-21,text,true,,820,0,42,42,null,0,0,0
+1574213327978,9159,Bot Service: Message Blind Spots,,,Bot Thread Group 1-45,text,true,,508,0,42,42,null,0,0,0
+1574213329860,7474,Bot Service: Message No,,,Bot Thread Group 1-40,text,true,,822,0,42,42,null,0,0,0
+1574213327797,9676,Bot Service: Message No,,,Bot Thread Group 1-31,text,true,,821,0,42,42,null,0,0,0
+1574213334410,3281,Bot Service: Message Attractor,,,Bot Thread Group 1-18,text,false,Test failed: text expected to contain /Wait a minute. It will take a while./,130,0,42,42,null,0,0,0
+1574213329042,8661,Bot Service: Message Attractor,,,Bot Thread Group 1-35,text,false,Test failed: text expected to contain /Wait a minute. It will take a while./,131,0,41,41,null,0,0,0
+1574213318073,19649,Bot Service: Message search Ongs Hat,,,Bot Thread Group 1-46,text,true,,1788,0,40,40,null,0,0,0
+1574213330418,7402,Bot Service: Message No,,,Bot Thread Group 1-1,text,true,,822,0,40,40,null,0,0,0
+1574213334956,3048,Bot Service: Message Attractor,,,Bot Thread Group 1-25,text,false,Test failed: text expected to contain /Wait a minute. It will take a while./,129,0,40,40,null,0,0,0
+1574213332956,5051,Bot Service: Message Blind Spots,,,Bot Thread Group 1-8,text,true,,1468,0,39,39,null,0,0,0
+1574213333444,5468,Bot Service: Message No,,,Bot Thread Group 1-32,text,true,,821,0,39,39,null,0,0,0
+1574213329843,9070,Bot Service: Message No,,,Bot Thread Group 1-12,text,true,,819,0,39,39,null,0,0,0
+1574213335942,2975,Bot Service: Message Attractor,,,Bot Thread Group 1-28,text,false,Test failed: text expected to contain /Wait a minute. It will take a while./,129,0,39,39,null,0,0,0
+1574213329631,9287,Bot Service: Message No,,,Bot Thread Group 1-14,text,true,,821,0,38,38,null,0,0,0
+1574213331924,6995,Bot Service: Message No,,,Bot Thread Group 1-9,text,true,,820,0,38,38,null,0,0,0
+1574213333443,5477,Bot Service: Message No,,,Bot Thread Group 1-2,text,true,,819,0,38,38,null,0,0,0
+1574213335837,3085,Bot Service: Message Attractor,,,Bot Thread Group 1-38,text,false,Test failed: text expected to contain /Wait a minute. It will take a while./,128,0,38,38,null,0,0,0
+1574213327650,11272,Bot Service: Message No,,,Bot Thread Group 1-16,text,true,,820,0,37,37,null,0,0,0
+1574213328515,10427,Bot Service: Message No,,,Bot Thread Group 1-33,text,true,,820,0,37,37,null,0,0,0
+1574213338913,718,Bot Service: Message Attractor,,,Bot Thread Group 1-32,text,false,Test failed: text expected to contain /Wait a minute. It will take a while./,130,0,37,37,null,0,0,0
+1574213338920,739,Bot Service: Message Attractor,,,Bot Thread Group 1-9,text,false,Test failed: text expected to contain /Wait a minute. It will take a while./,129,0,36,36,null,0,0,0
+1574213335339,4366,Bot Service: Message Attractor,,,Bot Thread Group 1-24,text,false,Test failed: text expected to contain /Wait a minute. It will take a while./,129,0,35,35,null,0,0,0
+1574213338943,777,Bot Service: Message Attractor,,,Bot Thread Group 1-33,text,false,Test failed: text expected to contain /Wait a minute. It will take a while./,129,0,34,34,null,0,0,0
+1574213338922,854,Bot Service: Message Attractor,,,Bot Thread Group 1-2,text,false,Test failed: text expected to contain /Wait a minute. It will take a while./,128,0,33,33,null,0,0,0
+1574213338923,958,Bot Service: Message Attractor,,,Bot Thread Group 1-16,text,false,Test failed: text expected to contain /Wait a minute. It will take a while./,129,0,32,32,null,0,0,0
+1574213336424,3498,Bot Service: Message Attractor,,,Bot Thread Group 1-36,text,false,Test failed: text expected to contain /Wait a minute. It will take a while./,131,0,31,31,null,0,0,0
+1574213338008,1924,Bot Service: Message No,,,Bot Thread Group 1-8,text,true,,822,0,30,30,null,0,0,0
+1574213336376,3673,Bot Service: Message Attractor,,,Bot Thread Group 1-26,text,false,Test failed: text expected to contain /Wait a minute. It will take a while./,129,0,30,30,null,0,0,0
+1574213336469,3593,Bot Service: Message No,,,Bot Thread Group 1-5,text,true,,821,0,29,29,null,0,0,0
+1574213337139,3240,Bot Service: Message Blind Spots,,,Bot Thread Group 1-45,text,true,,1459,0,29,29,null,0,0,0
+1574213335539,5022,Bot Service: Message No,,,Bot Thread Group 1-34,text,true,,822,0,29,29,null,0,0,0
+1574213340062,811,Bot Service: Message Attractor,,,Bot Thread Group 1-5,text,false,Test failed: text expected to contain /Wait a minute. It will take a while./,130,0,29,29,null,0,0,0
+1574213340380,557,Bot Service: Message No,,,Bot Thread Group 1-45,text,true,,819,0,28,28,null,0,0,0
+1574213336622,4467,Bot Service: Message Attractor,,,Bot Thread Group 1-4,text,false,Test failed: text expected to contain /Wait a minute. It will take a while./,130,0,28,28,null,0,0,0
+1574213338914,2187,Bot Service: Message Attractor,,,Bot Thread Group 1-12,text,false,Test failed: text expected to contain /Wait a minute. It will take a while./,128,0,27,27,null,0,0,0
+1574213336873,4232,Bot Service: Message Attractor,,,Bot Thread Group 1-6,text,false,Test failed: text expected to contain /Wait a minute. It will take a while./,130,0,26,26,null,0,0,0
+1574213339932,1206,Bot Service: Message Attractor,,,Bot Thread Group 1-8,text,false,Test failed: text expected to contain /Wait a minute. It will take a while./,131,0,25,25,null,0,0,0
+1574213338919,2221,Bot Service: Message Attractor,,,Bot Thread Group 1-14,text,false,Test failed: text expected to contain /Wait a minute. It will take a while./,130,0,24,24,null,0,0,0
+1574213337821,3320,Bot Service: Message Attractor,,,Bot Thread Group 1-1,text,false,Test failed: text expected to contain /Wait a minute. It will take a while./,131,0,23,23,null,0,0,0
+1574213337724,3503,Bot Service: Message Blind Spots,,,Bot Thread Group 1-46,text,true,,511,0,22,22,null,0,0,0
+1574213340561,919,Bot Service: Message Attractor,,,Bot Thread Group 1-34,text,false,Test failed: text expected to contain /Wait a minute. It will take a while./,131,0,22,22,null,0,0,0
+1574213337335,4364,Bot Service: Message Attractor,,,Bot Thread Group 1-40,text,false,Test failed: text expected to contain /Wait a minute. It will take a while./,131,0,21,21,null,0,0,0
+1574213337025,4722,Bot Service: Message Attractor,,,Bot Thread Group 1-21,text,false,Test failed: text expected to contain /Wait a minute. It will take a while./,129,0,20,20,null,0,0,0
+1574213340937,815,Bot Service: Message Attractor,,,Bot Thread Group 1-45,text,false,Test failed: text expected to contain /Wait a minute. It will take a while./,128,0,19,19,null,0,0,0
+1574213337474,4290,Bot Service: Message Attractor,,,Bot Thread Group 1-31,text,false,Test failed: text expected to contain /Wait a minute. It will take a while./,130,0,18,18,null,0,0,0
+1574213341228,1125,Bot Service: Message Blind Spots,,,Bot Thread Group 1-46,text,true,,1469,0,17,17,null,0,0,0
+1574213342353,54,Bot Service: Message No,,,Bot Thread Group 1-46,text,true,,822,0,17,17,null,0,0,0
+1574213342407,39,Bot Service: Message Attractor,,,Bot Thread Group 1-46,text,false,Test failed: text expected to contain /Wait a minute. It will take a while./,131,0,17,17,null,0,0,0
+1574213322099,302338,Bot Service: Message Blind Spots,,,Bot Thread Group 1-37,text,false,Test failed: text expected to contain /Random Point generated/,128,0,16,16,null,0,0,0
+1574213624439,640,Bot Service: Message No,,,Bot Thread Group 1-37,text,false,Test failed: text expected to contain /What would you like to get/check?/,339,0,16,16,null,0,0,0
+1574213625079,23,Bot Service: Message Attractor,,,Bot Thread Group 1-37,text,false,Test failed: text expected to contain /Wait a minute. It will take a while./,339,0,16,16,null,0,0,0
+1574213322405,303910,Bot Service: Message Blind Spots,,,Bot Thread Group 1-49,text,false,Test failed: text expected to contain /Random Point generated/,128,0,15,15,null,0,0,0
+1574213626316,45,Bot Service: Message No,,,Bot Thread Group 1-49,text,true,,849,0,15,15,null,0,0,0
+1574213626361,33,Bot Service: Message Attractor,,,Bot Thread Group 1-49,text,false,Test failed: text expected to contain /Wait a minute. It will take a while./,130,0,15,15,null,0,0,0
+1574213327515,301288,Bot Service: Message Blind Spots,,,Bot Thread Group 1-13,text,false,Test failed: text expected to contain /Random Point generated/,128,0,14,14,null,0,0,0
+1574213628805,43,Bot Service: Message No,,,Bot Thread Group 1-13,text,true,,848,0,14,14,null,0,0,0
+1574213628848,31,Bot Service: Message Attractor,,,Bot Thread Group 1-13,text,false,Test failed: text expected to contain /Wait a minute. It will take a while./,129,0,14,14,null,0,0,0
+1574213327499,302006,Bot Service: Message Blind Spots,,,Bot Thread Group 1-30,text,false,Test failed: text expected to contain /Random Point generated/,128,0,13,13,null,0,0,0
+1574213629506,25,Bot Service: Message No,,,Bot Thread Group 1-30,text,false,Test failed: text expected to contain /What would you like to get/check?/,341,0,13,13,null,0,0,0
+1574213629531,21,Bot Service: Message Attractor,,,Bot Thread Group 1-30,text,false,Test failed: text expected to contain /Wait a minute. It will take a while./,341,0,13,13,null,0,0,0
+1574213326470,305580,Bot Service: Message Blind Spots,,,Bot Thread Group 1-44,text,false,Test failed: text expected to contain /Random Point generated/,128,0,12,12,null,0,0,0
+1574213632050,44,Bot Service: Message No,,,Bot Thread Group 1-44,text,true,,849,0,12,12,null,0,0,0
+1574213632094,743,Bot Service: Message Attractor,,,Bot Thread Group 1-44,text,false,Test failed: text expected to contain /Wait a minute. It will take a while./,130,0,12,12,null,0,0,0
+1574213324406,308505,Bot Service: Message Blind Spots,,,Bot Thread Group 1-23,text,false,Test failed: text expected to contain /Random Point generated/,128,0,11,11,null,0,0,0
+1574213324332,308612,Bot Service: Message Blind Spots,,,Bot Thread Group 1-19,text,false,Test failed: text expected to contain /Random Point generated/,128,0,11,11,null,0,0,0
+1574213632911,40,Bot Service: Message No,,,Bot Thread Group 1-23,text,true,,850,0,11,11,null,0,0,0
+1574213328654,304789,Bot Service: Message Blind Spots,,,Bot Thread Group 1-27,text,false,Test failed: text expected to contain /Random Point generated/,128,0,11,11,null,0,0,0
+1574213632952,904,Bot Service: Message Attractor,,,Bot Thread Group 1-23,text,false,Test failed: text expected to contain /Wait a minute. It will take a while./,131,0,11,11,null,0,0,0
+1574213632944,923,Bot Service: Message No,,,Bot Thread Group 1-19,text,true,,850,0,10,10,null,0,0,0
+1574213633443,433,Bot Service: Message No,,,Bot Thread Group 1-27,text,true,,849,0,10,10,null,0,0,0
+1574213327566,306958,Bot Service: Message Blind Spots,,,Bot Thread Group 1-20,text,false,Test failed: text expected to contain /Random Point generated/,128,0,10,10,null,0,0,0
+1574213633867,972,Bot Service: Message Attractor,,,Bot Thread Group 1-19,text,false,Test failed: text expected to contain /Wait a minute. It will take a while./,131,0,10,10,null,0,0,0
+1574213332955,302365,Bot Service: Message Blind Spots,,,Bot Thread Group 1-41,text,false,Test failed: text expected to contain /Random Point generated/,128,0,9,9,null,0,0,0
+1574213331301,304471,Bot Service: Message Blind Spots,,,Bot Thread Group 1-7,text,false,Test failed: text expected to contain /Random Point generated/,128,0,9,9,null,0,0,0
+1574213331228,304546,Bot Service: Message Blind Spots,,,Bot Thread Group 1-42,text,false,Test failed: text expected to contain /Random Point generated/,128,0,9,9,null,0,0,0
+1574213633877,1963,Bot Service: Message Attractor,,,Bot Thread Group 1-27,text,false,Test failed: text expected to contain /Wait a minute. It will take a while./,130,0,9,9,null,0,0,0
+1574213635772,101,Bot Service: Message No,,,Bot Thread Group 1-7,text,false,Test failed: text expected to contain /What would you like to get/check?/,340,0,8,8,null,0,0,0
+1574213635774,106,Bot Service: Message No,,,Bot Thread Group 1-42,text,false,Test failed: text expected to contain /What would you like to get/check?/,341,0,8,8,null,0,0,0
+1574213635320,567,Bot Service: Message No,,,Bot Thread Group 1-41,text,true,,848,0,8,8,null,0,0,0
+1574213634524,1369,Bot Service: Message No,,,Bot Thread Group 1-20,text,true,,848,0,8,8,null,0,0,0
+1574213635873,27,Bot Service: Message Attractor,,,Bot Thread Group 1-7,text,false,Test failed: text expected to contain /Wait a minute. It will take a while./,340,0,8,8,null,0,0,0
+1574213635880,26,Bot Service: Message Attractor,,,Bot Thread Group 1-42,text,false,Test failed: text expected to contain /Wait a minute. It will take a while./,341,0,7,7,null,0,0,0
+1574213635887,953,Bot Service: Message Attractor,,,Bot Thread Group 1-41,text,false,Test failed: text expected to contain /Wait a minute. It will take a while./,129,0,6,6,null,0,0,0
+1574213635893,1946,Bot Service: Message Attractor,,,Bot Thread Group 1-20,text,false,Test failed: text expected to contain /Wait a minute. It will take a while./,129,0,5,5,null,0,0,0
+1574213334743,304176,Bot Service: Message Blind Spots,,,Bot Thread Group 1-15,text,false,Test failed: text expected to contain /Random Point generated/,128,0,4,4,null,0,0,0
+1574213335749,303741,Bot Service: Message Blind Spots,,,Bot Thread Group 1-43,text,false,Test failed: text expected to contain /Random Point generated/,128,0,4,4,null,0,0,0
+1574213639490,457,Bot Service: Message No,,,Bot Thread Group 1-43,text,false,Test failed: text expected to contain /What would you like to get/check?/,340,0,4,4,null,0,0,0
+1574213638919,1029,Bot Service: Message No,,,Bot Thread Group 1-15,text,true,,849,0,4,4,null,0,0,0
+1574213639948,21,Bot Service: Message Attractor,,,Bot Thread Group 1-43,text,false,Test failed: text expected to contain /Wait a minute. It will take a while./,340,0,4,4,null,0,0,0
+1574213330134,309836,Bot Service: Message Blind Spots,,,Bot Thread Group 1-50,text,false,Test failed: text expected to contain /Random Point generated/,128,0,3,3,null,0,0,0
+1574213330090,309923,Bot Service: Message Blind Spots,,,Bot Thread Group 1-39,text,false,Test failed: text expected to contain /Random Point generated/,128,0,3,3,null,0,0,0
+1574213639948,981,Bot Service: Message Attractor,,,Bot Thread Group 1-15,text,false,Test failed: text expected to contain /Wait a minute. It will take a while./,130,0,3,3,null,0,0,0
+1574213639970,992,Bot Service: Message No,,,Bot Thread Group 1-50,text,true,,849,0,2,2,null,0,0,0
+1574213640014,950,Bot Service: Message No,,,Bot Thread Group 1-39,text,true,,850,0,2,2,null,0,0,0
+1574213640963,1967,Bot Service: Message Attractor,,,Bot Thread Group 1-50,text,false,Test failed: text expected to contain /Wait a minute. It will take a while./,130,0,2,2,null,0,0,0
+1574213640964,1966,Bot Service: Message Attractor,,,Bot Thread Group 1-39,text,false,Test failed: text expected to contain /Wait a minute. It will take a while./,131,0,2,2,null,0,0,0

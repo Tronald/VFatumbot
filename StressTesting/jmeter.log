@@ -1,0 +1,328 @@
+2019-11-20 10:47:14,952 INFO o.a.j.u.JMeterUtils: Setting Locale to en_EN
+2019-11-20 10:47:15,035 INFO o.a.j.JMeter: Loading user properties from: /usr/local/Cellar/jmeter/5.2/libexec/bin/user.properties
+2019-11-20 10:47:15,035 INFO o.a.j.JMeter: Loading system properties from: /usr/local/Cellar/jmeter/5.2/libexec/bin/system.properties
+2019-11-20 10:47:15,037 INFO o.a.j.JMeter: Copyright (c) 1998-2019 The Apache Software Foundation
+2019-11-20 10:47:15,037 INFO o.a.j.JMeter: Version 5.2
+2019-11-20 10:47:15,037 INFO o.a.j.JMeter: java.version=1.8.0_144
+2019-11-20 10:47:15,037 INFO o.a.j.JMeter: java.vm.name=Java HotSpot(TM) 64-Bit Server VM
+2019-11-20 10:47:15,037 INFO o.a.j.JMeter: os.name=Mac OS X
+2019-11-20 10:47:15,037 INFO o.a.j.JMeter: os.arch=x86_64
+2019-11-20 10:47:15,037 INFO o.a.j.JMeter: os.version=10.14.6
+2019-11-20 10:47:15,037 INFO o.a.j.JMeter: file.encoding=UTF-8
+2019-11-20 10:47:15,037 INFO o.a.j.JMeter: java.awt.headless=null
+2019-11-20 10:47:15,038 INFO o.a.j.JMeter: Max memory     =1073741824
+2019-11-20 10:47:15,038 INFO o.a.j.JMeter: Available Processors =8
+2019-11-20 10:47:15,064 INFO o.a.j.JMeter: Default Locale=English (EN)
+2019-11-20 10:47:15,064 INFO o.a.j.JMeter: JMeter  Locale=English (EN)
+2019-11-20 10:47:15,064 INFO o.a.j.JMeter: JMeterHome=/usr/local/Cellar/jmeter/5.2/libexec
+2019-11-20 10:47:15,064 INFO o.a.j.JMeter: user.dir  =/Users/simon/Dropbox (Personal)/Fatum/github/VFatumbot/StressTesting
+2019-11-20 10:47:15,065 INFO o.a.j.JMeter: PWD       =/Users/simon/Dropbox (Personal)/Fatum/github/VFatumbot/StressTesting
+2019-11-20 10:47:15,077 INFO o.a.j.JMeter: IP: 192.168.44.9 Name: Simons-iMac.local FullName: 192.168.44.9
+2019-11-20 10:47:18,344 INFO o.a.j.g.a.LookAndFeelCommand: Installing Darcula LAF
+2019-11-20 10:47:18,602 INFO o.a.j.g.a.LookAndFeelCommand: Using look and feel: com.bulenkov.darcula.DarculaLaf [Darcula]
+2019-11-20 10:47:18,602 INFO o.a.j.JMeter: Setting LAF to: com.bulenkov.darcula.DarculaLaf
+2019-11-20 10:47:18,829 INFO o.a.j.JMeter: Loaded icon properties from org/apache/jmeter/images/icon.properties
+2019-11-20 10:47:23,935 INFO k.a.j.JMeterPluginsUtils: JMeter-Plugins.org v.1.4.0
+2019-11-20 10:47:24,571 WARN o.a.j.g.u.MenuFactory: Could not instantiate class: kg.apc.jmeter.reporters.LoadosophiaUploaderGui
+java.lang.reflect.InvocationTargetException: null
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method) ~[?:1.8.0_144]
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62) ~[?:1.8.0_144]
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45) ~[?:1.8.0_144]
+	at java.lang.reflect.Constructor.newInstance(Constructor.java:423) ~[?:1.8.0_144]
+	at org.apache.jmeter.gui.util.MenuFactory.getGUIComponent(MenuFactory.java:174) ~[ApacheJMeter_core.jar:5.2]
+	at org.apache.jmeter.gui.util.MenuFactory.initializeMenus(MenuFactory.java:141) ~[ApacheJMeter_core.jar:5.2]
+	at org.apache.jmeter.gui.util.MenuFactory.<clinit>(MenuFactory.java:106) ~[ApacheJMeter_core.jar:5.2]
+	at org.apache.jmeter.control.gui.TestPlanGui.createPopupMenu(TestPlanGui.java:92) ~[ApacheJMeter_core.jar:5.2]
+	at org.apache.jmeter.gui.tree.JMeterTreeNode.createPopupMenu(JMeterTreeNode.java:185) ~[ApacheJMeter_core.jar:5.2]
+	at org.apache.jmeter.gui.action.EditCommand.doAction(EditCommand.java:46) ~[ApacheJMeter_core.jar:5.2]
+	at org.apache.jmeter.gui.action.ActionRouter.performAction(ActionRouter.java:88) ~[ApacheJMeter_core.jar:5.2]
+	at org.apache.jmeter.gui.action.ActionRouter.lambda$actionPerformed$0(ActionRouter.java:70) ~[ApacheJMeter_core.jar:5.2]
+	at java.awt.event.InvocationEvent.dispatch(InvocationEvent.java:311) [?:1.8.0_144]
+	at java.awt.EventQueue.dispatchEventImpl(EventQueue.java:756) [?:1.8.0_144]
+	at java.awt.EventQueue.access$500(EventQueue.java:97) [?:1.8.0_144]
+	at java.awt.EventQueue$3.run(EventQueue.java:709) [?:1.8.0_144]
+	at java.awt.EventQueue$3.run(EventQueue.java:703) [?:1.8.0_144]
+	at java.security.AccessController.doPrivileged(Native Method) ~[?:1.8.0_144]
+	at java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:80) [?:1.8.0_144]
+	at java.awt.EventQueue.dispatchEvent(EventQueue.java:726) [?:1.8.0_144]
+	at java.awt.EventDispatchThread.pumpOneEventForFilters(EventDispatchThread.java:201) [?:1.8.0_144]
+	at java.awt.EventDispatchThread.pumpEventsForFilter(EventDispatchThread.java:116) [?:1.8.0_144]
+	at java.awt.EventDispatchThread.pumpEventsForHierarchy(EventDispatchThread.java:105) [?:1.8.0_144]
+	at java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:101) [?:1.8.0_144]
+	at java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:93) [?:1.8.0_144]
+	at java.awt.EventDispatchThread.run(EventDispatchThread.java:82) [?:1.8.0_144]
+Caused by: java.lang.NoClassDefFoundError: org/apache/commons/httpclient/methods/multipart/PartSource
+	at kg.apc.jmeter.reporters.LoadosophiaUploaderGui.init(LoadosophiaUploaderGui.java:114) ~[JMeterPlugins-Standard.jar:?]
+	at kg.apc.jmeter.reporters.LoadosophiaUploaderGui.<init>(LoadosophiaUploaderGui.java:28) ~[JMeterPlugins-Standard.jar:?]
+	... 26 more
+Caused by: java.lang.ClassNotFoundException: org.apache.commons.httpclient.methods.multipart.PartSource
+	at java.net.URLClassLoader.findClass(URLClassLoader.java:381) ~[?:1.8.0_144]
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:424) ~[?:1.8.0_144]
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:357) ~[?:1.8.0_144]
+	at kg.apc.jmeter.reporters.LoadosophiaUploaderGui.init(LoadosophiaUploaderGui.java:114) ~[JMeterPlugins-Standard.jar:?]
+	at kg.apc.jmeter.reporters.LoadosophiaUploaderGui.<init>(LoadosophiaUploaderGui.java:28) ~[JMeterPlugins-Standard.jar:?]
+	... 26 more
+2019-11-20 10:47:25,697 INFO o.a.j.p.h.s.HTTPSamplerBase: Parser for text/html is org.apache.jmeter.protocol.http.parser.LagartoBasedHtmlParser
+2019-11-20 10:47:25,698 INFO o.a.j.p.h.s.HTTPSamplerBase: Parser for application/xhtml+xml is org.apache.jmeter.protocol.http.parser.LagartoBasedHtmlParser
+2019-11-20 10:47:25,698 INFO o.a.j.p.h.s.HTTPSamplerBase: Parser for application/xml is org.apache.jmeter.protocol.http.parser.LagartoBasedHtmlParser
+2019-11-20 10:47:25,698 INFO o.a.j.p.h.s.HTTPSamplerBase: Parser for text/xml is org.apache.jmeter.protocol.http.parser.LagartoBasedHtmlParser
+2019-11-20 10:47:25,698 INFO o.a.j.p.h.s.HTTPSamplerBase: Parser for text/vnd.wap.wml is org.apache.jmeter.protocol.http.parser.RegexpHTMLParser
+2019-11-20 10:47:25,698 INFO o.a.j.p.h.s.HTTPSamplerBase: Parser for text/css is org.apache.jmeter.protocol.http.parser.CssParser
+2019-11-20 10:47:26,179 INFO o.a.j.e.KeyToolUtils: keytool found at 'keytool'
+2019-11-20 10:47:26,180 INFO o.a.j.p.h.p.ProxyControl: HTTP(S) Test Script Recorder SSL Proxy will use keys that support embedded 3rd party resources in file /usr/local/Cellar/jmeter/5.2/libexec/bin/proxyserver.jks
+2019-11-20 10:47:26,458 INFO o.a.j.s.FileServer: Default base='/Users/simon/Dropbox (Personal)/Fatum/github/VFatumbot/StressTesting'
+2019-11-20 10:47:26,853 INFO o.a.j.s.SampleResult: Note: Sample TimeStamps are START times
+2019-11-20 10:47:26,853 INFO o.a.j.s.SampleResult: sampleresult.default.encoding is set to ISO-8859-1
+2019-11-20 10:47:26,853 INFO o.a.j.s.SampleResult: sampleresult.useNanoTime=true
+2019-11-20 10:47:26,853 INFO o.a.j.s.SampleResult: sampleresult.nanoThreadSleep=5000
+2019-11-20 10:48:03,774 INFO o.a.j.g.a.Load: Loading file: /Users/simon/Dropbox (Personal)/Fatum/github/VFatumbot/StressTesting/Bot Thread Group.jmx
+2019-11-20 10:48:03,774 INFO o.a.j.s.FileServer: Set new base='/Users/simon/Dropbox (Personal)/Fatum/github/VFatumbot/StressTesting'
+2019-11-20 10:48:04,059 INFO o.a.j.s.SaveService: Testplan (JMX) version: 2.2. Testlog (JTL) version: 2.2
+2019-11-20 10:48:04,101 INFO o.a.j.s.SaveService: Using SaveService properties file encoding UTF-8
+2019-11-20 10:48:04,103 INFO o.a.j.s.SaveService: Using SaveService properties version 5.0
+2019-11-20 10:48:04,105 INFO o.a.j.s.SaveService: Loading file: /Users/simon/Dropbox (Personal)/Fatum/github/VFatumbot/StressTesting/Bot Thread Group.jmx
+2019-11-20 10:48:04,152 INFO b.c.m.o.b.s.j.s.ConversationUpdateSampler: el is instanceof class br.com.microsoft.ocp.bot.service.jmeter.config.BotServiceConfig
+2019-11-20 10:48:04,153 INFO b.c.m.o.b.s.j.s.ConversationUpdateSampler: config is instanceof class br.com.microsoft.ocp.bot.service.jmeter.config.BotServiceConfig
+2019-11-20 10:48:04,285 INFO o.a.j.s.FileServer: Set new base='/Users/simon/Dropbox (Personal)/Fatum/github/VFatumbot/StressTesting'
+2019-11-20 10:49:16,187 INFO b.c.m.o.b.s.j.s.ConversationUpdateSampler: el is instanceof class br.com.microsoft.ocp.bot.service.jmeter.config.BotServiceConfig
+2019-11-20 10:49:16,188 INFO b.c.m.o.b.s.j.s.ConversationUpdateSampler: config is instanceof class br.com.microsoft.ocp.bot.service.jmeter.config.BotServiceConfig
+2019-11-20 10:49:16,188 INFO b.c.m.o.b.s.j.s.ConversationUpdateSampler: el is instanceof class br.com.microsoft.ocp.bot.service.jmeter.config.BotServiceConfig
+2019-11-20 10:49:16,190 INFO b.c.m.o.b.s.j.s.ConversationUpdateSampler: config is instanceof class br.com.microsoft.ocp.bot.service.jmeter.config.BotServiceConfig
+2019-11-20 10:49:16,191 INFO b.c.m.o.b.s.j.s.ConversationUpdateSampler: el is instanceof class br.com.microsoft.ocp.bot.service.jmeter.config.BotServiceConfig
+2019-11-20 10:49:31,212 INFO b.c.m.o.b.s.j.s.ConversationUpdateSampler: config is instanceof class br.com.microsoft.ocp.bot.service.jmeter.config.BotServiceConfig
+2019-11-20 10:49:37,262 INFO o.a.j.e.StandardJMeterEngine: Running the test!
+2019-11-20 10:49:37,263 INFO o.a.j.s.SampleEvent: List of sample_variables: []
+2019-11-20 10:49:37,263 INFO o.a.j.s.SampleEvent: List of sample_variables: []
+2019-11-20 10:49:37,266 INFO o.a.j.e.u.CompoundVariable: Note: Function class names must contain the string: '.functions.'
+2019-11-20 10:49:37,266 INFO o.a.j.e.u.CompoundVariable: Note: Function class names must not contain the string: '.gui.'
+2019-11-20 10:49:37,857 INFO b.c.m.o.b.s.j.c.BotServiceConfig: Test started. Starting the embedded callback server.
+2019-11-20 10:49:37,858 INFO b.c.m.o.b.s.j.c.s.EmbeddedServer: Waiting for server to start...
+2019-11-20 10:49:37,858 INFO b.c.m.o.b.s.j.c.s.EmbeddedServer: Starting callback server.
+2019-11-20 10:49:37,859 INFO b.c.m.o.b.s.j.c.s.EmbeddedServer: Callback server listening on 0.0.0.0/0.0.0.0:45000
+2019-11-20 10:49:37,865 INFO o.e.j.u.log: Logging initialized @144939ms to org.eclipse.jetty.util.log.Slf4jLog
+2019-11-20 10:49:37,927 INFO o.e.j.s.Server: jetty-9.4.z-SNAPSHOT; built: 2018-08-30T13:59:14.071Z; git: 27208684755d94a92186989f695db2d7b21ebc51; jvm 1.8.0_144-b01
+2019-11-20 10:49:37,960 INFO o.e.j.s.session: DefaultSessionIdManager workerName=node0
+2019-11-20 10:49:37,960 INFO o.e.j.s.session: No SessionScavenger set, using defaults
+2019-11-20 10:49:37,961 INFO o.e.j.s.session: node0 Scavenging every 660000ms
+2019-11-20 10:49:38,570 INFO o.e.j.s.h.ContextHandler: Started o.e.j.s.ServletContextHandler@7edf80c6{/,null,AVAILABLE}
+2019-11-20 10:49:38,673 INFO o.e.j.s.AbstractConnector: Started ServerConnector@1e58aadb{HTTP/1.1,[http/1.1]}{0.0.0.0:45000}
+2019-11-20 10:49:38,673 INFO o.e.j.s.Server: Started @145748ms
+2019-11-20 10:49:38,673 INFO b.c.m.o.b.s.j.c.s.EmbeddedServer: Callback server started.
+2019-11-20 10:49:38,858 INFO b.c.m.o.b.s.j.c.s.EmbeddedServer: Waiting for server to start...
+2019-11-20 10:49:38,859 INFO b.c.m.o.b.s.j.c.BotServiceConfig: Embedded callback server started.
+2019-11-20 10:49:38,860 INFO o.a.j.g.u.JMeterMenuBar: setRunning(true, *local*)
+2019-11-20 10:49:39,074 INFO o.a.j.e.StandardJMeterEngine: Starting ThreadGroup: 1 : Bot Thread Group
+2019-11-20 10:49:39,074 INFO o.a.j.e.StandardJMeterEngine: Starting 1 threads for group Bot Thread Group.
+2019-11-20 10:49:39,074 INFO o.a.j.e.StandardJMeterEngine: Thread will continue on error
+2019-11-20 10:49:39,074 INFO o.a.j.t.ThreadGroup: Starting thread group... number=1 threads=1 ramp-up=1 delayedStart=false
+2019-11-20 10:49:39,078 INFO o.a.j.t.ThreadGroup: Started thread group number 1
+2019-11-20 10:49:39,078 INFO o.a.j.e.StandardJMeterEngine: All thread groups have been started
+2019-11-20 10:49:39,080 INFO o.a.j.t.JMeterThread: Thread started: Bot Thread Group 1-1
+2019-11-20 10:49:39,109 INFO b.c.m.o.b.s.j.c.s.ActivityRequestReply: setRequest(21cd8804-1e84-427d-a59c-453a50258d67)
+2019-11-20 10:49:39,109 INFO b.c.m.o.b.s.j.s.BaseBotSampler: Sending activity of type conversationUpdate with activityId=21cd8804-1e84-427d-a59c-453a50258d67, conversationId=13b9e270-25b4-408d-b029-e2d9a5f442a1 with callbackUrl as http://localhost:45000
+2019-11-20 10:49:40,878 ERROR b.c.m.o.b.s.j.s.BaseBotSampler: Unexpected error
+br.com.microsoft.ocp.bot.service.jmeter.callback.server.HttpResponseException: Internal Server Error
+	at br.com.microsoft.ocp.bot.service.jmeter.sampler.BaseBotSampler.ensureResponseSuccess(BaseBotSampler.java:78) ~[BotServiceStressToolkit-2.0.0.jar:?]
+	at br.com.microsoft.ocp.bot.service.jmeter.sampler.BaseBotSampler.send(BaseBotSampler.java:178) [BotServiceStressToolkit-2.0.0.jar:?]
+	at br.com.microsoft.ocp.bot.service.jmeter.sampler.ConversationUpdateSampler.sample(ConversationUpdateSampler.java:81) [BotServiceStressToolkit-2.0.0.jar:?]
+	at org.apache.jmeter.threads.JMeterThread.doSampling(JMeterThread.java:627) [ApacheJMeter_core.jar:5.2]
+	at org.apache.jmeter.threads.JMeterThread.executeSamplePackage(JMeterThread.java:551) [ApacheJMeter_core.jar:5.2]
+	at org.apache.jmeter.threads.JMeterThread.processSampler(JMeterThread.java:490) [ApacheJMeter_core.jar:5.2]
+	at org.apache.jmeter.threads.JMeterThread.run(JMeterThread.java:257) [ApacheJMeter_core.jar:5.2]
+	at java.lang.Thread.run(Thread.java:748) [?:1.8.0_144]
+2019-11-20 10:49:40,881 INFO b.c.m.o.b.s.j.c.s.ActivityRequestReply: setRequest(30d9ba43-e026-45c7-9d87-d571716889b7)
+2019-11-20 10:49:40,881 INFO b.c.m.o.b.s.j.s.BaseBotSampler: Sending activity of type message with activityId=30d9ba43-e026-45c7-9d87-d571716889b7, conversationId=13b9e270-25b4-408d-b029-e2d9a5f442a1 with callbackUrl as http://localhost:45000
+2019-11-20 10:49:41,673 ERROR b.c.m.o.b.s.j.s.BaseBotSampler: Unexpected error
+br.com.microsoft.ocp.bot.service.jmeter.callback.server.HttpResponseException: Internal Server Error
+	at br.com.microsoft.ocp.bot.service.jmeter.sampler.BaseBotSampler.ensureResponseSuccess(BaseBotSampler.java:78) ~[BotServiceStressToolkit-2.0.0.jar:?]
+	at br.com.microsoft.ocp.bot.service.jmeter.sampler.BaseBotSampler.send(BaseBotSampler.java:178) [BotServiceStressToolkit-2.0.0.jar:?]
+	at br.com.microsoft.ocp.bot.service.jmeter.sampler.MessageSampler.sample(MessageSampler.java:61) [BotServiceStressToolkit-2.0.0.jar:?]
+	at org.apache.jmeter.threads.JMeterThread.doSampling(JMeterThread.java:627) [ApacheJMeter_core.jar:5.2]
+	at org.apache.jmeter.threads.JMeterThread.executeSamplePackage(JMeterThread.java:551) [ApacheJMeter_core.jar:5.2]
+	at org.apache.jmeter.threads.JMeterThread.processSampler(JMeterThread.java:490) [ApacheJMeter_core.jar:5.2]
+	at org.apache.jmeter.threads.JMeterThread.run(JMeterThread.java:257) [ApacheJMeter_core.jar:5.2]
+	at java.lang.Thread.run(Thread.java:748) [?:1.8.0_144]
+2019-11-20 10:49:41,674 INFO b.c.m.o.b.s.j.c.s.ActivityRequestReply: setRequest(a8b25e4e-5d03-4648-ba13-abf7943827fe)
+2019-11-20 10:49:41,674 INFO b.c.m.o.b.s.j.s.BaseBotSampler: Sending activity of type message with activityId=a8b25e4e-5d03-4648-ba13-abf7943827fe, conversationId=13b9e270-25b4-408d-b029-e2d9a5f442a1 with callbackUrl as http://localhost:45000
+2019-11-20 10:49:42,214 ERROR b.c.m.o.b.s.j.s.BaseBotSampler: Unexpected error
+br.com.microsoft.ocp.bot.service.jmeter.callback.server.HttpResponseException: Internal Server Error
+	at br.com.microsoft.ocp.bot.service.jmeter.sampler.BaseBotSampler.ensureResponseSuccess(BaseBotSampler.java:78) ~[BotServiceStressToolkit-2.0.0.jar:?]
+	at br.com.microsoft.ocp.bot.service.jmeter.sampler.BaseBotSampler.send(BaseBotSampler.java:178) [BotServiceStressToolkit-2.0.0.jar:?]
+	at br.com.microsoft.ocp.bot.service.jmeter.sampler.MessageSampler.sample(MessageSampler.java:61) [BotServiceStressToolkit-2.0.0.jar:?]
+	at org.apache.jmeter.threads.JMeterThread.doSampling(JMeterThread.java:627) [ApacheJMeter_core.jar:5.2]
+	at org.apache.jmeter.threads.JMeterThread.executeSamplePackage(JMeterThread.java:551) [ApacheJMeter_core.jar:5.2]
+	at org.apache.jmeter.threads.JMeterThread.processSampler(JMeterThread.java:490) [ApacheJMeter_core.jar:5.2]
+	at org.apache.jmeter.threads.JMeterThread.run(JMeterThread.java:257) [ApacheJMeter_core.jar:5.2]
+	at java.lang.Thread.run(Thread.java:748) [?:1.8.0_144]
+2019-11-20 10:49:42,256 INFO b.c.m.o.b.s.j.c.s.ActivityRequestReply: setRequest(141fd122-0684-494f-a19d-c464503e1cc3)
+2019-11-20 10:49:43,014 INFO b.c.m.o.b.s.j.s.BaseBotSampler: Sending activity of type message with activityId=141fd122-0684-494f-a19d-c464503e1cc3, conversationId=13b9e270-25b4-408d-b029-e2d9a5f442a1 with callbackUrl as http://localhost:45000
+2019-11-20 10:49:43,579 ERROR b.c.m.o.b.s.j.s.BaseBotSampler: Unexpected error
+br.com.microsoft.ocp.bot.service.jmeter.callback.server.HttpResponseException: Internal Server Error
+	at br.com.microsoft.ocp.bot.service.jmeter.sampler.BaseBotSampler.ensureResponseSuccess(BaseBotSampler.java:78) ~[BotServiceStressToolkit-2.0.0.jar:?]
+	at br.com.microsoft.ocp.bot.service.jmeter.sampler.BaseBotSampler.send(BaseBotSampler.java:178) [BotServiceStressToolkit-2.0.0.jar:?]
+	at br.com.microsoft.ocp.bot.service.jmeter.sampler.MessageSampler.sample(MessageSampler.java:61) [BotServiceStressToolkit-2.0.0.jar:?]
+	at org.apache.jmeter.threads.JMeterThread.doSampling(JMeterThread.java:627) [ApacheJMeter_core.jar:5.2]
+	at org.apache.jmeter.threads.JMeterThread.executeSamplePackage(JMeterThread.java:551) [ApacheJMeter_core.jar:5.2]
+	at org.apache.jmeter.threads.JMeterThread.processSampler(JMeterThread.java:490) [ApacheJMeter_core.jar:5.2]
+	at org.apache.jmeter.threads.JMeterThread.run(JMeterThread.java:257) [ApacheJMeter_core.jar:5.2]
+	at java.lang.Thread.run(Thread.java:748) [?:1.8.0_144]
+2019-11-20 10:49:43,580 INFO b.c.m.o.b.s.j.c.s.ActivityRequestReply: setRequest(832c4bd5-7c45-4e33-b25a-bca2d853bdcb)
+2019-11-20 10:49:43,580 INFO b.c.m.o.b.s.j.s.BaseBotSampler: Sending activity of type message with activityId=832c4bd5-7c45-4e33-b25a-bca2d853bdcb, conversationId=13b9e270-25b4-408d-b029-e2d9a5f442a1 with callbackUrl as http://localhost:45000
+2019-11-20 10:49:44,117 ERROR b.c.m.o.b.s.j.s.BaseBotSampler: Unexpected error
+br.com.microsoft.ocp.bot.service.jmeter.callback.server.HttpResponseException: Internal Server Error
+	at br.com.microsoft.ocp.bot.service.jmeter.sampler.BaseBotSampler.ensureResponseSuccess(BaseBotSampler.java:78) ~[BotServiceStressToolkit-2.0.0.jar:?]
+	at br.com.microsoft.ocp.bot.service.jmeter.sampler.BaseBotSampler.send(BaseBotSampler.java:178) [BotServiceStressToolkit-2.0.0.jar:?]
+	at br.com.microsoft.ocp.bot.service.jmeter.sampler.MessageSampler.sample(MessageSampler.java:61) [BotServiceStressToolkit-2.0.0.jar:?]
+	at org.apache.jmeter.threads.JMeterThread.doSampling(JMeterThread.java:627) [ApacheJMeter_core.jar:5.2]
+	at org.apache.jmeter.threads.JMeterThread.executeSamplePackage(JMeterThread.java:551) [ApacheJMeter_core.jar:5.2]
+	at org.apache.jmeter.threads.JMeterThread.processSampler(JMeterThread.java:490) [ApacheJMeter_core.jar:5.2]
+	at org.apache.jmeter.threads.JMeterThread.run(JMeterThread.java:257) [ApacheJMeter_core.jar:5.2]
+	at java.lang.Thread.run(Thread.java:748) [?:1.8.0_144]
+2019-11-20 10:49:44,117 INFO b.c.m.o.b.s.j.c.s.ActivityRequestReply: setRequest(86347c41-ff77-46c5-98cd-5e1fe1b5c18c)
+2019-11-20 10:49:44,117 INFO b.c.m.o.b.s.j.s.BaseBotSampler: Sending activity of type message with activityId=86347c41-ff77-46c5-98cd-5e1fe1b5c18c, conversationId=13b9e270-25b4-408d-b029-e2d9a5f442a1 with callbackUrl as http://localhost:45000
+2019-11-20 10:49:44,658 ERROR b.c.m.o.b.s.j.s.BaseBotSampler: Unexpected error
+br.com.microsoft.ocp.bot.service.jmeter.callback.server.HttpResponseException: Internal Server Error
+	at br.com.microsoft.ocp.bot.service.jmeter.sampler.BaseBotSampler.ensureResponseSuccess(BaseBotSampler.java:78) ~[BotServiceStressToolkit-2.0.0.jar:?]
+	at br.com.microsoft.ocp.bot.service.jmeter.sampler.BaseBotSampler.send(BaseBotSampler.java:178) [BotServiceStressToolkit-2.0.0.jar:?]
+	at br.com.microsoft.ocp.bot.service.jmeter.sampler.MessageSampler.sample(MessageSampler.java:61) [BotServiceStressToolkit-2.0.0.jar:?]
+	at org.apache.jmeter.threads.JMeterThread.doSampling(JMeterThread.java:627) [ApacheJMeter_core.jar:5.2]
+	at org.apache.jmeter.threads.JMeterThread.executeSamplePackage(JMeterThread.java:551) [ApacheJMeter_core.jar:5.2]
+	at org.apache.jmeter.threads.JMeterThread.processSampler(JMeterThread.java:490) [ApacheJMeter_core.jar:5.2]
+	at org.apache.jmeter.threads.JMeterThread.run(JMeterThread.java:257) [ApacheJMeter_core.jar:5.2]
+	at java.lang.Thread.run(Thread.java:748) [?:1.8.0_144]
+2019-11-20 10:49:44,658 INFO o.a.j.t.JMeterThread: Thread is done: Bot Thread Group 1-1
+2019-11-20 10:49:44,658 INFO o.a.j.t.JMeterThread: Thread finished: Bot Thread Group 1-1
+2019-11-20 10:49:44,658 INFO o.a.j.e.StandardJMeterEngine: Notifying test listeners of end of test
+2019-11-20 10:49:44,658 INFO b.c.m.o.b.s.j.c.BotServiceConfig: Test stopped. Stopping the embedded callback server.
+2019-11-20 10:49:44,658 INFO b.c.m.o.b.s.j.c.s.EmbeddedServer: Stopping callback server.
+2019-11-20 10:49:44,668 INFO o.e.j.s.AbstractConnector: Stopped ServerConnector@1e58aadb{HTTP/1.1,[http/1.1]}{0.0.0.0:45000}
+2019-11-20 10:49:44,668 INFO o.e.j.s.session: node0 Stopped scavenging
+2019-11-20 10:49:44,670 INFO o.e.j.s.h.ContextHandler: Stopped o.e.j.s.ServletContextHandler@7edf80c6{/,null,UNAVAILABLE}
+2019-11-20 10:49:44,672 INFO b.c.m.o.b.s.j.c.BotServiceConfig: Embedded callback server stopped.
+2019-11-20 10:49:44,672 INFO o.a.j.g.u.JMeterMenuBar: setRunning(false, *local*)
+2019-11-20 10:50:07,022 INFO b.c.m.o.b.s.j.s.ConversationUpdateSampler: el is instanceof class br.com.microsoft.ocp.bot.service.jmeter.config.BotServiceConfig
+2019-11-20 10:50:07,022 INFO b.c.m.o.b.s.j.s.ConversationUpdateSampler: config is instanceof class br.com.microsoft.ocp.bot.service.jmeter.config.BotServiceConfig
+2019-11-20 10:50:07,023 INFO b.c.m.o.b.s.j.s.ConversationUpdateSampler: el is instanceof class br.com.microsoft.ocp.bot.service.jmeter.config.BotServiceConfig
+2019-11-20 10:50:07,026 INFO b.c.m.o.b.s.j.s.ConversationUpdateSampler: config is instanceof class br.com.microsoft.ocp.bot.service.jmeter.config.BotServiceConfig
+2019-11-20 10:50:07,026 INFO b.c.m.o.b.s.j.s.ConversationUpdateSampler: el is instanceof class br.com.microsoft.ocp.bot.service.jmeter.config.BotServiceConfig
+2019-11-20 10:50:21,597 INFO b.c.m.o.b.s.j.s.ConversationUpdateSampler: config is instanceof class br.com.microsoft.ocp.bot.service.jmeter.config.BotServiceConfig
+2019-11-20 10:50:21,598 INFO b.c.m.o.b.s.j.s.ConversationUpdateSampler: el is instanceof class br.com.microsoft.ocp.bot.service.jmeter.config.BotServiceConfig
+2019-11-20 10:50:22,909 INFO b.c.m.o.b.s.j.s.ConversationUpdateSampler: config is instanceof class br.com.microsoft.ocp.bot.service.jmeter.config.BotServiceConfig
+2019-11-20 10:50:22,909 INFO b.c.m.o.b.s.j.s.ConversationUpdateSampler: el is instanceof class br.com.microsoft.ocp.bot.service.jmeter.config.BotServiceConfig
+2019-11-20 10:50:22,910 INFO b.c.m.o.b.s.j.s.ConversationUpdateSampler: config is instanceof class br.com.microsoft.ocp.bot.service.jmeter.config.BotServiceConfig
+2019-11-20 10:50:22,910 INFO b.c.m.o.b.s.j.s.ConversationUpdateSampler: el is instanceof class br.com.microsoft.ocp.bot.service.jmeter.config.BotServiceConfig
+2019-11-20 10:50:22,910 INFO b.c.m.o.b.s.j.s.ConversationUpdateSampler: config is instanceof class br.com.microsoft.ocp.bot.service.jmeter.config.BotServiceConfig
+2019-11-20 10:50:22,910 INFO b.c.m.o.b.s.j.s.ConversationUpdateSampler: el is instanceof class br.com.microsoft.ocp.bot.service.jmeter.config.BotServiceConfig
+2019-11-20 10:50:22,914 INFO b.c.m.o.b.s.j.s.ConversationUpdateSampler: config is instanceof class br.com.microsoft.ocp.bot.service.jmeter.config.BotServiceConfig
+2019-11-20 10:50:22,915 INFO b.c.m.o.b.s.j.s.ConversationUpdateSampler: el is instanceof class br.com.microsoft.ocp.bot.service.jmeter.config.BotServiceConfig
+2019-11-20 10:50:22,915 INFO b.c.m.o.b.s.j.s.ConversationUpdateSampler: config is instanceof class br.com.microsoft.ocp.bot.service.jmeter.config.BotServiceConfig
+2019-11-20 10:50:22,916 INFO b.c.m.o.b.s.j.s.ConversationUpdateSampler: el is instanceof class br.com.microsoft.ocp.bot.service.jmeter.config.BotServiceConfig
+2019-11-20 10:50:22,916 INFO o.a.j.e.StandardJMeterEngine: Running the test!
+2019-11-20 10:50:22,917 INFO o.a.j.s.SampleEvent: List of sample_variables: []
+2019-11-20 10:50:22,919 INFO b.c.m.o.b.s.j.c.BotServiceConfig: Test started. Starting the embedded callback server.
+2019-11-20 10:50:22,919 INFO b.c.m.o.b.s.j.c.s.EmbeddedServer: Waiting for server to start...
+2019-11-20 10:50:22,919 INFO b.c.m.o.b.s.j.c.s.EmbeddedServer: Starting callback server.
+2019-11-20 10:50:22,919 INFO b.c.m.o.b.s.j.c.s.EmbeddedServer: Callback server listening on 0.0.0.0/0.0.0.0:45000
+2019-11-20 10:50:22,920 INFO o.e.j.s.Server: jetty-9.4.z-SNAPSHOT; built: 2018-08-30T13:59:14.071Z; git: 27208684755d94a92186989f695db2d7b21ebc51; jvm 1.8.0_144-b01
+2019-11-20 10:50:22,921 INFO o.e.j.s.session: DefaultSessionIdManager workerName=node0
+2019-11-20 10:50:22,921 INFO o.e.j.s.session: No SessionScavenger set, using defaults
+2019-11-20 10:50:22,921 INFO o.e.j.s.session: node0 Scavenging every 600000ms
+2019-11-20 10:50:23,266 INFO o.e.j.s.h.ContextHandler: Started o.e.j.s.ServletContextHandler@7d4b1e08{/,null,AVAILABLE}
+2019-11-20 10:50:23,267 INFO o.e.j.s.AbstractConnector: Started ServerConnector@546736a9{HTTP/1.1,[http/1.1]}{0.0.0.0:45000}
+2019-11-20 10:50:23,268 INFO o.e.j.s.Server: Started @190342ms
+2019-11-20 10:50:23,268 INFO b.c.m.o.b.s.j.c.s.EmbeddedServer: Callback server started.
+2019-11-20 10:50:23,924 INFO b.c.m.o.b.s.j.c.s.EmbeddedServer: Waiting for server to start...
+2019-11-20 10:50:23,925 INFO b.c.m.o.b.s.j.c.BotServiceConfig: Embedded callback server started.
+2019-11-20 10:50:23,925 INFO o.a.j.g.u.JMeterMenuBar: setRunning(true, *local*)
+2019-11-20 10:50:24,080 INFO o.a.j.e.StandardJMeterEngine: Starting ThreadGroup: 1 : Bot Thread Group
+2019-11-20 10:50:24,080 INFO o.a.j.e.StandardJMeterEngine: Starting 1 threads for group Bot Thread Group.
+2019-11-20 10:50:24,080 INFO o.a.j.e.StandardJMeterEngine: Thread will continue on error
+2019-11-20 10:50:24,080 INFO o.a.j.t.ThreadGroup: Starting thread group... number=1 threads=1 ramp-up=1 delayedStart=false
+2019-11-20 10:50:24,081 INFO o.a.j.t.ThreadGroup: Started thread group number 1
+2019-11-20 10:50:24,081 INFO o.a.j.e.StandardJMeterEngine: All thread groups have been started
+2019-11-20 10:50:24,081 INFO o.a.j.t.JMeterThread: Thread started: Bot Thread Group 1-1
+2019-11-20 10:50:24,082 INFO b.c.m.o.b.s.j.c.s.ActivityRequestReply: setRequest(d007d56e-17e3-4d95-9a9a-7a13722c7a35)
+2019-11-20 10:50:24,082 INFO b.c.m.o.b.s.j.s.BaseBotSampler: Sending activity of type conversationUpdate with activityId=d007d56e-17e3-4d95-9a9a-7a13722c7a35, conversationId=bc08b5e9-974b-437a-be18-dfa3a8f52743 with callbackUrl as http://localhost:45000
+2019-11-20 10:50:28,660 INFO b.c.m.o.b.s.j.c.s.MockChannelCallback: replyToActivity(conversationId=bc08b5e9-974b-437a-be18-dfa3a8f52743, activityId=d007d56e-17e3-4d95-9a9a-7a13722c7a35)
+2019-11-20 10:50:28,686 INFO b.c.m.o.b.s.j.c.s.MockChannelCallback: replyToActivity(conversationId=bc08b5e9-974b-437a-be18-dfa3a8f52743, activityId=d007d56e-17e3-4d95-9a9a-7a13722c7a35) [Activity(replyToId=d007d56e-17e3-4d95-9a9a-7a13722c7a35)]
+2019-11-20 10:50:28,732 INFO b.c.m.o.b.s.j.c.s.MockChannelCallback: replyToActivity(conversationId=bc08b5e9-974b-437a-be18-dfa3a8f52743, activityId=d007d56e-17e3-4d95-9a9a-7a13722c7a35)
+2019-11-20 10:50:28,747 INFO b.c.m.o.b.s.j.c.s.MockChannelCallback: replyToActivity(conversationId=bc08b5e9-974b-437a-be18-dfa3a8f52743, activityId=d007d56e-17e3-4d95-9a9a-7a13722c7a35) [Activity(replyToId=d007d56e-17e3-4d95-9a9a-7a13722c7a35)]
+2019-11-20 10:50:29,319 INFO b.c.m.o.b.s.j.s.BaseBotSampler: Waiting for 2 response(s) of activity d007d56e-17e3-4d95-9a9a-7a13722c7a35 at url http://localhost:45000
+2019-11-20 10:50:29,319 INFO b.c.m.o.b.s.j.s.BaseBotSampler: Got 1 responses for activity d007d56e-17e3-4d95-9a9a-7a13722c7a35
+2019-11-20 10:50:29,319 INFO b.c.m.o.b.s.j.s.BaseBotSampler: Got all (2) responses for activity d007d56e-17e3-4d95-9a9a-7a13722c7a35
+2019-11-20 10:50:29,322 INFO b.c.m.o.b.s.j.c.s.ActivityRequestReply: setRequest(f01d5a13-b510-48c5-8707-eb9e181d3eb7)
+2019-11-20 10:50:29,322 INFO b.c.m.o.b.s.j.s.BaseBotSampler: Sending activity of type message with activityId=f01d5a13-b510-48c5-8707-eb9e181d3eb7, conversationId=bc08b5e9-974b-437a-be18-dfa3a8f52743 with callbackUrl as http://localhost:45000
+2019-11-20 10:50:30,665 INFO b.c.m.o.b.s.j.c.s.MockChannelCallback: replyToActivity(conversationId=bc08b5e9-974b-437a-be18-dfa3a8f52743, activityId=f01d5a13-b510-48c5-8707-eb9e181d3eb7)
+2019-11-20 10:50:30,673 INFO b.c.m.o.b.s.j.c.s.MockChannelCallback: replyToActivity(conversationId=bc08b5e9-974b-437a-be18-dfa3a8f52743, activityId=f01d5a13-b510-48c5-8707-eb9e181d3eb7) [Activity(replyToId=f01d5a13-b510-48c5-8707-eb9e181d3eb7)]
+2019-11-20 10:50:31,045 INFO b.c.m.o.b.s.j.c.s.MockChannelCallback: replyToActivity(conversationId=bc08b5e9-974b-437a-be18-dfa3a8f52743, activityId=f01d5a13-b510-48c5-8707-eb9e181d3eb7)
+2019-11-20 10:50:31,062 INFO b.c.m.o.b.s.j.c.s.MockChannelCallback: replyToActivity(conversationId=bc08b5e9-974b-437a-be18-dfa3a8f52743, activityId=f01d5a13-b510-48c5-8707-eb9e181d3eb7) [Activity(replyToId=f01d5a13-b510-48c5-8707-eb9e181d3eb7)]
+2019-11-20 10:50:31,426 INFO b.c.m.o.b.s.j.c.s.MockChannelCallback: replyToActivity(conversationId=bc08b5e9-974b-437a-be18-dfa3a8f52743, activityId=f01d5a13-b510-48c5-8707-eb9e181d3eb7)
+2019-11-20 10:50:31,431 INFO b.c.m.o.b.s.j.c.s.MockChannelCallback: replyToActivity(conversationId=bc08b5e9-974b-437a-be18-dfa3a8f52743, activityId=f01d5a13-b510-48c5-8707-eb9e181d3eb7) [Activity(replyToId=f01d5a13-b510-48c5-8707-eb9e181d3eb7)]
+2019-11-20 10:50:31,832 INFO b.c.m.o.b.s.j.s.BaseBotSampler: Waiting for 3 response(s) of activity f01d5a13-b510-48c5-8707-eb9e181d3eb7 at url http://localhost:45000
+2019-11-20 10:50:31,833 INFO b.c.m.o.b.s.j.s.BaseBotSampler: Got 1 responses for activity f01d5a13-b510-48c5-8707-eb9e181d3eb7
+2019-11-20 10:50:31,833 INFO b.c.m.o.b.s.j.s.BaseBotSampler: Got 2 responses for activity f01d5a13-b510-48c5-8707-eb9e181d3eb7
+2019-11-20 10:50:31,833 INFO b.c.m.o.b.s.j.s.BaseBotSampler: Got all (3) responses for activity f01d5a13-b510-48c5-8707-eb9e181d3eb7
+2019-11-20 10:50:31,868 INFO b.c.m.o.b.s.j.c.s.ActivityRequestReply: setRequest(7a81bdc7-b444-45f8-ae89-ba3c29b85ac3)
+2019-11-20 10:50:31,869 INFO b.c.m.o.b.s.j.s.BaseBotSampler: Sending activity of type message with activityId=7a81bdc7-b444-45f8-ae89-ba3c29b85ac3, conversationId=bc08b5e9-974b-437a-be18-dfa3a8f52743 with callbackUrl as http://localhost:45000
+2019-11-20 10:50:32,496 INFO b.c.m.o.b.s.j.c.s.MockChannelCallback: replyToActivity(conversationId=bc08b5e9-974b-437a-be18-dfa3a8f52743, activityId=7a81bdc7-b444-45f8-ae89-ba3c29b85ac3)
+2019-11-20 10:50:32,507 INFO b.c.m.o.b.s.j.c.s.MockChannelCallback: replyToActivity(conversationId=bc08b5e9-974b-437a-be18-dfa3a8f52743, activityId=7a81bdc7-b444-45f8-ae89-ba3c29b85ac3) [Activity(replyToId=7a81bdc7-b444-45f8-ae89-ba3c29b85ac3)]
+2019-11-20 10:50:32,841 INFO b.c.m.o.b.s.j.s.BaseBotSampler: Waiting for 1 response(s) of activity 7a81bdc7-b444-45f8-ae89-ba3c29b85ac3 at url http://localhost:45000
+2019-11-20 10:50:32,842 INFO b.c.m.o.b.s.j.s.BaseBotSampler: Got all (1) responses for activity 7a81bdc7-b444-45f8-ae89-ba3c29b85ac3
+2019-11-20 10:50:32,846 INFO b.c.m.o.b.s.j.c.s.ActivityRequestReply: setRequest(c20c0f7b-38d1-4a9f-8ee4-f06c5f54b5e9)
+2019-11-20 10:50:32,846 INFO b.c.m.o.b.s.j.s.BaseBotSampler: Sending activity of type message with activityId=c20c0f7b-38d1-4a9f-8ee4-f06c5f54b5e9, conversationId=bc08b5e9-974b-437a-be18-dfa3a8f52743 with callbackUrl as http://localhost:45000
+2019-11-20 10:50:33,556 INFO b.c.m.o.b.s.j.c.s.MockChannelCallback: replyToActivity(conversationId=bc08b5e9-974b-437a-be18-dfa3a8f52743, activityId=c20c0f7b-38d1-4a9f-8ee4-f06c5f54b5e9)
+2019-11-20 10:50:33,562 INFO b.c.m.o.b.s.j.c.s.MockChannelCallback: replyToActivity(conversationId=bc08b5e9-974b-437a-be18-dfa3a8f52743, activityId=c20c0f7b-38d1-4a9f-8ee4-f06c5f54b5e9) [Activity(replyToId=c20c0f7b-38d1-4a9f-8ee4-f06c5f54b5e9)]
+2019-11-20 10:50:33,790 INFO b.c.m.o.b.s.j.s.BaseBotSampler: Waiting for 3 response(s) of activity c20c0f7b-38d1-4a9f-8ee4-f06c5f54b5e9 at url http://localhost:45000
+2019-11-20 10:50:33,790 INFO b.c.m.o.b.s.j.s.BaseBotSampler: Got 1 responses for activity c20c0f7b-38d1-4a9f-8ee4-f06c5f54b5e9
+2019-11-20 10:50:33,943 INFO b.c.m.o.b.s.j.c.s.MockChannelCallback: replyToActivity(conversationId=bc08b5e9-974b-437a-be18-dfa3a8f52743, activityId=c20c0f7b-38d1-4a9f-8ee4-f06c5f54b5e9)
+2019-11-20 10:50:33,952 INFO b.c.m.o.b.s.j.c.s.MockChannelCallback: replyToActivity(conversationId=bc08b5e9-974b-437a-be18-dfa3a8f52743, activityId=c20c0f7b-38d1-4a9f-8ee4-f06c5f54b5e9) [Activity(replyToId=c20c0f7b-38d1-4a9f-8ee4-f06c5f54b5e9)]
+2019-11-20 10:50:33,952 INFO b.c.m.o.b.s.j.s.BaseBotSampler: Got 2 responses for activity c20c0f7b-38d1-4a9f-8ee4-f06c5f54b5e9
+2019-11-20 10:50:34,511 INFO b.c.m.o.b.s.j.c.s.MockChannelCallback: replyToActivity(conversationId=bc08b5e9-974b-437a-be18-dfa3a8f52743, activityId=c20c0f7b-38d1-4a9f-8ee4-f06c5f54b5e9)
+2019-11-20 10:50:34,517 INFO b.c.m.o.b.s.j.c.s.MockChannelCallback: replyToActivity(conversationId=bc08b5e9-974b-437a-be18-dfa3a8f52743, activityId=c20c0f7b-38d1-4a9f-8ee4-f06c5f54b5e9) [Activity(replyToId=c20c0f7b-38d1-4a9f-8ee4-f06c5f54b5e9)]
+2019-11-20 10:50:34,517 INFO b.c.m.o.b.s.j.s.BaseBotSampler: Got all (3) responses for activity c20c0f7b-38d1-4a9f-8ee4-f06c5f54b5e9
+2019-11-20 10:50:34,521 INFO b.c.m.o.b.s.j.c.s.ActivityRequestReply: setRequest(95e21633-c601-488c-88fd-4014605e3925)
+2019-11-20 10:50:34,521 INFO b.c.m.o.b.s.j.s.BaseBotSampler: Sending activity of type message with activityId=95e21633-c601-488c-88fd-4014605e3925, conversationId=bc08b5e9-974b-437a-be18-dfa3a8f52743 with callbackUrl as http://localhost:45000
+2019-11-20 10:50:35,783 INFO b.c.m.o.b.s.j.c.s.MockChannelCallback: replyToActivity(conversationId=bc08b5e9-974b-437a-be18-dfa3a8f52743, activityId=95e21633-c601-488c-88fd-4014605e3925)
+2019-11-20 10:50:35,786 INFO b.c.m.o.b.s.j.c.s.MockChannelCallback: replyToActivity(conversationId=bc08b5e9-974b-437a-be18-dfa3a8f52743, activityId=95e21633-c601-488c-88fd-4014605e3925) [Activity(replyToId=95e21633-c601-488c-88fd-4014605e3925)]
+2019-11-20 10:50:35,983 INFO b.c.m.o.b.s.j.c.s.MockChannelCallback: replyToActivity(conversationId=bc08b5e9-974b-437a-be18-dfa3a8f52743, activityId=95e21633-c601-488c-88fd-4014605e3925)
+2019-11-20 10:50:35,987 INFO b.c.m.o.b.s.j.c.s.MockChannelCallback: replyToActivity(conversationId=bc08b5e9-974b-437a-be18-dfa3a8f52743, activityId=95e21633-c601-488c-88fd-4014605e3925) [Activity(replyToId=95e21633-c601-488c-88fd-4014605e3925)]
+2019-11-20 10:50:36,960 INFO b.c.m.o.b.s.j.s.BaseBotSampler: Waiting for 1 response(s) of activity 95e21633-c601-488c-88fd-4014605e3925 at url http://localhost:45000
+2019-11-20 10:50:36,961 INFO b.c.m.o.b.s.j.s.BaseBotSampler: Got all (1) responses for activity 95e21633-c601-488c-88fd-4014605e3925
+2019-11-20 10:50:36,962 INFO b.c.m.o.b.s.j.c.s.ActivityRequestReply: setRequest(6b873b6b-4dcc-414e-a51c-c87545b498bb)
+2019-11-20 10:50:36,962 INFO b.c.m.o.b.s.j.s.BaseBotSampler: Sending activity of type message with activityId=6b873b6b-4dcc-414e-a51c-c87545b498bb, conversationId=bc08b5e9-974b-437a-be18-dfa3a8f52743 with callbackUrl as http://localhost:45000
+2019-11-20 10:50:37,550 INFO b.c.m.o.b.s.j.c.s.MockChannelCallback: replyToActivity(conversationId=bc08b5e9-974b-437a-be18-dfa3a8f52743, activityId=6b873b6b-4dcc-414e-a51c-c87545b498bb)
+2019-11-20 10:50:37,554 INFO b.c.m.o.b.s.j.c.s.MockChannelCallback: replyToActivity(conversationId=bc08b5e9-974b-437a-be18-dfa3a8f52743, activityId=6b873b6b-4dcc-414e-a51c-c87545b498bb) [Activity(replyToId=6b873b6b-4dcc-414e-a51c-c87545b498bb)]
+2019-11-20 10:50:37,831 INFO b.c.m.o.b.s.j.s.BaseBotSampler: Waiting for 1 response(s) of activity 6b873b6b-4dcc-414e-a51c-c87545b498bb at url http://localhost:45000
+2019-11-20 10:50:37,831 INFO b.c.m.o.b.s.j.s.BaseBotSampler: Got all (1) responses for activity 6b873b6b-4dcc-414e-a51c-c87545b498bb
+2019-11-20 10:50:37,832 INFO o.a.j.t.JMeterThread: Thread is done: Bot Thread Group 1-1
+2019-11-20 10:50:37,832 INFO o.a.j.t.JMeterThread: Thread finished: Bot Thread Group 1-1
+2019-11-20 10:50:37,832 INFO o.a.j.e.StandardJMeterEngine: Notifying test listeners of end of test
+2019-11-20 10:50:37,833 INFO b.c.m.o.b.s.j.c.BotServiceConfig: Test stopped. Stopping the embedded callback server.
+2019-11-20 10:50:37,833 INFO b.c.m.o.b.s.j.c.s.EmbeddedServer: Stopping callback server.
+2019-11-20 10:50:37,835 INFO o.e.j.s.AbstractConnector: Stopped ServerConnector@546736a9{HTTP/1.1,[http/1.1]}{0.0.0.0:45000}
+2019-11-20 10:50:37,835 INFO o.e.j.s.session: node0 Stopped scavenging
+2019-11-20 10:50:37,836 INFO o.e.j.s.h.ContextHandler: Stopped o.e.j.s.ServletContextHandler@7d4b1e08{/,null,UNAVAILABLE}
+2019-11-20 10:50:37,836 INFO b.c.m.o.b.s.j.c.BotServiceConfig: Embedded callback server stopped.
+2019-11-20 10:50:37,836 INFO o.a.j.g.u.JMeterMenuBar: setRunning(false, *local*)
+2019-11-20 10:50:48,045 INFO b.c.m.o.b.s.j.s.ConversationUpdateSampler: config is instanceof class br.com.microsoft.ocp.bot.service.jmeter.config.BotServiceConfig
+2019-11-20 10:50:56,549 INFO b.c.m.o.b.s.j.s.ConversationUpdateSampler: el is instanceof class br.com.microsoft.ocp.bot.service.jmeter.config.BotServiceConfig
+2019-11-20 10:50:56,549 INFO b.c.m.o.b.s.j.s.ConversationUpdateSampler: config is instanceof class br.com.microsoft.ocp.bot.service.jmeter.config.BotServiceConfig
+2019-11-20 10:50:56,550 INFO b.c.m.o.b.s.j.s.ConversationUpdateSampler: el is instanceof class br.com.microsoft.ocp.bot.service.jmeter.config.BotServiceConfig
+2019-11-20 10:50:56,552 INFO b.c.m.o.b.s.j.s.ConversationUpdateSampler: config is instanceof class br.com.microsoft.ocp.bot.service.jmeter.config.BotServiceConfig
+2019-11-20 10:50:56,552 INFO b.c.m.o.b.s.j.s.ConversationUpdateSampler: el is instanceof class br.com.microsoft.ocp.bot.service.jmeter.config.BotServiceConfig
+2019-11-20 10:51:28,731 INFO b.c.m.o.b.s.j.s.ConversationUpdateSampler: config is instanceof class br.com.microsoft.ocp.bot.service.jmeter.config.BotServiceConfig
+2019-11-20 10:51:28,731 INFO b.c.m.o.b.s.j.s.ConversationUpdateSampler: el is instanceof class br.com.microsoft.ocp.bot.service.jmeter.config.BotServiceConfig
+2019-11-20 10:51:28,732 INFO b.c.m.o.b.s.j.s.ConversationUpdateSampler: config is instanceof class br.com.microsoft.ocp.bot.service.jmeter.config.BotServiceConfig
+2019-11-20 10:51:28,732 INFO b.c.m.o.b.s.j.s.ConversationUpdateSampler: el is instanceof class br.com.microsoft.ocp.bot.service.jmeter.config.BotServiceConfig
+2019-11-20 10:51:28,734 INFO b.c.m.o.b.s.j.s.ConversationUpdateSampler: config is instanceof class br.com.microsoft.ocp.bot.service.jmeter.config.BotServiceConfig
+2019-11-20 10:51:28,735 INFO b.c.m.o.b.s.j.s.ConversationUpdateSampler: el is instanceof class br.com.microsoft.ocp.bot.service.jmeter.config.BotServiceConfig
+2019-11-20 10:51:28,735 INFO b.c.m.o.b.s.j.s.ConversationUpdateSampler: config is instanceof class br.com.microsoft.ocp.bot.service.jmeter.config.BotServiceConfig
+2019-11-20 10:51:28,735 INFO b.c.m.o.b.s.j.s.ConversationUpdateSampler: el is instanceof class br.com.microsoft.ocp.bot.service.jmeter.config.BotServiceConfig
+2019-11-20 10:51:31,287 INFO b.c.m.o.b.s.j.s.ConversationUpdateSampler: config is instanceof class br.com.microsoft.ocp.bot.service.jmeter.config.BotServiceConfig
+2019-11-20 10:51:31,287 INFO b.c.m.o.b.s.j.s.ConversationUpdateSampler: el is instanceof class br.com.microsoft.ocp.bot.service.jmeter.config.BotServiceConfig
+2019-11-20 10:51:31,288 INFO b.c.m.o.b.s.j.s.ConversationUpdateSampler: config is instanceof class br.com.microsoft.ocp.bot.service.jmeter.config.BotServiceConfig
+2019-11-20 10:51:31,288 INFO b.c.m.o.b.s.j.s.ConversationUpdateSampler: el is instanceof class br.com.microsoft.ocp.bot.service.jmeter.config.BotServiceConfig
+2019-11-20 10:51:31,290 INFO b.c.m.o.b.s.j.s.ConversationUpdateSampler: config is instanceof class br.com.microsoft.ocp.bot.service.jmeter.config.BotServiceConfig
+2019-11-20 10:51:31,290 INFO b.c.m.o.b.s.j.s.ConversationUpdateSampler: el is instanceof class br.com.microsoft.ocp.bot.service.jmeter.config.BotServiceConfig
+2019-11-20 10:51:31,291 INFO b.c.m.o.b.s.j.s.ConversationUpdateSampler: config is instanceof class br.com.microsoft.ocp.bot.service.jmeter.config.BotServiceConfig
+2019-11-20 10:51:31,291 INFO b.c.m.o.b.s.j.s.ConversationUpdateSampler: el is instanceof class br.com.microsoft.ocp.bot.service.jmeter.config.BotServiceConfig
