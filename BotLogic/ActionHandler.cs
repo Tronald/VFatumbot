@@ -294,7 +294,7 @@ namespace VFatumbot.BotLogic
 
                                 shortCodesArray[i] = Helpers.Crc32Hash(context.Activity.From.Id + context.Activity.Timestamp);
                                 mesg = Tolog(turnContext, "attractor", ida[i], shortCodesArray[i]);
-                                await turnContext.SendActivityAsync(MessageFactory.Text((idacou > 1 ? ("#" + (i + 1) + " ") : "") + mesg), cancellationToken);
+                                await turnContext.SendActivityAsync(MessageFactory.Text((idacou > 1 ? ("#" + (i + 1) + " ") : "") + Helpers.DirectLineNewLineFix(turnContext, mesg)), cancellationToken);
 
                                 dynamic w3wResult = await Helpers.GetWhat3WordsAddressAsync(incoords);
 
@@ -412,7 +412,7 @@ namespace VFatumbot.BotLogic
 
                                 shortCodesArray[i] = Helpers.Crc32Hash(context.Activity.From.Id + context.Activity.Timestamp);
                                 mesg = Tolog(turnContext, "void", ida[i], shortCodesArray[i]);
-                                await turnContext.SendActivityAsync(MessageFactory.Text((idacou > 1 ? ("#" + (i + 1) + " ") : "") + mesg), cancellationToken);
+                                await turnContext.SendActivityAsync(MessageFactory.Text((idacou > 1 ? ("#" + (i + 1) + " ") : "") + Helpers.DirectLineNewLineFix(turnContext, mesg)), cancellationToken);
 
                                 dynamic w3wResult = await Helpers.GetWhat3WordsAddressAsync(incoords);
 
@@ -544,7 +544,7 @@ namespace VFatumbot.BotLogic
 
                                 shortCodesArray[i] = Helpers.Crc32Hash(context.Activity.From.Id + context.Activity.Timestamp);
                                 mesg = Tolog(turnContext, "ida", ida[i], shortCodesArray[i]);
-                                await turnContext.SendActivityAsync(MessageFactory.Text((idacou > 1 ? ("#" + (i + 1) + " ") : "") + mesg), cancellationToken);
+                                await turnContext.SendActivityAsync(MessageFactory.Text((idacou > 1 ? ("#" + (i + 1) + " ") : "") + Helpers.DirectLineNewLineFix(turnContext, mesg)), cancellationToken);
 
                                 dynamic w3wResult = await Helpers.GetWhat3WordsAddressAsync(incoords);
 
@@ -822,7 +822,7 @@ namespace VFatumbot.BotLogic
                                     attShortCodesArray[i] = Helpers.Crc32Hash(context.Activity.From.Id + context.Activity.Timestamp);
 
                                     mesg = Tolog(turnContext, "attractor", att[i], attShortCodesArray[i]);
-                                    await turnContext.SendActivityAsync(MessageFactory.Text((idacou > 1 ? ("#" + (i + 1) + " ") : "") + mesg), cancellationToken);
+                                    await turnContext.SendActivityAsync(MessageFactory.Text((idacou > 1 ? ("#" + (i + 1) + " ") : "") + Helpers.DirectLineNewLineFix(turnContext, mesg)), cancellationToken);
                                     dynamic w3wResult1 = await Helpers.GetWhat3WordsAddressAsync(incoords);
                                     await turnContext.SendActivitiesAsync(CardFactory.CreateLocationCardsReply(Enum.Parse<ChannelPlatform>(turnContext.Activity.ChannelId), incoords, userProfileTemporary.IsDisplayGoogleThumbnails, w3wResult1), cancellationToken);
 
@@ -843,7 +843,7 @@ namespace VFatumbot.BotLogic
                                     voiShortCodesArray[i] = Helpers.Crc32Hash(context.Activity.From.Id + context.Activity.Timestamp);
 
                                     mesg = Tolog(turnContext, "void", voi[i], voiShortCodesArray[i]);
-                                    await turnContext.SendActivityAsync(MessageFactory.Text((idacou > 1 ? ("#" + (i + 1) + " ") : "") + mesg), cancellationToken);
+                                    await turnContext.SendActivityAsync(MessageFactory.Text((idacou > 1 ? ("#" + (i + 1) + " ") : "") + Helpers.DirectLineNewLineFix(turnContext, mesg)), cancellationToken);
                                     dynamic w3wResult2 = await Helpers.GetWhat3WordsAddressAsync(incoords);
                                     await turnContext.SendActivitiesAsync(CardFactory.CreateLocationCardsReply(Enum.Parse<ChannelPlatform>(turnContext.Activity.ChannelId), incoords, userProfileTemporary.IsDisplayGoogleThumbnails, w3wResult2), cancellationToken);
 
@@ -1046,7 +1046,7 @@ namespace VFatumbot.BotLogic
                             }
                         }
 
-                        await turnContext.SendActivityAsync(MessageFactory.Text(mesg), cancellationToken);
+                        await turnContext.SendActivityAsync(MessageFactory.Text(Helpers.DirectLineNewLineFix(turnContext, mesg)), cancellationToken);
 
                         dynamic w3wResult = await Helpers.GetWhat3WordsAddressAsync(incoords);
 

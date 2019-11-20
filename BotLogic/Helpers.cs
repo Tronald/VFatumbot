@@ -31,6 +31,11 @@ namespace VFatumbot.BotLogic
             }
         }
 
+        public static string DirectLineNewLineFix(ITurnContext turnContext, string mesg)
+        {
+            return turnContext.Activity.ChannelId.Equals(Enums.ChannelPlatform.directline.ToString()) ? mesg.Replace("\n\n", "\n") : mesg;
+        }
+
         public static string GetCountryFromW3W(dynamic w3wresult)
         {
             if (w3wresult == null || w3wresult.country == null)
