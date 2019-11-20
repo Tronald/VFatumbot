@@ -182,6 +182,11 @@ namespace VFatumbot.BotLogic
 
                 await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(turnContext, mainDialog, cancellationToken);
             }
+            else if (command.Equals("/closemenu"))
+            {
+                if (turnContext.Activity.ChannelId.Equals(ChannelPlatform.telegram.ToString()))
+                    await turnContext.SendActivityAsync(MessageFactory.Text($"Closing menu"), cancellationToken);
+            }
             else if (command.Equals("/test"))
             {
                 await turnContext.SendActivityAsync(MessageFactory.Text(
