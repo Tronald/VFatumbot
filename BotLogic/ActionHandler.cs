@@ -187,7 +187,12 @@ namespace VFatumbot.BotLogic
                 if (turnContext.Activity.ChannelId.Equals(ChannelPlatform.telegram.ToString()))
                     await turnContext.SendActivityAsync(MessageFactory.Text($"Closing menu"), cancellationToken);
             }
-            else if (command.Equals("/test"))
+			else if (command.Equals("/pushid"))
+			{
+				await turnContext.SendActivityAsync(MessageFactory.Text($"Your Push ID is {userProfileTemporary.PushUserId}"), cancellationToken);
+				await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(turnContext, mainDialog, cancellationToken);
+			}
+			else if (command.Equals("/test"))
             {
                 await turnContext.SendActivityAsync(MessageFactory.Text(
                     $"Fatumbot {Consts.APP_VERSION} is alive.{Helpers.GetNewLine(turnContext)}" +
