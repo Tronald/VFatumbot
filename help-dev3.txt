@@ -1,11 +1,11 @@
-### NEW FEATURES
-
-* Can now access the webbot from your browser
-* Easier to use now with buttons and menus
-* Get random intent suggestions
-* Set location by searching addresses
-* Can skip water points
-* Links to view points in Google Street View and Google Earth
-* Report your trip right from the bot
-* Strengthened privacy
-* Most of the old /<commands> still work as is
+#### NEW FEATURES  
+  
+* Can now access the webbot from your browser (Discord and others to come soon!)  
+* Easier to use now with buttons and menus  
+* Get random intent suggestions  
+* Set location by searching addresses  
+* Can skip water points  
+* Links to view points in Google Street View and Google Earth  
+* Report your trip right from the bot  
+* Strengthened privacy  
+* Most of the old /<commands> still work as is  

@@ -1,7 +1,37 @@
-### INSTRUCTIONS
-
-This new version builds upon the original Fatumbot3 that only worked on Telegram with /<commands> but now can be controlled with buttons and menus.
-
-First up the bot needs a location to calculate the Points from as the center. Send your current location or search for one. You'll be prompted on how to do so.
-
-[Detailed description of the commands](https://bot.randonauts.com/bot_instructions.html)
+#### INSTRUCTIONS  
+  
+First up you need to send a location from which the points will be calculated. You will be prompted to do so.  
+  
+##### Main Menu  
+  
+For the intent-driven anomaly search/mind-matter interaction part of the experiment you have:  
+You can enter [1]-[20] after the commands to get that number of points; e.g. /getattractor[3]  
+* Attractor (/getattractor) - generate an Attractor point  
+* Void (/getvoid) - generate a Void point  
+* Anomaly (/getanomaly, /getida) - get the strongest Attractor or Void point  
+* Intent Suggestions - get some quantumly random generated word suggestions for an intent to set  
+* Pair (/getpair) - get a pair of Attractor and Void points  
+* Scan submenu - see below  
+  
+For the blind spots/breaking determinism/blind-experiment part you have:  
+* Blind Spots submenu - see below  
+  
+Others:  
+* My Location - show your currently set location  
+* Settings - set your radius (/setradius), and toggle whether to skip/include water points and whether to show thumbnails for Google Street View and Google Earth  
+  
+##### Blind Spots Submenu  
+* Quantum (/getquantum) - get a single quantumly generated point  
+* Quantum Time (/getqtime) - same as above but with a suggested time to visit  
+* Pseudo (/getpseudo) - generate a single pseudo-random point  
+* Mystery Point (/getpoint) - generate a random type of point (for blind-experiments)  
+  
+##### Scan Submenu  
+  
+Same as the /get intent-driven anomalies but the bot spends longer scanning.  
+* Scan Attractor (/scanattractor)  
+* Scan Void (/scanvoid)  
+* Scan Anomaly (/scanida, /scananomaly)  
+* Scan Pair (/scanpair)  
+  
+[Detailed description of the commands and stats](https://bot.randonauts.com/bot_instructions.html)  
