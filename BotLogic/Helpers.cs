@@ -119,6 +119,16 @@ namespace VFatumbot.BotLogic
         // https://github.com/Alegrowin/OneSignal.RestAPIv3.Client
         public static async Task<NotificationCreateResult> SendPushNotification(UserProfileTemporary userProfileTemporary, string title, string body)
         {
+            if (title == null)
+            {
+                title = "";
+            }
+
+            if (body == null)
+            {
+                body = "";
+            }
+
             var client = new OneSignalClient(Consts.ONE_SIGNAL_API_KEY); // Use your Api Key
             var options = new NotificationCreateOptions
             {
