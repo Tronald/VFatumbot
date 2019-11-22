@@ -5,7 +5,7 @@
 #if RELEASE_PROD
         public const string APP_VERSION = "3.1.4";
 #else
-        public const string APP_VERSION = "3.1.5β";
+        public const string APP_VERSION = "3.2.0β";
 #endif
 
         // Azure App ID
