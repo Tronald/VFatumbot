@@ -1,0 +1,7 @@
+### INSTRUCTIONS
+
+This new version builds upon the original Fatumbot3 that only worked on Telegram with /<commands> but now can be controlled with buttons and menus.
+
+First up the bot needs a location to calculate the Points from as the center. Send your current location or search for one. You'll be prompted on how to do so.
+
+[Detailed description of the commands](https://bot.randonauts.com/bot_instructions.html)
