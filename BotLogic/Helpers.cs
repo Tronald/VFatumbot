@@ -127,7 +127,7 @@ namespace VFatumbot.BotLogic
                 // IncludedSegments = new List<string>() { "All" } // To send to all 
             };
             options.Headings.Add(LanguageCodes.English, title);
-            options.Contents.Add(LanguageCodes.English, body);
+            options.Contents.Add(LanguageCodes.English, body.Replace("<br>", "\n").Replace("\n\n", "\n"));
             return await client.Notifications.CreateAsync(options);
         }
 
