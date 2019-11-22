@@ -2,16 +2,16 @@
   
 First up you need to send a location from which the points will be calculated. You will be prompted to do so.  
   
-##### Main Menu  
+##### MAIN MENU  
   
 For the intent-driven anomaly search/mind-matter interaction part of the experiment you have:  
-You can enter [1]-[20] after the commands to get that number of points; e.g. /getattractor[3]  
 * Attractor (/getattractor) - generate an Attractor point  
 * Void (/getvoid) - generate a Void point  
 * Anomaly (/getanomaly, /getida) - get the strongest Attractor or Void point  
 * Intent Suggestions - get some quantumly random generated word suggestions for an intent to set  
 * Pair (/getpair) - get a pair of Attractor and Void points  
-* Scan submenu - see below  
+* Scan submenu - see below
+You can enter [1]-[20] after the commands to get that number of points; e.g. /getattractor[3]  
   
 For the blind spots/breaking determinism/blind-experiment part you have:  
 * Blind Spots submenu - see below  
@@ -20,7 +20,7 @@ Others:
 * My Location - show your currently set location  
 * Settings - set your radius (/setradius), and toggle whether to skip/include water points and whether to show thumbnails for Google Street View and Google Earth  
   
-##### Blind Spots Submenu  
+##### BLIND SPOTS SUBMENU  
 * Quantum (/getquantum) - get a single quantumly generated point  
 * Quantum Time (/getqtime) - same as above but with a suggested time to visit  
 * Pseudo (/getpseudo) - generate a single pseudo-random point  
@@ -28,7 +28,7 @@ Others:
   
 ##### Scan Submenu  
   
-Same as the /get intent-driven anomalies but the bot spends longer scanning.  
+Same as the /get intent-driven anomaly commands but the bot spends longer scanning.  
 * Scan Attractor (/scanattractor)  
 * Scan Void (/scanvoid)  
 * Scan Anomaly (/scanida, /scananomaly)  

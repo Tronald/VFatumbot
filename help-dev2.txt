@@ -8,4 +8,4 @@
 * Any location data that you send is automatically deleted after 24 hours.  
 * We do store anonymized data of points generated for internal analysis (afterall this is an experiment, and experiments need data to analyze).  
 * All your other data like your settings - besides the anonymized point data stored for analysis - will automatically be deleted after 1 month.
-* If you chose to write up a trip report, the report will be posed anonymously on the /r/randonaut_reports subreddit. Don't worry, we will never post your location, just the point generated.  
+* If you chose to write up a trip report, the report will be posted anonymously on the /r/randonaut_reports subreddit. Don't worry, we will never post your location, just the point generated.  
