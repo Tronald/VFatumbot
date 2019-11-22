@@ -158,7 +158,10 @@ namespace VFatumbot
             else if (!string.IsNullOrEmpty(turnContext.Activity.Text) && turnContext.Activity.Text.EndsWith("help", StringComparison.InvariantCultureIgnoreCase))
             {
 #if RELEASE_PROD
-                var help = System.IO.File.ReadAllText("help-prod.txt").Replace("APP_VERSION", Consts.APP_VERSION);
+                var help1 = System.IO.File.ReadAllText("help-prod1.txt").Replace("APP_VERSION", Consts.APP_VERSION);
+                var help2 = System.IO.File.ReadAllText("help-prod2.txt").Replace("APP_VERSION", Consts.APP_VERSION);
+                var help3 = System.IO.File.ReadAllText("help-prod3.txt").Replace("APP_VERSION", Consts.APP_VERSION);
+                var help4 = System.IO.File.ReadAllText("help-prod4.txt").Replace("APP_VERSION", Consts.APP_VERSION);
 #else
                 var help1 = System.IO.File.ReadAllText("help-dev1.txt").Replace("APP_VERSION", Consts.APP_VERSION);
                 var help2 = System.IO.File.ReadAllText("help-dev2.txt").Replace("APP_VERSION", Consts.APP_VERSION);
