@@ -518,7 +518,7 @@ namespace VFatumbot
             await PostTripReportToRedditAsync("Randonaut Trip Report"
                 + ((callbackOptions.NearestPlaces != null && callbackOptions.NearestPlaces.Length >= 1) ? (" from " + callbackOptions.NearestPlaces[answers.PointNumberVisited]) : " from somewhere in the multiverse"), // TODO fuck I should stop trying to condense so much into one line in C#. I'm just drunk and lazy ATM.
                 callbackOptions.Messages[answers.PointNumberVisited].Replace("\n\n", "  \n") + "\n\n" +
-                "Report: " + answers.Report + "\n\n" +
+                "Report: " + answers.Report + "\n   \n" +
                 (!string.IsNullOrEmpty(photos) ? photos + "\n\n" : "\n\n") +
                 (!string.IsNullOrEmpty(callbackOptions.What3Words[answers.PointNumberVisited]) ? "What 3 words address: [" + callbackOptions.What3Words[answers.PointNumberVisited] + "](https://what3words.com/" + callbackOptions.What3Words[answers.PointNumberVisited] + ")  \n" : "  \n") +
                 "[Google Maps](https://www.google.com/maps/place/" + incoords[0] + "+" + incoords[1] + "/@" + incoords[0] + "+" + incoords[1] + ",18z)  |  " +
@@ -527,8 +527,7 @@ namespace VFatumbot
                 (!string.IsNullOrEmpty(intentSuggestions) ? "Intents suggested: " + intentSuggestions + "  \n" : "") +
                 "Artifact(s) collected? " + (answers.ArtifactCollected ? "Yes" : "No") + "  \n" +
                 "Was a 'wow and astounding' trip? " + (answers.WasFuckingAmazing ? "Yes" : "No") + "  \n" +
-                "\n\n" +
-                "## Trip ratings  \n" +
+                "## Trip Ratings  \n" +
                 "Meaningfulness: " + answers.Rating_Meaningfulness + "  \n" +
                 "Emotional: " + answers.Rating_Emotional + "  \n" +
                 "Importance: " + answers.Rating_Importance + "  \n" +
