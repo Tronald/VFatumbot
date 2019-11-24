@@ -182,7 +182,15 @@ namespace VFatumbot.BotLogic
 
                 await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(turnContext, mainDialog, cancellationToken);
             }
-			else if (command.Equals("/pushid"))
+            else if (command.Equals("/resetlocation"))
+            {
+                userProfileTemporary.ResetLocation();
+
+                await turnContext.SendActivityAsync(MessageFactory.Text($"Current location reset"), cancellationToken);
+
+                await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(turnContext, mainDialog, cancellationToken);
+            }
+            else if (command.Equals("/pushid"))
 			{
 				await turnContext.SendActivityAsync(MessageFactory.Text($"Your Push ID is {userProfileTemporary.PushUserId}"), cancellationToken);
 				await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(turnContext, mainDialog, cancellationToken);

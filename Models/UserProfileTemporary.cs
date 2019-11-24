@@ -52,6 +52,11 @@ namespace VFatumbot
             }
         }
 
+        public void ResetLocation()
+        {
+            Latitude = Longitude = Consts.INVALID_COORD;
+        }
+
         public LatLng Location
         {
             get
