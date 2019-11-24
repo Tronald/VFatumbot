@@ -8,6 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Bot.Builder;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using static VFatumbot.BotLogic.Enums;
 using static VFatumbot.BotLogic.FatumFunctions;
 using static VFatumbot.QuantumRandomNumberGeneratorWrapper;
@@ -206,6 +207,26 @@ namespace VFatumbot.BotLogic
 				await turnContext.SendActivityAsync(MessageFactory.Text($"Your Push ID is {userProfileTemporary.PushUserId}"), cancellationToken);
 				await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(turnContext, mainDialog, cancellationToken);
 			}
+            else if (command.Equals("/closemenu"))
+            {
+                // First release was leaving dialog prompt menus sticking on everyone's keyboard in the Randonaut Telegram lobby.
+                // This is a hack to close it next update.
+                var reply = turnContext.Activity.CreateReply("Closing menu");
+                var replyMarkup = new
+                {
+                    reply_markup = new
+                    {
+                        remove_keyboard = true,
+                    }
+                };
+                var channelData = new
+                {
+                    method = "sendMessage",
+                    parameters = replyMarkup,
+                };
+                reply.ChannelData = JObject.FromObject(channelData);
+                await turnContext.SendActivityAsync(reply, cancellationToken);
+            }
 			else if (command.Equals("/test"))
             {
                 await turnContext.SendActivityAsync(MessageFactory.Text(
