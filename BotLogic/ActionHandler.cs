@@ -46,6 +46,10 @@ namespace VFatumbot.BotLogic
             {
                 await VoidActionAsync(turnContext, userProfileTemporary, cancellationToken, mainDialog);
             }
+            else if (command.StartsWith("/getintents", StringComparison.InvariantCulture))
+            {
+                await IntentSuggestionActionAsync(turnContext, userProfileTemporary, cancellationToken, mainDialog);
+            }
             else if (command.StartsWith("/getpair", StringComparison.InvariantCulture))
             {
                 await PairActionAsync(turnContext, userProfileTemporary, cancellationToken, mainDialog);
