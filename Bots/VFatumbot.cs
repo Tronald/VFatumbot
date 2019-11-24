@@ -191,7 +191,9 @@ namespace VFatumbot
                     return;
                 }
             }
-            else if (!string.IsNullOrEmpty(turnContext.Activity.Text) && !userProfileTemporary.IsLocationSet)
+            else if (!string.IsNullOrEmpty(turnContext.Activity.Text) && !userProfileTemporary.IsLocationSet
+                    && !turnContext.Activity.Text.ToLower().Equals("intent suggestions")
+                )
             {
                 await turnContext.SendActivityAsync(MessageFactory.Text(Consts.NO_LOCATION_SET_MSG), cancellationToken);
 
