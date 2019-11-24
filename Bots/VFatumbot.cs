@@ -45,28 +45,18 @@ namespace VFatumbot
                     var userProfilePersistent = await _userProfilePersistentAccessor.GetAsync(turnContext, () => new UserProfilePersistent());
                     var userProfileTemporary = await _userProfileTemporaryAccessor.GetAsync(turnContext, () => new UserProfileTemporary());
 
-                    if (turnContext.Activity.ChannelId.Equals(ChannelPlatform.telegram)
-                        && turnContext.Activity.Conversation.IsGroup == true
-                        && "RANDONAUTS (LOBBY)".Equals(turnContext.Activity.Conversation.Name) || "botwars".Equals(turnContext.Activity.Conversation.Name.ToLower()))
+                    if (Helpers.IsRandoLobby(turnContext))
                     {
                         // If Randonauts Telegram lobby then keep the welcome short
                         Activity replyActivity;
                         if (userProfileTemporary.IsLocationSet || userProfilePersistent.HasSetLocationOnce)
                         {
-                            replyActivity = MessageFactory.Text($"Welcome back @{turnContext.Activity.From.Name}");
+                            replyActivity = MessageFactory.Text($"Welcome back @{turnContext.Activity.From.Name}!");
                         }
                         else
                         {
-                            replyActivity = MessageFactory.Text($"@{turnContext.Activity.From.Name} Welcome fellow Randonaut! Sit back, relax and join the chat. Message the @shangrila_bot privately to start your adventure!");
+                            replyActivity = MessageFactory.Text($"Welcome @{turnContext.Activity.From.Name}! Message the @shangrila_bot privately to start your adventure and feel free to share your experiences here.");
                         }
-
-                        var mention = new Mention
-                        {
-                            Mentioned = turnContext.Activity.From,
-                            Text = $"<at>{turnContext.Activity.From.Name}</at>",
-                        };
-
-                        replyActivity.Entities = new List<Entity> { mention };
 
                         await turnContext.SendActivityAsync(replyActivity);
                     }
@@ -240,8 +230,11 @@ namespace VFatumbot
 
                 return;
             }
-
-            await base.OnTurnAsync(turnContext, cancellationToken);
+            else if (!Helpers.IsRandoLobby(turnContext))
+            {
+                // Don't run dialogs in the Rando lobby as the menus popup for everyone and it's a bit annoying
+                await base.OnTurnAsync(turnContext, cancellationToken);
+            }
 
             // Save any state changes that might have occured during the turn.
             await _conversationState.SaveChangesAsync(turnContext, false, cancellationToken);

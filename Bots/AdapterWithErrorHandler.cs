@@ -60,12 +60,15 @@ namespace VFatumbot
         // have completed their work on a background thread
         public async Task RepromptMainDialog(ITurnContext turnContext, Dialog dialog, CancellationToken cancellationToken, CallbackOptions callbackOptions = null)
         {
-            var conversationStateAccesor = _conversationState.CreateProperty<DialogState>(nameof(DialogState));
-            var dialogSet = new DialogSet(conversationStateAccesor);
-            dialogSet.Add(dialog);
-            var dialogContext = await dialogSet.CreateContextAsync(turnContext, cancellationToken);
-            await dialogContext.ReplaceDialogAsync(nameof(MainDialog), callbackOptions, cancellationToken);
-            await _conversationState.SaveChangesAsync(dialogContext.Context, false, cancellationToken);
+            if (!Helpers.IsRandoLobby(turnContext))
+            {
+                var conversationStateAccesor = _conversationState.CreateProperty<DialogState>(nameof(DialogState));
+                var dialogSet = new DialogSet(conversationStateAccesor);
+                dialogSet.Add(dialog);
+                var dialogContext = await dialogSet.CreateContextAsync(turnContext, cancellationToken);
+                await dialogContext.ReplaceDialogAsync(nameof(MainDialog), callbackOptions, cancellationToken);
+                await _conversationState.SaveChangesAsync(dialogContext.Context, false, cancellationToken);
+            }
         }
     }
 }

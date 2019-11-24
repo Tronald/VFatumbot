@@ -14,6 +14,8 @@ using System.Text;
 using Force.Crc32;
 using Microsoft.Bot.Builder;
 using Bia.Countries.Iso3166;
+using Microsoft.Bot.Schema;
+using static VFatumbot.BotLogic.Enums;
 
 namespace VFatumbot.BotLogic
 {
@@ -68,6 +70,13 @@ namespace VFatumbot.BotLogic
             }
 
             return null;
+        }
+
+        public static bool IsRandoLobby(ITurnContext turnContext)
+        {
+            return turnContext.Activity.ChannelId.Equals(ChannelPlatform.telegram)
+                   && turnContext.Activity.Conversation.IsGroup == true
+                   && ("RANDONAUTS (LOBBY)".Equals(turnContext.Activity.Conversation.Name) || "botwars".Equals(turnContext.Activity.Conversation.Name));
         }
 
         public static async Task<string[]> GetIntentSuggestionsAsync(QuantumRandomNumberGeneratorWrapper rnd)
