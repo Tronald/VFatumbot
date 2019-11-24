@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Bot.Builder;
+using Newtonsoft.Json;
 using static VFatumbot.BotLogic.Enums;
 using static VFatumbot.BotLogic.FatumFunctions;
 using static VFatumbot.QuantumRandomNumberGeneratorWrapper;
@@ -187,6 +188,12 @@ namespace VFatumbot.BotLogic
                 userProfileTemporary.ResetLocation();
 
                 await turnContext.SendActivityAsync(MessageFactory.Text($"Current location reset"), cancellationToken);
+
+                await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(turnContext, mainDialog, cancellationToken);
+            }
+            else if (command.Equals("/dumpjson"))
+            {
+                await turnContext.SendActivityAsync(MessageFactory.Text(JsonConvert.SerializeObject(turnContext.Activity)), cancellationToken);
 
                 await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(turnContext, mainDialog, cancellationToken);
             }
