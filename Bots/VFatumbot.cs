@@ -230,11 +230,8 @@ namespace VFatumbot
 
                 return;
             }
-            else if (!Helpers.IsRandoLobby(turnContext))
-            {
-                // Don't run dialogs in the Rando lobby as the menus popup for everyone and it's a bit annoying
-                await base.OnTurnAsync(turnContext, cancellationToken);
-            }
+
+            await base.OnTurnAsync(turnContext, cancellationToken);
 
             // Save any state changes that might have occured during the turn.
             await _conversationState.SaveChangesAsync(turnContext, false, cancellationToken);

@@ -48,6 +48,12 @@ namespace VFatumbot
 
         private async Task<DialogTurnResult> ChoiceActionStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
         {
+            if (Helpers.IsRandoLobby(stepContext.Context))
+            {
+                // Don't spam Randonauts Telegram Lobby with dialog menus as they get sent to everyone
+                return await stepContext.EndDialogAsync();
+            }
+
             // Shortcut to trip report dialog testing
             //return await stepContext.ReplaceDialogAsync(nameof(TripReportDialog), new CallbackOptions(), cancellationToken);
 

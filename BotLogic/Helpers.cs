@@ -74,7 +74,7 @@ namespace VFatumbot.BotLogic
 
         public static bool IsRandoLobby(ITurnContext turnContext)
         {
-            return turnContext.Activity.ChannelId.Equals(ChannelPlatform.telegram)
+            return turnContext.Activity.ChannelId.Equals(ChannelPlatform.telegram.ToString())
                    && turnContext.Activity.Conversation.IsGroup == true
                    && ("RANDONAUTS (LOBBY)".Equals(turnContext.Activity.Conversation.Name) || "botwars".Equals(turnContext.Activity.Conversation.Name));
         }
