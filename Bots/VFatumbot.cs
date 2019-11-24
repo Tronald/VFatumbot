@@ -45,7 +45,32 @@ namespace VFatumbot
                     var userProfilePersistent = await _userProfilePersistentAccessor.GetAsync(turnContext, () => new UserProfilePersistent());
                     var userProfileTemporary = await _userProfileTemporaryAccessor.GetAsync(turnContext, () => new UserProfileTemporary());
 
-                    if (userProfileTemporary.IsLocationSet)
+                    if (turnContext.Activity.ChannelId.Equals(ChannelPlatform.telegram)
+                        && turnContext.Activity.Conversation.IsGroup == true
+                        && "RANDONAUTS (LOBBY)".Equals(turnContext.Activity.Conversation.Name) || "botwars".Equals(turnContext.Activity.Conversation.Name.ToLower()))
+                    {
+                        // If Randonauts Telegram lobby then keep the welcome short
+                        Activity replyActivity;
+                        if (userProfileTemporary.IsLocationSet || userProfilePersistent.HasSetLocationOnce)
+                        {
+                            replyActivity = MessageFactory.Text($"Welcome back @{turnContext.Activity.From.Name}");
+                        }
+                        else
+                        {
+                            replyActivity = MessageFactory.Text($"@{turnContext.Activity.From.Name} Welcome fellow Randonaut! Sit back, relax and join the chat. Message the @shangrila_bot privately to start your adventure!");
+                        }
+
+                        var mention = new Mention
+                        {
+                            Mentioned = turnContext.Activity.From,
+                            Text = $"<at>{turnContext.Activity.From.Name}</at>",
+                        };
+
+                        replyActivity.Entities = new List<Entity> { mention };
+
+                        await turnContext.SendActivityAsync(replyActivity);
+                    }
+                    else if (userProfileTemporary.IsLocationSet)
                     {
                         await turnContext.SendActivityAsync(MessageFactory.Text("Welcome back to Fatumbot!"), cancellationToken);
                         await turnContext.SendActivityAsync(MessageFactory.Text("Don't forget to send your current location."), cancellationToken);
