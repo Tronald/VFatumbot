@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Logging;
@@ -9,8 +10,18 @@ namespace VFatumbot
     {
         public static void Main(string[] args)
         {
+            DispatchWorkerThread((object sender, DoWorkEventArgs e) =>
+            {
+                new DiscordBot().RunBotAsync().GetAwaiter().GetResult();
+            });
             CreateWebHostBuilder(args).Build().Run();
-            new DiscordBot().RunBotAsync().GetAwaiter().GetResult();
+        }
+
+        public static void DispatchWorkerThread(DoWorkEventHandler handler)
+        {
+            var backgroundWorker = new BackgroundWorker();
+            backgroundWorker.DoWork += handler;
+            backgroundWorker.RunWorkerAsync();
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>

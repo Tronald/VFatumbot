@@ -166,7 +166,7 @@ namespace VFatumbot.Discord
         {
             var handler = new ActionHandler();
             var turnContextWrapper = new TurnContextWrapper(ctx, numberPoints.Length == 1 ? numberPoints[0] : 1);
-            await handler.ParseSlashCommands(turnContextWrapper, new UserProfileTemporary(), new CancellationToken(), null);
+            await handler.ParseSlashCommands(turnContextWrapper, userProfileTemporary, new CancellationToken(), null);
         }
 
         [Command("getvoid"), Description("Get a void point")]
@@ -175,7 +175,7 @@ namespace VFatumbot.Discord
         {
             var handler = new ActionHandler();
             var turnContextWrapper = new TurnContextWrapper(ctx, numberPoints.Length == 1 ? numberPoints[0] : 1);
-            await handler.ParseSlashCommands(turnContextWrapper, new UserProfileTemporary(), new CancellationToken(), null);
+            await handler.ParseSlashCommands(turnContextWrapper, userProfileTemporary, new CancellationToken(), null);
         }
 
         [Command("getintents"), Description("Get intent suggestions")]
@@ -183,7 +183,7 @@ namespace VFatumbot.Discord
         {
             var handler = new ActionHandler();
             var turnContextWrapper = new TurnContextWrapper(ctx);
-            await handler.ParseSlashCommands(turnContextWrapper, new UserProfileTemporary(), new CancellationToken(), null);
+            await handler.ParseSlashCommands(turnContextWrapper, userProfileTemporary, new CancellationToken(), null);
         }
 
         [Command("getpair"), Description("Get a pair of attractor and void points")]
@@ -192,7 +192,7 @@ namespace VFatumbot.Discord
         {
             var handler = new ActionHandler();
             var turnContextWrapper = new TurnContextWrapper(ctx, numberPoints.Length == 1 ? numberPoints[0] : 1);
-            await handler.ParseSlashCommands(turnContextWrapper, new UserProfileTemporary(), new CancellationToken(), null);
+            await handler.ParseSlashCommands(turnContextWrapper, userProfileTemporary, new CancellationToken(), null);
         }
 
         [Command("getpseudo"), Description("Get a single pseudo random point")]
@@ -200,7 +200,7 @@ namespace VFatumbot.Discord
         {
             var handler = new ActionHandler();
             var turnContextWrapper = new TurnContextWrapper(ctx);
-            await handler.ParseSlashCommands(turnContextWrapper, new UserProfileTemporary(), new CancellationToken(), null);
+            await handler.ParseSlashCommands(turnContextWrapper, userProfileTemporary, new CancellationToken(), null);
         }
 
         [Command("getquantum"), Description("Get a single quantum random point")]
@@ -208,7 +208,7 @@ namespace VFatumbot.Discord
         {
             var handler = new ActionHandler();
             var turnContextWrapper = new TurnContextWrapper(ctx);
-            await handler.ParseSlashCommands(turnContextWrapper, new UserProfileTemporary(), new CancellationToken(), null);
+            await handler.ParseSlashCommands(turnContextWrapper, userProfileTemporary, new CancellationToken(), null);
         }
 
         [Command("getqtime"), Description("Get a single quantum random point with suggested time to visit")]
@@ -216,7 +216,7 @@ namespace VFatumbot.Discord
         {
             var handler = new ActionHandler();
             var turnContextWrapper = new TurnContextWrapper(ctx);
-            await handler.ParseSlashCommands(turnContextWrapper, new UserProfileTemporary(), new CancellationToken(), null);
+            await handler.ParseSlashCommands(turnContextWrapper, userProfileTemporary, new CancellationToken(), null);
         }
 
         [Command("getanomaly"), Description("Get a pair of attractor and void points")]
@@ -225,7 +225,7 @@ namespace VFatumbot.Discord
         {
             var handler = new ActionHandler();
             var turnContextWrapper = new TurnContextWrapper(ctx, numberPoints.Length == 1 ? numberPoints[0] : 1);
-            await handler.ParseSlashCommands(turnContextWrapper, new UserProfileTemporary(), new CancellationToken(), null);
+            await handler.ParseSlashCommands(turnContextWrapper, userProfileTemporary, new CancellationToken(), null);
         }
 
         [Command("getpoint"), Description("Get a mystery point")]
@@ -234,7 +234,7 @@ namespace VFatumbot.Discord
         {
             var handler = new ActionHandler();
             var turnContextWrapper = new TurnContextWrapper(ctx);
-            await handler.ParseSlashCommands(turnContextWrapper, new UserProfileTemporary(), new CancellationToken(), null);
+            await handler.ParseSlashCommands(turnContextWrapper, userProfileTemporary, new CancellationToken(), null);
         }
 
         [Command("setradius"), Description("Set radius")]
@@ -242,7 +242,7 @@ namespace VFatumbot.Discord
         {
             var handler = new ActionHandler();
             var turnContextWrapper = new TurnContextWrapper(ctx);
-            await handler.ParseSlashCommands(turnContextWrapper, new UserProfileTemporary(), new CancellationToken(), null);
+            await handler.ParseSlashCommands(turnContextWrapper, userProfileTemporary, new CancellationToken(), null);
         }
 
         [Command("setlocation"), Description("Set location")]
@@ -250,7 +250,7 @@ namespace VFatumbot.Discord
         {
             var handler = new ActionHandler();
             var turnContextWrapper = new TurnContextWrapper(ctx);
-            await handler.ParseSlashCommands(turnContextWrapper, new UserProfileTemporary(), new CancellationToken(), null);
+            await handler.ParseSlashCommands(turnContextWrapper, userProfileTemporary, new CancellationToken(), null);
         }
 
         [Command("mylocation"), Description("Get your currently set location")]
@@ -258,7 +258,7 @@ namespace VFatumbot.Discord
         {
             var handler = new ActionHandler();
             var turnContextWrapper = new TurnContextWrapper(ctx);
-            await handler.ParseSlashCommands(turnContextWrapper, new UserProfileTemporary(), new CancellationToken(), null);
+            await handler.ParseSlashCommands(turnContextWrapper, userProfileTemporary, new CancellationToken(), null);
         }
 
         [Command("togglewater"), Description("Toggle skipping water points")]
@@ -266,7 +266,7 @@ namespace VFatumbot.Discord
         {
             var handler = new ActionHandler();
             var turnContextWrapper = new TurnContextWrapper(ctx);
-            await handler.ParseSlashCommands(turnContextWrapper, new UserProfileTemporary(), new CancellationToken(), null);
+            await handler.ParseSlashCommands(turnContextWrapper, userProfileTemporary, new CancellationToken(), null);
         }
 
         [Command("morehelp"), Description("Get more help")]
@@ -274,7 +274,7 @@ namespace VFatumbot.Discord
         {
             var handler = new ActionHandler();
             var turnContextWrapper = new TurnContextWrapper(ctx);
-            await handler.ParseSlashCommands(turnContextWrapper, new UserProfileTemporary(), new CancellationToken(), null);
+            await handler.ParseSlashCommands(turnContextWrapper, userProfileTemporary, new CancellationToken(), null);
         }
 
         [Command("test"), Description("Check if the bot and QRNG are online")]
@@ -282,7 +282,7 @@ namespace VFatumbot.Discord
         {
             var handler = new ActionHandler();
             var turnContextWrapper = new TurnContextWrapper(ctx);
-            await handler.ParseSlashCommands(turnContextWrapper, new UserProfileTemporary(), new CancellationToken(), null);
+            await handler.ParseSlashCommands(turnContextWrapper, userProfileTemporary, new CancellationToken(), null);
         }
 
         [Command("poll"), Description("Run a poll with reactions.")]
