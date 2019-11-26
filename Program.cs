@@ -10,11 +10,13 @@ namespace VFatumbot
     {
         public static void Main(string[] args)
         {
+#if RELEASE_PROD // no dev version yet
             // Run Discord bot
             DispatchWorkerThread((object sender, DoWorkEventArgs e) =>
             {
                 new DiscordBot().RunBotAsync().GetAwaiter().GetResult();
             });
+#endif
 
             // Run all other bots on the Bot Framework
             CreateWebHostBuilder(args).Build().Run();
