@@ -1,15 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Threading;
 using System.Threading.Tasks;
-using CoordinateSharp;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Schema;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using VFatumbot.BotLogic;
 using static VFatumbot.BotLogic.Enums;
 
@@ -127,7 +123,7 @@ namespace VFatumbot
                     await _userProfileTemporaryAccessor.SetAsync(turnContext, userProfileTemporary);
                 }
             }
-            else if (InterceptLocation(turnContext, out lat, out lon)) // Intercept any locations the user sends us, no matter where in the conversation they are
+            else if (Helpers.InterceptLocation(turnContext, out lat, out lon)) // Intercept any locations the user sends us, no matter where in the conversation they are
             {
                 bool validCoords = true;
                 if (lat == Consts.INVALID_COORD && lon == Consts.INVALID_COORD)
@@ -141,7 +137,7 @@ namespace VFatumbot
                     }
                     else
                     {
-                        await turnContext.SendActivityAsync(MessageFactory.Text("Address not found."), cancellationToken);
+                        await turnContext.SendActivityAsync(MessageFactory.Text("Place not found."), cancellationToken);
                         validCoords = false;
                     }
                 }
@@ -172,39 +168,7 @@ namespace VFatumbot
             }
             else if (!string.IsNullOrEmpty(turnContext.Activity.Text) && turnContext.Activity.Text.EndsWith("help", StringComparison.InvariantCultureIgnoreCase))
             {
-#if RELEASE_PROD
-                var help1 = System.IO.File.ReadAllText("help-prod1.txt").Replace("APP_VERSION", Consts.APP_VERSION);
-                var help2 = System.IO.File.ReadAllText("help-prod2.txt").Replace("APP_VERSION", Consts.APP_VERSION);
-                var help3 = System.IO.File.ReadAllText("help-prod3.txt").Replace("APP_VERSION", Consts.APP_VERSION);
-                var help4 = System.IO.File.ReadAllText("help-prod4.txt").Replace("APP_VERSION", Consts.APP_VERSION);
-#else
-                var help1 = System.IO.File.ReadAllText("help-dev1.txt").Replace("APP_VERSION", Consts.APP_VERSION);
-                var help2 = System.IO.File.ReadAllText("help-dev2.txt").Replace("APP_VERSION", Consts.APP_VERSION);
-                var help3 = System.IO.File.ReadAllText("help-dev3.txt").Replace("APP_VERSION", Consts.APP_VERSION);
-                var help4 = System.IO.File.ReadAllText("help-dev4.txt").Replace("APP_VERSION", Consts.APP_VERSION);
-#endif
-                await turnContext.SendActivityAsync(MessageFactory.Text(help1), cancellationToken);
-                await turnContext.SendActivityAsync(MessageFactory.Text(help2), cancellationToken);
-                await turnContext.SendActivityAsync(MessageFactory.Text(help3), cancellationToken);
-                await turnContext.SendActivityAsync(MessageFactory.Text(help4), cancellationToken);
-
-                if (!string.IsNullOrEmpty(turnContext.Activity.Text) && !userProfileTemporary.IsLocationSet)
-                {
-                    await turnContext.SendActivityAsync(MessageFactory.Text(Consts.NO_LOCATION_SET_MSG), cancellationToken);
-
-                    // Hack coz Facebook Messenge stopped showing "Send Location" button
-                    if (turnContext.Activity.ChannelId.Equals("facebook"))
-                    {
-                        await turnContext.SendActivityAsync(CardFactory.CreateGetLocationFromGoogleMapsReply());
-                    }
-
-                    return;
-                }
-                else
-                {
-                    await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(turnContext, _mainDialog, cancellationToken);
-                    return;
-                }
+                await Helpers.HelpAsync(turnContext, userProfileTemporary, _mainDialog, cancellationToken);
             }
             else if (!string.IsNullOrEmpty(turnContext.Activity.Text) && !userProfileTemporary.IsLocationSet)
             {
@@ -262,105 +226,6 @@ namespace VFatumbot
             }
 
             return false;
-        }
-
-        protected bool InterceptLocation(ITurnContext turnContext, out double lat, out double lon)
-        {
-            lat = lon = Consts.INVALID_COORD;
-
-            var activity = turnContext.Activity;
-
-            bool isFound = false;
-
-            // Prioritize geo coordinates sent via entities
-            if (activity.Entities != null)
-            {
-                foreach (Entity entity in activity.Entities)
-                {
-                    if (entity.Type == "Place")
-                    {
-                        Place place = entity.GetAs<Place>();
-                        GeoCoordinates geo = JsonConvert.DeserializeObject<GeoCoordinates>(place.Geo + "");
-                        lat = (double)geo.Latitude;
-                        lon = (double)geo.Longitude;
-                        isFound = true;
-                        break;
-                    }
-                }
-            }
-
-            // Secondly is if there is a Google Map URL
-            if (!isFound && activity.Text != null && (activity.Text.Contains("google.com/maps/") || activity.Text.Contains("Sending location @")))
-            {
-                string[] seps0 = { "@" };
-                string[] entry0 = turnContext.Activity.Text.Split(seps0, StringSplitOptions.RemoveEmptyEntries);
-                string[] seps = { "," };
-                string[] entry = entry0[1].Split(seps, StringSplitOptions.RemoveEmptyEntries);
-                if (Double.TryParse(entry[0], NumberStyles.Any, CultureInfo.InvariantCulture, out lat) &&
-                    Double.TryParse(entry[1], NumberStyles.Any, CultureInfo.InvariantCulture, out lon))
-                {
-                    isFound = true;
-                }
-            }
-
-            // Thirdly, geocode the address the user sent
-            if (!isFound && !string.IsNullOrEmpty(activity.Text) && activity.Text.ToLower().StartsWith("search", StringComparison.InvariantCulture))
-            {
-                // dirty hack: get the calling method which is already async to do the Google Geocode async API call
-                lat = lon = Consts.INVALID_COORD;
-                isFound = true;
-            }
-
-            // Fourthly, sometime around late October 2019, about two months after I started coding this bot, Facebook
-            // for whatever reason decided to stop displaying the "Location" button that allowed users to easily send
-            // their location to us. So here's my workaround that intercepts a shared message sent to the bot from
-            // Google Maps with coordinates that we decode here. FYI I could do with some more 酎ハイ right now.
-            if (!isFound && activity.ChannelId.Equals("facebook"))
-            {
-                try
-                {
-                    /* e.g.
-                     * "channelData":{ 
-                                      "sender":{ 
-                                         "id":"2418280911623293"
-                                      },
-                                      "recipient":{ 
-                                         "id":"422185445016594"
-                                      },
-                                      "timestamp":1571933853598,
-                                      "message":{ 
-                                         "mid":"WYvV4Nkos0LXSCT0xhwHz-QWY6PlmXHw1lzdArnJxcDyHORviVvB-22m880-8unGmfNfdwNwANdH4KxHFmVbrQ",
-                                         "seq":0,
-                                         "is_echo":false,
-                                         "attachments":[ 
-                                            { 
-                                               "type":"fallback",
-                                               "title":"33°35'06.1\"N 130°20'24.0\"E",
-                                               "url":"https://l.facebook.com/l.php?u=https%3A%2F%2Fgoo.gl%2Fmaps%2Fzzbjm7nutWjmYdDo9&h=AT1d60WwFvNZF-1afhyRyFlCUZLvJqxlw5bgPcYga8z-oi_sA7RO1fn7OwP8Nn29Vi31OTIoWI-aKSTQe-UEJnTzoPA99f5E5nSnb2yZOxYhFNc6EEglmnflNMQ5vBC8KhWEnDt6dw1R&s=1",
-                                               "payload":null
-                                            }
-                                         ]
-                                      }
-                                   },
-                     */
-                    JObject channelData = JObject.Parse(activity.ChannelData.ToString());
-                    JToken title = channelData["message"]["attachments"][0]["title"];
-
-                    // CoordinateSharp: https://github.com/Tronald/CoordinateSharp
-                    Coordinate coordinates = null;
-                    if (Coordinate.TryParse(title.ToString(), out coordinates))
-                    {
-                        lat = coordinates.Latitude.ToDouble();
-                        lon = coordinates.Longitude.ToDouble();
-                        isFound = true;
-                    }
-                }
-                catch (Exception)
-                {
-                }
-            }
-
-            return isFound;
         }
     }
 }

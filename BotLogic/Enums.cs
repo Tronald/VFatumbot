@@ -14,6 +14,7 @@ namespace VFatumbot.BotLogic
             facebook,
             telegram,
             line,
+            discord
         }
 
         public enum PointTypes

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
 
@@ -168,11 +169,20 @@ namespace VFatumbot
     {
         protected virtual byte GetRandomByte()
         {
-            return 0;
+            return Convert.ToByte((new Random()).Next(256));
         }
 
         protected virtual string GetRandomHex(int lnts)
-        { return ""; }
+        {
+            var random = new Random();
+            byte[] buffer = new byte[lnts / 2];
+            random.NextBytes(buffer);
+            string result = String.Concat(buffer.Select(x => x.ToString("x2")).ToArray());
+            if (lnts % 2 == 0)
+                return result;
+            var ret = result + random.Next(16).ToString("x");
+            return ret;
+        }
 
         /// <summary>
         /// Returns a random integer that is within a specified range.

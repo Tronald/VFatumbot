@@ -44,6 +44,9 @@
     <PackageReference Include="Crc32.NET" Version="1.2.0" />
     <PackageReference Include="Imgur.API.NetCore" Version="1.0.1" />
     <PackageReference Include="Bia.Countries" Version="3.0.0" />
+    <PackageReference Include="DSharpPlus" Version="3.2.3" />
+    <PackageReference Include="DSharpPlus.CommandsNext" Version="3.2.3" />
+    <PackageReference Include="DSharpPlus.Interactivity" Version="3.2.3" />
   </ItemGroup>
 
   <ItemGroup>

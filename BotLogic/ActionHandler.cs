@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Microsoft.Bot.Builder;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+
 using static VFatumbot.BotLogic.Enums;
 using static VFatumbot.BotLogic.FatumFunctions;
 using static VFatumbot.QuantumRandomNumberGeneratorWrapper;
@@ -55,10 +56,6 @@ namespace VFatumbot.BotLogic
             {
                 await PairActionAsync(turnContext, userProfileTemporary, cancellationToken, mainDialog);
             }
-            else if (command.StartsWith("/getattractor", StringComparison.InvariantCulture))
-            {
-                await AttractorActionAsync(turnContext, userProfileTemporary, cancellationToken, mainDialog);
-            }
             else if (command.StartsWith("/getpseudo", StringComparison.InvariantCulture))
             {
                 await PseudoActionAsync(turnContext, userProfileTemporary, cancellationToken, mainDialog);
@@ -76,7 +73,8 @@ namespace VFatumbot.BotLogic
             {
                 await AnomalyActionAsync(turnContext, userProfileTemporary, cancellationToken, mainDialog);
             }
-            else if (command.StartsWith("/scanida", StringComparison.InvariantCulture))
+            else if (command.StartsWith("/scanida", StringComparison.InvariantCulture) ||
+                     command.StartsWith("/scananomaly", StringComparison.InvariantCulture))
             {
                 await AnomalyActionAsync(turnContext, userProfileTemporary, cancellationToken, mainDialog, true);
             }
@@ -93,8 +91,7 @@ namespace VFatumbot.BotLogic
                 await PairActionAsync(turnContext, userProfileTemporary, cancellationToken, mainDialog, true);
             }
             else if (command.StartsWith("/getpoint", StringComparison.InvariantCulture) ||
-                     command.StartsWith("/blindspot", StringComparison.InvariantCulture) ||
-                     command.StartsWith("/blind", StringComparison.InvariantCulture))
+                     command.StartsWith("/mysterypoint", StringComparison.InvariantCulture))
             {
                 await MysteryPointActionAsync(turnContext, userProfileTemporary, cancellationToken, mainDialog);
             }
@@ -133,6 +130,74 @@ namespace VFatumbot.BotLogic
                 }
 
                 await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(turnContext, mainDialog, cancellationToken);
+            }
+            else if (command.StartsWith("/setlocation", StringComparison.InvariantCulture))
+            {
+                if (command.Contains(" "))
+                {
+                    double lat = 0, lon = 0;
+                    if (Helpers.InterceptLocation(turnContext, out lat, out lon)) // Intercept any locations the user sends us, no matter where in the conversation they are
+                    {
+                        bool validCoords = true;
+                        if (lat == Consts.INVALID_COORD && lon == Consts.INVALID_COORD)
+                        {
+                            // Do a geocode query lookup against the address the user sent
+                            var result = await Helpers.GeocodeAddressAsync(turnContext.Activity.Text.ToLower().Replace("/setlocation", ""));
+                            if (result != null)
+                            {
+                                lat = result.Item1;
+                                lon = result.Item2;
+                            }
+                            else
+                            {
+                                await turnContext.SendActivityAsync(MessageFactory.Text("Place not found."), cancellationToken);
+                                validCoords = false;
+                            }
+                        }
+
+                        if (validCoords)
+                        {
+                            // Update user's location
+                            userProfileTemporary.Latitude = lat;
+                            userProfileTemporary.Longitude = lon;
+
+                            await turnContext.SendActivityAsync(MessageFactory.Text($"New location confirmed @ {lat},{lon}"), cancellationToken);
+
+                            var incoords = new double[] { lat, lon };
+                            var w3wResult = await Helpers.GetWhat3WordsAddressAsync(incoords);
+                            await turnContext.SendActivitiesAsync(CardFactory.CreateLocationCardsReply(Enum.Parse<ChannelPlatform>(turnContext.Activity.ChannelId), incoords, userProfileTemporary.IsDisplayGoogleThumbnails, w3wResult), cancellationToken);
+
+                            //await _userProfileTemporaryAccessor.SetAsync(turnContext, userProfileTemporary);
+                            //await _userTemporaryState.SaveChangesAsync(turnContext, false, cancellationToken);
+
+                            //userProfilePersistent.HasSetLocationOnce = true;
+                            //await _userProfilePersistentAccessor.SetAsync(turnContext, userProfilePersistent);
+                            //await _userPersistentState.SaveChangesAsync(turnContext, false, cancellationToken);
+
+                            await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(turnContext, mainDialog, cancellationToken);
+
+                            return;
+                        }
+                    }
+                }
+
+                await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(turnContext, mainDialog, cancellationToken);
+            }
+            else if (command.StartsWith("/mylocation", StringComparison.InvariantCulture))
+            {
+                await LocationActionAsync(turnContext, userProfileTemporary, cancellationToken);
+                await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(turnContext, mainDialog, cancellationToken);
+            }
+            else if (command.StartsWith("/togglewater", StringComparison.InvariantCulture))
+            {
+                userProfileTemporary.IsIncludeWaterPoints = !userProfileTemporary.IsIncludeWaterPoints;
+                await turnContext.SendActivityAsync(MessageFactory.Text($"Water points will be {(userProfileTemporary.IsIncludeWaterPoints ? "included" : "skipped")}"), cancellationToken);
+                await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(turnContext, mainDialog, cancellationToken);
+            }
+            else if (command.StartsWith("/help", StringComparison.InvariantCulture) ||
+                     command.StartsWith("/morehelp", StringComparison.InvariantCulture))
+            {
+                await Helpers.HelpAsync(turnContext, userProfileTemporary, mainDialog, cancellationToken);
             }
             else if (command.Equals("/kpi"))
             {
@@ -203,10 +268,10 @@ namespace VFatumbot.BotLogic
                 await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(turnContext, mainDialog, cancellationToken);
             }
             else if (command.Equals("/pushid"))
-			{
-				await turnContext.SendActivityAsync(MessageFactory.Text($"Your Push ID is {userProfileTemporary.PushUserId}"), cancellationToken);
-				await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(turnContext, mainDialog, cancellationToken);
-			}
+            {
+                await turnContext.SendActivityAsync(MessageFactory.Text($"Your Push ID is {userProfileTemporary.PushUserId}"), cancellationToken);
+                await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(turnContext, mainDialog, cancellationToken);
+            }
             else if (command.Equals("/closemenu"))
             {
                 // First release was leaving dialog prompt menus sticking on everyone's keyboard in the Randonaut Telegram lobby.
@@ -227,7 +292,7 @@ namespace VFatumbot.BotLogic
                 reply.ChannelData = JObject.FromObject(channelData);
                 await turnContext.SendActivityAsync(reply, cancellationToken);
             }
-			else if (command.Equals("/test"))
+            else if (command.Equals("/test"))
             {
                 await turnContext.SendActivityAsync(MessageFactory.Text(
                     $"Fatumbot {Consts.APP_VERSION} is alive.{Helpers.GetNewLine(turnContext)}" +

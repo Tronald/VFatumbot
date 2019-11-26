@@ -19,6 +19,9 @@ namespace VFatumbot
     {
         protected readonly ConversationState _conversationState;
 
+        // For Discord Bot
+        public AdapterWithErrorHandler() { }
+
         public AdapterWithErrorHandler(IConfiguration configuration, ILogger<BotFrameworkHttpAdapter> logger, ConversationState conversationState = null)
             : base(configuration, logger)
         {
@@ -60,7 +63,7 @@ namespace VFatumbot
         // have completed their work on a background thread
         public async Task RepromptMainDialog(ITurnContext turnContext, Dialog dialog, CancellationToken cancellationToken, CallbackOptions callbackOptions = null)
         {
-            if (!Helpers.IsRandoLobby(turnContext))
+            if (!Helpers.IsRandoLobby(turnContext) && !turnContext.Activity.ChannelId.Equals(ChannelPlatform.discord.ToString()))
             {
                 var conversationStateAccesor = _conversationState.CreateProperty<DialogState>(nameof(DialogState));
                 var dialogSet = new DialogSet(conversationStateAccesor);
