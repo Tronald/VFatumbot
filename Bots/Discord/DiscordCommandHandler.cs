@@ -147,7 +147,7 @@ namespace VFatumbot.Discord
         public AdapterWithErrorHandlerWrapper(IConfiguration configuration, ILogger<BotFrameworkHttpAdapter> logger, ConversationState conversationState = null)
             : base(configuration, logger) {}
 
-        public async override Task ContinueConversationAsync(string appId, ConversationReference reference, BotCallbackHandler callback, CancellationToken cancellationToken)
+        public async override Task ContinueConversationAsync(string botAppId, ConversationReference reference, BotCallbackHandler callback, CancellationToken cancellationToken)
         {
            await callback.Invoke(_ctx, cancellationToken);
         }
@@ -155,17 +155,6 @@ namespace VFatumbot.Discord
 
     public class DiscordCommandHandler
     {
-        // For the bot running in the Azure cloud, we need to use Cosmos DB (or Azure's Blob Storage service)
-        // to keep data persistent, otherwise the stateless nature of the bot would be useless in keeping
-        // track of users's locations, radius settings etc.
-        //private CosmosDbStorage persistentStorage = new CosmosDbStorage(new CosmosDbStorageOptions
-        //{
-        //    AuthKey = Consts.COSMOS_DB_KEY,
-        //    CollectionId = Consts.COSMOS_CONTAINER_NAME_PERSISTENT,
-        //    CosmosDBEndpoint = new Uri(Consts.COSMOS_DB_URI),
-        //    DatabaseId = Consts.COSMOS_DB_NAME,
-        //});
-
         private CosmosDbStorage temporaryStorage = new CosmosDbStorage(new CosmosDbStorageOptions
         {
             AuthKey = Consts.COSMOS_DB_KEY,
@@ -195,7 +184,7 @@ namespace VFatumbot.Discord
 
         [Command("getattractor"), Description("Get an attractor point")]
         [Aliases("scanattractor")]
-        public async Task GetAttractor(CommandContext ctx, [Description("Number of points to generate")] params int[] numberPoints)
+        public async Task GetAttractor(CommandContext ctx, [Description("Number of attractor points to generate")] params int[] numberPoints)
         {
             var userProfileTemporary = await GetUserProfileTemporaryAsync(ctx);
             var handler = new ActionHandler();
@@ -205,7 +194,7 @@ namespace VFatumbot.Discord
 
         [Command("getvoid"), Description("Get a void point")]
         [Aliases("scanvoid")]
-        public async Task GetVoid(CommandContext ctx, [Description("Number of points to generate")] params int[] numberPoints)
+        public async Task GetVoid(CommandContext ctx, [Description("Number of void points to generate")] params int[] numberPoints)
         {
             var userProfileTemporary = await GetUserProfileTemporaryAsync(ctx);
             var handler = new ActionHandler();
@@ -290,7 +279,7 @@ namespace VFatumbot.Discord
         }
 
         [Command("setlocation"), Description("Set location")]
-        public async Task SetLocation(CommandContext ctx, [Description("Radius in meters")] params string[] location)
+        public async Task SetLocation(CommandContext ctx, [Description("Address/place name or a Google Maps URL")] params string[] location)
         {
             var userProfileTemporary = await GetUserProfileTemporaryAsync(ctx);
             var handler = new ActionHandler();

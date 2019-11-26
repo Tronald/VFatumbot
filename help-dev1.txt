@@ -8,5 +8,6 @@ Welcome to Fatumbot APP_VERSION! This is a tool to experiment with the ideas tha
 [FAQ](https://old.reddit.com/r/randonauts/wiki/faq)  
 [Help/Contribute & Merchandise](https://old.reddit.com/r/randonauts/wiki/contribute)  
 [Official Homepage](http://www.randonauts.com)  
+[The Memeplex](https://memeplex.randonauts.com/)  
 [Randonaut Subreddit](https://www.reddit.com/r/randonauts)  
 [Bot Trip Reports](https://www.reddit.com/r/randonaut_reports)  

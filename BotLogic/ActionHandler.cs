@@ -167,13 +167,6 @@ namespace VFatumbot.BotLogic
                             var w3wResult = await Helpers.GetWhat3WordsAddressAsync(incoords);
                             await turnContext.SendActivitiesAsync(CardFactory.CreateLocationCardsReply(Enum.Parse<ChannelPlatform>(turnContext.Activity.ChannelId), incoords, userProfileTemporary.IsDisplayGoogleThumbnails, w3wResult), cancellationToken);
 
-                            //await _userProfileTemporaryAccessor.SetAsync(turnContext, userProfileTemporary);
-                            //await _userTemporaryState.SaveChangesAsync(turnContext, false, cancellationToken);
-
-                            //userProfilePersistent.HasSetLocationOnce = true;
-                            //await _userProfilePersistentAccessor.SetAsync(turnContext, userProfilePersistent);
-                            //await _userPersistentState.SaveChangesAsync(turnContext, false, cancellationToken);
-
                             await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(turnContext, mainDialog, cancellationToken);
 
                             return;
