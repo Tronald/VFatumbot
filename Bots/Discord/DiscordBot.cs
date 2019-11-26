@@ -1,4 +1,4 @@
-﻿// THIS FILE IS A PART OF EMZI0767'S BOT EXAMPLES
+﻿// THIS FILE IS(WAS) A PART OF EMZI0767'S BOT EXAMPLES
 //
 // --------
 // 
@@ -17,13 +17,8 @@
 // limitations under the License.
 //
 // --------
-//
-// This is an interactivity example. It shows how to properly utilize 
-// Interactivity module.
 
 using System;
-using System.IO;
-using System.Text;
 using System.Threading.Tasks;
 using DSharpPlus;
 using DSharpPlus.CommandsNext;
@@ -31,7 +26,6 @@ using DSharpPlus.CommandsNext.Exceptions;
 using DSharpPlus.Entities;
 using DSharpPlus.EventArgs;
 using DSharpPlus.Interactivity;
-using Newtonsoft.Json;
 
 namespace VFatumbot.Discord
 {
@@ -119,7 +113,7 @@ namespace VFatumbot.Discord
             this.Commands.CommandErrored += this.Commands_CommandErrored;
 
             // up next, let's register our commands
-            this.Commands.RegisterCommands<InteractiveCommands>();
+            this.Commands.RegisterCommands<DiscordCommandHandler>();
 
             // finally, let's connect and log in
             await this.Client.ConnectAsync();
