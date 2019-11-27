@@ -93,7 +93,11 @@ namespace VFatumbot
             }
 
             app.UseDefaultFiles();
-            app.UseStaticFiles();
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                // for serving KML randotrip files
+                ServeUnknownFileTypes = true,
+            });
 
             app.UseMvc();
         }
