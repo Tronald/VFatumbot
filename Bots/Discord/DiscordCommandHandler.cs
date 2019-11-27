@@ -268,6 +268,16 @@ namespace VFatumbot.Discord
             await handler.ParseSlashCommands(turnContextWrapper, userProfileTemporary, new CancellationToken(), null);
         }
 
+        [Command("randotrip"), Description("Get today's randotrip")]
+        [Aliases("mysterypoint")]
+        public async Task GetRandotrip(CommandContext ctx, [Description("yyyy-mm-dd")] params string[] radius)
+        {
+            var userProfileTemporary = await GetUserProfileTemporaryAsync(ctx);
+            var handler = new ActionHandler();
+            var turnContextWrapper = new TurnContextWrapper(ctx);
+            await handler.ParseSlashCommands(turnContextWrapper, userProfileTemporary, new CancellationToken(), null);
+        }
+
         [Command("setradius"), Description("Set radius")]
         public async Task SetRadius(CommandContext ctx, [Description("Radius in meters")] params string[] radius)
         {
