@@ -38,8 +38,8 @@ namespace VFatumbot
 
             var options = new PromptOptions()
             {
-                Prompt = MessageFactory.Text("Choose the kind of blind spot:"),
-                RetryPrompt = MessageFactory.Text("That is not a valid blind spot."),
+                Prompt = MessageFactory.Text("Choose the 'more stuff' action:"),
+                RetryPrompt = MessageFactory.Text("That is not valid 'more stuff'."),
                 Choices = GetActionChoices(),
             };
 
