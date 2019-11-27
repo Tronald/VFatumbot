@@ -269,8 +269,7 @@ namespace VFatumbot.Discord
         }
 
         [Command("randotrip"), Description("Get today's randotrip")]
-        [Aliases("mysterypoint")]
-        public async Task GetRandotrip(CommandContext ctx, [Description("yyyy-mm-dd")] params string[] radius)
+        public async Task GetRandotrip(CommandContext ctx, [Description("yyyy-mm-dd")] params string[] date)
         {
             var userProfileTemporary = await GetUserProfileTemporaryAsync(ctx);
             var handler = new ActionHandler();
