@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Bot.Builder;
@@ -9,13 +10,13 @@ using VFatumbot.BotLogic;
 
 namespace VFatumbot
 {
-    public class BlindSpotsDialog : ComponentDialog
+    public class MoreStuffDialog : ComponentDialog
     {
         protected readonly ILogger _logger;
         protected readonly IStatePropertyAccessor<UserProfileTemporary> _userProfileTemporaryAccessor;
         protected readonly MainDialog _mainDialog;
 
-        public BlindSpotsDialog(IStatePropertyAccessor<UserProfileTemporary> userProfileTemporaryAccessor, MainDialog mainDialog, ILogger<MainDialog> logger) : base(nameof(BlindSpotsDialog))
+        public MoreStuffDialog(IStatePropertyAccessor<UserProfileTemporary> userProfileTemporaryAccessor, MainDialog mainDialog, ILogger<MainDialog> logger) : base(nameof(MoreStuffDialog))
         {
             _logger = logger;
             _userProfileTemporaryAccessor = userProfileTemporaryAccessor;
@@ -66,6 +67,9 @@ namespace VFatumbot
                 case "Mystery Point":
                     await actionHandler.MysteryPointActionAsync(stepContext.Context, userProfileTemporary, cancellationToken, _mainDialog);
                     break;
+                case "Today's Randotrip":
+                    await actionHandler.RandotripActionAsync(stepContext.Context, userProfileTemporary, cancellationToken, _mainDialog, DateTime.UtcNow.ToString("yyyy-MM-dd"));
+                    break;
                 case "< Back":
                     return await stepContext.ReplaceDialogAsync(nameof(MainDialog), cancellationToken: cancellationToken);
             }
@@ -113,6 +117,17 @@ namespace VFatumbot
                                         "Point",
                                         "point",
                                         "getpoint",
+                                    }
+                },
+                new Choice() {
+                    Value = "Today's Randotrip",
+                    Synonyms = new List<string>()
+                                    {
+                                        "Today's randotrip",
+                                        "Todays randotrip",
+                                        "today's randotrip",
+                                        "todays randotrip",
+                                        "randotrip",
                                     }
                 },
                 new Choice() {

@@ -32,7 +32,7 @@ namespace VFatumbot
             if (userTemporaryState != null)
                 _userProfileTemporaryAccessor = userTemporaryState.CreateProperty<UserProfileTemporary>(nameof(UserProfileTemporary));
 
-            AddDialog(new BlindSpotsDialog(_userProfileTemporaryAccessor, this, logger));
+            AddDialog(new MoreStuffDialog(_userProfileTemporaryAccessor, this, logger));
             AddDialog(new TripReportDialog(_userProfileTemporaryAccessor, this, logger));
             AddDialog(new ScanDialog(_userProfileTemporaryAccessor, this, logger));
             AddDialog(new SettingsDialog(_userProfileTemporaryAccessor, logger));
@@ -155,8 +155,8 @@ namespace VFatumbot
                 case "Pair":
                     await actionHandler.PairActionAsync(stepContext.Context, userProfileTemporary, cancellationToken, this);
                     break;
-                case "Blind Spots":
-                    return await stepContext.BeginDialogAsync(nameof(BlindSpotsDialog), this, cancellationToken);
+                case "More Stuff":
+                    return await stepContext.BeginDialogAsync(nameof(MoreStuffDialog), this, cancellationToken);
                 case "Scan":
                     return await stepContext.BeginDialogAsync(nameof(ScanDialog), this, cancellationToken);
                 case "My Location":
@@ -226,9 +226,13 @@ namespace VFatumbot
                                     }
                 },
                 new Choice() {
-                    Value = "Blind Spots",
+                    Value = "More Stuff",
                     Synonyms = new List<string>()
                                     {
+                                        "More stuff",
+                                        "more stuff",
+                                        "morestuff",
+                                        "Blind Spots",
                                         "blind spots",
                                         "blindspots",
                                     }

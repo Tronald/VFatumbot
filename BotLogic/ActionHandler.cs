@@ -95,6 +95,19 @@ namespace VFatumbot.BotLogic
             {
                 await MysteryPointActionAsync(turnContext, userProfileTemporary, cancellationToken, mainDialog);
             }
+            else if (command.StartsWith("/randotrip", StringComparison.InvariantCulture))
+            {
+                var date = DateTime.UtcNow.ToString("yyyy-MM-dd");
+                if (command.Contains(" "))
+                {
+                    string enteredDateStr = command.Replace(command.Substring(0, command.IndexOf(" ", StringComparison.InvariantCulture)), "");
+                    DateTime parsedDateTime;
+                    if (DateTime.TryParse(enteredDateStr, out parsedDateTime))
+                        date = parsedDateTime.ToString("yyyy-MM-dd");
+                }
+
+                await RandotripActionAsync(turnContext, userProfileTemporary, cancellationToken, mainDialog, date);
+            }
             else if (command.StartsWith("/setradius", StringComparison.InvariantCulture))
             {
                 if (command.Contains(" "))
@@ -1163,6 +1176,34 @@ namespace VFatumbot.BotLogic
                             NearestPlaces = new string[] { w3wResult?.nearestPlace + Helpers.GetCountryFromW3W(w3wResult) },
                         };
                         await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(context, mainDialog, cancellationToken, callbackOptions);
+                    }, cancellationToken);
+            });
+        }
+
+        public async Task RandotripActionAsync(ITurnContext turnContext, UserProfileTemporary userProfileTemporary, CancellationToken cancellationToken, MainDialog mainDialog, string date)
+        {
+            await turnContext.SendActivityAsync(MessageFactory.Text("Wait a minute. Preparing your experience."), cancellationToken);
+
+            DispatchWorkerThread((object sender, DoWorkEventArgs e) =>
+            {
+                turnContext.Adapter.ContinueConversationAsync(Consts.APP_ID, turnContext.Activity.GetConversationReference(),
+                    async (context, token) =>
+                    {
+                        string file = RandotripKMLGenerator.Generate(date);
+                        if (string.IsNullOrEmpty(file))
+                        {
+                            await turnContext.SendActivityAsync(MessageFactory.Text("There was an error. Uh-oh."), cancellationToken);
+                        }
+                        else
+                        {
+#if RELEASE_PROD
+                            var baseUrl = "https://bot.randonauts.com/flythrus/";
+#else
+                            var baseUrl = "https://devbot.randonauts.com/flythrus/";
+#endif
+                            await turnContext.SendActivityAsync(MessageFactory.Text($"Download file and load in Google Earth: {baseUrl}{file}"), cancellationToken);
+                        }
+                        await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(context, mainDialog, cancellationToken);
                     }, cancellationToken);
             });
         }

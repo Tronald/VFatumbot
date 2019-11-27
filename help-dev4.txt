@@ -14,17 +14,18 @@ For the intent-driven anomaly search/mind-matter interaction part of the experim
 You can enter [1]-[20] after the commands to get that number of points; e.g. /getattractor[3]  
   
 For the blind spots/breaking determinism/blind-experiment part you have:  
-* Blind Spots submenu - see below  
+* More Stuff submenu - blind spots and other features, see below  
   
 Others:  
 * My Location - show your currently set location  
 * Settings - set your radius (/setradius), and toggle whether to skip/include water points and whether to show thumbnails for Google Street View and Google Earth  
   
-##### BLIND SPOTS SUBMENU  
+##### MORE STUFF SUBMENU  
 * Quantum (/getquantum) - get a single quantumly generated point  
 * Quantum Time (/getqtime) - same as above but with a suggested time to visit  
 * Pseudo (/getpseudo) - generate a single pseudo-random point  
 * Mystery Point (/getpoint) - generate a random type of point (for blind-experiments)  
+* Today's Randotrip (/randotrip) - download the file for a virtual trip of today's points in Google Earth  
   
 ##### SCAN SUBMENU  
   

@@ -61,6 +61,7 @@
   <ItemGroup>
     <Folder Include="BotLogic\" />
     <Folder Include="RNGs\" />
+    <Folder Include="wwwroot\flythrus\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Condition=" '$(EnableDefaultCompileItems)' == 'true' " Update="BotLogic\ActionHandler %28copy%29.cs">
