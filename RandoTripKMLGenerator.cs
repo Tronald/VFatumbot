@@ -32,7 +32,7 @@ namespace VFatumbot
         public const string FLYTO_TEMPLATE =
 @"          <gx:FlyTo>
                 <gx:duration>10.0</gx:duration>
-                <gx:flyToMode>smooth</gx:flyToMode>
+                <gx:flyToMode>bounce</gx:flyToMode>
                 <LookAt>
                     <latitude>{0}</latitude>
                     <longitude>{1}</longitude>
