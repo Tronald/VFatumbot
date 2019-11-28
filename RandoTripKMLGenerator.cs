@@ -179,6 +179,7 @@ namespace VFatumbot
             public double z_score;
             public string nearest_place;
             public string country;
+            public DateTime datetime;
         }
 
         public static bool Generate(string whereClause, string filename)
@@ -196,7 +197,7 @@ namespace VFatumbot
                     connection.Open();
 
                     StringBuilder ssb = new StringBuilder();
-                    ssb.Append("SELECT point_type,intent_set,what_3_words,text,photos,short_hash_id,latitude,longitude,final_bearing,power,z_score,nearest_place,country FROM ");
+                    ssb.Append("SELECT point_type,intent_set,what_3_words,text,photos,short_hash_id,latitude,longitude,final_bearing,power,z_score,nearest_place,country,datetime FROM ");
                     //                      0          1           2        3     4        5            6         7          8          9      10       11          12                   
 #if RELEASE_PROD
                 ssb.Append("reports");
@@ -237,6 +238,7 @@ namespace VFatumbot
                                 if (!reader.IsDBNull(10)) point.z_score = reader.GetDouble(10);
                                 if (!reader.IsDBNull(11)) point.nearest_place = reader.GetString(11);
                                 if (!reader.IsDBNull(12)) point.country = reader.GetString(12);
+                                if (!reader.IsDBNull(13)) point.datetime = reader.GetDateTime(13);
 
                                 flytos.Add(flyto);
                                 points.Add(point);
@@ -289,7 +291,7 @@ namespace VFatumbot
 
                         var formatted = string.Format(POINT_TEMPLATE,
                                                 $"point{pointNo++}",
-                                                point.point_type,
+                                                $"{point.point_type} {point.datetime.ToString("yyyy-MM-dd HH':'mm")}",
                                                 balloonString.ToString(),
                                                 point.longitude,
                                                 point.latitude

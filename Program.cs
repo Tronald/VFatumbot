@@ -16,10 +16,12 @@ namespace VFatumbot
             {
                 new DiscordBot().RunBotAsync().GetAwaiter().GetResult();
             });
-//#endif
+            //#endif
 
             // Run all other bots on the Bot Framework
             CreateWebHostBuilder(args).Build().Run();
+            //RandotripKMLGenerator.Generate("AND DATETIME LIKE '%2019-11-27%'", "test.kml");
+            //RandotripKMLGenerator.Generate("", "test.kml");
         }
 
         public static void DispatchWorkerThread(DoWorkEventHandler handler)
