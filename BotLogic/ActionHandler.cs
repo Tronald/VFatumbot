@@ -853,6 +853,7 @@ namespace VFatumbot.BotLogic
                             },
                             NumWaterPointsSkipped = new int[] { numWaterPointsSkipped },
                             What3Words = new string[] { w3wResult?.words },
+                            NearestPlaces = new string[] { w3wResult?.nearestPlace + Helpers.GetCountryFromW3W(w3wResult) },
                         };
                         await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(turnContext, mainDialog, cancellationToken, callbackOptions);
                     }, cancellationToken);

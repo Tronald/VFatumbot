@@ -633,6 +633,11 @@ namespace VFatumbot
                             isb.Append("time_intent_suggestions_set,");
                         }
                         isb.Append("what_3_words,");
+                        if (!string.IsNullOrEmpty(options.NearestPlaces[i]))
+                        {
+                            isb.Append("nearest_place,");
+                            isb.Append("country,");
+                        }
                         isb.Append("short_hash_id,");
                         isb.Append("num_water_points_skipped,");
                         isb.Append("gid,");
@@ -689,7 +694,12 @@ namespace VFatumbot
                             isb.Append($"'{string.Join(",", SanitizeString(userProfileTemporary.IntentSuggestions))}',"); // intent suggestions
                             isb.Append($"'{userProfileTemporary.TimeIntentSuggestionsSet}',");
                         }
-                        isb.Append($"'{(!string.IsNullOrEmpty(options.What3Words[i])  ? options.What3Words[i] : "")}',");
+                        isb.Append($"'{(!string.IsNullOrEmpty(options.What3Words[i]) ? options.What3Words[i] : "")}',");
+                        if (!string.IsNullOrEmpty(options.NearestPlaces[i]))
+                        {
+                            isb.Append($"'{options.NearestPlaces[i].Substring(0, options.NearestPlaces[i].IndexOf("(") - 1)}',");
+                            isb.Append($"'{options.NearestPlaces[i].Substring(options.NearestPlaces[i].IndexOf("(") + 1).Replace(")", "")}',");
+                        }
                         isb.Append($"'{options.ShortCodes[i]}',");
                         isb.Append($"'{options.NumWaterPointsSkipped[i]}',");
                         isb.Append($"'{attractor.GID}',");
