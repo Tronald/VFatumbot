@@ -100,18 +100,23 @@ namespace VFatumbot
                                     Value = "No",
                                     Synonyms = new List<string>()
                                                     {
+                                                        "no"
                                                     }
                                 },
                                 new Choice() {
                                     Value = "Yes and report!",
                                     Synonyms = new List<string>()
                                                     {
+                                                        "Yes",
+                                                        "yes"
                                                     }
                                 },
                                 new Choice() {
                                     Value = "Yes sans reporting",
                                     Synonyms = new List<string>()
                                                     {
+                                                        "Report",
+                                                        "report"
                                                     }
                                 }
                 }
