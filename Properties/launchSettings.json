@@ -10,11 +10,10 @@
   "profiles": {
     "VFatumbot": {
       "commandName": "Project",
-      "launchBrowser": false,
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
-      "applicationUrl": "http://0.0.0.0:2222",
+      "applicationUrl": "http://0.0.0.0:2222"
     }
   }
 }
