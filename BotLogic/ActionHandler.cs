@@ -95,18 +95,30 @@ namespace VFatumbot.BotLogic
             {
                 await MysteryPointActionAsync(turnContext, userProfileTemporary, cancellationToken, mainDialog);
             }
-            else if (command.StartsWith("/randotrip", StringComparison.InvariantCulture))
+            else if (command.StartsWith("/myrandotrips", StringComparison.InvariantCulture))
+            {
+                await RandotripsActionAsync(turnContext, userProfileTemporary, cancellationToken, mainDialog, "my");
+            }
+            else if (command.StartsWith("/randotrips", StringComparison.InvariantCulture))
             {
                 var date = DateTime.UtcNow.ToString("yyyy-MM-dd");
                 if (command.Contains(" "))
                 {
-                    string enteredDateStr = command.Replace(command.Substring(0, command.IndexOf(" ", StringComparison.InvariantCulture)), "");
-                    DateTime parsedDateTime;
-                    if (DateTime.TryParse(enteredDateStr, out parsedDateTime))
-                        date = parsedDateTime.ToString("yyyy-MM-dd");
+                    string arg = command.Replace(command.Substring(0, command.IndexOf(" ", StringComparison.InvariantCulture)), "");
+                    arg = arg.Trim();
+                    if (!"all".Equals(arg))
+                    {
+                        DateTime parsedDateTime;
+                        if (DateTime.TryParse(arg, out parsedDateTime))
+                            date = parsedDateTime.ToString("yyyy-MM-dd");
+                    }
+                    else
+                    {
+                        date = arg; // all
+                    }
                 }
 
-                await RandotripActionAsync(turnContext, userProfileTemporary, cancellationToken, mainDialog, date);
+                await RandotripsActionAsync(turnContext, userProfileTemporary, cancellationToken, mainDialog, date);
             }
             else if (command.StartsWith("/setradius", StringComparison.InvariantCulture))
             {
@@ -1181,17 +1193,35 @@ namespace VFatumbot.BotLogic
             });
         }
 
-        public async Task RandotripActionAsync(ITurnContext turnContext, UserProfileTemporary userProfileTemporary, CancellationToken cancellationToken, MainDialog mainDialog, string date)
+        public async Task RandotripsActionAsync(ITurnContext turnContext, UserProfileTemporary userProfileTemporary, CancellationToken cancellationToken, MainDialog mainDialog, string date)
         {
-            await turnContext.SendActivityAsync(MessageFactory.Text("Wait a minute. Preparing your experience."), cancellationToken);
+            await turnContext.SendActivityAsync(MessageFactory.Text("Grabbing the randotrips... hold on."), cancellationToken);
 
             DispatchWorkerThread((object sender, DoWorkEventArgs e) =>
             {
                 turnContext.Adapter.ContinueConversationAsync(Consts.APP_ID, turnContext.Activity.GetConversationReference(),
                     async (context, token) =>
                     {
-                        string file = RandotripKMLGenerator.Generate(date);
-                        if (string.IsNullOrEmpty(file))
+                        string whereClause = "", filename = "";
+                        var ext = ".kml";
+                        if ("my".Equals(date))
+                        {
+                            whereClause = $"AND user_id = '{userProfileTemporary.UserId}'";
+                            filename = userProfileTemporary.UserId + ext;
+                        }
+                        else if ("all".Equals(date))
+                        {
+                            whereClause = ""; // no extra filtering. hushhush.
+                            filename = "all" + ext;
+                        }
+                        else
+                        {
+                            whereClause = $"AND DATETIME LIKE '%{date}%'";
+                            filename = $"randotrips_{date.Replace("-","")}{ext}";
+                        }
+
+                        var success = RandotripKMLGenerator.Generate(whereClause, filename);
+                        if (!success)
                         {
                             await turnContext.SendActivityAsync(MessageFactory.Text("There was an error. Uh-oh."), cancellationToken);
                         }
@@ -1202,7 +1232,7 @@ namespace VFatumbot.BotLogic
 #else
                             var baseUrl = "https://devbot.randonauts.com/flythrus/";
 #endif
-                            await turnContext.SendActivityAsync(MessageFactory.Text($"Download file and load in Google Earth: {baseUrl}{file}"), cancellationToken);
+                            await turnContext.SendActivityAsync(MessageFactory.Text($"Load/upload this file into Google Earth, find it in ☰ -> Projects and tap PLAY▶︎: {baseUrl}{filename}"), cancellationToken);
                         }
                         await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(context, mainDialog, cancellationToken);
                     }, cancellationToken);

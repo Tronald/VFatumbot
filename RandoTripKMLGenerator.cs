@@ -181,7 +181,7 @@ namespace VFatumbot
             public string country;
         }
 
-        public static string Generate(string date)
+        public static bool Generate(string whereClause, string filename)
         {
             try
             {
@@ -204,7 +204,7 @@ namespace VFatumbot
                     ssb.Append("reports");
                     //ssb.Append("reports_dev");
 #endif
-                    ssb.Append($" WHERE VISITED = '1' AND DATETIME LIKE '%{date}%' ORDER BY DATETIME ASC;");
+                    ssb.Append($" WHERE VISITED = '1' {whereClause} ORDER BY DATETIME ASC;");
                     Console.WriteLine("SQL:" + ssb.ToString());
 
                     List<FlyTo> flytos = new List<FlyTo>();
@@ -298,17 +298,16 @@ namespace VFatumbot
                         pointsAppender.Append(formatted);
                     }
 
-                    var output = string.Format(MAIN_TEMPLATE, date, flyTosAppender.ToString(), pointsAppender.ToString());
-                    var filename = $"randotrip{date.Replace("-", "")}.kml";
+                    var output = string.Format(MAIN_TEMPLATE, filename, flyTosAppender, pointsAppender);
                     System.IO.File.WriteAllText($"wwwroot/flythrus/{filename}", output);
-                    return filename;
+                    return true;
                 }
             }
             catch (Exception e)
             {
                 // My error handling is getting lazy
                 Console.Write(e);
-                return null;
+                return false;
             }
         }
     }

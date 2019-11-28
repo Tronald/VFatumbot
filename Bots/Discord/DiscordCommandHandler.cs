@@ -268,8 +268,17 @@ namespace VFatumbot.Discord
             await handler.ParseSlashCommands(turnContextWrapper, userProfileTemporary, new CancellationToken(), null);
         }
 
-        [Command("randotrip"), Description("Get today's randotrip")]
-        public async Task GetRandotrip(CommandContext ctx, [Description("yyyy-mm-dd")] params string[] date)
+        [Command("myrandotrips"), Description("Get all your randotrips")]
+        public async Task GetMyRandotrip(CommandContext ctx)
+        {
+            var userProfileTemporary = await GetUserProfileTemporaryAsync(ctx);
+            var handler = new ActionHandler();
+            var turnContextWrapper = new TurnContextWrapper(ctx);
+            await handler.ParseSlashCommands(turnContextWrapper, userProfileTemporary, new CancellationToken(), null);
+        }
+
+        [Command("randotrips"), Description("Get today's randotrip")]
+        public async Task GetRandotrips(CommandContext ctx, [Description("yyyy-mm-dd")] params string[] date)
         {
             var userProfileTemporary = await GetUserProfileTemporaryAsync(ctx);
             var handler = new ActionHandler();

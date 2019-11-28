@@ -67,8 +67,11 @@ namespace VFatumbot
                 case "Mystery Point":
                     await actionHandler.MysteryPointActionAsync(stepContext.Context, userProfileTemporary, cancellationToken, _mainDialog);
                     break;
-                case "Today's Randotrip":
-                    await actionHandler.RandotripActionAsync(stepContext.Context, userProfileTemporary, cancellationToken, _mainDialog, DateTime.UtcNow.ToString("yyyy-MM-dd"));
+                case "My Randotrips":
+                    await actionHandler.RandotripsActionAsync(stepContext.Context, userProfileTemporary, cancellationToken, _mainDialog, "my");
+                    break;
+                case "Today's Randotrips":
+                    await actionHandler.RandotripsActionAsync(stepContext.Context, userProfileTemporary, cancellationToken, _mainDialog, DateTime.UtcNow.ToString("yyyy-MM-dd"));
                     break;
                 case "< Back":
                     return await stepContext.ReplaceDialogAsync(nameof(MainDialog), cancellationToken: cancellationToken);
@@ -120,14 +123,23 @@ namespace VFatumbot
                                     }
                 },
                 new Choice() {
-                    Value = "Today's Randotrip",
+                    Value = "My Randotrips",
                     Synonyms = new List<string>()
                                     {
-                                        "Today's randotrip",
-                                        "Todays randotrip",
-                                        "today's randotrip",
-                                        "todays randotrip",
-                                        "randotrip",
+                                        "My randotrips",
+                                        "my randotrips",
+                                        "myrandotrips",
+                                    }
+                },
+                new Choice() {
+                    Value = "Today's Randotrips",
+                    Synonyms = new List<string>()
+                                    {
+                                        "Today's randotrips",
+                                        "Todays randotrips",
+                                        "today's randotrips",
+                                        "todays randotrips",
+                                        "randotrips",
                                     }
                 },
                 new Choice() {

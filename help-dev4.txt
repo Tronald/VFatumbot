@@ -24,8 +24,9 @@ Others:
 * Quantum (/getquantum) - get a single quantumly generated point  
 * Quantum Time (/getqtime) - same as above but with a suggested time to visit  
 * Pseudo (/getpseudo) - generate a single pseudo-random point  
-* Mystery Point (/getpoint) - generate a random type of point (for blind-experiments)  
-* Today's Randotrip (/randotrip) - download the file for a virtual trip of today's points in Google Earth  
+* Mystery Point (/getpoint) - generate a random type of point (for blind-experiments)
+* My Randotrips (/myrandotrips) - download the file for a virtual trip in Google Earth of all your visited points  
+* Today's Randotrips (/randotrips) - download the file for a virtual in Google Earth trip of today's points in Google Earth  
   
 ##### SCAN SUBMENU  
   
