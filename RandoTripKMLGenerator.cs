@@ -29,119 +29,126 @@ namespace VFatumbot
 </kml>";
 
         public const string FLYTO_TEMPLATE =
-@"
-             <gx:FlyTo>
-                <gx:duration>5.0</gx:duration>
+@"            <!-- #################### FLYTO #################### -->
+            <gx:FlyTo>
+                <gx:duration>8.0</gx:duration>
                 <gx:flyToMode>bounce</gx:flyToMode>
                 <LookAt>
-
-			
                     <latitude>{0}</latitude>
                     <longitude>{1}</longitude>
                     <altitude>0</altitude>
-		    <heading>0.0</heading>
+                    <heading>{3}</heading>
                     <tilt>30</tilt>
                     <range>100</range>
                     <gx:altitudeMode>relativeToGround</gx:altitudeMode>
                 </LookAt>
             </gx:FlyTo>
 
-           <gx:FlyTo>
+            <gx:FlyTo>
                 <gx:duration>1.0</gx:duration>
                 <gx:flyToMode>smooth</gx:flyToMode>
                 <LookAt>
                     <latitude>{0}</latitude>
                     <longitude>{1}</longitude>
                     <altitude>0</altitude>
-                    <heading>0.0</heading>
+                    <heading>{4}</heading>
                     <tilt>70</tilt>
                     <range>100</range>
                     <gx:altitudeMode>relativeToGround</gx:altitudeMode>
                 </LookAt>
             </gx:FlyTo>
 
-
+            <gx:Wait>
+                <gx:duration>1.0</gx:duration>
+            </gx:Wait>
 
             <gx:AnimatedUpdate>
               <Update>
                 <targetHref/>
                 <Change>
-                  <Placemark targetId=""{3}"">
+                  <Placemark targetId=""{2}"">
                     <gx:balloonVisibility>1</gx:balloonVisibility>
                   </Placemark>
                 </Change>
               </Update>
             </gx:AnimatedUpdate>
 
-		     <gx:Wait>
-          <gx:duration>1.0</gx:duration>
-        </gx:Wait>
-
-
-		       <gx:FlyTo>
+            <gx:FlyTo>
                 <gx:duration>5.0</gx:duration>
                 <gx:flyToMode>smooth</gx:flyToMode>
                 <LookAt>
                     <latitude>{0}</latitude>
                     <longitude>{1}</longitude>
                     <altitude>0</altitude>
-                    <heading>90.0</heading>
+                    <heading>{5}</heading>
                     <tilt>70</tilt>
                     <range>100</range>
                     <gx:altitudeMode>relativeToGround</gx:altitudeMode>
                 </LookAt>
             </gx:FlyTo>
 
-		    
-		     <gx:Wait>
-          <gx:duration>2.0</gx:duration>
-        </gx:Wait>
+            <gx:FlyTo>
+                <gx:duration>5.0</gx:duration>
+                <gx:flyToMode>smooth</gx:flyToMode>
+                <LookAt>
+                   <latitude>{0}</latitude>
+                    <longitude>{1}</longitude>
+                    <altitude>0</altitude>
+                    <heading>{6}</heading>
+                    <tilt>70</tilt>
+                    <range>100</range>
+                    <gx:altitudeMode>relativeToGround</gx:altitudeMode>
+                </LookAt>
+            </gx:FlyTo>
 
+            <gx:FlyTo>
+                <gx:duration>5.0</gx:duration>
+                <gx:flyToMode>smooth</gx:flyToMode>
+                <LookAt>
+                   <latitude>{0}</latitude>
+                    <longitude>{1}</longitude>
+                    <altitude>0</altitude>
+                    <heading>{7}</heading>
+                    <tilt>70</tilt>
+                    <range>100</range>
+                    <gx:altitudeMode>relativeToGround</gx:altitudeMode>
+                </LookAt>
+            </gx:FlyTo>
 
-
-           <gx:FlyTo>
+            <gx:FlyTo>
                 <gx:duration>5.0</gx:duration>
                 <gx:flyToMode>smooth</gx:flyToMode>
                 <LookAt>
                     <latitude>{0}</latitude>
                     <longitude>{1}</longitude>
                     <altitude>0</altitude>
-                    <heading>180.0</heading>
+                    <heading>{8}</heading>
                     <tilt>70</tilt>
-                    <range>100</range>
-                    <gx:altitudeMode>relativeToGround</gx:altitudeMode>
-                </LookAt>
-            </gx:FlyTo>
-
-		     <gx:FlyTo>
-                <gx:duration>1.0</gx:duration>
-                <gx:flyToMode>smooth</gx:flyToMode>
-                <LookAt>
-                    <latitude>{0}</latitude>
-                    <longitude>{1}</longitude>
-                    <altitude>0</altitude>
-                    <heading>-90.0</heading>
-                    <tilt>30</tilt>
                     <range>100</range>
                     <gx:altitudeMode>relativeToGround</gx:altitudeMode>
                 </LookAt>
             </gx:FlyTo>
 
             <gx:AnimatedUpdate>
-              <Update>
+                <Update>
                 <targetHref/>
                 <Change>
-                  <Placemark targetId=""{3}"">
+                    <Placemark targetId=""{2}"">
                     <gx:balloonVisibility>0</gx:balloonVisibility>
-                  </Placemark>
+                    </Placemark>
                 </Change>
-              </Update>
+                </Update>
             </gx:AnimatedUpdate>
+
+            <gx:Wait>
+                <gx:duration>1.0</gx:duration>
+            </gx:Wait>
 
 ";
 
         public const string POINT_TEMPLATE =
-@"        <Placemark id=""{0}"">
+@"        <!-- #################### POINT #################### -->
+        <Placemark id=""{0}"">
           <name>{1}</name>
           <description>{2}</description>
           <Point>
@@ -238,7 +245,13 @@ namespace VFatumbot
                     int pointNo = 1;
                     foreach (FlyTo flyto in flytos)
                     {
-                        flyTosAppender.Append(string.Format(FLYTO_TEMPLATE, flyto.latitude, flyto.longitude, flyto.final_bearing, $"point{pointNo++}"));
+                        var var3 = (flyto.final_bearing + 360) % 360;
+                        var var4 = (flyto.final_bearing + 360) % 360;
+                        var var5 = (flyto.final_bearing + 360 + 90) % 360;
+                        var var6 = (flyto.final_bearing + 360 + 180) % 360;
+                        var var7 = (flyto.final_bearing + 360 + 270) % 360;
+                        var var8 = (flyto.final_bearing + 360) % 360;
+                        flyTosAppender.Append(string.Format(FLYTO_TEMPLATE, flyto.latitude, flyto.longitude, $"point{pointNo++}", var3, var4, var5, var6, var7, var8));
                     }
 
                     var pointsAppender = new StringBuilder();
