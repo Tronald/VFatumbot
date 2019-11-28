@@ -13,8 +13,6 @@ namespace VFatumbot
 {
     public class Startup
     {
-        private const string BotOpenIdMetadataKey = "BotOpenIdMetadata";
-
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;

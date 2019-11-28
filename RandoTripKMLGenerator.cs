@@ -21,7 +21,6 @@ namespace VFatumbot
             <gx:Playlist>
 
 {1}
-
             </gx:Playlist>
         </gx:Tour>
 
@@ -30,23 +29,38 @@ namespace VFatumbot
 </kml>";
 
         public const string FLYTO_TEMPLATE =
-@"          <gx:FlyTo>
-                <gx:duration>10.0</gx:duration>
+@"
+             <gx:FlyTo>
+                <gx:duration>5.0</gx:duration>
                 <gx:flyToMode>bounce</gx:flyToMode>
                 <LookAt>
+
+			
                     <latitude>{0}</latitude>
                     <longitude>{1}</longitude>
                     <altitude>0</altitude>
-	                <heading>{2}]</heading>
-                    <tilt>70</tilt>
-	                <range>100</range>
+		    <heading>0.0</heading>
+                    <tilt>30</tilt>
+                    <range>100</range>
                     <gx:altitudeMode>relativeToGround</gx:altitudeMode>
                 </LookAt>
             </gx:FlyTo>
 
-            <gx:Wait>
-              <gx:duration>5.0</gx:duration>
-            </gx:Wait>
+           <gx:FlyTo>
+                <gx:duration>1.0</gx:duration>
+                <gx:flyToMode>smooth</gx:flyToMode>
+                <LookAt>
+                    <latitude>{0}</latitude>
+                    <longitude>{1}</longitude>
+                    <altitude>0</altitude>
+                    <heading>0.0</heading>
+                    <tilt>70</tilt>
+                    <range>100</range>
+                    <gx:altitudeMode>relativeToGround</gx:altitudeMode>
+                </LookAt>
+            </gx:FlyTo>
+
+
 
             <gx:AnimatedUpdate>
               <Update>
@@ -59,9 +73,59 @@ namespace VFatumbot
               </Update>
             </gx:AnimatedUpdate>
 
-            <gx:Wait>
-              <gx:duration>5.0</gx:duration>
-            </gx:Wait>
+		     <gx:Wait>
+          <gx:duration>1.0</gx:duration>
+        </gx:Wait>
+
+
+		       <gx:FlyTo>
+                <gx:duration>5.0</gx:duration>
+                <gx:flyToMode>smooth</gx:flyToMode>
+                <LookAt>
+                    <latitude>{0}</latitude>
+                    <longitude>{1}</longitude>
+                    <altitude>0</altitude>
+                    <heading>90.0</heading>
+                    <tilt>70</tilt>
+                    <range>100</range>
+                    <gx:altitudeMode>relativeToGround</gx:altitudeMode>
+                </LookAt>
+            </gx:FlyTo>
+
+		    
+		     <gx:Wait>
+          <gx:duration>2.0</gx:duration>
+        </gx:Wait>
+
+
+
+           <gx:FlyTo>
+                <gx:duration>5.0</gx:duration>
+                <gx:flyToMode>smooth</gx:flyToMode>
+                <LookAt>
+                    <latitude>{0}</latitude>
+                    <longitude>{1}</longitude>
+                    <altitude>0</altitude>
+                    <heading>180.0</heading>
+                    <tilt>70</tilt>
+                    <range>100</range>
+                    <gx:altitudeMode>relativeToGround</gx:altitudeMode>
+                </LookAt>
+            </gx:FlyTo>
+
+		     <gx:FlyTo>
+                <gx:duration>1.0</gx:duration>
+                <gx:flyToMode>smooth</gx:flyToMode>
+                <LookAt>
+                    <latitude>{0}</latitude>
+                    <longitude>{1}</longitude>
+                    <altitude>0</altitude>
+                    <heading>-90.0</heading>
+                    <tilt>30</tilt>
+                    <range>100</range>
+                    <gx:altitudeMode>relativeToGround</gx:altitudeMode>
+                </LookAt>
+            </gx:FlyTo>
 
             <gx:AnimatedUpdate>
               <Update>
@@ -77,7 +141,7 @@ namespace VFatumbot
 ";
 
         public const string POINT_TEMPLATE =
-@"      <Placemark id=""{0}"">
+@"        <Placemark id=""{0}"">
           <name>{1}</name>
           <description>{2}</description>
           <Point>
