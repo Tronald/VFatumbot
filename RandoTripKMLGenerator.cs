@@ -177,6 +177,8 @@ namespace VFatumbot
             public double longitude;
             public double power;
             public double z_score;
+            public string nearest_place;
+            public string country;
         }
 
         public static string Generate(string date)
@@ -194,8 +196,8 @@ namespace VFatumbot
                     connection.Open();
 
                     StringBuilder ssb = new StringBuilder();
-                    ssb.Append("SELECT point_type,intent_set,what_3_words,text,photos,short_hash_id,latitude,longitude,final_bearing,power,z_score FROM ");
-                    //                      0          1           2        3     4        5            6         7          8          9      10                       
+                    ssb.Append("SELECT point_type,intent_set,what_3_words,text,photos,short_hash_id,latitude,longitude,final_bearing,power,z_score,nearest_place,country FROM ");
+                    //                      0          1           2        3     4        5            6         7          8          9      10       11          12                   
 #if RELEASE_PROD
                 ssb.Append("reports");
 #else
@@ -233,6 +235,8 @@ namespace VFatumbot
                                 if (!reader.IsDBNull(5)) point.short_hash_id = reader.GetString(5);
                                 if (!reader.IsDBNull(9)) point.power = reader.GetDouble(9);
                                 if (!reader.IsDBNull(10)) point.z_score = reader.GetDouble(10);
+                                if (!reader.IsDBNull(11)) point.nearest_place = reader.GetString(11);
+                                if (!reader.IsDBNull(12)) point.country = reader.GetString(12);
 
                                 flytos.Add(flyto);
                                 points.Add(point);
@@ -258,13 +262,39 @@ namespace VFatumbot
                     pointNo = 1; // reset
                     foreach (Point point in points)
                     {
+                        // Format content to show inside the balloon popup
+                        var balloonString = new StringBuilder();
+                        balloonString.Append("<![CDATA[");
+                        if (!string.IsNullOrEmpty(point.nearest_place))
+                        {
+                            balloonString.Append($"in {point.nearest_place}, {point.country}<br>");
+                        }
+                        balloonString.Append($"@{point.latitude.ToString("G6")},{point.longitude.ToString("G6")} ({point.what_3_words})<br>");
+                        balloonString.Append($"Power: {point.power.ToString("G3")}<br>");
+                        balloonString.Append($"z-score: {point.z_score.ToString("G3")}<br>");
+                        if (!string.IsNullOrEmpty(point.intent_set)) balloonString.Append($"Intent: {point.intent_set}<br>");
+                        if (!string.IsNullOrEmpty(point.report)) balloonString.Append($"Report: {point.report}<br>");
+                        if (!string.IsNullOrEmpty(point.photos))
+                        {
+                            var photos = point.photos.Split(",");
+                            int i = 0;
+                            foreach (string url in photos)
+                            {
+                                balloonString.Append($"<a href=\"{url}\">photo {++i}</a> ");
+                            }
+                            balloonString.Append("<br>");
+                        }
+                        balloonString.Append($"{point.short_hash_id}<br>");
+                        balloonString.Append("]]>");
+
                         var formatted = string.Format(POINT_TEMPLATE,
                                                 $"point{pointNo++}",
                                                 point.point_type,
-                                                $"{point.what_3_words}\nPower: {point.power}\nZ-score:{point.z_score}\nReport: {point.report}",
+                                                balloonString.ToString(),
                                                 point.longitude,
                                                 point.latitude
                                                 );
+
                         pointsAppender.Append(formatted);
                     }
 
