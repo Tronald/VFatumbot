@@ -20,11 +20,13 @@ namespace VFatumbot
         protected readonly IStatePropertyAccessor<UserProfilePersistent> _userProfilePersistentAccessor;
         protected readonly IStatePropertyAccessor<UserProfileTemporary> _userProfileTemporaryAccessor;
 
-        public MainDialog(UserPersistentState userPersistentState, UserTemporaryState userTemporaryState, ConversationState conversationState, ILogger<MainDialog> logger) : base(nameof(MainDialog))
+        public MainDialog(UserPersistentState userPersistentState, UserTemporaryState userTemporaryState, ConversationState conversationState, ILogger<MainDialog> logger, IBotTelemetryClient telemetryClient) : base(nameof(MainDialog))
         {
             _logger = logger;
             _userPersistentState = userPersistentState;
             _userTemporaryState = userTemporaryState;
+
+            TelemetryClient = telemetryClient;
 
             if (_userPersistentState != null)
                 _userProfilePersistentAccessor = userPersistentState.CreateProperty<UserProfilePersistent>(nameof(UserProfilePersistent));
@@ -32,16 +34,22 @@ namespace VFatumbot
             if (userTemporaryState != null)
                 _userProfileTemporaryAccessor = userTemporaryState.CreateProperty<UserProfileTemporary>(nameof(UserProfileTemporary));
 
-            AddDialog(new MoreStuffDialog(_userProfileTemporaryAccessor, this, logger));
-            AddDialog(new TripReportDialog(_userProfileTemporaryAccessor, this, logger));
-            AddDialog(new ScanDialog(_userProfileTemporaryAccessor, this, logger));
-            AddDialog(new SettingsDialog(_userProfileTemporaryAccessor, logger));
-            AddDialog(new ChoicePrompt(nameof(ChoicePrompt)));
+            AddDialog(new MoreStuffDialog(_userProfileTemporaryAccessor, this, logger, telemetryClient));
+            AddDialog(new TripReportDialog(_userProfileTemporaryAccessor, this, logger, telemetryClient));
+            AddDialog(new ScanDialog(_userProfileTemporaryAccessor, this, logger, telemetryClient));
+            AddDialog(new SettingsDialog(_userProfileTemporaryAccessor, logger, telemetryClient));
+            AddDialog(new ChoicePrompt(nameof(ChoicePrompt))
+            {
+                TelemetryClient = telemetryClient,
+            });
             AddDialog(new WaterfallDialog(nameof(WaterfallDialog), new WaterfallStep[]
             {
                 ChoiceActionStepAsync,
                 PerformActionStepAsync,
-            }));
+            })
+            {
+                TelemetryClient = telemetryClient,
+            });
 
             InitialDialogId = nameof(WaterfallDialog);
         }

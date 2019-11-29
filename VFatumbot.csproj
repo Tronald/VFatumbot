@@ -47,6 +47,9 @@
     <PackageReference Include="DSharpPlus" Version="3.2.3" />
     <PackageReference Include="DSharpPlus.CommandsNext" Version="3.2.3" />
     <PackageReference Include="DSharpPlus.Interactivity" Version="3.2.3" />
+    <PackageReference Include="Microsoft.ApplicationInsights" Version="2.11.0" />
+    <PackageReference Include="Microsoft.Bot.Builder.ApplicationInsights" Version="4.6.3" />
+    <PackageReference Include="Microsoft.Bot.Builder.Integration.ApplicationInsights.Core" Version="4.6.3" />
   </ItemGroup>
 
   <ItemGroup>

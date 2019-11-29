@@ -14,14 +14,25 @@ namespace VFatumbot
         protected readonly ILogger _logger;
         protected readonly IStatePropertyAccessor<UserProfileTemporary> _userProfileTemporaryAccessor;
 
-        public SettingsDialog(IStatePropertyAccessor<UserProfileTemporary> userProfileTemporaryAccessor, ILogger<MainDialog> logger) : base(nameof(SettingsDialog))
+        public SettingsDialog(IStatePropertyAccessor<UserProfileTemporary> userProfileTemporaryAccessor, ILogger<MainDialog> logger, IBotTelemetryClient telemetryClient) : base(nameof(SettingsDialog))
         {
             _logger = logger;
             _userProfileTemporaryAccessor = userProfileTemporaryAccessor;
 
-            AddDialog(new ChoicePrompt(nameof(ChoicePrompt)));
-            AddDialog(new NumberPrompt<int>(nameof(NumberPrompt<int>), RadiusValidatorAsync));
-            AddDialog(new TextPrompt(nameof(TextPrompt)));
+            TelemetryClient = telemetryClient;
+
+            AddDialog(new ChoicePrompt(nameof(ChoicePrompt))
+            {
+                TelemetryClient = telemetryClient,
+            });
+            AddDialog(new NumberPrompt<int>(nameof(NumberPrompt<int>), RadiusValidatorAsync)
+            {
+                TelemetryClient = telemetryClient,
+            });
+            AddDialog(new TextPrompt(nameof(TextPrompt))
+            {
+                TelemetryClient = telemetryClient,
+            });
 
             AddDialog(new WaterfallDialog(nameof(WaterfallDialog), new WaterfallStep[]
             {
@@ -32,7 +43,10 @@ namespace VFatumbot
                 UpdateWaterPointsYesOrNoStepAsync,
                 GoogleThumbnailsDisplayToggleStepAsync,
                 FinishSettingsStepAsync
-            }));
+            })
+            {
+                TelemetryClient = telemetryClient,
+            });
 
             InitialDialogId = nameof(WaterfallDialog);
         }

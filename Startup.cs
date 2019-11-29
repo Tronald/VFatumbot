@@ -2,6 +2,9 @@ using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.ApplicationInsights.Extensibility;
+using Microsoft.Bot.Builder.ApplicationInsights;
+using Microsoft.Bot.Builder.Integration.ApplicationInsights.Core;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.Azure;
 using Microsoft.Bot.Builder.Integration.AspNet.Core;
@@ -27,6 +30,24 @@ namespace VFatumbot
 
             // Create the Bot Framework Adapter.
             services.AddSingleton<IBotFrameworkHttpAdapter, AdapterWithErrorHandler>();
+
+            // Add Application Insights services into service collection
+            services.AddApplicationInsightsTelemetry();
+
+            // Add the standard telemetry client
+            services.AddSingleton<IBotTelemetryClient, BotTelemetryClient>();
+
+            // Create the telemetry middleware to track conversation events
+            services.AddSingleton<TelemetryLoggerMiddleware>();
+
+            // Add the telemetry initializer middleware
+            services.AddSingleton<IMiddleware, TelemetryInitializerMiddleware>();
+
+            // Add telemetry initializer that will set the correlation context for all telemetry items
+            services.AddSingleton<ITelemetryInitializer, OperationCorrelationTelemetryInitializer>();
+
+            // Add telemetry initializer that sets the user ID and session ID (in addition to other bot-specific properties, such as activity ID)
+            services.AddSingleton<ITelemetryInitializer, TelemetryBotIdInitializer>();
 
             // For the bot running in the Azure cloud, we need to use Cosmos DB (or Azure's Blob Storage service)
             // to keep data persistent, otherwise the stateless nature of the bot would be useless in keeping

@@ -15,18 +15,26 @@ namespace VFatumbot
         protected readonly IStatePropertyAccessor<UserProfileTemporary> _userProfileTemporaryAccessor;
         protected readonly MainDialog _mainDialog;
 
-        public ScanDialog(IStatePropertyAccessor<UserProfileTemporary> userProfileTemporaryAccessor, MainDialog mainDialog, ILogger<MainDialog> logger) : base(nameof(ScanDialog))
+        public ScanDialog(IStatePropertyAccessor<UserProfileTemporary> userProfileTemporaryAccessor, MainDialog mainDialog, ILogger<MainDialog> logger, IBotTelemetryClient telemetryClient) : base(nameof(ScanDialog))
         {
             _logger = logger;
             _userProfileTemporaryAccessor = userProfileTemporaryAccessor;
             _mainDialog = mainDialog;
 
-            AddDialog(new ChoicePrompt(nameof(ChoicePrompt)));
+            TelemetryClient = telemetryClient;
+
+            AddDialog(new ChoicePrompt(nameof(ChoicePrompt))
+            {
+                TelemetryClient = telemetryClient,
+            });
             AddDialog(new WaterfallDialog(nameof(WaterfallDialog), new WaterfallStep[]
             {
                 ChoiceActionStepAsync,
                 PerformActionStepAsync,
-            }));
+            })
+            {
+                TelemetryClient = telemetryClient,
+            });
 
             InitialDialogId = nameof(WaterfallDialog);
         }
