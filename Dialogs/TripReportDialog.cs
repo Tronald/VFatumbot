@@ -520,9 +520,13 @@ namespace VFatumbot
             var incoords = new double[] { callbackOptions.GeneratedPoints[answers.PointNumberVisited].X.center.point.latitude,
                                           callbackOptions.GeneratedPoints[answers.PointNumberVisited].X.center.point.longitude };
 
+            // Remove bearing info from reports
+            var message = callbackOptions.Messages[answers.PointNumberVisited];
+            message = message.Substring(0, message.IndexOf("Bearing:", StringComparison.InvariantCulture)) + message.Substring(message.IndexOf("°", StringComparison.InvariantCulture) + 1).Replace("\n", "");
+
             await PostTripReportToRedditAsync("Randonaut Trip Report"
                 + ((callbackOptions.NearestPlaces != null && callbackOptions.NearestPlaces.Length >= 1) ? (" from " + callbackOptions.NearestPlaces[answers.PointNumberVisited]) : " from somewhere in the multiverse"), // TODO fuck I should stop trying to condense so much into one line in C#. I'm just drunk and lazy ATM.
-                callbackOptions.Messages[answers.PointNumberVisited].Replace("\n\n", "  \n") + "\n\n" +
+                message.Replace("\n\n", "  \n") + "\n\n" +
                 "Report: " + answers.Report + "\n   \n" +
                 (!string.IsNullOrEmpty(photos) ? photos + "\n\n" : "\n\n") +
                 (!string.IsNullOrEmpty(callbackOptions.What3Words[answers.PointNumberVisited]) ? "What 3 words address: [" + callbackOptions.What3Words[answers.PointNumberVisited] + "](https://what3words.com/" + callbackOptions.What3Words[answers.PointNumberVisited] + ")  \n" : "  \n") +
