@@ -178,6 +178,7 @@ namespace VFatumbot.Discord
         {
             var key = "discord/users/" + ctx.User.Id;
             var dict = new Dictionary<string, object>();
+            userProfileTemporary.UserId = ctx.User.Id.ToString();
             dict.Add(key, userProfileTemporary);
             await temporaryStorage.WriteAsync(dict, new CancellationToken());
         }
