@@ -19,7 +19,7 @@ namespace VFatumbot
         protected readonly UserPersistentState _userPersistentState;
         protected readonly UserTemporaryState _userTemporaryState;
 
-        protected IStatePropertyAccessor<ConversationData> _conversationDataAccessor;
+        //protected IStatePropertyAccessor<ConversationData> _conversationDataAccessor;
         protected IStatePropertyAccessor<UserProfilePersistent> _userProfilePersistentAccessor;
         protected IStatePropertyAccessor<UserProfileTemporary> _userProfileTemporaryAccessor;
 
@@ -90,8 +90,8 @@ namespace VFatumbot
             _userProfileTemporaryAccessor = _userTemporaryState.CreateProperty<UserProfileTemporary>(nameof(UserProfileTemporary));
             var userProfileTemporary = await _userProfileTemporaryAccessor.GetAsync(turnContext, () => new UserProfileTemporary());
 
-            _conversationDataAccessor = _conversationState.CreateProperty<ConversationData>(nameof(ConversationData));
-            var conversationData = await _conversationDataAccessor.GetAsync(turnContext, () => new ConversationData());
+            //_conversationDataAccessor = _conversationState.CreateProperty<ConversationData>(nameof(ConversationData));
+            //var conversationData = await _conversationDataAccessor.GetAsync(turnContext, () => new ConversationData());
 
             // Print info about image attachments
             //if (turnContext.Activity.Attachments != null)
@@ -103,10 +103,10 @@ namespace VFatumbot
             userProfilePersistent.UserId = userProfileTemporary.UserId = Helpers.Sha256Hash(turnContext.Activity.From.Id);
 
             // Add message details to the conversation data.
-            var messageTimeOffset = (DateTimeOffset)turnContext.Activity.Timestamp;
-            var localMessageTime = messageTimeOffset.ToLocalTime();
-            conversationData.Timestamp = localMessageTime.ToString();
-            await _conversationDataAccessor.SetAsync(turnContext, conversationData);
+            //var messageTimeOffset = (DateTimeOffset)turnContext.Activity.Timestamp;
+            //var localMessageTime = messageTimeOffset.ToLocalTime();
+            //conversationData.Timestamp = localMessageTime.ToString();
+            //await _conversationDataAccessor.SetAsync(turnContext, conversationData);
 
             // TODO: most of the logic/functionalioty in the following if statements I realised later on should probably be structured in the way the Bot Framework SDK talks about "middleware".
             // Maybe one day re-structure/re-factor it to following their middleware patterns...
