@@ -13,7 +13,7 @@ namespace VFatumbot
 <kml xmlns=""http://www.opengis.net/kml/2.2"" xmlns:gx=""http://www.google.com/kml/ext/2.2"">
   
     <Document>
-        <name>Randotrip {0}</name>
+        <name>Randotrips {0}</name>
         <open>1</open>
 
         <gx:Tour>
