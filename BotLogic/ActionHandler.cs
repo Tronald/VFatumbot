@@ -1236,12 +1236,11 @@ namespace VFatumbot.BotLogic
 #else
                             var baseUrl = "https://devbot.randonauts.com/flythrus/";
 #endif
-                            await turnContext.SendActivityAsync(MessageFactory.Text($"Found {numPoints} trips. Download this file: {baseUrl}{filename}"), cancellationToken);
-
                             await turnContext.SendActivityAsync(MessageFactory.Text(Helpers.DirectLineNewLineFix(turnContext,
-                                $"If you're downloading from a web browser on a computer, goto https://earth.google.com/web/ in Chrome → click ☰ → Projects → New Project → Import KML file from computer → load it → select the most recent one and tap PLAY▶︎\n\n" +
-                                "On phones; open/copy/share the file with the Google Earth app → tap ☰ → Projects, select the most recent one and tap PLAY▶︎.")
+                                $"If you're downloading from a web browser on a computer, goto https://earth.google.com/web/ in Chrome → click ☰ → Projects → New Project → Import KML file from computer → load it → select the most recent one and tap PLAY▶︎\n\n\n\n" +
+                                "On phones; open/copy/share the file with the Google Earth app → tap ☰ → Projects, select the most recent one and tap PLAY▶︎")
                                 ), cancellationToken);
+                            await turnContext.SendActivityAsync(MessageFactory.Text($"Found {numPoints} trip{(numPoints > 1 ? "s" : "")}. Download this file: {baseUrl}{filename}"), cancellationToken);
                         }
                         await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(context, mainDialog, cancellationToken);
                     }, cancellationToken);
