@@ -300,7 +300,7 @@ namespace VFatumbot
                         pointsAppender.Append(formatted);
                     }
 
-                    var output = string.Format(MAIN_TEMPLATE, filename, flyTosAppender, pointsAppender);
+                    var output = string.Format(MAIN_TEMPLATE, filename.Replace(".kml", ""), flyTosAppender, pointsAppender);
                     System.IO.File.WriteAllText($"wwwroot/flythrus/{filename}", output);
                     return true;
                 }
