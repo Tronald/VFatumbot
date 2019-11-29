@@ -415,7 +415,7 @@ namespace VFatumbot.BotLogic
                                     }
                                 }
 
-                                shortCodesArray[i] = Helpers.Crc32Hash(context.Activity.From.Id + context.Activity.Timestamp);
+                                shortCodesArray[i] = Helpers.Crc32Hash($"{turnContext.Activity.From.Id}{turnContext.Activity.Timestamp.ToString()}");
                                 mesg = Tolog(turnContext, "attractor", ida[i], shortCodesArray[i]);
                                 await turnContext.SendActivityAsync(MessageFactory.Text((idacou > 1 ? ("#" + (i + 1) + " ") : "") + Helpers.DirectLineNewLineFix(turnContext, mesg)), cancellationToken);
 
@@ -533,7 +533,7 @@ namespace VFatumbot.BotLogic
                                     }
                                 }
 
-                                shortCodesArray[i] = Helpers.Crc32Hash(context.Activity.From.Id + context.Activity.Timestamp);
+                                shortCodesArray[i] = Helpers.Crc32Hash($"{turnContext.Activity.From.Id}{turnContext.Activity.Timestamp.ToString()}");
                                 mesg = Tolog(turnContext, "void", ida[i], shortCodesArray[i]);
                                 await turnContext.SendActivityAsync(MessageFactory.Text((idacou > 1 ? ("#" + (i + 1) + " ") : "") + Helpers.DirectLineNewLineFix(turnContext, mesg)), cancellationToken);
 
@@ -665,7 +665,7 @@ namespace VFatumbot.BotLogic
                                     }
                                 }
 
-                                shortCodesArray[i] = Helpers.Crc32Hash(context.Activity.From.Id + context.Activity.Timestamp);
+                                shortCodesArray[i] = Helpers.Crc32Hash($"{turnContext.Activity.From.Id}{turnContext.Activity.Timestamp.ToString()}");
                                 mesg = Tolog(turnContext, "ida", ida[i], shortCodesArray[i]);
                                 await turnContext.SendActivityAsync(MessageFactory.Text((idacou > 1 ? ("#" + (i + 1) + " ") : "") + Helpers.DirectLineNewLineFix(turnContext, mesg)), cancellationToken);
 
@@ -767,7 +767,7 @@ namespace VFatumbot.BotLogic
                             }
                         }
 
-                        string shortCode = Helpers.Crc32Hash(turnContext.Activity.From.Id + turnContext.Activity.Timestamp);
+                        string shortCode = Helpers.Crc32Hash($"{turnContext.Activity.From.Id}{turnContext.Activity.Timestamp.ToString()}");
                         string mesg = Tolog(turnContext, "random", (float)incoords[0], (float)incoords[1], suggestTime ? "qtime" : "quantum", shortCode, new QuantumRandomNumberGeneratorWrapper(context, mainDialog, token));
                         await turnContext.SendActivityAsync(MessageFactory.Text(mesg), cancellationToken);
 
@@ -835,7 +835,7 @@ namespace VFatumbot.BotLogic
                             }
                         }
 
-                        string shortCode = Helpers.Crc32Hash(turnContext.Activity.From.Id + turnContext.Activity.Timestamp);
+                        string shortCode = Helpers.Crc32Hash($"{turnContext.Activity.From.Id}{turnContext.Activity.Timestamp.ToString()}");
                         string mesg = Tolog(turnContext, "random", (float)incoords[0], (float)incoords[1], "pseudo", shortCode, new QuantumRandomNumberGeneratorWrapper(context, mainDialog, token));
                         await turnContext.SendActivityAsync(MessageFactory.Text(mesg), cancellationToken);
 
@@ -943,7 +943,7 @@ namespace VFatumbot.BotLogic
                                 }
                                 else
                                 {
-                                    attShortCodesArray[i] = Helpers.Crc32Hash(context.Activity.From.Id + context.Activity.Timestamp);
+                                    attShortCodesArray[i] = Helpers.Crc32Hash($"{turnContext.Activity.From.Id}{turnContext.Activity.Timestamp.ToString()}");
 
                                     mesg = Tolog(turnContext, "attractor", att[i], attShortCodesArray[i]);
                                     await turnContext.SendActivityAsync(MessageFactory.Text((idacou > 1 ? ("#" + (i + 1) + " ") : "") + Helpers.DirectLineNewLineFix(turnContext, mesg)), cancellationToken);
@@ -964,7 +964,7 @@ namespace VFatumbot.BotLogic
                                 }
                                 else
                                 {
-                                    voiShortCodesArray[i] = Helpers.Crc32Hash(context.Activity.From.Id + context.Activity.Timestamp);
+                                    voiShortCodesArray[i] = Helpers.Crc32Hash($"{turnContext.Activity.From.Id}{turnContext.Activity.Timestamp.ToString()}");
 
                                     mesg = Tolog(turnContext, "void", voi[i], voiShortCodesArray[i]);
                                     await turnContext.SendActivityAsync(MessageFactory.Text((idacou > 1 ? ("#" + (i + 1) + " ") : "") + Helpers.DirectLineNewLineFix(turnContext, mesg)), cancellationToken);
@@ -1112,7 +1112,7 @@ namespace VFatumbot.BotLogic
 
                         Random rn = new Random();
                         int mtd = rn.Next(100);
-                        var shortCode = Helpers.Crc32Hash(context.Activity.From.Id + context.Activity.Timestamp);
+                        var shortCode = Helpers.Crc32Hash($"{turnContext.Activity.From.Id}{turnContext.Activity.Timestamp.ToString()}");
 
                         if (mtd < 20)
                         {
