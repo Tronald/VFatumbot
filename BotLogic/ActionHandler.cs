@@ -1217,13 +1217,17 @@ namespace VFatumbot.BotLogic
                         else
                         {
                             whereClause = $"AND DATETIME LIKE '%{date}%'";
-                            filename = $"randotrips_{date.Replace("-","")}{ext}";
+                            filename = $"randotrips_{date}{ext}";
                         }
 
-                        var success = RandotripKMLGenerator.Generate(whereClause, filename);
-                        if (!success)
+                        var numPoints = RandotripKMLGenerator.Generate(whereClause, filename);
+                        if (numPoints < 0)
                         {
                             await turnContext.SendActivityAsync(MessageFactory.Text("There was an error. Uh-oh."), cancellationToken);
+                        }
+                        else if (numPoints == 0)
+                        {
+                            await turnContext.SendActivityAsync(MessageFactory.Text("There are no trips."), cancellationToken);
                         }
                         else
                         {
@@ -1232,7 +1236,12 @@ namespace VFatumbot.BotLogic
 #else
                             var baseUrl = "https://devbot.randonauts.com/flythrus/";
 #endif
-                            await turnContext.SendActivityAsync(MessageFactory.Text($"Load/upload this file into Google Earth, find it in ☰ -> Projects and tap PLAY▶︎: {baseUrl}{filename}"), cancellationToken);
+                            await turnContext.SendActivityAsync(MessageFactory.Text($"Found {numPoints} trips. Download this file: {baseUrl}{filename}"), cancellationToken);
+
+                            await turnContext.SendActivityAsync(MessageFactory.Text(Helpers.DirectLineNewLineFix(turnContext,
+                                $"If you're downloading from a web browser on a computer, goto https://earth.google.com/web/ in Chrome → click ☰ → Projects → New Project → Import KML file from computer → load it → select the most recent one and tap PLAY▶︎\n\n" +
+                                "On phones; open/copy/share the file with the Google Earth app → tap ☰ → Projects, select the most recent one and tap PLAY▶︎.")
+                                ), cancellationToken);
                         }
                         await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(context, mainDialog, cancellationToken);
                     }, cancellationToken);

@@ -182,7 +182,7 @@ namespace VFatumbot
             public DateTime datetime;
         }
 
-        public static bool Generate(string whereClause, string filename)
+        public static int Generate(string whereClause, string filename)
         {
             try
             {
@@ -300,16 +300,16 @@ namespace VFatumbot
                         pointsAppender.Append(formatted);
                     }
 
-                    var output = string.Format(MAIN_TEMPLATE, filename.Replace(".kml", ""), flyTosAppender, pointsAppender);
+                    var output = string.Format(MAIN_TEMPLATE, filename.Replace(".kml", "").Replace("randotrips_", ""), flyTosAppender, pointsAppender);
                     System.IO.File.WriteAllText($"wwwroot/flythrus/{filename}", output);
-                    return true;
+                    return pointNo;
                 }
             }
             catch (Exception e)
             {
                 // My error handling is getting lazy
                 Console.Write(e);
-                return false;
+                return -1;
             }
         }
     }
