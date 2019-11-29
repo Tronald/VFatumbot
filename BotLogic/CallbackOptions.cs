@@ -10,6 +10,7 @@ namespace VFatumbot.BotLogic
         public bool StartTripReportDialog { get; set; }
         public string[] ShortCodes { get; set; } // short hash IDs (using CRC32 so the string isn't too long)
         public FinalAttractor[] GeneratedPoints { get; set; }
+        public string ShaGid { get; set; }
         public string[] Messages { get; set; }
         public PointTypes[] PointTypes { get; set; }
         public int[] NumWaterPointsSkipped { get; set; }

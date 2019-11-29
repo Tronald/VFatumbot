@@ -543,7 +543,7 @@ namespace VFatumbot
                 "Strangeness: " + answers.Rating_Strangeness + "  \n" +
                 "Synchronicity: " + answers.Rating_Synchronicty + "  \n" +
                  "\n\n" +
-                userProfileTemporary.UserId + " " + callbackOptions.ShortCodes[answers.PointNumberVisited],
+                userProfileTemporary.UserId + " " + callbackOptions.ShortCodes[answers.PointNumberVisited] + " " + callbackOptions.ShaGid,
                 answers.PhotoURLs
                 );
 
@@ -711,7 +711,10 @@ namespace VFatumbot
                         }
                         isb.Append($"'{options.ShortCodes[i]}',");
                         isb.Append($"'{options.NumWaterPointsSkipped[i]}',");
-                        isb.Append($"'{attractor.GID}',");
+
+                        //isb.Append($"'{attractor.GID}',");// was hardcoded at 23 in Fatumbot3
+                        isb.Append($"'{options.ShaGid}',");
+
                         isb.Append($"'{attractor.TID}',");
                         isb.Append($"'{attractor.LID}',");
                         isb.Append($"'{i+1}',"); // idastep (which element in idacount array)

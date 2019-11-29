@@ -124,6 +124,31 @@ namespace VFatumbot
             return hexstring;
         }
 
+        public override byte[] NextHexBytes(int len, int meta, out string shaGid)
+        {
+            if (meta == 0)
+            {
+                // switching to David's libwrapper API
+#if RELEASE_PROD
+                var jsonStr = Client.DownloadString($"https://api.randonauts.com/entropy?size={len*2}");
+#else
+                var jsonStr = Client.DownloadString($"https://devapi.randonauts.com/entropy?size={len*2}");
+#endif
+                var response = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(jsonStr);
+                var hex = response.Entropy?.ToString();
+
+                // convert to bytes
+                int NumberChars = hex.Length;
+                byte[] bytes = new byte[NumberChars / 2];
+                for (int i = 0; i < NumberChars - 1; i += 2)
+                    bytes[i / 2] = Convert.ToByte(hex.Substring(i, 2), 16);
+
+                shaGid = response.Gid;
+                return bytes;
+            }
+
+            return base.NextHexBytes(len, meta, out shaGid);
+        }
 
         protected WebClient Client
         {
@@ -214,7 +239,7 @@ namespace VFatumbot
             return result;
         }
 
-        public byte[] NextHexBytes(int len, int meta)
+        public virtual byte[] NextHexBytes(int len, int meta, out string shaGid)
         {
             string hex = "";
             if (meta == 1)
@@ -243,6 +268,7 @@ namespace VFatumbot
             //if (s1 > 5242880) { System.IO.File.WriteAllText(fp, ""); }
             //System.IO.File.AppendAllText(fp,hex + Environment.NewLine + Environment.NewLine);
 
+            shaGid = null;
             return bytes;
         }
 

@@ -239,18 +239,19 @@ namespace VFatumbot.BotLogic
             return resp;
         }
 
-        public static FinalAttractor[] GetIDA(LatLng startcoord, double radius, int meta, QuantumRandomNumberGeneratorWrapper rnd)
+        public static FinalAttractor[] GetIDA(LatLng startcoord, double radius, int meta, QuantumRandomNumberGeneratorWrapper rnd, out string shaGid)
         {
             FinalAttractor[] result = new FinalAttractor[0];
             int al = 0; int cou = 0;
+            shaGid = null;
             while ((al == 0) && (cou < 10))
             {
                 cou++;
                 int No = getOptimizedDots(radius);
                 int bytesSize = requiredEnthropyBytes(No);
                 //byte[] byteinput = new byte[No]; // todo use byte or hex dependent on sourcetype
-                //rnd.NextBytes(byteinput); 
-                byte[] byteinput = rnd.NextHexBytes((int)bytesSize, meta);
+                //rnd.NextBytes(byteinput);
+                byte[] byteinput = rnd.NextHexBytes((int)bytesSize, meta, out shaGid);
                 if (meta == 1) { bytesSize = bytesSize * 10; }
                 int engin1 = initWithBytes(getHandle(), byteinput, bytesSize);
                 int fa = findAttractors(engin1, significance, filtering_significance);

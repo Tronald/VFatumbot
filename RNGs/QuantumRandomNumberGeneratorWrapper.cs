@@ -91,12 +91,12 @@ namespace VFatumbot
             }
         }
 
-        public byte[] NextHexBytes(int len, int meta)
+        public byte[] NextHexBytes(int len, int meta, out string shaGid)
         {
             try
             {
                 //return File.ReadAllBytes("entropy");
-                var res = qRNG.NextHexBytes(len, meta);
+                var res = qRNG.NextHexBytes(len, meta, out shaGid);
                 //TODO: delete me! investigating libAttract crash
                 //File.WriteAllBytes("entropy" + ((Int32)DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalSeconds), res);
                 return res;
@@ -121,7 +121,9 @@ namespace VFatumbot
             // to catch QRNG source related exceptions to allow us to do operations like
             // send the user a message, reset their scanning flags and take them back to MainDialog prompt
             if ((exception.GetType().Equals(typeof(InvalidDataException)) && "Service did not return random data.".Equals(exception.Message)) ||
-                    (exception.GetType().Equals(typeof(WebException)) && exception.Message.Contains("connection attempt failed because the connected party did not properly respond after a period of time")))
+                (exception.GetType().Equals(typeof(WebException)) && exception.Message.Contains("connection attempt failed because the connected party did not properly respond after a period of time")) ||
+                (exception.GetType().Equals(typeof(WebException)) && exception.Message.Contains("timed out"))
+                )
             {
                 _turnContext.SendActivityAsync("Sorry, there was an error sourcing quantum entropy needed to randomize. Try a bit later. If this happens during beta testing tell soliax.").GetAwaiter().GetResult();
                 ((AdapterWithErrorHandler)_turnContext.Adapter).RepromptMainDialog(_turnContext, _mainDialog, _cancellationToken, new CallbackOptions() { ResetFlag = true }).GetAwaiter().GetResult();

@@ -375,7 +375,8 @@ namespace VFatumbot.BotLogic
                         int numWaterPointsSkipped = 0;
 
                     redo:
-                        FinalAttractor[] ida = GetIDA(userProfileTemporary.Location, userProfileTemporary.Radius, doScan ? 1 : 0, new QuantumRandomNumberGeneratorWrapper(context, mainDialog, token));
+                        string shaGid;
+                        FinalAttractor[] ida = GetIDA(userProfileTemporary.Location, userProfileTemporary.Radius, doScan ? 1 : 0, new QuantumRandomNumberGeneratorWrapper(context, mainDialog, token), out shaGid);
                         ida = SortIDA(ida, "attractor", idacou);
                         if (ida.Length > 0)
                         {
@@ -443,6 +444,7 @@ namespace VFatumbot.BotLogic
                                 Messages = messagesArray,
                                 PointTypes = pointTypesArray,
                                 GeneratedPoints = ida,
+                                ShaGid = shaGid,
                                 NumWaterPointsSkipped = numWaterPointsSkippedArray,
                                 What3Words = what3WordsArray,
                                 NearestPlaces = nearestPlacesArray,
@@ -493,7 +495,8 @@ namespace VFatumbot.BotLogic
                         int numWaterPointsSkipped = 0;
 
                     redo:
-                        FinalAttractor[] ida = GetIDA(userProfileTemporary.Location, userProfileTemporary.Radius, doScan ? 1 : 0, new QuantumRandomNumberGeneratorWrapper(context, mainDialog, token));
+                        string shaGid;
+                        FinalAttractor[] ida = GetIDA(userProfileTemporary.Location, userProfileTemporary.Radius, doScan ? 1 : 0, new QuantumRandomNumberGeneratorWrapper(context, mainDialog, token), out shaGid);
                         ida = SortIDA(ida, "void", idacou);
                         if (ida.Length > 0)
                         {
@@ -561,6 +564,7 @@ namespace VFatumbot.BotLogic
                                 Messages = messagesArray,
                                 PointTypes = pointTypesArray,
                                 GeneratedPoints = ida,
+                                ShaGid = shaGid,
                                 NumWaterPointsSkipped = numWaterPointsSkippedArray,
                                 What3Words = what3WordsArray,
                                 NearestPlaces = nearestPlacesArray,
@@ -625,7 +629,8 @@ namespace VFatumbot.BotLogic
                         int numWaterPointsSkipped = 0;
 
                     redo:
-                        FinalAttractor[] ida = GetIDA(userProfileTemporary.Location, userProfileTemporary.Radius, doScan ? 1 : 0, new QuantumRandomNumberGeneratorWrapper(context, mainDialog, token));
+                        string shaGid;
+                        FinalAttractor[] ida = GetIDA(userProfileTemporary.Location, userProfileTemporary.Radius, doScan ? 1 : 0, new QuantumRandomNumberGeneratorWrapper(context, mainDialog, token), out shaGid);
                         ida = SortIDA(ida, "any", idacou);
                         if (ida.Length > 0)
                         {
@@ -693,6 +698,7 @@ namespace VFatumbot.BotLogic
                                 Messages = messagesArray,
                                 PointTypes = pointTypesArray,
                                 GeneratedPoints = ida,
+                                ShaGid = shaGid,
                                 NumWaterPointsSkipped = numWaterPointsSkippedArray,
                                 What3Words = what3WordsArray,
                                 NearestPlaces = nearestPlacesArray,
@@ -905,7 +911,8 @@ namespace VFatumbot.BotLogic
                         int numVoiWaterPointsSkipped = 0;
                         string mesg = "";
 
-                        FinalAttractor[] ida = GetIDA(userProfileTemporary.Location, userProfileTemporary.Radius, doScan ? 1 : 0, new QuantumRandomNumberGeneratorWrapper(context, mainDialog, token));
+                        string shaGid;
+                        FinalAttractor[] ida = GetIDA(userProfileTemporary.Location, userProfileTemporary.Radius, doScan ? 1 : 0, new QuantumRandomNumberGeneratorWrapper(context, mainDialog, token), out shaGid);
                         FinalAttractor[] att = SortIDA(ida, "attractor", idacou);
                         FinalAttractor[] voi = SortIDA(ida, "void", idacou);
                         if (att.Count() > voi.Count())
@@ -993,6 +1000,7 @@ namespace VFatumbot.BotLogic
                                 Messages = attMessagesArray.Concat(voiMessagesArray).ToArray(),
                                 PointTypes = attPointTypesArray.Concat(voiPointTypesArray).ToArray(),
                                 GeneratedPoints = att.Concat(voi).ToArray(),
+                                ShaGid = shaGid,
                                 NumWaterPointsSkipped = attNumWaterPointsSkippedArray.Concat(voiNumWaterPointsSkippedArray).ToArray(),
                                 What3Words = attWhat3WordsArray.Concat(voiWhat3WordsArray).ToArray(),
                                 NearestPlaces = attNearestPlacesArray.Concat(voiNearestPlacesArray).ToArray(),
@@ -1024,7 +1032,8 @@ namespace VFatumbot.BotLogic
                         int numWaterPointsSkipped = 0;
 
                     redoIDA:
-                        FinalAttractor[] ida = GetIDA(userProfileTemporary.Location, userProfileTemporary.Radius, 0, new QuantumRandomNumberGeneratorWrapper(context, mainDialog, token));
+                        string shaGid;
+                        FinalAttractor[] ida = GetIDA(userProfileTemporary.Location, userProfileTemporary.Radius, 0, new QuantumRandomNumberGeneratorWrapper(context, mainDialog, token), out shaGid);
 
                         FinalAttractor[] att = SortIDA(ida, "attractor", 1);
                         if (att.Length > 0 && !userProfileTemporary.IsIncludeWaterPoints)
@@ -1184,6 +1193,7 @@ namespace VFatumbot.BotLogic
                             Messages = new string[] { mesg },
                             PointTypes = new PointTypes[] { PointTypes.MysteryPoint },
                             GeneratedPoints = ida,
+                            ShaGid = shaGid,
                             NumWaterPointsSkipped = new int[] { numWaterPointsSkipped },
                             What3Words = new string[] { w3wResult?.words },
                             NearestPlaces = new string[] { w3wResult?.nearestPlace + Helpers.GetCountryFromW3W(w3wResult) },
