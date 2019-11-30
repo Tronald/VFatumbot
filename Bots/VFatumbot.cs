@@ -206,7 +206,7 @@ namespace VFatumbot
             //_logger.LogInformation("Running dialog with Message Activity.");
 
             // Run the MainDialog with the new message Activity
-            await _mainDialog.RunAsync(turnContext, _conversationState.CreateProperty<DialogState>(nameof(DialogState)), cancellationToken);
+            await _mainDialog.Run(turnContext, _conversationState.CreateProperty<DialogState>(nameof(DialogState)), cancellationToken);
         }
 
         protected bool InterceptPushNotificationSubscription(ITurnContext turnContext, out string pushUserId)
