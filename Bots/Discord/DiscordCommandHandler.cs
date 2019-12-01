@@ -343,5 +343,14 @@ namespace VFatumbot.Discord
             var turnContextWrapper = new TurnContextWrapper(ctx);
             await handler.ParseSlashCommands(turnContextWrapper, userProfileTemporary, new CancellationToken(), null);
         }
+
+        [Command("steve"), Description("Say hi to Steve")]
+        public async Task Steve(CommandContext ctx)
+        {
+            var userProfileTemporary = await GetUserProfileTemporaryAsync(ctx);
+            var handler = new ActionHandler();
+            var turnContextWrapper = new TurnContextWrapper(ctx);
+            await handler.ParseSlashCommands(turnContextWrapper, userProfileTemporary, new CancellationToken(), null);
+        }
     }
 }

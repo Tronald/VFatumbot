@@ -40,6 +40,11 @@ namespace VFatumbot.BotLogic
                 await turnContext.SendActivityAsync("You're not authorized to do that!");
                 await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(turnContext, mainDialog, cancellationToken);
             }
+            else if (command.StartsWith("/steve", StringComparison.InvariantCulture))
+            {
+                await turnContext.SendActivityAsync("I'm all kinds of Steve!");
+                await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(turnContext, mainDialog, cancellationToken);
+            }
             else if (command.StartsWith("/getattractor", StringComparison.InvariantCulture))
             {
                 await AttractorActionAsync(turnContext, userProfileTemporary, cancellationToken, mainDialog);
