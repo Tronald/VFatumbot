@@ -24,6 +24,7 @@ namespace VFatumbot
 
             TelemetryClient = telemetryClient;
 
+            AddDialog(new ChainsDialog(_userProfileTemporaryAccessor, mainDialog, logger, telemetryClient));
             AddDialog(new ChoicePrompt(nameof(ChoicePrompt))
             {
                 TelemetryClient = telemetryClient,
@@ -75,6 +76,8 @@ namespace VFatumbot
                 case "Mystery Point":
                     await actionHandler.MysteryPointActionAsync(stepContext.Context, userProfileTemporary, cancellationToken, _mainDialog);
                     break;
+                case "Chains":
+                    return await stepContext.BeginDialogAsync(nameof(ChainsDialog), this, cancellationToken);
                 case "My Randotrips":
                     await actionHandler.RandotripsActionAsync(stepContext.Context, userProfileTemporary, cancellationToken, _mainDialog, "my");
                     break;
@@ -125,9 +128,15 @@ namespace VFatumbot
                                         "Mystery point",
                                         "mystery point",
                                         "Point",
-                                        "Point",
                                         "point",
                                         "getpoint",
+                                    }
+                },
+                new Choice() {
+                    Value = "Chains",
+                    Synonyms = new List<string>()
+                                    {
+                                        "chains",
                                     }
                 },
                 new Choice() {
