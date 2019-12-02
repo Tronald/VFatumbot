@@ -53,9 +53,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Update="appsettings.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Update="wwwroot\bot_instructions.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
