@@ -108,7 +108,7 @@ namespace VFatumbot
             conversationData.Timestamp = localMessageTime.ToString();
             await _conversationDataAccessor.SetAsync(turnContext, conversationData);
 
-            // TODO: most of the logic/functionalioty in the following if statements I realised later on should probably be structured in the way the Bot Framework SDK talks about "middleware".
+            // TODO: most of the logic/functionality in the following if statements I realised later on should probably be structured in the way the Bot Framework SDK talks about "middleware".
             // Maybe one day re-structure/re-factor it to following their middleware patterns...
 
             double lat = 0, lon = 0;
