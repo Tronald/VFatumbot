@@ -144,9 +144,6 @@ namespace VFatumbot.Discord
             _ctx = turnContext;
         }
 
-        public AdapterWithErrorHandlerWrapper(IConfiguration configuration, ILogger<BotFrameworkHttpAdapter> logger, IMiddleware middleware, ConversationState conversationState = null)
-            : base(configuration, logger, middleware) {}
-
         public async override Task ContinueConversationAsync(string botAppId, ConversationReference reference, BotCallbackHandler callback, CancellationToken cancellationToken)
         {
            await callback.Invoke(_ctx, cancellationToken);

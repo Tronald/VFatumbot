@@ -9,6 +9,7 @@ using System.Threading;
 using static VFatumbot.BotLogic.Enums;
 using VFatumbot.BotLogic;
 using static VFatumbot.QuantumRandomNumberGeneratorWrapper;
+using Microsoft.Bot.Connector.Authentication;
 
 namespace VFatumbot
 {
@@ -19,8 +20,8 @@ namespace VFatumbot
         // For Discord Bot
         public AdapterWithErrorHandler() { }
 
-        public AdapterWithErrorHandler(IConfiguration configuration, ILogger<BotFrameworkHttpAdapter> logger, IMiddleware middleware, ConversationState conversationState = null)
-            : base(configuration, logger)
+        public AdapterWithErrorHandler(ICredentialProvider credentialProvider, ILogger<BotFrameworkHttpAdapter> logger, IMiddleware middleware, ConversationState conversationState = null)
+            : base(credentialProvider, logger:logger)
         {
             Use(middleware);
 
@@ -66,6 +67,7 @@ namespace VFatumbot
             {
                 var conversationStateAccesor = _conversationState.CreateProperty<DialogState>(nameof(DialogState));
                 var dialogSet = new DialogSet(conversationStateAccesor);
+                dialogSet.TelemetryClient = dialog.TelemetryClient;
                 dialogSet.Add(dialog);
                 var dialogContext = await dialogSet.CreateContextAsync(turnContext, cancellationToken);
                 await dialogContext.ReplaceDialogAsync(nameof(MainDialog), callbackOptions, cancellationToken);

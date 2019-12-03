@@ -28,18 +28,18 @@
       <PrivateAssets>all</PrivateAssets>
       <Publish>true</Publish>
     </PackageReference>
-    <PackageReference Include="Microsoft.Bot.Builder.Integration.AspNet.Core" Version="4.5.3" />
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
-    <PackageReference Include="Microsoft.Bot.Builder.Dialogs" Version="4.5.3" />
+    <PackageReference Include="Microsoft.Bot.Builder.Integration.AspNet.Core" Version="4.6.3" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="Microsoft.Bot.Builder.Dialogs" Version="4.6.3" />
     <PackageReference Include="Geocoding.Google" Version="4.0.1" />
-    <PackageReference Include="Microsoft.Bot.Builder.Azure" Version="4.5.3" />
-    <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="2.9.6">
+    <PackageReference Include="Microsoft.Bot.Builder.Azure" Version="4.6.3" />
+    <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="2.9.8">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="OneSignal.RestAPIv3.Client" Version="1.1.0" />
-    <PackageReference Include="CoordinateSharp" Version="2.2.2.1" />
-    <PackageReference Include="Reddit" Version="1.2.0" />
+    <PackageReference Include="OneSignal.RestAPIv3.Client" Version="1.1.1" />
+    <PackageReference Include="CoordinateSharp" Version="2.3.1.1" />
+    <PackageReference Include="Reddit" Version="1.3.4" />
     <PackageReference Include="System.Data.SqlClient" Version="4.7.0" />
     <PackageReference Include="Crc32.NET" Version="1.2.0" />
     <PackageReference Include="Imgur.API.NetCore" Version="1.0.1" />
@@ -47,9 +47,9 @@
     <PackageReference Include="DSharpPlus" Version="3.2.3" />
     <PackageReference Include="DSharpPlus.CommandsNext" Version="3.2.3" />
     <PackageReference Include="DSharpPlus.Interactivity" Version="3.2.3" />
-    <PackageReference Include="Microsoft.Bot.Builder.ApplicationInsights" Version="4.5.3" />
-    <PackageReference Include="Microsoft.Bot.Builder.Integration.ApplicationInsights.Core" Version="4.5.3" />
-    <PackageReference Include="Microsoft.ApplicationInsights" Version="2.8.1" />
+    <PackageReference Include="Microsoft.Bot.Builder.ApplicationInsights" Version="4.6.3" />
+    <PackageReference Include="Microsoft.Bot.Builder.Integration.ApplicationInsights.Core" Version="4.6.3" />
+    <PackageReference Include="Microsoft.ApplicationInsights" Version="2.11.0" />
   </ItemGroup>
 
   <ItemGroup>

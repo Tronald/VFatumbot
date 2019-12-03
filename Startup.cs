@@ -11,6 +11,7 @@ using Microsoft.Bot.Builder.Integration.AspNet.Core;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using VFatumbot.BotLogic;
+using Microsoft.Bot.Connector.Authentication;
 
 namespace VFatumbot
 {
@@ -28,26 +29,29 @@ namespace VFatumbot
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
-            // Create the Bot Framework Adapter.
-            services.AddSingleton<IBotFrameworkHttpAdapter, AdapterWithErrorHandler>();
+            // Create the credential provider to be used with the Bot Framework Adapter.
+            services.AddSingleton<ICredentialProvider, ConfigurationCredentialProvider>();
 
             // Add Application Insights services into service collection
             services.AddApplicationInsightsTelemetry();
 
-            // Add the standard telemetry client
+            // Create the telemetry client.
             services.AddSingleton<IBotTelemetryClient, BotTelemetryClient>();
 
-            // Create the telemetry middleware to track conversation events
-            services.AddSingleton<TelemetryLoggerMiddleware>();
-
-            // Add the telemetry initializer middleware
-            services.AddSingleton<IMiddleware, TelemetryInitializerMiddleware>();
-
-            // Add telemetry initializer that will set the correlation context for all telemetry items
+            // Add telemetry initializer that will set the correlation context for all telemetry items.
             services.AddSingleton<ITelemetryInitializer, OperationCorrelationTelemetryInitializer>();
 
-            // Add telemetry initializer that sets the user ID and session ID (in addition to other bot-specific properties, such as activity ID)
+            // Add telemetry initializer that sets the user ID and session ID (in addition to other bot-specific properties such as activity ID)
             services.AddSingleton<ITelemetryInitializer, TelemetryBotIdInitializer>();
+
+            // Create the telemetry middleware to initialize telemetry gathering
+            services.AddSingleton<IMiddleware, TelemetryInitializerMiddleware>();
+
+            // Create the telemetry middleware (used by the telemetry initializer) to track conversation events
+            services.AddSingleton<TelemetryLoggerMiddleware>();
+
+            // Create the Bot Framework Adapter with error handling enabled.
+            services.AddSingleton<IBotFrameworkHttpAdapter, AdapterWithErrorHandler>();
 
             // For the bot running in the Azure cloud, we need to use Cosmos DB (or Azure's Blob Storage service)
             // to keep data persistent, otherwise the stateless nature of the bot would be useless in keeping
@@ -85,12 +89,12 @@ namespace VFatumbot
             services.AddSingleton<IStorage, MemoryStorage>();
 
             // Create the User state.
-            services.AddSingleton<UserState>();
+            services.AddSingleton<UserPersistentState>();
+            services.AddSingleton<UserTemporaryState>();
 
             // Create the Conversation state.
             services.AddSingleton<ConversationState>();
 */
-
 
             // The Dialog that will be run by the bot.
             services.AddSingleton<MainDialog>();
@@ -119,6 +123,14 @@ namespace VFatumbot
             });
 
             app.UseMvc();
+        }
+    }
+
+    public class ConfigurationCredentialProvider : SimpleCredentialProvider
+    {
+        public ConfigurationCredentialProvider(IConfiguration configuration)
+            : base(configuration["MicrosoftAppId"], configuration["MicrosoftAppPassword"])
+        {
         }
     }
 }
