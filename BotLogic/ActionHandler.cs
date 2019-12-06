@@ -129,21 +129,30 @@ namespace VFatumbot.BotLogic
             {
                 if (command.Contains(" "))
                 {
+                    bool noLimit = false; // archon mode
+                    if (command.Contains(" nolimit"))
+                    {
+                        noLimit = true;
+                        command = command.Replace(" nolimit", "");
+                    }
                     string newRadiusStr = command.Replace(command.Substring(0, command.IndexOf(" ", StringComparison.InvariantCulture)), "");
                     int oldRadius = userProfileTemporary.Radius, inputtedRadius;
                     if (Int32.TryParse(newRadiusStr, out inputtedRadius))
                     {
-                        if (inputtedRadius < Consts.RADIUS_MIN)
+                        if (!noLimit)
                         {
-                            await turnContext.SendActivityAsync(MessageFactory.Text($"Radius must be more than or equal to {Consts.RADIUS_MIN}m"), cancellationToken);
-                            await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(turnContext, mainDialog, cancellationToken);
-                            return;
-                        }
-                        if (inputtedRadius > Consts.RADIUS_MAX)
-                        {
-                            await turnContext.SendActivityAsync(MessageFactory.Text($"Radius must be less than or equal to {Consts.RADIUS_MAX}m"), cancellationToken);
-                            await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(turnContext, mainDialog, cancellationToken);
-                            return;
+                            if (inputtedRadius < Consts.RADIUS_MIN)
+                            {
+                                await turnContext.SendActivityAsync(MessageFactory.Text($"Radius must be more than or equal to {Consts.RADIUS_MIN}m"), cancellationToken);
+                                await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(turnContext, mainDialog, cancellationToken);
+                                return;
+                            }
+                            if (inputtedRadius > Consts.RADIUS_MAX)
+                            {
+                                await turnContext.SendActivityAsync(MessageFactory.Text($"Radius must be less than or equal to {Consts.RADIUS_MAX}m"), cancellationToken);
+                                await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(turnContext, mainDialog, cancellationToken);
+                                return;
+                            }
                         }
 
                         userProfileTemporary.Radius = inputtedRadius;
