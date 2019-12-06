@@ -270,6 +270,11 @@ namespace VFatumbot.BotLogic
         // https://github.com/Alegrowin/OneSignal.RestAPIv3.Client
         public static async Task<NotificationCreateResult> SendPushNotification(UserProfileTemporary userProfileTemporary, string title, string body)
         {
+            if (string.IsNullOrEmpty(userProfileTemporary.PushUserId))
+            {
+                return new NotificationCreateResult();
+            }
+
             if (title == null)
             {
                 title = "";
