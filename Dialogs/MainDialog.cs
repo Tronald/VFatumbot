@@ -163,7 +163,7 @@ namespace VFatumbot
                 case "Pair":
                     await actionHandler.PairActionAsync(stepContext.Context, userProfileTemporary, cancellationToken, this);
                     break;
-                case "More Stuff":
+                case "Blind Spots & More":
                     return await stepContext.BeginDialogAsync(nameof(MoreStuffDialog), this, cancellationToken);
                 case "Scan":
                     return await stepContext.BeginDialogAsync(nameof(ScanDialog), this, cancellationToken);
@@ -234,9 +234,14 @@ namespace VFatumbot
                                     }
                 },
                 new Choice() {
-                    Value = "More Stuff",
+                    Value = "Blind Spots & More",
                     Synonyms = new List<string>()
                                     {
+                                        "Blind spots & more",
+                                        "blind spots & more",
+                                        "Blind Spots and More",
+                                        "Blind spots and more",
+                                        "blind spots and more",
                                         "More stuff",
                                         "more stuff",
                                         "morestuff",

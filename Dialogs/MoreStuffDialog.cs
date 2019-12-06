@@ -47,8 +47,8 @@ namespace VFatumbot
 
             var options = new PromptOptions()
             {
-                Prompt = MessageFactory.Text("Choose the 'more stuff' action:"),
-                RetryPrompt = MessageFactory.Text("That is not valid 'more stuff'."),
+                Prompt = MessageFactory.Text("Choose the action:"),
+                RetryPrompt = MessageFactory.Text("That is not valid action."),
                 Choices = GetActionChoices(),
             };
 
