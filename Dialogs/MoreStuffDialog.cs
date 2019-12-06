@@ -25,6 +25,7 @@ namespace VFatumbot
             TelemetryClient = telemetryClient;
 
             AddDialog(new ChainsDialog(_userProfileTemporaryAccessor, mainDialog, logger, telemetryClient));
+            AddDialog(new QuantumDiceDialog(_userProfileTemporaryAccessor, mainDialog, logger, telemetryClient));
             AddDialog(new ChoicePrompt(nameof(ChoicePrompt))
             {
                 TelemetryClient = telemetryClient,
@@ -78,6 +79,8 @@ namespace VFatumbot
                     break;
                 case "Chains":
                     return await stepContext.BeginDialogAsync(nameof(ChainsDialog), this, cancellationToken);
+                case "Quantum Dice":
+                    return await stepContext.BeginDialogAsync(nameof(QuantumDiceDialog), this, cancellationToken);
                 case "My Randotrips":
                     await actionHandler.RandotripsActionAsync(stepContext.Context, userProfileTemporary, cancellationToken, _mainDialog, "my");
                     break;
@@ -137,6 +140,15 @@ namespace VFatumbot
                     Synonyms = new List<string>()
                                     {
                                         "chains",
+                                    }
+                },
+                new Choice() {
+                    Value = "Quantum Dice",
+                    Synonyms = new List<string>()
+                                    {
+                                        "quantum dice",
+                                        "Dice",
+                                        "dice",
                                     }
                 },
                 new Choice() {
