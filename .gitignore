@@ -5,3 +5,5 @@ bin/**
 runtimes/**
 .DS_Store
 .vs/*
+Microsoft.Bot.Builder.ApplicationInsights/bin/**
+Microsoft.Bot.Builder.ApplicationInsights/obj/**
