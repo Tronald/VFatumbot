@@ -44,7 +44,16 @@ namespace VFatumbot
         {
             //_logger.LogInformation("QuantumDiceDialog.EnterDiceMaxStepAsync");
 
-            var promptOptions = new PromptOptions { Prompt = MessageFactory.Text("Let's roll the quantum dice! Enter a maximum number (inclusive, up to 255):") };
+
+            int alreadyGotMax = -1;
+            if (stepContext.Options != null && int.TryParse(stepContext.Options.ToString(), out alreadyGotMax))
+            {
+                // Rolling again
+                stepContext.Values["Max"] = alreadyGotMax;
+                return await stepContext.NextAsync(cancellationToken: cancellationToken);
+            }
+
+            var promptOptions = new PromptOptions { Prompt = MessageFactory.Text("Enter a maximum number (greater than 1, up to 255):") };
             return await stepContext.PromptAsync(nameof(NumberPrompt<int>), promptOptions, cancellationToken);
         }
 
@@ -77,21 +86,21 @@ namespace VFatumbot
             //_logger.LogInformation($"QuantumDiceDialog.RollQDiceStepAsync[{((FoundChoice)stepContext.Result)?.Value}]");
 
             int maxValue;
-            if (stepContext.Values != null && stepContext.Values.ContainsKey("Result"))
+            if (stepContext.Values != null && stepContext.Values.ContainsKey("Max"))
             {
-                maxValue = (int)stepContext.Values["Result"];
+                maxValue = int.Parse(stepContext.Values["Max"].ToString());
             }
             else
             {
                 maxValue = (int)stepContext.Result;
             }
             var qrng = new QuantumRandomNumberGeneratorWrapper(stepContext.Context, _mainDialog, cancellationToken);
-            var diceValue = qrng.Next(0, maxValue);
-            stepContext.Values["Result"] = diceValue;
+            var diceValue = qrng.Next(maxValue == 1 ? 0 : 1, maxValue + 1);
+            stepContext.Values["Max"] = maxValue;
 
             var options = new PromptOptions()
             {
-                Prompt = MessageFactory.Text($"Dice value: {diceValue}. Roll again?"),
+                Prompt = MessageFactory.Text($"Result: {diceValue}/{maxValue}. Roll again?"),
                 RetryPrompt = MessageFactory.Text("Yes or No, nothing else."),
                 Choices = new List<Choice>()
                 {
@@ -122,7 +131,7 @@ namespace VFatumbot
             switch (((FoundChoice)stepContext.Result)?.Value)
             {
                 case "Yes":
-                    return await RollQDiceStepAsync(stepContext, cancellationToken);
+                    return await stepContext.ReplaceDialogAsync(nameof(QuantumDiceDialog), options: stepContext.Values["Max"], cancellationToken: cancellationToken);
                 case "No":
                 default:
                     return await stepContext.ReplaceDialogAsync(nameof(MainDialog), cancellationToken: cancellationToken);
