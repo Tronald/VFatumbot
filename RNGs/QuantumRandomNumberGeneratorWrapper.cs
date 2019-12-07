@@ -125,7 +125,7 @@ namespace VFatumbot
                 (exception.GetType().Equals(typeof(WebException)) && exception.Message.Contains("timed out"))
                 )
             {
-                _turnContext.SendActivityAsync("Sorry, there was an error sourcing quantum entropy needed to randomize. Try a bit later. If this happens during beta testing tell soliax.").GetAwaiter().GetResult();
+                _turnContext.SendActivityAsync("Sorry, there was an error sourcing quantum entropy needed to randomize. Try a bit later.").GetAwaiter().GetResult();
                 ((AdapterWithErrorHandler)_turnContext.Adapter).RepromptMainDialog(_turnContext, _mainDialog, _cancellationToken, new CallbackOptions() { ResetFlag = true }).GetAwaiter().GetResult();
                 return true;
             }
