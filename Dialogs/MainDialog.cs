@@ -42,10 +42,21 @@ namespace VFatumbot
             {
                 TelemetryClient = telemetryClient,
             });
+            AddDialog(new ChoicePrompt("AskHowManyIDAsChoicePrompt",
+                (PromptValidatorContext<FoundChoice> promptContext, CancellationToken cancellationToken) =>
+                {
+                    // forced true validater result to also allow free text entry for ratings
+                    return Task.FromResult(true);
+                })
+            {
+                TelemetryClient = telemetryClient,
+            });
             AddDialog(new WaterfallDialog(nameof(WaterfallDialog), new WaterfallStep[]
             {
                 ChoiceActionStepAsync,
                 PerformActionStepAsync,
+                AskHowManyIDAsStepAsync,
+                GetHowManyIDAsStepAsync,
             })
             {
                 TelemetryClient = telemetryClient,
@@ -149,20 +160,20 @@ namespace VFatumbot
                     break;
 
                 case "Attractor":
-                    await actionHandler.AttractorActionAsync(stepContext.Context, userProfileTemporary, cancellationToken, this);
-                    break;
+                    stepContext.Values["PointType"] = "Attractor";
+                    return await stepContext.NextAsync(cancellationToken: cancellationToken);
                 case "Void":
-                    await actionHandler.VoidActionAsync(stepContext.Context, userProfileTemporary, cancellationToken, this);
-                    break;
+                    stepContext.Values["PointType"] = "Void";
+                    return await stepContext.NextAsync(cancellationToken: cancellationToken);
                 case "Anomaly":
-                    await actionHandler.AnomalyActionAsync(stepContext.Context, userProfileTemporary, cancellationToken, this);
-                    break;
+                    stepContext.Values["PointType"] = "Anomaly";
+                    return await stepContext.NextAsync(cancellationToken: cancellationToken);
                 case "Intent Suggestions":
                     await actionHandler.IntentSuggestionActionAsync(stepContext.Context, userProfileTemporary, cancellationToken, this);
                     break;
                 case "Pair":
-                    await actionHandler.PairActionAsync(stepContext.Context, userProfileTemporary, cancellationToken, this);
-                    break;
+                    stepContext.Values["PointType"] = "Pair";
+                    return await stepContext.NextAsync(cancellationToken: cancellationToken);
                 case "Blind Spots & More":
                     return await stepContext.BeginDialogAsync(nameof(MoreStuffDialog), this, cancellationToken);
                 case "Scan":
@@ -184,6 +195,55 @@ namespace VFatumbot
                 // Long-running tasks like /getattractors etc will make use of ContinueDialog to re-prompt users
                 return await stepContext.EndDialogAsync(cancellationToken: cancellationToken);
             }
+        }
+
+        private async Task<DialogTurnResult> AskHowManyIDAsStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
+        {
+            //_logger.LogInformation($"MainDialog.AskHowManyIDAsStepAsync");
+
+            var options = new PromptOptions()
+            {
+                Prompt = MessageFactory.Text("Up to how many IDAs (anomalies) to look for? (or enter a number up to 20):"),
+                RetryPrompt = MessageFactory.Text("That is not a valid number."),
+                Choices = new List<Choice>()
+                                {
+                                    new Choice() { Value = "1" },
+                                    new Choice() { Value = "2" },
+                                    new Choice() { Value = "5" },
+                                    new Choice() { Value = "10" },
+                                }
+            };
+
+            return await stepContext.PromptAsync("AskHowManyIDAsChoicePrompt", options, cancellationToken);
+        }
+
+        private async Task<DialogTurnResult> GetHowManyIDAsStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
+        {
+            //_logger.LogInformation($"MainDialog.GetHowManyIDAsStepAsync[{((FoundChoice)stepContext.Result)?.Value}]");
+
+            var userProfileTemporary = await _userProfileTemporaryAccessor.GetAsync(stepContext.Context, () => new UserProfileTemporary());
+            var actionHandler = new ActionHandler();
+
+            int idacou = int.Parse(((FoundChoice)stepContext.Result)?.Value);
+
+            switch (stepContext.Values["PointType"].ToString())
+            {
+                case "Attractor":
+                    await actionHandler.AttractorActionAsync(stepContext.Context, userProfileTemporary, cancellationToken, this, idacou:idacou);
+                    break;
+                case "Void":
+                    await actionHandler.VoidActionAsync(stepContext.Context, userProfileTemporary, cancellationToken, this, idacou: idacou);
+                    break;
+                case "Anomaly":
+                    await actionHandler.AnomalyActionAsync(stepContext.Context, userProfileTemporary, cancellationToken, this, idacou: idacou);
+                    break;
+                case "Pair":
+                    await actionHandler.PairActionAsync(stepContext.Context, userProfileTemporary, cancellationToken, this, idacou: idacou);
+                    break;
+            }
+
+            // Long-running tasks like /getattractors etc will make use of ContinueDialog to re-prompt users
+            return await stepContext.EndDialogAsync(cancellationToken: cancellationToken);
         }
 
         private IList<Choice> GetActionChoices(ITurnContext turnContext)
