@@ -45,8 +45,19 @@ namespace VFatumbot
             AddDialog(new ChoicePrompt("AskHowManyIDAsChoicePrompt",
                 (PromptValidatorContext<FoundChoice> promptContext, CancellationToken cancellationToken) =>
                 {
-                    // forced true validater result to also allow free text entry for ratings
-                    return Task.FromResult(true);
+                    // override validater result to also allow free text entry for ratings
+                    int idacou;
+                    if (int.TryParse(promptContext.Context.Activity.Text, out idacou))
+                    {
+                        if (idacou < 1 || idacou > 20)
+                        {
+                            return Task.FromResult(false);
+                        }
+
+                        return Task.FromResult(true);
+                    }
+
+                    return Task.FromResult(false);
                 })
             {
                 TelemetryClient = telemetryClient,
@@ -204,7 +215,7 @@ namespace VFatumbot
             var options = new PromptOptions()
             {
                 Prompt = MessageFactory.Text("Up to how many IDAs (anomalies) to look for? (or enter a number up to 20):"),
-                RetryPrompt = MessageFactory.Text("That is not a valid number."),
+                RetryPrompt = MessageFactory.Text("That is not a valid number. It should be a number from 1 to 20."),
                 Choices = new List<Choice>()
                                 {
                                     new Choice() { Value = "1" },
@@ -224,7 +235,15 @@ namespace VFatumbot
             var userProfileTemporary = await _userProfileTemporaryAccessor.GetAsync(stepContext.Context, () => new UserProfileTemporary());
             var actionHandler = new ActionHandler();
 
-            int idacou = int.Parse(((FoundChoice)stepContext.Result)?.Value);
+            int idacou;
+            if (stepContext.Result == null)
+            {
+                idacou = int.Parse(stepContext.Context.Activity.Text); // manually inputted a number
+            }
+            else
+            {
+                idacou = int.Parse(((FoundChoice)stepContext.Result)?.Value);
+            }
 
             switch (stepContext.Values["PointType"].ToString())
             {
