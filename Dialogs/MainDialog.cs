@@ -169,7 +169,6 @@ namespace VFatumbot
                     repromptThisRound = true;
                     await stepContext.Context.SendActivityAsync(CardFactory.CreateGetLocationFromGoogleMapsReply());
                     break;
-
                 case "Attractor":
                     stepContext.Values["PointType"] = "Attractor";
                     return await stepContext.NextAsync(cancellationToken: cancellationToken);
@@ -186,14 +185,17 @@ namespace VFatumbot
                     stepContext.Values["PointType"] = "Pair";
                     return await stepContext.NextAsync(cancellationToken: cancellationToken);
                 case "Blind Spots & More":
+                    await stepContext.EndDialogAsync(cancellationToken: cancellationToken);
                     return await stepContext.BeginDialogAsync(nameof(MoreStuffDialog), this, cancellationToken);
                 case "Scan":
+                    await stepContext.EndDialogAsync(cancellationToken: cancellationToken);
                     return await stepContext.BeginDialogAsync(nameof(ScanDialog), this, cancellationToken);
                 case "My Location":
                     repromptThisRound = true;
                     await actionHandler.LocationActionAsync(stepContext.Context, userProfileTemporary, cancellationToken);
                     break;
                 case "Settings":
+                    await stepContext.EndDialogAsync(cancellationToken: cancellationToken);
                     return await stepContext.BeginDialogAsync(nameof(SettingsDialog), this, cancellationToken);
             }
 
