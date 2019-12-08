@@ -146,8 +146,8 @@ namespace VFatumbot
 
             var options = new PromptOptions()
             {
-                Prompt = MessageFactory.Text("What would you like to get/check?"),
-                RetryPrompt = MessageFactory.Text("That is not a valid action. What would you like to get/check?"),
+                Prompt = MessageFactory.Text("What would you like to get"),
+                RetryPrompt = MessageFactory.Text("That is not a valid action. What would you like to get?"),
                 Choices = GetActionChoices(stepContext.Context),
             };
 
