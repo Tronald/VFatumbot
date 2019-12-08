@@ -165,7 +165,9 @@ namespace VFatumbot.BotLogic
 
         public static string GetNewLine(ITurnContext context)
         {
-            if (context.Activity.ChannelId == Enums.ChannelPlatform.directline.ToString())
+            if (context.Activity.ChannelId == Enums.ChannelPlatform.directline.ToString() ||
+                context.Activity.ChannelId == Enums.ChannelPlatform.emulator.ToString() ||
+                context.Activity.ChannelId == Enums.ChannelPlatform.discord.ToString())
             {
                 return "\n\n";
             }
