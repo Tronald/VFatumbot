@@ -560,7 +560,7 @@ namespace VFatumbot
                 "Strangeness: " + answers.Rating_Strangeness + "  \n" +
                 "Synchronicity: " + answers.Rating_Synchronicty + "  \n" +
                  "\n\n" +
-                userProfileTemporary.UserId + " " + callbackOptions.ShortCodes[answers.PointNumberVisited] + " " + callbackOptions.ShaGid,
+                userProfileTemporary.UserId + " " + callbackOptions.ShortCodes[answers.PointNumberVisited] + " " + callbackOptions.ShaGids[answers.PointNumberVisited],
                 answers.PhotoURLs
                 );
 
@@ -730,7 +730,7 @@ namespace VFatumbot
                         isb.Append($"'{options.NumWaterPointsSkipped[i]}',");
 
                         //isb.Append($"'{attractor.GID}',");// was hardcoded at 23 in Fatumbot3
-                        isb.Append($"'{options.ShaGid}',");
+                        isb.Append($"'{options.ShaGids}',");
 
                         isb.Append($"'{attractor.TID}',");
                         isb.Append($"'{attractor.LID}',");

@@ -37,7 +37,13 @@ namespace VFatumbot.BotLogic
             Quantum,
             QuantumTime,
             Pseudo,
-            MysteryPoint
+            MysteryPoint,
+            ChainAttractor,
+            ChainVoid,
+            ChainAnomaly,
+            ChainQuantum,
+            ChainPseudo,
+            //ChainMysteryPoint // not implemented yet
         }
     }
 }

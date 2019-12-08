@@ -27,7 +27,7 @@ namespace VFatumbot
             {
                 TelemetryClient = telemetryClient,
             });
-            AddDialog(new NumberPrompt<int>(nameof(NumberPrompt<int>), DistanceValidatorAsync)
+            AddDialog(new NumberPrompt<float>(nameof(NumberPrompt<float>), DistanceValidatorAsync)
             {
                 TelemetryClient = telemetryClient,
             });
@@ -63,7 +63,7 @@ namespace VFatumbot
                                         }
                     },
                     new Choice() {
-                        Value = "Void",
+                        Value = "Voids",
                         Synonyms = new List<string>()
                                         {
                                             "voids",
@@ -92,14 +92,15 @@ namespace VFatumbot
                                             "pseudos",
                                         }
                     },
-                    new Choice() {
-                        Value = "Mystery Points",
-                        Synonyms = new List<string>()
-                                        {
-                                            "Mystery points",
-                                            "mystery points",
-                                        }
-                    },
+                    // TODO: implement one day
+                    //new Choice() {
+                    //    Value = "Mystery Points",
+                    //    Synonyms = new List<string>()
+                    //                    {
+                    //                        "Mystery points",
+                    //                        "mystery points",
+                    //                    }
+                    //},
                     new Choice() {
                         Value = "< Back",
                         Synonyms = new List<string>()
@@ -156,7 +157,7 @@ namespace VFatumbot
 
             var options = new PromptOptions()
             {
-                Prompt = MessageFactory.Text("Enter preferred total distance in meters:"),
+                Prompt = MessageFactory.Text("Enter preferred total distance in kms, eg. 5.5:"),
                 RetryPrompt = MessageFactory.Text("That is not a valid location-generating option."),
                 Choices = new List<Choice>()
                 {
@@ -177,27 +178,27 @@ namespace VFatumbot
                 }
             };
 
-            return await stepContext.PromptAsync(nameof(NumberPrompt<int>), options, cancellationToken);
+            return await stepContext.PromptAsync(nameof(NumberPrompt<float>), options, cancellationToken);
         }
 
-        private async Task<bool> DistanceValidatorAsync(PromptValidatorContext<int> promptContext, CancellationToken cancellationToken)
+        private async Task<bool> DistanceValidatorAsync(PromptValidatorContext<float> promptContext, CancellationToken cancellationToken)
         {
-            int inputtedDistance;
-            if (!int.TryParse(promptContext.Context.Activity.Text, out inputtedDistance))
+            float inputtedDistance;
+            if (!float.TryParse(promptContext.Context.Activity.Text, out inputtedDistance))
             {
                 await promptContext.Context.SendActivityAsync(MessageFactory.Text($"Invalid distance. Enter preferred distance:"), cancellationToken);
                 return false;
             }
 
-            if (inputtedDistance < Consts.RADIUS_MIN)
+            if (inputtedDistance < Consts.CHAIN_DISTANCE_MIN)
             {
-                await promptContext.Context.SendActivityAsync(MessageFactory.Text($"Distance must be more than or equal to {Consts.CHAIN_DISTANCE_MIN}m. Enter preferred distance:"), cancellationToken);
+                await promptContext.Context.SendActivityAsync(MessageFactory.Text($"Distance must be more than or equal to {Consts.CHAIN_DISTANCE_MIN}km. Enter preferred distance:"), cancellationToken);
                 return false;
             }
 
-            if (inputtedDistance > Consts.RADIUS_MAX)
+            if (inputtedDistance > Consts.CHAIN_DISTANCE_MAX)
             {
-                await promptContext.Context.SendActivityAsync(MessageFactory.Text($"Distance must be less than or equal to {Consts.CHAIN_DISTANCE_MAX}m. Enter preferred distance:"), cancellationToken);
+                await promptContext.Context.SendActivityAsync(MessageFactory.Text($"Distance must be less than or equal to {Consts.CHAIN_DISTANCE_MAX}km. Enter preferred distance:"), cancellationToken);
                 return false;
             }
 
@@ -208,16 +209,43 @@ namespace VFatumbot
         {
             //_logger.LogInformation("ChainsDialog.StartChainingStepAsync");
 
-            await stepContext.Context.SendActivityAsync(MessageFactory.Text(
-                $"type: {stepContext.Values["point_type"]}\n\n" +
-                $"center generation: {stepContext.Values["center_location"]}\n\n" +
-                $"preferred distance: {stepContext.Values["preferred_distance"]}\n\n"
-                ), cancellationToken);
+            stepContext.Values["preferred_distance"] = stepContext.Result;
 
-            await stepContext.EndDialogAsync(cancellationToken);
+            //await stepContext.Context.SendActivityAsync(MessageFactory.Text(
+            //    $"type: {stepContext.Values["point_type"]}\n\n" +
+            //    $"center generation: {stepContext.Values["center_location"]}\n\n" +
+            //    $"preferred distance: {stepContext.Values["preferred_distance"]}\n\n"
+            //    ), cancellationToken);
 
 
-            return await stepContext.ReplaceDialogAsync(nameof(MainDialog), cancellationToken:cancellationToken);
+            var userProfileTemporary = await _userProfileTemporaryAccessor.GetAsync(stepContext.Context, () => new UserProfileTemporary());
+            var actionHandler = new ActionHandler();
+
+            switch (stepContext.Values["point_type"].ToString())
+            {
+                case "Attractors":
+                    await actionHandler.ChainActionAsync(stepContext.Context, userProfileTemporary, cancellationToken, _mainDialog,
+                                            Enums.PointTypes.Attractor, (float)stepContext.Values["preferred_distance"], stepContext.Values["center_location"].ToString().ToLower().Equals("current"));
+                    break;
+                case "Voids":
+                    await actionHandler.ChainActionAsync(stepContext.Context, userProfileTemporary, cancellationToken, _mainDialog,
+                                            Enums.PointTypes.Void, (float)stepContext.Values["preferred_distance"], stepContext.Values["center_location"].ToString().ToLower().Equals("current"));
+                    break;
+                case "Anomalies":
+                    await actionHandler.ChainActionAsync(stepContext.Context, userProfileTemporary, cancellationToken, _mainDialog,
+                                            Enums.PointTypes.Anomaly, (float)stepContext.Values["preferred_distance"], stepContext.Values["center_location"].ToString().ToLower().Equals("current"));
+                    break;
+                case "Quantums":
+                    await actionHandler.ChainActionAsync(stepContext.Context, userProfileTemporary, cancellationToken, _mainDialog,
+                                            Enums.PointTypes.Quantum, (float)stepContext.Values["preferred_distance"], stepContext.Values["center_location"].ToString().ToLower().Equals("current"));
+                    break;
+                case "Pseudos":
+                    await actionHandler.ChainActionAsync(stepContext.Context, userProfileTemporary, cancellationToken, _mainDialog,
+                                            Enums.PointTypes.Pseudo, (float)stepContext.Values["preferred_distance"], stepContext.Values["center_location"].ToString().ToLower().Equals("current"));
+                    break;
+            }
+
+            return await stepContext.EndDialogAsync(cancellationToken: cancellationToken);
         }
     }
 }

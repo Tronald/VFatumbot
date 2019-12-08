@@ -457,7 +457,7 @@ namespace VFatumbot.BotLogic
                                 Messages = messagesArray,
                                 PointTypes = pointTypesArray,
                                 GeneratedPoints = ida,
-                                ShaGid = shaGid,
+                                ShaGids = new string[] { shaGid },
                                 NumWaterPointsSkipped = numWaterPointsSkippedArray,
                                 What3Words = what3WordsArray,
                                 NearestPlaces = nearestPlacesArray,
@@ -576,7 +576,7 @@ namespace VFatumbot.BotLogic
                                 Messages = messagesArray,
                                 PointTypes = pointTypesArray,
                                 GeneratedPoints = ida,
-                                ShaGid = shaGid,
+                                ShaGids = new string[] { shaGid },
                                 NumWaterPointsSkipped = numWaterPointsSkippedArray,
                                 What3Words = what3WordsArray,
                                 NearestPlaces = nearestPlacesArray,
@@ -709,7 +709,7 @@ namespace VFatumbot.BotLogic
                                 Messages = messagesArray,
                                 PointTypes = pointTypesArray,
                                 GeneratedPoints = ida,
-                                ShaGid = shaGid,
+                                ShaGids = new string[] { shaGid },
                                 NumWaterPointsSkipped = numWaterPointsSkippedArray,
                                 What3Words = what3WordsArray,
                                 NearestPlaces = nearestPlacesArray,
@@ -1010,7 +1010,7 @@ namespace VFatumbot.BotLogic
                                 Messages = attMessagesArray.Concat(voiMessagesArray).ToArray(),
                                 PointTypes = attPointTypesArray.Concat(voiPointTypesArray).ToArray(),
                                 GeneratedPoints = att.Concat(voi).ToArray(),
-                                ShaGid = shaGid,
+                                ShaGids = new string[] { shaGid },
                                 NumWaterPointsSkipped = attNumWaterPointsSkippedArray.Concat(voiNumWaterPointsSkippedArray).ToArray(),
                                 What3Words = attWhat3WordsArray.Concat(voiWhat3WordsArray).ToArray(),
                                 NearestPlaces = attNearestPlacesArray.Concat(voiNearestPlacesArray).ToArray(),
@@ -1024,6 +1024,125 @@ namespace VFatumbot.BotLogic
                             await turnContext.SendActivityAsync(MessageFactory.Text(mesg), cancellationToken);
                             await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(context, mainDialog, cancellationToken, new CallbackOptions() { ResetFlag = doScan });
                         }
+                    }, cancellationToken);
+            });
+        }
+
+        public async Task ChainActionAsync(ITurnContext turnContext, UserProfileTemporary userProfileTemporary, CancellationToken cancellationToken, MainDialog mainDialog, Enums.PointTypes pointType, float maxDistance, bool isCentered = false)
+        {
+            await turnContext.SendActivityAsync(MessageFactory.Text("Wait a minute. It will take a while."), cancellationToken);
+
+            DispatchWorkerThread((object sender, DoWorkEventArgs e) =>
+            {
+                turnContext.Adapter.ContinueConversationAsync(Consts.APP_ID, turnContext.Activity.GetConversationReference(),
+                    async (context, token) =>
+                    {
+                        string mesg = "";
+                        int numWaterPointsSkipped = 0;
+
+                        string idaType = "";
+                        if (pointType == PointTypes.Attractor) idaType = "attractor";
+                        else if (pointType == PointTypes.Void) idaType = "void";
+                        else if (pointType == PointTypes.Anomaly) idaType = "any";
+
+                        int numPoints = (int)maxDistance; // TODO: revise
+                        FinalAttractor[] generatedPoints = new FinalAttractor[numPoints];
+                        var shortCodesArray = new string[numPoints];
+                        var messagesArray = new string[numPoints];
+                        var pointTypesArray = new PointTypes[numPoints];
+                        var shaGids = new string[numPoints];
+                        var numWaterPointsSkippedArray = new int[numPoints];
+                        var what3WordsArray = new string[numPoints];
+                        var nearestPlacesArray = new string[numPoints];
+
+                        for (int j = 0; j < numPoints; j++)
+                        {
+                            LatLng centerLocation;
+                            if (isCentered
+                                || j == 0 // first point
+                                )
+                            {
+                                // each point generated from the current user's location
+                                centerLocation = userProfileTemporary.Location;
+                            }
+                            else
+                            {
+                                // sequentially reset current location to each previously generated point
+                                centerLocation = new LatLng(generatedPoints[j - 1].X.center.point.latitude, generatedPoints[j - 1].X.center.point.longitude);
+                            }
+
+                        redo:
+                            string shaGid;
+                            var idas = GetIDA(centerLocation, userProfileTemporary.Radius, 0, new QuantumRandomNumberGeneratorWrapper(context, mainDialog, token), out shaGid);
+                            idas = SortIDA(idas, idaType, 1);
+
+                            if (idas.Count() == 0)
+                            {
+                                await turnContext.SendActivityAsync(MessageFactory.Text($"No anomalies found at so far at point #{j+1}. Trying again..."), cancellationToken);
+                                goto redo;
+                            }
+
+                            generatedPoints[j] = idas[0];
+                            var incoords = new double[] { centerLocation.latitude, centerLocation.longitude };
+
+                            // If water points are set to be skipped, and there's only 1 point in the result array, try again else just exclude those from the results
+                            if (!userProfileTemporary.IsIncludeWaterPoints)
+                            {
+                                var isWaterPoint = await Helpers.IsWaterCoordinatesAsync(incoords);
+                                if (isWaterPoint)
+                                {
+                                    numWaterPointsSkipped++;
+
+                                    if (numWaterPointsSkipped > Consts.WATER_POINTS_SEARCH_MAX)
+                                    {
+                                        await turnContext.SendActivityAsync(MessageFactory.Text($"Couldn't find anything but water points at point {j+1}. Try again later."), cancellationToken);
+                                        await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(context, mainDialog, cancellationToken, new CallbackOptions() { ResetFlag = false });
+                                        return;
+                                    }
+
+                                    await turnContext.SendActivityAsync(MessageFactory.Text($"Number of water points skipped so far at point #{j+1}: {numWaterPointsSkipped}"), cancellationToken);
+                                    goto redo;
+                                }
+                            }
+
+                            shortCodesArray[j] = Helpers.Crc32Hash($"{turnContext.Activity.From.Id}{turnContext.Activity.Timestamp.ToString()}");
+                            mesg = Tolog(turnContext, idaType, idas[0], shortCodesArray[j]);
+                            await turnContext.SendActivityAsync(MessageFactory.Text($"#{j+1} {Helpers.DirectLineNewLineFix(turnContext, mesg)}"), cancellationToken);
+
+                            dynamic w3wResult = await Helpers.GetWhat3WordsAddressAsync(incoords);
+
+                            if (numWaterPointsSkipped > 0)
+                            {
+                                await turnContext.SendActivityAsync(MessageFactory.Text($"Number of water points skipped at point #{j+1}: " + numWaterPointsSkipped), cancellationToken);
+                            }
+
+                            messagesArray[j] = mesg;
+                            pointTypesArray[j] = Enum.Parse<PointTypes>("Chain" + pointType.ToString());
+                            shaGids[j] = shaGid;
+                            numWaterPointsSkippedArray[j] = numWaterPointsSkipped;
+                            what3WordsArray[j] = "" + w3wResult?.words;
+                            nearestPlacesArray[j] = "" + w3wResult?.nearestPlace + Helpers.GetCountryFromW3W(w3wResult);
+
+                            await turnContext.SendActivitiesAsync(CardFactory.CreateLocationCardsReply(Enum.Parse<ChannelPlatform>(turnContext.Activity.ChannelId), incoords, userProfileTemporary.IsDisplayGoogleThumbnails, w3wResult), cancellationToken);
+                        }
+
+                        await turnContext.SendActivitiesAsync(CardFactory.CreateChainCardReply(Enum.Parse<ChannelPlatform>(turnContext.Activity.ChannelId), generatedPoints), cancellationToken);
+                        await Helpers.SendPushNotification(userProfileTemporary, "Chain Generated", mesg);
+
+                        CallbackOptions callbackOptions = new CallbackOptions()
+                        {
+                            StartTripReportDialog = true,
+                            ShortCodes = shortCodesArray,
+                            Messages = messagesArray,
+                            PointTypes = pointTypesArray,
+                            GeneratedPoints = generatedPoints,
+                            ShaGids = shaGids,
+                            NumWaterPointsSkipped = numWaterPointsSkippedArray,
+                            What3Words = what3WordsArray,
+                            NearestPlaces = nearestPlacesArray,
+                            ResetFlag = false
+                        };
+                        await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(context, mainDialog, cancellationToken, callbackOptions);
                     }, cancellationToken);
             });
         }
@@ -1203,7 +1322,7 @@ namespace VFatumbot.BotLogic
                             Messages = new string[] { mesg },
                             PointTypes = new PointTypes[] { PointTypes.MysteryPoint },
                             GeneratedPoints = ida,
-                            ShaGid = shaGid,
+                            ShaGids = new string[] { shaGid },
                             NumWaterPointsSkipped = new int[] { numWaterPointsSkipped },
                             What3Words = new string[] { w3wResult?.words },
                             NearestPlaces = new string[] { w3wResult?.nearestPlace + Helpers.GetCountryFromW3W(w3wResult) },

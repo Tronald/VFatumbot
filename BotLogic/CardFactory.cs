@@ -5,6 +5,7 @@ using Microsoft.Bot.Builder;
 using Microsoft.Bot.Schema;
 using VFatumbot.BotLogic;
 using static VFatumbot.BotLogic.Enums;
+using static VFatumbot.BotLogic.FatumFunctions;
 
 namespace VFatumbot
 {
@@ -32,6 +33,46 @@ namespace VFatumbot
             reply.Attachments.Add(heroCard.ToAttachment());
 
             return reply;
+        }
+
+        public static IMessageActivity[] CreateChainCardReply(ChannelPlatform platform, FinalAttractor[] generatedPoints)
+        {
+            var replies = new IMessageActivity[1];
+
+            var attachments = new List<Attachment>();
+            var attachmentReply = MessageFactory.Attachment(attachments);
+            replies[0] = attachmentReply;
+
+            attachmentReply.AttachmentLayout = AttachmentLayoutTypes.Carousel;
+
+            double[][] incoords = new double[generatedPoints.Length][];
+            for (int i = 0; i < incoords.Length; i++)
+            {
+                incoords[i] = new double[2];
+                incoords[i][0] = generatedPoints[i].X.center.point.latitude;
+                incoords[i][1] = generatedPoints[i].X.center.point.longitude;
+            }
+
+            var images = new List<CardImage>();
+            images.Add(new CardImage(CreateGoogleMapsStaticThumbnail(incoords[0])));
+
+            var cardAction = new CardAction(ActionTypes.OpenUrl, "Maps", value: CreateGoogleMapsRouteUrl(incoords));
+
+            var buttons = new List<CardAction> {
+                cardAction,
+            };
+
+            var heroCard = new HeroCard
+            {
+                Title = "View with Google",
+                Images = images,
+                Buttons = buttons,
+                Tap = cardAction
+            };
+
+            attachmentReply.Attachments.Add(heroCard.ToAttachment());
+
+            return replies;
         }
 
         public static IMessageActivity[] CreateLocationCardsReply(ChannelPlatform platform, double[] incoords, bool showStreetAndEarthThumbnails = false, dynamic w3wResult = null)
@@ -182,6 +223,16 @@ namespace VFatumbot
         public static string CreateGoogleMapsUrl(double[] incoords)
         {
             return "https://www.google.com/maps/place/" + incoords[0] + "+" + incoords[1] + "/@" + incoords[0] + "+" + incoords[1] + ",14z";
+        }
+
+        public static string CreateGoogleMapsRouteUrl(double[][] incoords)
+        {
+            var str = "https://www.google.com/maps/dir/";
+            for (int i = 0; i < incoords.Length; i++)
+            {
+                str += incoords[i][0] + "+" + incoords[i][1] + "/";
+            }
+            return str;
         }
 
         public static string CreateGoogleStreetViewUrl(double[] incoords)
