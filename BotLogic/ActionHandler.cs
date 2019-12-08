@@ -335,7 +335,7 @@ namespace VFatumbot.BotLogic
                 await turnContext.Adapter.ContinueConversationAsync(Consts.APP_ID, turnContext.Activity.GetConversationReference(),
                    async (context, token) =>
                    {
-                       QuantumRandomNumberGeneratorWrapper rnd = new QuantumRandomNumberGeneratorWrapper(turnContext, mainDialog, cancellationToken); ;
+                       QuantumRandomNumberGeneratorWrapper rnd = new QuantumRandomNumberGeneratorWrapper(turnContext, mainDialog, cancellationToken);
                        try
                        {
                            rnd.NextHex(10);
