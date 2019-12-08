@@ -53,7 +53,7 @@ namespace VFatumbot
                 return await stepContext.NextAsync(cancellationToken: cancellationToken);
             }
 
-            var promptOptions = new PromptOptions { Prompt = MessageFactory.Text("Enter a maximum number (greater than 1, up to 255):") };
+            var promptOptions = new PromptOptions { Prompt = MessageFactory.Text("Enter an inclusive maximum number greater than 1, up to 255. For a simple coin toss, enter 2 and assign heads to 1 and tails to 2:") };
             return await stepContext.PromptAsync(nameof(NumberPrompt<int>), promptOptions, cancellationToken);
         }
 
