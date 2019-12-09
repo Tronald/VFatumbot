@@ -67,7 +67,7 @@
 #endif
 
         // Google Maps etc thumbnail sizes to use in reply cards
-        public const string THUMBNAIL_SIZE = "400x400";
+        public const string THUMBNAIL_SIZE = "320x320";
 
         // Dummy invalid coordinate
         public const double INVALID_COORD = -1000.0;
