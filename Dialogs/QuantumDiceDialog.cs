@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Bot.Builder;
@@ -51,11 +52,18 @@ namespace VFatumbot
 
 
             int alreadyGotMin = -1;
-            if (stepContext.Options != null && int.TryParse(stepContext.Options.ToString(), out alreadyGotMin))
+            if (stepContext.Options != null)
             {
-                // Rolling again
-                stepContext.Values["Min"] = alreadyGotMin;
-                return await stepContext.NextAsync(cancellationToken: cancellationToken);
+                try
+                {
+                    var minmax = (IDictionary<string, string>)stepContext.Options;
+                    if (int.TryParse(minmax["Min"], out alreadyGotMin))
+                    {
+                        // Rolling again
+                        stepContext.Values["Min"] = alreadyGotMin;
+                        return await stepContext.NextAsync(cancellationToken: cancellationToken);
+                    }
+                } catch (Exception) { /* cast exception, bad hack, TLDR: fix later */ }
             }
 
             var promptOptions = new PromptOptions { Prompt = MessageFactory.Text("Enter an inclusive minimum number greater than or equal to 1. For a coin toss enter 1 and assign heads to it:") };
@@ -77,7 +85,7 @@ namespace VFatumbot
                 return false;
             }
 
-            if (inputtedDiceMin >= 0xff)
+            if (inputtedDiceMin > 254)
             {
                 await promptContext.Context.SendActivityAsync(MessageFactory.Text($"Invalid minimum, must be less than or equal to 254. Try again:"), cancellationToken);
                 return false;
@@ -102,11 +110,18 @@ namespace VFatumbot
             stepContext.Values["Min"] = minValue;
 
             int alreadyGotMax = -1;
-            if (stepContext.Options != null && int.TryParse(stepContext.Options.ToString(), out alreadyGotMax))
+            if (stepContext.Options != null)
             {
-                // Rolling again
-                stepContext.Values["Max"] = alreadyGotMax;
-                return await stepContext.NextAsync(cancellationToken: cancellationToken);
+                try
+                {
+                    var minmax = (IDictionary<string, string>)stepContext.Options;
+                    if (int.TryParse(minmax["Max"], out alreadyGotMax))
+                    {
+                        // Rolling again
+                        stepContext.Values["Max"] = alreadyGotMax;
+                        return await stepContext.NextAsync(cancellationToken: cancellationToken);
+                    }
+                } catch (Exception) { /* cast exception, bad hack, TLDR: fix later */ }
             }
 
             var promptOptions = new PromptOptions { Prompt = MessageFactory.Text("Enter an inclusive maximum number greater than the minimum, up to 255. For a coin toss enter 2 and assign tails to it:") };
@@ -130,7 +145,7 @@ namespace VFatumbot
 
             if (inputtedDiceMax > 0xff)
             {
-                await promptContext.Context.SendActivityAsync(MessageFactory.Text($"Invalid maxium, must be less than or equal to 255. Try again:"), cancellationToken);
+                await promptContext.Context.SendActivityAsync(MessageFactory.Text($"Invalid maximum, must be less than or equal to 255. Try again:"), cancellationToken);
                 return false;
             }
 
@@ -155,18 +170,20 @@ namespace VFatumbot
 
             if (minValue > maxValue)
             {
-                await stepContext.Context.SendActivityAsync(MessageFactory.Text($"Minium ({minValue}) must be less than the maximum ({maxValue}). Setting it to {minValue-1}."), cancellationToken);
+                await stepContext.Context.SendActivityAsync(MessageFactory.Text($"Minimum ({minValue}) must be less than the maximum ({maxValue}). Setting it to {minValue-1}."), cancellationToken);
                 minValue--;
                 stepContext.Values["Min"] = minValue;
             }
 
+            await stepContext.Context.SendActivityAsync(MessageFactory.Text($"Rolling..."), cancellationToken);
+
             var qrng = new QuantumRandomNumberGeneratorWrapper(stepContext.Context, _mainDialog, cancellationToken);
-            var diceValue = qrng.Next(minValue == 1 ? 0 : minValue, maxValue + 1);
+            var diceValue = qrng.Next(minValue, maxValue + 1);
             stepContext.Values["Max"] = maxValue;
 
             var options = new PromptOptions()
             {
-                Prompt = MessageFactory.Text($"Result: {diceValue}/{maxValue}. Roll again?"),
+                Prompt = MessageFactory.Text($"Result: {diceValue} [{minValue},{maxValue}]. Roll again?"),
                 RetryPrompt = MessageFactory.Text("Yes or No, nothing else."),
                 Choices = new List<Choice>()
                 {
@@ -194,10 +211,16 @@ namespace VFatumbot
         {
             //_logger.LogInformation($"QuantumDiceDialog.RollAgainStepAsync[{((FoundChoice)stepContext.Result)?.Value}]");
 
+            IDictionary<string, string> minmax = new Dictionary<string, string>
+            {
+                { "Min", stepContext.Values["Min"].ToString() },
+                { "Max", stepContext.Values["Max"].ToString() }
+            };
+
             switch (((FoundChoice)stepContext.Result)?.Value)
             {
                 case "Yes":
-                    return await stepContext.ReplaceDialogAsync(nameof(QuantumDiceDialog), options: stepContext.Values["Max"], cancellationToken: cancellationToken);
+                    return await stepContext.ReplaceDialogAsync(nameof(QuantumDiceDialog), options: minmax, cancellationToken: cancellationToken);
                 case "No":
                 default:
                     return await stepContext.ReplaceDialogAsync(nameof(MainDialog), cancellationToken: cancellationToken);
