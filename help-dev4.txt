@@ -1,6 +1,6 @@
 #### INSTRUCTIONS  
   
-First up you need to send a location from which the points will be calculated. You will be prompted to do so.  
+First up you need to send a location from where the points will be calculated. You will be prompted to do so.  
   
 ##### MAIN MENU  
   
@@ -8,26 +8,31 @@ For the intent-driven anomaly search/mind-matter interaction part of the experim
 * Attractor (/getattractor) - generate an Attractor point  
 * Void (/getvoid) - generate a Void point  
 * Anomaly (/getanomaly, /getida) - get the strongest Attractor or Void point  
-* Intent Suggestions - get some quantumly random generated word suggestions for an intent to set  
-* Pair (/getpair) - get a pair of Attractor and Void points  
-* Scan submenu - see below
-You can enter [1]-[20] after the commands to get that number of points; e.g. /getattractor[3]  
+* Intent Suggestions (/getintents) - get some quantumly random generated word suggestions for an intent to set  
+* Pair (/getpair) - get a pair of Attractor and Void points 
   
-For the blind spots/breaking determinism/blind-experiment part you have:  
-* More Stuff submenu - blind spots and other features, see below  
-  
-Others:  
+And others:  
+* Scan submenu - see below  
+* Blind Spots & More submenu - see below  
 * My Location - show your currently set location  
 * Settings - set your radius (/setradius), and toggle whether to skip/include water points and whether to show thumbnails for Google Street View and Google Earth  
   
-##### MORE STUFF SUBMENU
+You can enter [1]-[20] after the commands to search for up to that number of points; e.g. /getattractor[3]  
+  
+##### BLIND SPOTS & MORE SUBMENU  
+  
+For the blind spots/breaking determinism/blind-experiment part you have + other  features:  
   
 * Quantum (/getquantum) - get a single quantumly generated point  
 * Quantum Time (/getqtime) - same as above but with a suggested time to visit  
 * Pseudo (/getpseudo) - generate a single pseudo-random point  
-* Mystery Point (/getpoint) - generate a random type of point (for blind-experiments)
+* Mystery Point (/getpoint) - generate a random type of point (for blind-experiments) 
+* Chains - chain points together 
+* Quantum Dice -  do a quantum random coin toss or number generation up to 255  
 * My Randotrips (/myrandotrips) - download the file for a virtual trip in Google Earth of all your visited points  
 * Today's Randotrips (/randotrips) - download the file for a virtual in Google Earth trip of today's points in Google Earth   
+    
+And lastly,  
   
 ##### SCAN SUBMENU  
   
