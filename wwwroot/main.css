@@ -27,7 +27,7 @@ body, button, input, textarea, .css-mfy564 {
 .css-a4zgb2 {
 	border-radius:		0.5em;
 	box-shadow: 		0px 0px 2px 2px rgba(0,0,0, 0.5);
-	margin: 1em;
+	margin:             0.1em;
 }
 #snackbar {
 	border-radius:		0.25em !important;
@@ -44,7 +44,7 @@ div.main, div.main input, .css-a4zgb2 {
 	color:				#f4f4f4;
 	border-color:		black;
 	border-width:		2px;
-	padding:			0px 0.294em 0.176em 0.294em;
+	padding:			0px 0px 0px 0px;
 	text-shadow:		0px -1px 1px black;
 	line-height:		1.4em;
 }
@@ -55,6 +55,19 @@ div.main {
 div.bubble {
 	max-width: 60% !important;
 	max-width: 600px !important;
+}
+
+.ac-container {
+	background: -moz-linear-gradient(top,  #201917 0%, #333131 100%);
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#201917), color-stop(100%,#333131));
+	background: -webkit-linear-gradient(top,  #201917 0%,#333131 100%);
+	background: -o-linear-gradient(top,  #201917 0%,#333131 100%);
+}
+
+.ac-textBlock {
+    color:			#f4f4f4             !important;
+	text-shadow:	0px -1px 1px black  !important;
+	background:		rgba(0,0,0,0)       !important;
 }
 
 div.main, .css-a4zgb2 {
@@ -78,7 +91,6 @@ div.main input {
 	background:			rgba(0,0,0,0);
 }
 
-
 .css-1mou18w > input:not(:disabled), [data-css-1mou18w] > input:not(:disabled) {
 	color: #f4f4f4;
 }
@@ -91,10 +103,11 @@ div.main input {
 	fill: rgb(255, 255, 255);
 }
 
-
-body, button {
+/* was making the "New Messages" button full height. TODO: see if it broke otherstuff.
+body, button, !.css-1m1alj7 {
 	height:			100%;
 }
+*/
 
 
 textarea, div.middle input {
@@ -110,12 +123,12 @@ body, button, input {
 
 @media only screen and (max-width: 600px) and (min-width: 400px) {
 	body, button, input {
-		font-size: 14px;
+		font-size: 17px;
 	}
 }
 @media only screen and (max-width: 399px) {
 	body, button, input {
-		font-size: 12px;
+		font-size: 14px;
 	}
 }
 
