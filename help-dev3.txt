@@ -1,5 +1,6 @@
 #### NEW FEATURES  
   
+* Design updated to match the new homepage's theme  
 * Now on Discord @ https://discord.gg/ZBf5u6n (no buttons/menus, /command support only)  
 * Now on Slack @ https://shorturl.at/AFGKX  
 * Now on Skype @ https://shorturl.at/iyLM4  
