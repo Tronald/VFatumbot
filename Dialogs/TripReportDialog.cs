@@ -730,7 +730,12 @@ namespace VFatumbot
                         isb.Append($"'{options.NumWaterPointsSkipped[i]}',");
 
                         //isb.Append($"'{attractor.GID}',");// was hardcoded at 23 in Fatumbot3
-                        isb.Append($"'{(options.ShaGids.Length == 1 ? options.ShaGids[0] : options.ShaGids[i])}',");
+                        var shaGid = "";
+                        if (options.ShaGids != null && options.ShaGids.Length >= 1)
+                        {
+                            shaGid = (options.ShaGids.Length == 1 ? options.ShaGids[0] : options.ShaGids[i]);
+                        }
+                        isb.Append($"'{shaGid}',");
 
                         isb.Append($"'{attractor.TID}',");
                         isb.Append($"'{attractor.LID}',");
