@@ -1343,10 +1343,12 @@ namespace VFatumbot.BotLogic
                     {
                         string whereClause = "", filename = "";
                         var ext = ".kml";
+                        var isMyRandotrips = false;
                         if ("my".Equals(date))
                         {
                             whereClause = $"AND user_id = '{userProfileTemporary.UserId}'";
                             filename = userProfileTemporary.UserId + ext;
+                            isMyRandotrips = true;
                         }
                         else if ("all".Equals(date))
                         {
@@ -1359,7 +1361,7 @@ namespace VFatumbot.BotLogic
                             filename = $"randotrips_{date}{ext}";
                         }
 
-                        var numPoints = RandotripKMLGenerator.Generate(whereClause, filename);
+                        var numPoints = RandotripKMLGenerator.Generate(whereClause, filename, isMyRandotrips);
                         if (numPoints < 0)
                         {
                             await turnContext.SendActivityAsync(MessageFactory.Text("There was an error. Uh-oh."), cancellationToken);

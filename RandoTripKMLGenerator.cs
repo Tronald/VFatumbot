@@ -31,7 +31,7 @@ namespace VFatumbot
         public const string FLYTO_TEMPLATE =
 @"            <!-- #################### FLYTO #################### -->
             <gx:FlyTo>
-                <gx:duration>8.0</gx:duration>
+                <gx:duration>6.5</gx:duration>
                 <gx:flyToMode>bounce</gx:flyToMode>
                 <LookAt>
                     <latitude>{0}</latitude>
@@ -182,7 +182,7 @@ namespace VFatumbot
             public DateTime datetime;
         }
 
-        public static int Generate(string whereClause, string filename)
+        public static int Generate(string whereClause, string filename, bool isMyRandotrips)
         {
             try
             {
@@ -289,9 +289,20 @@ namespace VFatumbot
                         balloonString.Append($"{point.short_hash_id}<br>");
                         balloonString.Append("]]>");
 
+                        var dateTimeStr = "";
+                        if (isMyRandotrips)
+                        {
+                            // TODO: one day figure out how to show My Randotrips in user's local timezone
+                            dateTimeStr = $"{point.point_type} {point.datetime.ToString("yyyy-MM-dd HH':'mm")} UTC";
+                        }
+                        else
+                        {
+                            dateTimeStr = $"{point.point_type} {point.datetime.ToString("yyyy-MM-dd HH':'mm")} UTC";
+                        }
+
                         var formatted = string.Format(POINT_TEMPLATE,
                                                 $"point{pointNo++}",
-                                                $"{point.point_type} {point.datetime.ToString("yyyy-MM-dd HH':'mm")}",
+                                                dateTimeStr,
                                                 balloonString.ToString(),
                                                 point.longitude,
                                                 point.latitude
