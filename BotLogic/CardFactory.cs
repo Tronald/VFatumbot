@@ -53,10 +53,10 @@ namespace VFatumbot
                 incoords[i][1] = generatedPoints[i].X.center.point.longitude;
             }
 
-            var images = new List<CardImage>();
-            images.Add(new CardImage(CreateGoogleMapsStaticThumbnail(incoords[0])));
+            //var images = new List<CardImage>();
+            //images.Add(new CardImage(CreateGoogleMapsStaticThumbnail(incoords[0])));
 
-            var cardAction = new CardAction(ActionTypes.OpenUrl, "Maps", value: CreateGoogleMapsRouteUrl(incoords));
+            var cardAction = new CardAction(ActionTypes.OpenUrl, "Open", value: CreateGoogleMapsRouteUrl(incoords));
 
             var buttons = new List<CardAction> {
                 cardAction,
@@ -64,8 +64,8 @@ namespace VFatumbot
 
             var heroCard = new HeroCard
             {
-                Title = "View with Google",
-                Images = images,
+                Title = "Travel Chain on Google Maps",
+                //Images = images,
                 Buttons = buttons,
                 Tap = cardAction
             };

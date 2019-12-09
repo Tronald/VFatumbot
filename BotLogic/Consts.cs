@@ -82,10 +82,10 @@
         public const int RADIUS_MIN = 1000;
 
         // Max chain distance
-        public const float CHAIN_DISTANCE_MAX = 1000;
+        public const float CHAIN_DISTANCE_MAX = 20;
 
         // Min chain distance
-        public const float CHAIN_DISTANCE_MIN = 1;
+        public const float CHAIN_DISTANCE_MIN = 2;
 
         // Maximum number of tries to search for non-water points before giving up
         public const int WATER_POINTS_SEARCH_MAX = 10;

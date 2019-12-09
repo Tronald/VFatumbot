@@ -1028,9 +1028,9 @@ namespace VFatumbot.BotLogic
             });
         }
 
-        public async Task ChainActionAsync(ITurnContext turnContext, UserProfileTemporary userProfileTemporary, CancellationToken cancellationToken, MainDialog mainDialog, Enums.PointTypes pointType, float maxDistance, bool isCentered = false)
+        public async Task ChainActionAsync(ITurnContext turnContext, UserProfileTemporary userProfileTemporary, CancellationToken cancellationToken, MainDialog mainDialog, Enums.PointTypes pointType, int maxDistance, bool isCentered = false)
         {
-            await turnContext.SendActivityAsync(MessageFactory.Text("Wait a minute. It will take a while."), cancellationToken);
+            await turnContext.SendActivityAsync(MessageFactory.Text("Generating your chain. Depending on your radius and the number/type of points it may take a while."), cancellationToken);
 
             DispatchWorkerThread((object sender, DoWorkEventArgs e) =>
             {
@@ -1045,7 +1045,7 @@ namespace VFatumbot.BotLogic
                         else if (pointType == PointTypes.Void) idaType = "void";
                         else if (pointType == PointTypes.Anomaly) idaType = "any";
 
-                        int numPoints = (int)maxDistance; // TODO: revise
+                        int numPoints = (int)maxDistance; // TODO: revise numPoints to a fancy distance calculation algo
                         FinalAttractor[] generatedPoints = new FinalAttractor[numPoints];
                         var shortCodesArray = new string[numPoints];
                         var messagesArray = new string[numPoints];
@@ -1083,7 +1083,7 @@ namespace VFatumbot.BotLogic
                             }
 
                             generatedPoints[j] = idas[0];
-                            var incoords = new double[] { centerLocation.latitude, centerLocation.longitude };
+                            var incoords = new double[] { generatedPoints[j].X.center.point.latitude, generatedPoints[j].X.center.point.longitude };
 
                             // If water points are set to be skipped, and there's only 1 point in the result array, try again else just exclude those from the results
                             if (!userProfileTemporary.IsIncludeWaterPoints)
@@ -1126,7 +1126,21 @@ namespace VFatumbot.BotLogic
                             await turnContext.SendActivitiesAsync(CardFactory.CreateLocationCardsReply(Enum.Parse<ChannelPlatform>(turnContext.Activity.ChannelId), incoords, userProfileTemporary.IsDisplayGoogleThumbnails, w3wResult), cancellationToken);
                         }
 
-                        await turnContext.SendActivitiesAsync(CardFactory.CreateChainCardReply(Enum.Parse<ChannelPlatform>(turnContext.Activity.ChannelId), generatedPoints), cancellationToken);
+                        var origin = new FinalAttractor[] {
+                                // FinalAttractor is just a wrapper for the origin
+                                new FinalAttractor()
+                                {
+                                    X = new FinalAttr()
+                                    {
+                                        center = new Coordinate()
+                                        {
+                                            point = userProfileTemporary.Location,
+                                        },
+                                    }
+                                }
+                            };
+                        var chain = origin.Concat(generatedPoints).ToArray();
+                        await turnContext.SendActivitiesAsync(CardFactory.CreateChainCardReply(Enum.Parse<ChannelPlatform>(turnContext.Activity.ChannelId), chain), cancellationToken);
                         await Helpers.SendPushNotification(userProfileTemporary, "Chain Generated", mesg);
 
                         CallbackOptions callbackOptions = new CallbackOptions()
