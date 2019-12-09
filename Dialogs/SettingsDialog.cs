@@ -176,7 +176,7 @@ namespace VFatumbot
 
             await ShowCurrentSettingsAsync(stepContext, cancellationToken);
 
-            await stepContext.EndDialogAsync(cancellationToken);
+            await stepContext.EndDialogAsync(cancellationToken: cancellationToken);
 
             var callbackOptions = new CallbackOptions();
             callbackOptions.UpdateSettings = true;

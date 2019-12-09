@@ -81,7 +81,7 @@ namespace VFatumbot
             if (Helpers.IsRandoLobby(stepContext.Context))
             {
                 // Don't spam Randonauts Telegram Lobby with dialog menus as they get sent to everyone
-                return await stepContext.EndDialogAsync();
+                return await stepContext.EndDialogAsync(cancellationToken: cancellationToken);
             }
 
             // Shortcut to trip report dialog testing
