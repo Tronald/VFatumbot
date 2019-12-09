@@ -23,12 +23,17 @@ namespace VFatumbot
 
             TelemetryClient = telemetryClient;
 
-            AddDialog(new NumberPrompt<int>(nameof(NumberPrompt<int>), DiceMaxValidatorAsync)
+            AddDialog(new NumberPrompt<int>("MinNumberPrompt", DiceMinValidatorAsync)
+            {
+                TelemetryClient = telemetryClient,
+            });
+            AddDialog(new NumberPrompt<int>("MaxNumberPrompt", DiceMaxValidatorAsync)
             {
                 TelemetryClient = telemetryClient,
             });
             AddDialog(new WaterfallDialog(nameof(WaterfallDialog), new WaterfallStep[]
             {
+                EnterDiceMinStepAsync,
                 EnterDiceMaxStepAsync,
                 RollQDiceStepAsync,
                 RollAgainStepAsync
@@ -40,10 +45,61 @@ namespace VFatumbot
             InitialDialogId = nameof(WaterfallDialog);
         }
 
+        private async Task<DialogTurnResult> EnterDiceMinStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
+        {
+            //_logger.LogInformation("QuantumDiceDialog.EnterDiceMinStepAsync");
+
+
+            int alreadyGotMin = -1;
+            if (stepContext.Options != null && int.TryParse(stepContext.Options.ToString(), out alreadyGotMin))
+            {
+                // Rolling again
+                stepContext.Values["Min"] = alreadyGotMin;
+                return await stepContext.NextAsync(cancellationToken: cancellationToken);
+            }
+
+            var promptOptions = new PromptOptions { Prompt = MessageFactory.Text("Enter an inclusive minimum number greater than or equal to 1. For a coin toss enter 1 and assign heads to it:") };
+            return await stepContext.PromptAsync("MinNumberPrompt", promptOptions, cancellationToken);
+        }
+
+        private async Task<bool> DiceMinValidatorAsync(PromptValidatorContext<int> promptContext, CancellationToken cancellationToken)
+        {
+            int inputtedDiceMin;
+            if (!int.TryParse(promptContext.Context.Activity.Text, out inputtedDiceMin))
+            {
+                await promptContext.Context.SendActivityAsync(MessageFactory.Text($"Invalid minimum. Enter desired minimum:"), cancellationToken);
+                return false;
+            }
+
+            if (inputtedDiceMin < 1)
+            {
+                await promptContext.Context.SendActivityAsync(MessageFactory.Text($"Minimum must greater than or equal to 1. Try again:"), cancellationToken);
+                return false;
+            }
+
+            if (inputtedDiceMin >= 0xff)
+            {
+                await promptContext.Context.SendActivityAsync(MessageFactory.Text($"Invalid minimum, must be less than or equal to 254. Try again:"), cancellationToken);
+                return false;
+            }
+
+            return true;
+        }
+
         private async Task<DialogTurnResult> EnterDiceMaxStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
         {
             //_logger.LogInformation("QuantumDiceDialog.EnterDiceMaxStepAsync");
 
+            int minValue;
+            if (stepContext.Values != null && stepContext.Values.ContainsKey("Min"))
+            {
+                minValue = int.Parse(stepContext.Values["Min"].ToString());
+            }
+            else
+            {
+                minValue = (int)stepContext.Result;
+            }
+            stepContext.Values["Min"] = minValue;
 
             int alreadyGotMax = -1;
             if (stepContext.Options != null && int.TryParse(stepContext.Options.ToString(), out alreadyGotMax))
@@ -53,8 +109,8 @@ namespace VFatumbot
                 return await stepContext.NextAsync(cancellationToken: cancellationToken);
             }
 
-            var promptOptions = new PromptOptions { Prompt = MessageFactory.Text("Enter an inclusive maximum number greater than 1, up to 255. For a simple coin toss, enter 2 and assign heads to 1 and tails to 2:") };
-            return await stepContext.PromptAsync(nameof(NumberPrompt<int>), promptOptions, cancellationToken);
+            var promptOptions = new PromptOptions { Prompt = MessageFactory.Text("Enter an inclusive maximum number greater than the minimum, up to 255. For a coin toss enter 2 and assign tails to it:") };
+            return await stepContext.PromptAsync("MaxNumberPrompt", promptOptions, cancellationToken);
         }
 
         private async Task<bool> DiceMaxValidatorAsync(PromptValidatorContext<int> promptContext, CancellationToken cancellationToken)
@@ -85,6 +141,8 @@ namespace VFatumbot
         {
             //_logger.LogInformation($"QuantumDiceDialog.RollQDiceStepAsync[{((FoundChoice)stepContext.Result)?.Value}]");
 
+            int minValue = int.Parse(stepContext.Values["Min"].ToString());
+
             int maxValue;
             if (stepContext.Values != null && stepContext.Values.ContainsKey("Max"))
             {
@@ -94,8 +152,16 @@ namespace VFatumbot
             {
                 maxValue = (int)stepContext.Result;
             }
+
+            if (minValue > maxValue)
+            {
+                await stepContext.Context.SendActivityAsync(MessageFactory.Text($"Minium ({minValue}) must be less than the maximum ({maxValue}). Setting it to {minValue-1}."), cancellationToken);
+                minValue--;
+                stepContext.Values["Min"] = minValue;
+            }
+
             var qrng = new QuantumRandomNumberGeneratorWrapper(stepContext.Context, _mainDialog, cancellationToken);
-            var diceValue = qrng.Next(maxValue == 1 ? 0 : 1, maxValue + 1);
+            var diceValue = qrng.Next(minValue == 1 ? 0 : minValue, maxValue + 1);
             stepContext.Values["Max"] = maxValue;
 
             var options = new PromptOptions()
