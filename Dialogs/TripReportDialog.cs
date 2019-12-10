@@ -169,6 +169,9 @@ namespace VFatumbot
                         case PointTypes.ScanVoid:
                         case PointTypes.ScanAnomaly:
                         case PointTypes.ScanPair:
+                        case PointTypes.ChainAttractor:
+                        case PointTypes.ChainVoid:
+                        case PointTypes.ChainAnomaly:
                             var options = new PromptOptions()
                             {
                                 Prompt = MessageFactory.Text("Did you set an intent?"),
