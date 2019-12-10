@@ -109,7 +109,7 @@ namespace VFatumbot
 
             var options = new PromptOptions()
             {
-                Prompt = MessageFactory.Text("Did you visit this point and would you like to make a trip report?"),
+                Prompt = MessageFactory.Text("Did you visit the point(s) and would you like to make a trip report?"),
                 RetryPrompt = MessageFactory.Text("That is not a valid choice."),
                 Choices = new List<Choice>()
                             {
