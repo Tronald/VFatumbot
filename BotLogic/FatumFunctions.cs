@@ -181,7 +181,7 @@ namespace VFatumbot.BotLogic
                     double bearing = ida.X.center.bearing.finalBearing;
                     if (bearing < 0)
                     {
-                        bearing = 360 - bearing;
+                        bearing = (bearing + 360) % 360.0;
                     }
 
                     resp += "Type: Void" + "\n\n";
