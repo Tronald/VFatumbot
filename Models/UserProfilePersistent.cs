@@ -29,5 +29,7 @@ namespace VFatumbot
 
         // Kind of track whether they've used the bot before
         public bool HasSetLocationOnce { get; set; } = false;
+
+        public bool HasAgreedToToS { get; set; } = false;
     }
 }

@@ -34,6 +34,7 @@ namespace VFatumbot
             if (userTemporaryState != null)
                 _userProfileTemporaryAccessor = userTemporaryState.CreateProperty<UserProfileTemporary>(nameof(UserProfileTemporary));
 
+            AddDialog(new PrivacyAndTermsDialog(_userProfilePersistentAccessor, logger, telemetryClient));
             AddDialog(new MoreStuffDialog(_userProfileTemporaryAccessor, this, logger, telemetryClient));
             AddDialog(new TripReportDialog(_userProfileTemporaryAccessor, this, logger, telemetryClient));
             AddDialog(new ScanDialog(_userProfileTemporaryAccessor, this, logger, telemetryClient));
@@ -89,6 +90,13 @@ namespace VFatumbot
 
             var userProfilePersistent = await _userProfilePersistentAccessor.GetAsync(stepContext.Context, () => new UserProfilePersistent());
             var userProfileTemporary = await _userProfileTemporaryAccessor.GetAsync(stepContext.Context, () => new UserProfileTemporary());
+
+            // Must agree to Privacy Policy and Terms of Service before using
+            if (!userProfilePersistent.HasAgreedToToS)
+            {
+                await stepContext.EndDialogAsync(cancellationToken: cancellationToken);
+                return await stepContext.BeginDialogAsync(nameof(PrivacyAndTermsDialog), this, cancellationToken);
+            }
 
             if (stepContext.Options != null)
             {
