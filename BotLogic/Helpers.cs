@@ -220,7 +220,11 @@ namespace VFatumbot.BotLogic
         {
             return turnContext.Activity.ChannelId.Equals(ChannelPlatform.telegram.ToString())
                    && turnContext.Activity.Conversation.IsGroup == true
-                   && ("RANDONAUTS (LOBBY)".Equals(turnContext.Activity.Conversation.Name) || "botwars".Equals(turnContext.Activity.Conversation.Name));
+                   && (
+                   "RANDONAUTS (LOBBY)".Equals(turnContext.Activity.Conversation.Name) ||
+                   "botwars".Equals(turnContext.Activity.Conversation.Name) ||
+                   "Im All Kinds Of Steve".Equals(turnContext.Activity.Conversation.Name)
+                   );
         }
 
         public static async Task<string[]> GetIntentSuggestionsAsync(QuantumRandomNumberGeneratorWrapper rnd)
