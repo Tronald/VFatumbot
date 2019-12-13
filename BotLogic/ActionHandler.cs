@@ -65,8 +65,6 @@ namespace VFatumbot.BotLogic
                 imallkinds.Attachments.Add(heroCard.ToAttachment());
 
                 await turnContext.SendActivityAsync(imallkinds);
-
-                await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(turnContext, mainDialog, cancellationToken);
             }
             else if (command.StartsWith("/getattractor", StringComparison.InvariantCulture))
             {
