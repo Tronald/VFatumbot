@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data.SqlClient;
 using System.Linq;
@@ -7,6 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Bot.Builder;
+using Microsoft.Bot.Schema;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -42,7 +44,28 @@ namespace VFatumbot.BotLogic
             }
             else if (command.StartsWith("/steve", StringComparison.InvariantCulture))
             {
-                await turnContext.SendActivityAsync("I'm all kinds of Steve!");
+                var imallkinds = MessageFactory.Text("I'm all kinds of Steve!");
+                
+                var images = new List<CardImage> {
+                    new CardImage("http://thispersondoesnotexist.com/image"),
+                };
+                var cardAction = new CardAction(ActionTypes.OpenUrl, "Let Steve help you!", value: "https://docs.google.com/forms/d/e/1FAIpQLSekcgPLv7MUd5nfPn9JVLpZHH0I5MNP_e7ekw7_mEmJsMJkzw/viewform");
+                var buttons = new List<CardAction> {
+                    cardAction
+                };
+                var heroCard = new HeroCard
+                {
+                    Title = "↑↑ This is Steve ↑↑",
+                    Images = images,
+                    Buttons = buttons,
+                    Tap = cardAction,
+                };
+
+                imallkinds.Attachments = new List<Attachment>();
+                imallkinds.Attachments.Add(heroCard.ToAttachment());
+
+                await turnContext.SendActivityAsync(imallkinds);
+
                 await ((AdapterWithErrorHandler)turnContext.Adapter).RepromptMainDialog(turnContext, mainDialog, cancellationToken);
             }
             else if (command.StartsWith("/getattractor", StringComparison.InvariantCulture))

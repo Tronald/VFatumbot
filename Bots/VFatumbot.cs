@@ -172,6 +172,19 @@ namespace VFatumbot
             {
                 await Helpers.HelpAsync(turnContext, userProfileTemporary, _mainDialog, cancellationToken);
             }
+            else if (!string.IsNullOrEmpty(turnContext.Activity.Text) && (
+                        turnContext.Activity.Text.ToLower().StartsWith("/steve", StringComparison.InvariantCultureIgnoreCase) ||
+                        turnContext.Activity.Text.ToLower().StartsWith("/ongshat", StringComparison.InvariantCultureIgnoreCase)
+                ))
+            {
+                await new ActionHandler().ParseSlashCommands(turnContext, userProfileTemporary, cancellationToken, _mainDialog);
+
+                await _userProfileTemporaryAccessor.SetAsync(turnContext, userProfileTemporary);
+                await _userPersistentState.SaveChangesAsync(turnContext, false, cancellationToken);
+                await _userTemporaryState.SaveChangesAsync(turnContext, false, cancellationToken);
+
+                return;
+            }
             else if (!string.IsNullOrEmpty(turnContext.Activity.Text) && !userProfileTemporary.IsLocationSet)
             {
                 await turnContext.SendActivityAsync(MessageFactory.Text(Consts.NO_LOCATION_SET_MSG), cancellationToken);
