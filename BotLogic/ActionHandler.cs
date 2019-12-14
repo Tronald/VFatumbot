@@ -151,7 +151,8 @@ namespace VFatumbot.BotLogic
                 if (command.Contains(" "))
                 {
                     bool noLimit = false; // archon mode
-                    if (command.Contains(" nolimit"))
+                    if (command.Contains(" nolimit")
+                        || userProfileTemporary.UserId.Equals("16716e1a5797c6285a0d6d84c3520ec20f962b1e54be46f631b62ea3bc70488d")) // for Patrick who helped raise the importance of ToS and lives on a ridge the Jungle somewhere and anything >1km is inaccessible
                     {
                         noLimit = true;
                         command = command.Replace(" nolimit", "");
