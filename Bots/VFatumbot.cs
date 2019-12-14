@@ -51,7 +51,13 @@ namespace VFatumbot
                         }
                         else
                         {
-                            replyActivity = MessageFactory.Text($"Welcome @{turnContext.Activity.From.Name}! Message the @shangrila_bot privately to start your adventure and feel free to share your experiences here.");
+                            string name = "to the Randonauts Lobby";
+                            if (!"randonauts".Equals(turnContext.Activity.From.Name))
+                            {
+                                // Make the welcome a bit more personal if they've set their @username
+                                name = $"@{turnContext.Activity.From.Name}";
+                            }
+                            replyActivity = MessageFactory.Text($"Welcome {name}! Message the @shangrila_bot privately to start your adventure and feel free to share your experiences here.");
                         }
 
                         await turnContext.SendActivityAsync(replyActivity);
