@@ -156,20 +156,23 @@
             );
             document.querySelector('#webchat > *').focus();
 
-            let urlParams = new URLSearchParams(window.location.search);
-            var src = "web";
-            if (urlParams.has("src"))
+            let urlSrc = getUrlParameter('src');
+            if (urlSrc)
             {
                 // Bot is being accessed from the Randonautica app or not
-                src = urlParams['src'];
+                src = urlSrc;
+            }
+            else
+            {
+                src = "web";
             }
 
             // Instead of waiting for the user to type in something and have the bot say hello, initiate it from our side
             var activity = {
                 from: {
-                    id: userId,
-                    src: src
+                    id: userId
                 },
+                src: src,
                 type: 'event',
             };
             directLine.postActivity(activity).subscribe(function (id) {
@@ -297,6 +300,21 @@
             function eraseCookie(name) {
                 document.cookie = name + '=; Max-Age=-99999999;';
             }
+
+            function getUrlParameter(sParam) {
+                var sPageURL = window.location.search.substring(1),
+                    sURLVariables = sPageURL.split('&'),
+                    sParameterName,
+                    i;
+
+                for (i = 0; i < sURLVariables.length; i++) {
+                    sParameterName = sURLVariables[i].split('=');
+
+                    if (sParameterName[0] === sParam) {
+                        return sParameterName[1] === undefined ? true : decodeURIComponent(sParameterName[1]);
+                    }
+                }
+            };
         })().catch(err => console.error(err));</script>
 </body>
 </html>

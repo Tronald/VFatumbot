@@ -119,19 +119,20 @@ namespace VFatumbot
             // TODO: most of the logic/functionality in the following if statements I realised later on should probably be structured in the way the Bot Framework SDK talks about "middleware".
             // Maybe one day re-structure/re-factor it to following their middleware patterns...
 
-            double lat = 0, lon = 0;
-            string pushUserId = null;
-            userProfileTemporary.PushUserId = userProfilePersistent.PushUserId;
-
             var botSrc = WebSrc.nonweb;
             userProfileTemporary.BotSrc = WebSrc.nonweb;
 
             if (InterceptWebBotSource(turnContext, out botSrc))
             {
                 userProfileTemporary.BotSrc = botSrc;
-                await turnContext.SendActivityAsync(MessageFactory.Text($"Accessing from @ {botSrc}"));
+                await turnContext.SendActivityAsync(MessageFactory.Text($"Accessing from {botSrc}"));
             }
-            else if (InterceptPushNotificationSubscription(turnContext, out pushUserId))
+
+            double lat = 0, lon = 0;
+            string pushUserId = null;
+            userProfileTemporary.PushUserId = userProfilePersistent.PushUserId;
+
+            if (InterceptPushNotificationSubscription(turnContext, out pushUserId))
             {
                 if (userProfilePersistent.PushUserId != pushUserId)
                 {
