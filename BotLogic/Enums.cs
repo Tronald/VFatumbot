@@ -19,6 +19,14 @@ namespace VFatumbot.BotLogic
             skype
         }
 
+        public enum WebSrc
+        {
+            nonweb,
+            web,
+            android,
+            ios
+        }
+
         public enum PointTypes
         {
             /** IMPORTANT: Don't change order/delete as their corresponding ints are saved in the DB

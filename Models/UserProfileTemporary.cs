@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.Bot.Builder;
 using VFatumbot.BotLogic;
+using static VFatumbot.BotLogic.Enums;
 using static VFatumbot.BotLogic.FatumFunctions;
 
 namespace VFatumbot
@@ -29,6 +30,7 @@ namespace VFatumbot
         public string PushUserId { get; set; }
         public bool IsIncludeWaterPoints { get; set; } = true;
         public bool IsDisplayGoogleThumbnails { get; set; } = false;
+        public WebSrc BotSrc { get; set; } = WebSrc.nonweb;
 
 #if EMULATORDEBUG
         // Fukuoka, Japan

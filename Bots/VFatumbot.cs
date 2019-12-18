@@ -122,7 +122,16 @@ namespace VFatumbot
             double lat = 0, lon = 0;
             string pushUserId = null;
             userProfileTemporary.PushUserId = userProfilePersistent.PushUserId;
-            if (InterceptPushNotificationSubscription(turnContext, out pushUserId))
+
+            var botSrc = WebSrc.nonweb;
+            userProfileTemporary.BotSrc = WebSrc.nonweb;
+
+            if (InterceptWebBotSource(turnContext, out botSrc))
+            {
+                userProfileTemporary.BotSrc = botSrc;
+                await turnContext.SendActivityAsync(MessageFactory.Text($"Accessing from @ {botSrc}"));
+            }
+            else if (InterceptPushNotificationSubscription(turnContext, out pushUserId))
             {
                 if (userProfilePersistent.PushUserId != pushUserId)
                 {
@@ -243,6 +252,25 @@ namespace VFatumbot
                 {
                     pushUserId = pushUserIdFromClient;
                     return true;
+                }
+            }
+
+            return false;
+        }
+
+        protected bool InterceptWebBotSource(ITurnContext turnContext, out WebSrc webSrc)
+        {
+            webSrc = WebSrc.nonweb;
+
+            var activity = turnContext.Activity;
+
+            if (activity.Properties != null)
+            {
+                var clientSrc = (string)activity.Properties.GetValue("src");
+                if (!string.IsNullOrEmpty(clientSrc))
+                {
+                    var res = Enum.TryParse<WebSrc>(clientSrc, out webSrc);
+                    return res;
                 }
             }
 

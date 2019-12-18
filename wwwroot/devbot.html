@@ -156,10 +156,19 @@
             );
             document.querySelector('#webchat > *').focus();
 
+            let urlParams = new URLSearchParams(window.location.search);
+            var src = "web";
+            if (urlParams.has("src"))
+            {
+                // Bot is being accessed from the Randonautica app or not
+                src = urlParams['src'];
+            }
+
             // Instead of waiting for the user to type in something and have the bot say hello, initiate it from our side
             var activity = {
                 from: {
                     id: userId,
+                    src: src
                 },
                 type: 'event',
             };
