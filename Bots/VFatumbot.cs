@@ -126,7 +126,6 @@ namespace VFatumbot
             if (InterceptWebBotSource(turnContext, out botSrc))
             {
                 userProfileTemporary.BotSrc = botSrc;
-                await turnContext.SendActivityAsync(MessageFactory.Text($"Accessing from {botSrc}"));
             }
 
             double lat = 0, lon = 0;
