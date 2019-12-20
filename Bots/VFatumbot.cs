@@ -75,7 +75,8 @@ namespace VFatumbot
                     }
                     else
                     {
-                        await turnContext.SendActivityAsync(MessageFactory.Text("Welcome to Fatumbot. This is a tool to experiment with the ideas that the mind and matter are connected in more ways than currently understood, and that by visiting random (in the true sense of the word) places one can journey outside of their normal probability paths."), cancellationToken);
+                        await turnContext.SendActivityAsync(MessageFactory.Text("Welcome to Fatumbot. This is a tool to experiment with the ideas that the mind and matter are connected in more ways than currently understood, and that by visiting random (in the true sense of the word) places one can find 'blind spots' to journey outside of their normal probability paths."), cancellationToken);
+                        await turnContext.SendActivityAsync(MessageFactory.Text("For newcomers, read our Beginners Guide @ https://medium.com/@TheAndromedus/a-beginners-guide-to-randonauting-1dd505c3c5a9"), cancellationToken);
                         await turnContext.SendActivityAsync(MessageFactory.Text("Join the Telegram community chatroom lobby @ https://t.me/randonauts"), cancellationToken);
                         await turnContext.SendActivityAsync(MessageFactory.Text("Read and share experiences on our subreddit @ https://www.reddit.com/r/randonauts/"), cancellationToken);
                         await turnContext.SendActivityAsync(MessageFactory.Text("Start off by sending your location from the app (hint: you can do so by tapping the 🌍/::/＋/📎 icon), or type \"search <address/place name>\", or send a Google Maps URL. Don't forget you can type \"help\" for more info."), cancellationToken);
