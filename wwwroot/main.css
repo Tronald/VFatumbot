@@ -38,7 +38,7 @@ div.markdown p, div.markdown h1, div.markdown h2, div.markdown h3, div.markdown 
 	padding-right: 1em;
 }
 
-div.main, div.main input, .css-a4zgb2 {
+div.main, div.main input, .css-a4zgb2, .css-1wegtiu {
 	padding:			0.88em;
 	padding-top:		0px;
 	color:				#f4f4f4;
@@ -77,12 +77,43 @@ div.main, .css-a4zgb2 {
 	background: -o-linear-gradient(top,  #201917 0%,#333131 100%);
 }
 
+div.css-1hgv39r button {
+	color:				#f4f4f4   !important;
+	border-radius:		0.294em;
+	border:				1.5px solid !important;
+	padding:			0 auto;
+	min-width:			8em;
+	text-align:			center;
+	background:			#282725 !important;
+	border-color:		rgba(0,0,255, 1.0) !important;
+}
+
+button nobr {
+	margin: 0 auto;
+}
+
+div.css-1hgv39r button:hover {
+	text-shadow:
+		-5px 0px 6px white,
+		0px 0px 6px white,
+		5px 0px 6px white !important;
+}
+
+div.css-1hgv39r button:active {
+	text-shadow:
+		-5px 0px 6px red,
+		0px 0px 6px red,
+		5px 0px 6px white !important;
+}
+
 div.main input {
 	border-radius: 0.2em;
-	background: -moz-linear-gradient(top,  #333131 0%, #282725 100%);
-	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#333131), color-stop(100%,#232220));
-	background: -webkit-linear-gradient(top,  #333131 0%,#282725 100%);
-	background: -o-linear-gradient(top,  #333131 0%, #282725 100%);
+}
+div.main input, .css-1wegtiu {
+	background: -moz-linear-gradient(top,  #333131 0%, #282725 100%) !important;
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#333131), color-stop(100%,#232220))  !important;
+	background: -webkit-linear-gradient(top,  #333131 0%,#282725 100%)  !important;
+	background: -o-linear-gradient(top,  #333131 0%, #282725 100%)  !important;
 }
 
 .css-o3xlyv {
