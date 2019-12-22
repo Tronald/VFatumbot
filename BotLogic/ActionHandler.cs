@@ -68,14 +68,37 @@ namespace VFatumbot.BotLogic
             }
             else if (command.StartsWith("/newsteve22", StringComparison.InvariantCulture))
             {
-                var imallkinds = MessageFactory.Text("I'm the real Steve 22!");
+                var videoCard = new VideoCard
+                {
+                    Title = "The New Steve",
+                    Image = new ThumbnailUrl
+                    {
+                        Url = "https://bot.randonauts.com/therealsteve.png",
+                    },
+                    Media = new List<MediaUrl>
+                    {
+                        new MediaUrl()
+                        {
+                            Url = "https://bot.randonauts.com/therealsteve.mp4",
+                        },
+                    },
+                    Buttons = new List<CardAction>
+                    {
+                        new CardAction()
+                        {
+                            Title = "Let Steve guide you",
+                            Type = ActionTypes.OpenUrl,
+                            Value = "https://docs.google.com/forms/d/e/1FAIpQLSekcgPLv7MUd5nfPn9JVLpZHH0I5MNP_e7ekw7_mEmJsMJkzw/viewform",
+                        },
+                    },
+                };
 
-                var video = new VideoCard("https://devbot.randonauts.com/therealsteve.mp4");
-
+                var imallkinds = MessageFactory.Text("I'm the new all kinds of Steve 22!");
                 imallkinds.Attachments = new List<Attachment>();
-                imallkinds.Attachments.Add(video.ToAttachment());
+                imallkinds.Attachments.Add(videoCard.ToAttachment());
 
                 await turnContext.SendActivityAsync(imallkinds);
+
             }
             else if (command.StartsWith("/getattractor", StringComparison.InvariantCulture))
             {
