@@ -66,6 +66,17 @@ namespace VFatumbot.BotLogic
 
                 await turnContext.SendActivityAsync(imallkinds);
             }
+            else if (command.StartsWith("/newsteve22", StringComparison.InvariantCulture))
+            {
+                var imallkinds = MessageFactory.Text("I'm the real Steve 22!");
+
+                var video = new VideoCard("https://devbot.randonauts.com/therealsteve.mp4");
+
+                imallkinds.Attachments = new List<Attachment>();
+                imallkinds.Attachments.Add(video.ToAttachment());
+
+                await turnContext.SendActivityAsync(imallkinds);
+            }
             else if (command.StartsWith("/getattractor", StringComparison.InvariantCulture))
             {
                 await AttractorActionAsync(turnContext, userProfileTemporary, cancellationToken, mainDialog);

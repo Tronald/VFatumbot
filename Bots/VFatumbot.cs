@@ -190,6 +190,7 @@ namespace VFatumbot
             }
             else if (!string.IsNullOrEmpty(turnContext.Activity.Text) && (
                         turnContext.Activity.Text.ToLower().StartsWith("/steve", StringComparison.InvariantCultureIgnoreCase) ||
+                        turnContext.Activity.Text.ToLower().StartsWith("/newsteve22", StringComparison.InvariantCultureIgnoreCase) ||
                         turnContext.Activity.Text.ToLower().StartsWith("/ongshat", StringComparison.InvariantCultureIgnoreCase)
                 ))
             {
