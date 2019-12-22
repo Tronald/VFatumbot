@@ -70,11 +70,7 @@ namespace VFatumbot.BotLogic
             {
                 var videoCard = new VideoCard
                 {
-                    Title = "The New Steve",
-                    Image = new ThumbnailUrl
-                    {
-                        Url = "https://bot.randonauts.com/therealsteve.png",
-                    },
+                    Title = "The New Steve 22",
                     Media = new List<MediaUrl>
                     {
                         new MediaUrl()
