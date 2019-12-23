@@ -141,6 +141,26 @@
                 setCookie('userId', userId, 1825);
             }
 
+            // Catch incoming events from bot
+            const store = window.WebChat.createStore(
+                {},
+                ({ dispatch }) => next => action => {
+                    if (action.type === 'DIRECT_LINE/INCOMING_ACTIVITY') {
+                        const event = new Event('webchatincomingactivity');
+
+                        event.data = action.payload.activity;
+                        window.dispatchEvent(event);
+                    }
+
+                    return next(action);
+                 }
+            );
+
+            window.addEventListener('webchatincomingactivity', ({ data }) => {
+                console.log(`Received an activity of type "${data.type}":`);
+                console.log(data);
+            });
+
             let directLine = window.WebChat.createDirectLine({
                 // TODO: get this dynamically?
                 token: '***REMOVED***' 
@@ -149,6 +169,7 @@
             window.WebChat.renderWebChat(
                 {
                     directLine: directLine,
+                    store: store,
                     userID: userId,
                     locale: 'en', // TODO: get from browser or does framework automatically do that for us?
                 },

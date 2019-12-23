@@ -63,12 +63,18 @@ namespace VFatumbot
             {
                 TelemetryClient = telemetryClient,
             });
+            AddDialog(new AttachmentPrompt(nameof(AttachmentPrompt))
+            {
+                TelemetryClient = telemetryClient
+            });
             AddDialog(new WaterfallDialog(nameof(WaterfallDialog), new WaterfallStep[]
             {
                 ChoiceActionStepAsync,
                 PerformActionStepAsync,
                 AskHowManyIDAsStepAsync,
-                GetHowManyIDAsStepAsync,
+                SelectQRNGSourceStepAsync,
+                GetQRNGSourceStepAsync,
+                GenerateIDAsStepAsync
             })
             {
                 TelemetryClient = telemetryClient,
@@ -238,22 +244,76 @@ namespace VFatumbot
             return await stepContext.PromptAsync("AskHowManyIDAsChoicePrompt", options, cancellationToken);
         }
 
-        private async Task<DialogTurnResult> GetHowManyIDAsStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
+        private async Task<DialogTurnResult> SelectQRNGSourceStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
         {
-            //_logger.LogInformation($"MainDialog.GetHowManyIDAsStepAsync[{((FoundChoice)stepContext.Result)?.Value}]");
+            //_logger.LogInformation($"MainDialog.SelectQRNGSourceStepAsync[{((FoundChoice)stepContext.Result)?.Value}]");
 
-            var userProfileTemporary = await _userProfileTemporaryAccessor.GetAsync(stepContext.Context, () => new UserProfileTemporary());
-            var actionHandler = new ActionHandler();
-
-            int idacou;
+            // Number of IDAs to look for from previous step
             if (stepContext.Result == null)
             {
-                idacou = int.Parse(stepContext.Context.Activity.Text); // manually inputted a number
+                stepContext.Values["idacou"] = int.Parse(stepContext.Context.Activity.Text); // manually inputted a number
             }
             else
             {
-                idacou = int.Parse(((FoundChoice)stepContext.Result)?.Value);
+                stepContext.Values["idacou"] = int.Parse(((FoundChoice)stepContext.Result)?.Value);
             }
+
+            var options = new PromptOptions()
+            {
+                Prompt = MessageFactory.Text("Chose your source of entropy for the quantum random number generator:"),
+                RetryPrompt = MessageFactory.Text("That is not a valid QRNG source."),
+                Choices = new List<Choice>()
+                                {
+                                    new Choice() { Value = "Camera" },
+                                    new Choice() { Value = "GCP" },
+                                    new Choice() { Value = "ANU" },
+                                }
+            };
+
+            return await stepContext.PromptAsync(nameof(ChoicePrompt), options, cancellationToken);
+        }
+
+        private async Task<DialogTurnResult> GetQRNGSourceStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
+        {
+            //_logger.LogInformation($"MainDialog.GetQRNGSourceStepAsync[{((FoundChoice)stepContext.Result)?.Value}]");
+
+            switch (((FoundChoice)stepContext.Result)?.Value)
+            {
+                case "Camera":
+                    stepContext.Values["qrng_source"] = "Camera";
+
+                    var promptOptions = new PromptOptions
+                    {
+                        Prompt = MessageFactory.Text("Your smartphone's camera will now load. Generate some local entropy to continue."),
+                        RetryPrompt = MessageFactory.Text("That is not a valid upload."),
+                    };
+
+                    var requestEntropyActivity = Activity.CreateEventActivity();
+                    requestEntropyActivity.ChannelData = "camrng";
+                    await stepContext.Context.SendActivityAsync(requestEntropyActivity);
+
+                    return await stepContext.PromptAsync(nameof(AttachmentPrompt), promptOptions, cancellationToken);
+
+                case "GCP":
+                    stepContext.Values["qrng_source"] = "GCP";
+                    // TODO: call GCP logic here... if it can be done
+                    // Reference: http://gcpdot.com/gcpindex.php?small=100
+                    return await stepContext.NextAsync(cancellationToken: cancellationToken);
+
+                default:
+                case "ANU":
+                    stepContext.Values["qrng_source"] = "ANU";
+                    return await stepContext.NextAsync(cancellationToken: cancellationToken);
+            }
+        }
+
+        private async Task<DialogTurnResult> GenerateIDAsStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
+        {
+            //_logger.LogInformation($"MainDialog.SelectQRNGSourceStepAsync[{((FoundChoice)stepContext.Result)?.Value}]");
+            var userProfileTemporary = await _userProfileTemporaryAccessor.GetAsync(stepContext.Context, () => new UserProfileTemporary());
+            var actionHandler = new ActionHandler();
+
+            var idacou = int.Parse(stepContext.Values["idacou"].ToString());
 
             switch (stepContext.Values["PointType"].ToString())
             {
