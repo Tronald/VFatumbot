@@ -156,9 +156,16 @@
                  }
             );
 
+            // Catch event activities telling the app to load the camera RNG
             window.addEventListener('webchatincomingactivity', ({ data }) => {
-                console.log(`Received an activity of type "${data.type}":`);
-                console.log(data);
+                if (data.type == "event" && data.channelData) {
+                    if (data.channelData.startsWith("camrng")) {
+                        console.log("camrng")
+                        var splitted = data.channelData.split(',');
+                        console.log("need bytes camrng:" + splitted[1]);
+                        alert("need bytes from camrng: " + splitted[1]);
+                    }
+                }
             });
 
             let directLine = window.WebChat.createDirectLine({

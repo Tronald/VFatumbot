@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Bot.Builder;
@@ -14,6 +15,11 @@ namespace VFatumbot
 {
     public class MainDialog : ComponentDialog
     {
+        [DllImport("libAttract", CallingConvention = CallingConvention.Cdecl)]
+        public extern static int getOptimizedDots(double areaRadiusM); //how many coordinates is needed for requested radius, optimized for performance on larger areas
+        [DllImport("libAttract", CallingConvention = CallingConvention.Cdecl)]
+        private extern static int requiredEnthropyBytes(int N); // N* POINT_ENTROPY_BYTES 
+
         protected readonly ILogger _logger;
         protected readonly UserPersistentState _userPersistentState;
         protected readonly UserTemporaryState _userTemporaryState;
@@ -288,8 +294,15 @@ namespace VFatumbot
                         RetryPrompt = MessageFactory.Text("That is not a valid upload."),
                     };
 
+                    // Get the number of bytes we need from the camera's entropy
+                    var userProfileTemporary = await _userProfileTemporaryAccessor.GetAsync(stepContext.Context, () => new UserProfileTemporary());
+                    int numDots = getOptimizedDots(userProfileTemporary.Radius);
+                    int bytesSize = requiredEnthropyBytes(numDots);
+
+                    // Send an EventActivity to for the webbot's JavaScript callback handler to pickup
+                    // and then pass onto the app layer to load the camera
                     var requestEntropyActivity = Activity.CreateEventActivity();
-                    requestEntropyActivity.ChannelData = "camrng";
+                    requestEntropyActivity.ChannelData = $"camrng,{bytesSize}";
                     await stepContext.Context.SendActivityAsync(requestEntropyActivity);
 
                     return await stepContext.PromptAsync(nameof(AttachmentPrompt), promptOptions, cancellationToken);
