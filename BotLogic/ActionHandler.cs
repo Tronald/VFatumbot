@@ -66,36 +66,36 @@ namespace VFatumbot.BotLogic
 
                 await turnContext.SendActivityAsync(imallkinds);
             }
-            else if (command.StartsWith("/newsteve22", StringComparison.InvariantCulture))
-            {
-                var videoCard = new VideoCard
-                {
-                    Title = "The New Steve 22",
-                    Media = new List<MediaUrl>
-                    {
-                        new MediaUrl()
-                        {
-                            Url = "https://bot.randonauts.com/therealsteve.mp4",
-                        },
-                    },
-                    Buttons = new List<CardAction>
-                    {
-                        new CardAction()
-                        {
-                            Title = "Let Steve guide you",
-                            Type = ActionTypes.OpenUrl,
-                            Value = "https://docs.google.com/forms/d/e/1FAIpQLSekcgPLv7MUd5nfPn9JVLpZHH0I5MNP_e7ekw7_mEmJsMJkzw/viewform",
-                        },
-                    },
-                };
+            //else if (command.StartsWith("/newsteve22", StringComparison.InvariantCulture))
+            //{
+            //    var videoCard = new VideoCard
+            //    {
+            //        Title = "The New Steve 22",
+            //        Media = new List<MediaUrl>
+            //        {
+            //            new MediaUrl()
+            //            {
+            //                Url = "https://bot.randonauts.com/therealsteve.mp4",
+            //            },
+            //        },
+            //        Buttons = new List<CardAction>
+            //        {
+            //            new CardAction()
+            //            {
+            //                Title = "Let Steve guide you",
+            //                Type = ActionTypes.OpenUrl,
+            //                Value = "https://docs.google.com/forms/d/e/1FAIpQLSekcgPLv7MUd5nfPn9JVLpZHH0I5MNP_e7ekw7_mEmJsMJkzw/viewform",
+            //            },
+            //        },
+            //    };
 
-                var imallkinds = MessageFactory.Text("I'm the new all kinds of Steve 22!");
-                imallkinds.Attachments = new List<Attachment>();
-                imallkinds.Attachments.Add(videoCard.ToAttachment());
+            //    var imallkinds = MessageFactory.Text("I'm the new all kinds of Steve 22!");
+            //    imallkinds.Attachments = new List<Attachment>();
+            //    imallkinds.Attachments.Add(videoCard.ToAttachment());
 
-                await turnContext.SendActivityAsync(imallkinds);
+            //    await turnContext.SendActivityAsync(imallkinds);
 
-            }
+            //}
             else if (command.StartsWith("/getattractor", StringComparison.InvariantCulture))
             {
                 await AttractorActionAsync(turnContext, userProfileTemporary, cancellationToken, mainDialog);
