@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Bot.Builder;
@@ -73,17 +74,14 @@ namespace VFatumbot
                 (PromptValidatorContext<string> promptContext, CancellationToken cancellationToken) =>
                 {
                     // verify it's a 64 char hex string (sha256 of the entropy generated)
-                    int res = 0;
-                    if (int.TryParse(promptContext.Context.Activity.Text,
-                             System.Globalization.NumberStyles.HexNumber,
-                             System.Globalization.CultureInfo.InvariantCulture, out res))
+                    if (promptContext.Context.Activity.Text.Length != 64)
                     {
-
-                        //IT'S A VALID HEX
-                        return Task.FromResult(true);
+                        return Task.FromResult(false);
                     }
 
-                    return Task.FromResult(false);
+                    // regex check
+                    Regex regex = new Regex("^[a-fA-F0-9]+$");
+                    return Task.FromResult(regex.IsMatch(promptContext.Context.Activity.Text));
                 })
             {
                 TelemetryClient = telemetryClient,
