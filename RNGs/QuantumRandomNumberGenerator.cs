@@ -136,7 +136,7 @@ namespace VFatumbot
                 var queryStr = $"size={len * 2}";
                 if (!string.IsNullOrEmpty(EntropyGid))
                 {
-                    queryStr = $"gid={EntropyGid}";
+                    queryStr = $"gid={EntropyGid}&raw=true";
                 }
 #if RELEASE_PROD
                 var jsonStr = Client.DownloadString($"https://api.randonauts.com/entropy?{queryStr}");
