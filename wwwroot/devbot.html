@@ -168,6 +168,21 @@
                 }
             });
 
+            // Callback from Flutter->Javascript to send locally generated entropy's gid to bot
+            function sendGidToBot(gid) {
+                showSnackbar("Sending your entropy's ID...");
+                var activity = {
+                    from: {
+                        id: userId,
+                    },
+                    type: 'message',
+                    text: gid
+                };
+                directLine.postActivity(activity).subscribe(function (id) {
+                    hideSnackbar();
+                });
+            }
+
             let directLine = window.WebChat.createDirectLine({
                 // TODO: get this dynamically?
                 token: '***REMOVED***' 
