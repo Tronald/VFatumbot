@@ -136,6 +136,7 @@ namespace VFatumbot
                 var queryStr = $"size={len * 2}";
                 if (!string.IsNullOrEmpty(EntropyGid))
                 {
+                    // GID specified of what entropy to use (eg camrng generated entropy saved on the server)
                     queryStr = $"gid={EntropyGid}&raw=true";
                 }
 #if RELEASE_PROD
