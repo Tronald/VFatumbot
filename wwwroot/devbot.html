@@ -131,7 +131,9 @@
 <body>
     <div id="webchat" role="main"></div>
     <div id="snackbar"></div>
-    <script>(async function () {
+    <script>
+        var sendGidToBot;
+        (async function () {
             showSnackbar("Connecting to bot...");
 
             // Re-use credentials if they exist in cookies
@@ -169,7 +171,7 @@
             });
 
             // Callback from Flutter->Javascript to send locally generated entropy's gid to bot
-            function sendGidToBot(gid) {
+            sendGidToBot = function(gid) {
                 showSnackbar("Sending your entropy's ID...");
                 var activity = {
                     from: {
@@ -358,6 +360,7 @@
                     }
                 }
             };
-        })().catch(err => console.error(err));</script>
+        })().catch(err => console.error(err));
+    </script>
 </body>
 </html>
