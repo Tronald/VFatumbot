@@ -8,6 +8,10 @@ namespace VFatumbot
 {
     public class QuantumRandomNumberGenerator : BaseRandomProvider, IDisposable
     {
+        // If this property is != null, then we use this GID to specify the entropy we get from the libwrapper API
+        // e.g. from locally camera generated entropy, not from ANU
+        public string EntropyGid { get; set; } = null;
+
         ~QuantumRandomNumberGenerator()
         {
             Dispose(false);
@@ -129,10 +133,15 @@ namespace VFatumbot
             if (meta == 0)
             {
                 // switching to David's libwrapper API
+                var queryStr = $"size={len * 2}";
+                if (!string.IsNullOrEmpty(EntropyGid))
+                {
+                    queryStr = $"gid={EntropyGid}";
+                }
 #if RELEASE_PROD
-                var jsonStr = Client.DownloadString($"https://api.randonauts.com/entropy?size={len*2}");
+                var jsonStr = Client.DownloadString($"https://api.randonauts.com/entropy?{queryStr}");
 #else
-                var jsonStr = Client.DownloadString($"https://devapi.randonauts.com/entropy?size={len*2}");
+                var jsonStr = Client.DownloadString($"https://devapi.randonauts.com/entropy?{queryStr}");
 #endif
                 var response = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(jsonStr);
                 var hex = response.Entropy?.ToString();

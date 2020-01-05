@@ -408,7 +408,7 @@ namespace VFatumbot.BotLogic
             }
         }
 
-        public async Task AttractorActionAsync(ITurnContext turnContext, UserProfileTemporary userProfileTemporary, CancellationToken cancellationToken, MainDialog mainDialog, bool doScan = false, int idacou = 1)
+        public async Task AttractorActionAsync(ITurnContext turnContext, UserProfileTemporary userProfileTemporary, CancellationToken cancellationToken, MainDialog mainDialog, bool doScan = false, int idacou = 1, string gid = null)
         {
             if (turnContext.Activity.Text.Contains("["))
             {
@@ -441,7 +441,7 @@ namespace VFatumbot.BotLogic
 
                     redo:
                         string shaGid;
-                        FinalAttractor[] ida = GetIDA(userProfileTemporary.Location, userProfileTemporary.Radius, doScan ? 1 : 0, new QuantumRandomNumberGeneratorWrapper(context, mainDialog, token), out shaGid);
+                        FinalAttractor[] ida = GetIDA(userProfileTemporary.Location, userProfileTemporary.Radius, doScan ? 1 : 0, new QuantumRandomNumberGeneratorWrapper(context, mainDialog, token, gid:gid), out shaGid);
                         ida = SortIDA(ida, "attractor", idacou);
                         if (ida.Length > 0)
                         {
@@ -527,7 +527,7 @@ namespace VFatumbot.BotLogic
             });
         }
 
-        public async Task VoidActionAsync(ITurnContext turnContext, UserProfileTemporary userProfileTemporary, CancellationToken cancellationToken, MainDialog mainDialog, bool doScan = false, int idacou = 1)
+        public async Task VoidActionAsync(ITurnContext turnContext, UserProfileTemporary userProfileTemporary, CancellationToken cancellationToken, MainDialog mainDialog, bool doScan = false, int idacou = 1, string gid = null)
         {
             if (turnContext.Activity.Text.Contains("["))
             {
@@ -560,7 +560,7 @@ namespace VFatumbot.BotLogic
 
                     redo:
                         string shaGid;
-                        FinalAttractor[] ida = GetIDA(userProfileTemporary.Location, userProfileTemporary.Radius, doScan ? 1 : 0, new QuantumRandomNumberGeneratorWrapper(context, mainDialog, token), out shaGid);
+                        FinalAttractor[] ida = GetIDA(userProfileTemporary.Location, userProfileTemporary.Radius, doScan ? 1 : 0, new QuantumRandomNumberGeneratorWrapper(context, mainDialog, token, gid: gid), out shaGid);
                         ida = SortIDA(ida, "void", idacou);
                         if (ida.Length > 0)
                         {
@@ -660,7 +660,7 @@ namespace VFatumbot.BotLogic
             await turnContext.SendActivitiesAsync(CardFactory.CreateLocationCardsReply(Enum.Parse<ChannelPlatform>(turnContext.Activity.ChannelId), incoords, userProfileTemporary.IsDisplayGoogleThumbnails, w3wResult), cancellationToken);
         }
 
-        public async Task AnomalyActionAsync(ITurnContext turnContext, UserProfileTemporary userProfileTemporary, CancellationToken cancellationToken, MainDialog mainDialog, bool doScan = false, int idacou = 1)
+        public async Task AnomalyActionAsync(ITurnContext turnContext, UserProfileTemporary userProfileTemporary, CancellationToken cancellationToken, MainDialog mainDialog, bool doScan = false, int idacou = 1, string gid = null)
         {
             if (turnContext.Activity.Text.Contains("["))
             {
@@ -693,7 +693,7 @@ namespace VFatumbot.BotLogic
 
                     redo:
                         string shaGid;
-                        FinalAttractor[] ida = GetIDA(userProfileTemporary.Location, userProfileTemporary.Radius, doScan ? 1 : 0, new QuantumRandomNumberGeneratorWrapper(context, mainDialog, token), out shaGid);
+                        FinalAttractor[] ida = GetIDA(userProfileTemporary.Location, userProfileTemporary.Radius, doScan ? 1 : 0, new QuantumRandomNumberGeneratorWrapper(context, mainDialog, token, gid: gid), out shaGid);
                         ida = SortIDA(ida, "any", idacou);
                         if (ida.Length > 0)
                         {
@@ -941,7 +941,7 @@ namespace VFatumbot.BotLogic
             });
         }
 
-        public async Task PairActionAsync(ITurnContext turnContext, UserProfileTemporary userProfileTemporary, CancellationToken cancellationToken, MainDialog mainDialog, bool doScan = false, int idacou = 1)
+        public async Task PairActionAsync(ITurnContext turnContext, UserProfileTemporary userProfileTemporary, CancellationToken cancellationToken, MainDialog mainDialog, bool doScan = false, int idacou = 1, string gid = null)
         {
             if (turnContext.Activity.Text.Contains("["))
             {
@@ -974,7 +974,7 @@ namespace VFatumbot.BotLogic
                         string mesg = "";
 
                         string shaGid;
-                        FinalAttractor[] ida = GetIDA(userProfileTemporary.Location, userProfileTemporary.Radius, doScan ? 1 : 0, new QuantumRandomNumberGeneratorWrapper(context, mainDialog, token), out shaGid);
+                        FinalAttractor[] ida = GetIDA(userProfileTemporary.Location, userProfileTemporary.Radius, doScan ? 1 : 0, new QuantumRandomNumberGeneratorWrapper(context, mainDialog, token, gid:gid), out shaGid);
                         FinalAttractor[] att = SortIDA(ida, "attractor", idacou);
                         FinalAttractor[] voi = SortIDA(ida, "void", idacou);
                         if (att.Count() > voi.Count())

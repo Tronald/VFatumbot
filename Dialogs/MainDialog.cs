@@ -69,9 +69,24 @@ namespace VFatumbot
             {
                 TelemetryClient = telemetryClient,
             });
-            AddDialog(new AttachmentPrompt(nameof(AttachmentPrompt))
+            AddDialog(new TextPrompt("GetQRNGSourceChoicePrompt",
+                (PromptValidatorContext<string> promptContext, CancellationToken cancellationToken) =>
+                {
+                    // verify it's a 64 char hex string (sha256 of the entropy generated)
+                    int res = 0;
+                    if (int.TryParse(promptContext.Context.Activity.Text,
+                             System.Globalization.NumberStyles.HexNumber,
+                             System.Globalization.CultureInfo.InvariantCulture, out res))
+                    {
+
+                        //IT'S A VALID HEX
+                        return Task.FromResult(true);
+                    }
+
+                    return Task.FromResult(false);
+                })
             {
-                TelemetryClient = telemetryClient
+                TelemetryClient = telemetryClient,
             });
             AddDialog(new WaterfallDialog(nameof(WaterfallDialog), new WaterfallStep[]
             {
@@ -290,8 +305,8 @@ namespace VFatumbot
 
                     var promptOptions = new PromptOptions
                     {
-                        Prompt = MessageFactory.Text("Your smartphone's camera will now load. Generate some local entropy to continue."),
-                        RetryPrompt = MessageFactory.Text("That is not a valid upload."),
+                        Prompt = MessageFactory.Text("Your smartphone's camera will now load to generate some local entropy to send to me."),
+                        RetryPrompt = MessageFactory.Text("That is not a valid entropy source."),
                     };
 
                     // Get the number of bytes we need from the camera's entropy
@@ -305,7 +320,7 @@ namespace VFatumbot
                     requestEntropyActivity.ChannelData = $"camrng,{bytesSize}";
                     await stepContext.Context.SendActivityAsync(requestEntropyActivity);
 
-                    return await stepContext.PromptAsync(nameof(AttachmentPrompt), promptOptions, cancellationToken);
+                    return await stepContext.PromptAsync("GetQRNGSourceChoicePrompt", promptOptions, cancellationToken);
 
                 case "GCP":
                     stepContext.Values["qrng_source"] = "GCP";
@@ -327,20 +342,21 @@ namespace VFatumbot
             var actionHandler = new ActionHandler();
 
             var idacou = int.Parse(stepContext.Values["idacou"].ToString());
+            var gid = stepContext.Context.Activity.Text;
 
             switch (stepContext.Values["PointType"].ToString())
             {
                 case "Attractor":
-                    await actionHandler.AttractorActionAsync(stepContext.Context, userProfileTemporary, cancellationToken, this, idacou:idacou);
+                    await actionHandler.AttractorActionAsync(stepContext.Context, userProfileTemporary, cancellationToken, this, idacou:idacou, gid:gid);
                     break;
                 case "Void":
-                    await actionHandler.VoidActionAsync(stepContext.Context, userProfileTemporary, cancellationToken, this, idacou: idacou);
+                    await actionHandler.VoidActionAsync(stepContext.Context, userProfileTemporary, cancellationToken, this, idacou: idacou, gid: gid);
                     break;
                 case "Anomaly":
-                    await actionHandler.AnomalyActionAsync(stepContext.Context, userProfileTemporary, cancellationToken, this, idacou: idacou);
+                    await actionHandler.AnomalyActionAsync(stepContext.Context, userProfileTemporary, cancellationToken, this, idacou: idacou, gid: gid);
                     break;
                 case "Pair":
-                    await actionHandler.PairActionAsync(stepContext.Context, userProfileTemporary, cancellationToken, this, idacou: idacou);
+                    await actionHandler.PairActionAsync(stepContext.Context, userProfileTemporary, cancellationToken, this, idacou: idacou, gid: gid);
                     break;
             }
 
