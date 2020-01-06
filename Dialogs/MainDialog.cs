@@ -342,7 +342,7 @@ namespace VFatumbot
             var idacou = int.Parse(stepContext.Values["idacou"].ToString());
             string gid = stepContext.Context.Activity.Text;
 
-            if (gid.Length == 64)
+            if (gid.Length != 64)
             {
                 // if user chooses GCP/ANU etc at previous prompt, then we dont want that text being set as the gid
                 gid = null;
