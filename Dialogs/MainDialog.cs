@@ -284,7 +284,7 @@ namespace VFatumbot
                 Choices = new List<Choice>()
                                 {
                                     new Choice() { Value = "Camera" },
-                                    new Choice() { Value = "GCP" },
+                                    //new Choice() { Value = "GCP" },
                                     new Choice() { Value = "ANU" },
                                 }
             };
