@@ -277,24 +277,37 @@ namespace VFatumbot
                 stepContext.Values["idacou"] = int.Parse(((FoundChoice)stepContext.Result)?.Value);
             }
 
-            var options = new PromptOptions()
+            var userProfileTemporary = await _userProfileTemporaryAccessor.GetAsync(stepContext.Context, () => new UserProfileTemporary());
+            if (userProfileTemporary.BotSrc == Enums.WebSrc.ios) // TODO: add Android one day?
             {
-                Prompt = MessageFactory.Text("Chose your source of entropy for the quantum random number generator:"),
-                RetryPrompt = MessageFactory.Text("That is not a valid QRNG source."),
-                Choices = new List<Choice>()
+                var options = new PromptOptions()
+                {
+                    Prompt = MessageFactory.Text("Chose your source of entropy for the quantum random number generator:"),
+                    RetryPrompt = MessageFactory.Text("That is not a valid QRNG source."),
+                    Choices = new List<Choice>()
                                 {
                                     new Choice() { Value = "Camera" },
                                     //new Choice() { Value = "GCP" },
                                     new Choice() { Value = "ANU" },
                                 }
-            };
+                };
 
-            return await stepContext.PromptAsync(nameof(ChoicePrompt), options, cancellationToken);
+                return await stepContext.PromptAsync(nameof(ChoicePrompt), options, cancellationToken);
+            }
+
+            return await stepContext.NextAsync(cancellationToken: cancellationToken);
         }
 
         private async Task<DialogTurnResult> GetQRNGSourceStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
         {
             //_logger.LogInformation($"MainDialog.GetQRNGSourceStepAsync[{((FoundChoice)stepContext.Result)?.Value}]");
+
+            var userProfileTemporary = await _userProfileTemporaryAccessor.GetAsync(stepContext.Context, () => new UserProfileTemporary());
+            if (userProfileTemporary.BotSrc != Enums.WebSrc.ios) // TODO: add Android one day?
+            {
+                stepContext.Values["qrng_source"] = "ANU";
+                return await stepContext.NextAsync(cancellationToken: cancellationToken);
+            }
 
             switch (((FoundChoice)stepContext.Result)?.Value)
             {
@@ -308,7 +321,6 @@ namespace VFatumbot
                     };
 
                     // Get the number of bytes we need from the camera's entropy
-                    var userProfileTemporary = await _userProfileTemporaryAccessor.GetAsync(stepContext.Context, () => new UserProfileTemporary());
                     int numDots = getOptimizedDots(userProfileTemporary.Radius);
                     int bytesSize = requiredEnthropyBytes(numDots);
 
