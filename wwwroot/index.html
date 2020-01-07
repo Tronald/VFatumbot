@@ -131,7 +131,9 @@
 <body>
     <div id="webchat" role="main"></div>
     <div id="snackbar"></div>
-    <script>(async function () {
+    <script>
+        var sendGidToBot;
+        (async function () {
             showSnackbar("Connecting to bot...");
 
             // Re-use credentials if they exist in cookies
@@ -139,6 +141,48 @@
             if (!userId) {
                 userId = generateId();
                 setCookie('userId', userId, 1825);
+            }
+
+            // Catch incoming events from bot
+            const store = window.WebChat.createStore(
+                {},
+                ({ dispatch }) => next => action => {
+                    if (action.type === 'DIRECT_LINE/INCOMING_ACTIVITY') {
+                        const event = new Event('webchatincomingactivity');
+
+                        event.data = action.payload.activity;
+                        window.dispatchEvent(event);
+                    }
+
+                    return next(action);
+                 }
+            );
+
+            // Catch event activities telling the app to load the camera RNG
+            window.addEventListener('webchatincomingactivity', ({ data }) => {
+                if (data.type == "event" && data.channelData) {
+                    if (data.channelData.startsWith("camrng")) {
+                        var splitted = data.channelData.split(',');
+                        //if (flutterChannel_loadCamRNGWithBytesNeeded !=== 'undefined') {
+                            flutterChannel_loadCamRNGWithBytesNeeded.postMessage(splitted[1]);
+                        //}
+                    }
+                }
+            });
+
+            // Callback from Flutter->Javascript to send locally generated entropy's gid to bot
+            sendGidToBot = function(gid) {
+                showSnackbar("Sending your entropy's ID...");
+                var activity = {
+                    from: {
+                        id: userId,
+                    },
+                    type: 'message',
+                    text: gid
+                };
+                directLine.postActivity(activity).subscribe(function (id) {
+                    hideSnackbar();
+                });
             }
 
             let directLine = window.WebChat.createDirectLine({
@@ -149,6 +193,7 @@
             window.WebChat.renderWebChat(
                 {
                     directLine: directLine,
+                    store: store,
                     userID: userId,
                     locale: 'en', // TODO: get from browser or does framework automatically do that for us?
                 },
@@ -315,6 +360,7 @@
                     }
                 }
             };
-        })().catch(err => console.error(err));</script>
+        })().catch(err => console.error(err));
+    </script>
 </body>
 </html>
