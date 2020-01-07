@@ -2,7 +2,7 @@
   
 * Design updated to match the new homepage's theme  
 * Now on Discord @ https://discord.gg/ZBf5u6n (no buttons/menus, /command support only)  
-* Now on Slack @ https://shorturl.at/bpyS8  
+* Now on Slack @ https://join.slack.com/t/randonauts/shared_invite/enQtODU3Mjc1NzE0NTc3LWVlNTMxMzhlOTE3OTM3NzU0NzQ3ODM4ODIwYzM1ZDRjMTQwM2FhZTk5MzUxMjE5NjAxOTdkNGFmNjc1NTRmNTE  
 * Now on Skype @ https://shorturl.at/iyLM4  
 * Now on LINE @ https://lin.ee/dKQGBzM  
 * Now on Facebook @ https://www.facebook.com/randonauts/ (please request test user access for now via Reddit/Telegram lobby)  
