@@ -3,9 +3,9 @@
     public class Consts
     {
 #if RELEASE_PROD
-        public const string APP_VERSION = "3.2.3";
+        public const string APP_VERSION = "4.0.0";
 #else
-        public const string APP_VERSION = "3.3.0β";
+        public const string APP_VERSION = "4.1.0β";
 #endif
 
         // Azure App ID
