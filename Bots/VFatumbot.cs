@@ -121,11 +121,11 @@ namespace VFatumbot
             // Maybe one day re-structure/re-factor it to following their middleware patterns...
 
             var botSrc = WebSrc.nonweb;
-            userProfileTemporary.BotSrc = WebSrc.nonweb;
 
             if (InterceptWebBotSource(turnContext, out botSrc))
             {
                 userProfileTemporary.BotSrc = botSrc;
+                await _userProfileTemporaryAccessor.SetAsync(turnContext, userProfileTemporary);
             }
 
             double lat = 0, lon = 0;
