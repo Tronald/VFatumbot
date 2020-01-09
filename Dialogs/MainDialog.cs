@@ -278,7 +278,7 @@ namespace VFatumbot
             }
 
             var userProfileTemporary = await _userProfileTemporaryAccessor.GetAsync(stepContext.Context, () => new UserProfileTemporary());
-            if (userProfileTemporary.BotSrc == Enums.WebSrc.ios) // TODO: add Android one day?
+            if (userProfileTemporary.BotSrc == Enums.WebSrc.ios || userProfileTemporary.BotSrc == Enums.WebSrc.android)
             {
                 var options = new PromptOptions()
                 {
@@ -303,7 +303,7 @@ namespace VFatumbot
             //_logger.LogInformation($"MainDialog.GetQRNGSourceStepAsync[{((FoundChoice)stepContext.Result)?.Value}]");
 
             var userProfileTemporary = await _userProfileTemporaryAccessor.GetAsync(stepContext.Context, () => new UserProfileTemporary());
-            if (userProfileTemporary.BotSrc != Enums.WebSrc.ios) // TODO: add Android one day?
+            if (userProfileTemporary.BotSrc == Enums.WebSrc.ios || userProfileTemporary.BotSrc == Enums.WebSrc.android)
             {
                 stepContext.Values["qrng_source"] = "ANU";
                 return await stepContext.NextAsync(cancellationToken: cancellationToken);
