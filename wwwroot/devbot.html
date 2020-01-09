@@ -133,6 +133,7 @@
     <div id="snackbar"></div>
     <script>
         var sendGidToBot;
+        var sendPushIdToBot;
         (async function () {
             showSnackbar("Connecting to bot...");
 
@@ -182,6 +183,19 @@
                 };
                 directLine.postActivity(activity).subscribe(function (id) {
                     hideSnackbar();
+                });
+            }
+
+            // Callback from Flutter->Javascript to send the Flutter-side OneSignal Push Notification ID to the bot
+            sendPushIdToBot = function(id) {
+                var activity = {
+                    from: {
+                        id: userId,
+                    },
+                    type: 'event',
+                    pushUserId: id
+                };
+                directLine.postActivity(activity).subscribe(function (id) {
                 });
             }
 
