@@ -8,9 +8,9 @@ namespace VFatumbot
 {
     public class QuantumRandomNumberGenerator : BaseRandomProvider, IDisposable
     {
-        // If this property is != null, then we use this GID to specify the entropy we get from the libwrapper API
-        // e.g. from locally camera generated entropy, not from ANU
-        public string EntropyGid { get; set; } = null;
+        // If this property is != null, then we use this to determine what kind of entropy we get from the API (libwrapper server).
+        // E.g. gid=<GID> to specify the entropy's ID for entropy uploaded from camera, shared etc.
+        public string EntropySrcQueryString { get; set; } = null;
 
         ~QuantumRandomNumberGenerator()
         {
@@ -134,10 +134,9 @@ namespace VFatumbot
             {
                 // switching to David's libwrapper API
                 var queryStr = $"size={len * 2}";
-                if (!string.IsNullOrEmpty(EntropyGid))
+                if (!string.IsNullOrEmpty(EntropySrcQueryString))
                 {
-                    // GID specified of what entropy to use (eg camrng generated entropy saved on the server)
-                    queryStr = $"gid={EntropyGid}&raw=true";
+                    queryStr = EntropySrcQueryString;
                 }
 #if RELEASE_PROD
                 var jsonStr = Client.DownloadString($"https://api.randonauts.com/entropy?{queryStr}");

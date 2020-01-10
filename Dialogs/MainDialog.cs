@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -287,15 +288,30 @@ namespace VFatumbot
                     Choices = new List<Choice>()
                                 {
                                     new Choice() { Value = "Camera" },
-                                    //new Choice() { Value = "GCP" },
                                     new Choice() { Value = "ANU" },
+                                    new Choice() { Value = "ANU Leftovers)" },
+                                    new Choice() { Value = "GCP Retro" },
                                 }
                 };
 
                 return await stepContext.PromptAsync(nameof(ChoicePrompt), options, cancellationToken);
             }
+            else
+            {
+                var options = new PromptOptions()
+                {
+                    Prompt = MessageFactory.Text("Chose your entropy source:"),
+                    RetryPrompt = MessageFactory.Text("That is not a valid entropy source."),
+                    Choices = new List<Choice>()
+                                {
+                                    new Choice() { Value = "ANU" },
+                                    new Choice() { Value = "ANU Leftovers" },
+                                    new Choice() { Value = "GCP Retro" },
+                                }
+                };
 
-            return await stepContext.NextAsync(cancellationToken: cancellationToken);
+                return await stepContext.PromptAsync(nameof(ChoicePrompt), options, cancellationToken);
+            }
         }
 
         private async Task<DialogTurnResult> GetQRNGSourceStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
@@ -309,6 +325,11 @@ namespace VFatumbot
                 return await stepContext.NextAsync(cancellationToken: cancellationToken);
             }
 
+
+            // Get the number of bytes we need from the camera's entropy
+            int numDots = getOptimizedDots(userProfileTemporary.Radius);
+            int bytesSize = requiredEnthropyBytes(numDots);
+
             switch (((FoundChoice)stepContext.Result)?.Value)
             {
                 case "Camera":
@@ -320,10 +341,6 @@ namespace VFatumbot
                         RetryPrompt = MessageFactory.Text("That is not a valid entropy source."),
                     };
 
-                    // Get the number of bytes we need from the camera's entropy
-                    int numDots = getOptimizedDots(userProfileTemporary.Radius);
-                    int bytesSize = requiredEnthropyBytes(numDots);
-
                     // Send an EventActivity to for the webbot's JavaScript callback handler to pickup
                     // and then pass onto the app layer to load the camera
                     var requestEntropyActivity = Activity.CreateEventActivity();
@@ -332,15 +349,37 @@ namespace VFatumbot
 
                     return await stepContext.PromptAsync("GetQRNGSourceChoicePrompt", promptOptions, cancellationToken);
 
-                case "GCP":
-                    stepContext.Values["qrng_source"] = "GCP";
-                    // TODO: call GCP logic here... if it can be done
-                    // Reference: http://gcpdot.com/gcpindex.php?small=100
+                case "ANU Leftovers":
+                    stepContext.Values["qrng_source"] = "Pool";
+
+                    // Chose a random entropy GID from the list of GIDs in the pool (pseudo randomly selecting quantum randomness?! there's a joke in there somewhere :)
+#if RELEASE_PROD
+                    var jsonStr = new WebClient().DownloadString($"https://api.randonauts.com/getpools");
+#else
+                    var jsonStr = new WebClient().DownloadString($"https://devapi.randonauts.com/getpools");
+#endif
+                    var pools = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(jsonStr);
+                    getpool: // random pool selection (pseudo)
+                        var r = new Random();
+                        var idx = r.Next(pools.Count);
+                        var pool = pools[idx];
+                        if (pool.pool.ToString().Equals("0.pool")) goto getpool;
+                        var time = DateTime.Parse(pool.time.ToString());
+
+                    await stepContext.Context.SendActivityAsync($"Enjoy some residual entropy from around {time.ToString("yyyy-MM-dd")}");
+
+                    stepContext.Values["qrng_source_query_str"] = $"pool=true&gid={pool.pool.ToString().Replace(".pool", "")}&raw=true";
+                    return await stepContext.NextAsync(cancellationToken: cancellationToken);
+
+                case "GCP Retro":
+                    stepContext.Values["qrng_source"] = "GCPRetro";
+                    stepContext.Values["qrng_source_query_str"] = $"gcp=true&size={bytesSize * 2}";
                     return await stepContext.NextAsync(cancellationToken: cancellationToken);
 
                 default:
                 case "ANU":
                     stepContext.Values["qrng_source"] = "ANU";
+                    stepContext.Values["qrng_source_query_str"] = ""; // generated later in QRNG class
                     return await stepContext.NextAsync(cancellationToken: cancellationToken);
             }
         }
@@ -352,27 +391,32 @@ namespace VFatumbot
             var actionHandler = new ActionHandler();
 
             var idacou = int.Parse(stepContext.Values["idacou"].ToString());
-            string gid = stepContext.Context.Activity.Text;
+            string entropyQueryString = stepContext.Context.Activity.Text;
 
-            if (gid.Length != 64)
+            if (entropyQueryString.Length == 64)
             {
-                // if user chooses GCP/ANU etc at previous prompt, then we dont want that text being set as the gid
-                gid = null;
+                // Assume 64 chars exactly is entropy GID direct from camera or copy/pasted shared
+                stepContext.Values["qrng_source_query_str"] = $"gid={entropyQueryString}&raw=true";
+            }
+            else
+            {
+                // GCP Retro / ANU Leftovers (pool)
+                entropyQueryString = stepContext.Values["qrng_source_query_str"].ToString();
             }
 
             switch (stepContext.Values["PointType"].ToString())
             {
                 case "Attractor":
-                    await actionHandler.AttractorActionAsync(stepContext.Context, userProfileTemporary, cancellationToken, this, idacou:idacou, gid:gid);
+                    await actionHandler.AttractorActionAsync(stepContext.Context, userProfileTemporary, cancellationToken, this, idacou:idacou, entropyQueryString: entropyQueryString);
                     break;
                 case "Void":
-                    await actionHandler.VoidActionAsync(stepContext.Context, userProfileTemporary, cancellationToken, this, idacou: idacou, gid: gid);
+                    await actionHandler.VoidActionAsync(stepContext.Context, userProfileTemporary, cancellationToken, this, idacou: idacou, entropyQueryString: entropyQueryString);
                     break;
                 case "Anomaly":
-                    await actionHandler.AnomalyActionAsync(stepContext.Context, userProfileTemporary, cancellationToken, this, idacou: idacou, gid: gid);
+                    await actionHandler.AnomalyActionAsync(stepContext.Context, userProfileTemporary, cancellationToken, this, idacou: idacou, entropyQueryString: entropyQueryString);
                     break;
                 case "Pair":
-                    await actionHandler.PairActionAsync(stepContext.Context, userProfileTemporary, cancellationToken, this, idacou: idacou, gid: gid);
+                    await actionHandler.PairActionAsync(stepContext.Context, userProfileTemporary, cancellationToken, this, idacou: idacou, entropyQueryString: entropyQueryString);
                     break;
             }
 
