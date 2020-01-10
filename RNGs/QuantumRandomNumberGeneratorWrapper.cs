@@ -28,7 +28,7 @@ namespace VFatumbot
 
         public class CanIgnoreException : Exception { }
 
-        public QuantumRandomNumberGeneratorWrapper(ITurnContext turnContext, MainDialog mainDialog, CancellationToken cancellationToken, string entropyQueryString = null)
+        public QuantumRandomNumberGeneratorWrapper(ITurnContext turnContext, MainDialog mainDialog, CancellationToken cancellationToken, string gid = null)
         {
             _turnContext = turnContext;
             _mainDialog = mainDialog;
@@ -37,7 +37,7 @@ namespace VFatumbot
             qRNG = new PseudoRandomNumberGenerator();
 #else
             qRNG = new QuantumRandomNumberGenerator();
-            qRNG.EntropySrcQueryString = entropyQueryString;
+            qRNG.EntropyGid = gid;
 #endif
         }
 
