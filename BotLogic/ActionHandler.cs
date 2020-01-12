@@ -120,6 +120,11 @@ namespace VFatumbot.BotLogic
             {
                 await QuantumActionAsync(turnContext, userProfileTemporary, cancellationToken, mainDialog);
             }
+            else if (command.StartsWith("/stargate", StringComparison.InvariantCulture)) 
+            {
+                // for remote viewing experiments
+                await QuantumActionAsync(turnContext, userProfileTemporary, cancellationToken, mainDialog, forRemoteViewing: true);
+            }
             else if (command.StartsWith("/getqtime", StringComparison.InvariantCulture))
             {
                 await QuantumActionAsync(turnContext, userProfileTemporary, cancellationToken, mainDialog, true);
@@ -805,7 +810,7 @@ namespace VFatumbot.BotLogic
             });
         }
 
-        public async Task QuantumActionAsync(ITurnContext turnContext, UserProfileTemporary userProfileTemporary, CancellationToken cancellationToken, MainDialog mainDialog, bool suggestTime = false)
+        public async Task QuantumActionAsync(ITurnContext turnContext, UserProfileTemporary userProfileTemporary, CancellationToken cancellationToken, MainDialog mainDialog, bool suggestTime = false, bool forRemoteViewing = false)
         {
             DispatchWorkerThread((object sender, DoWorkEventArgs e) =>
             {
@@ -815,10 +820,10 @@ namespace VFatumbot.BotLogic
                         int numWaterPointsSkipped = 0;
 
                     redo:
-                        double[] incoords = GetQuantumRandom(userProfileTemporary.Latitude, userProfileTemporary.Longitude, userProfileTemporary.Radius, new QuantumRandomNumberGeneratorWrapper(context, mainDialog, token));
+                        double[] incoords = GetQuantumRandom(userProfileTemporary.Latitude, userProfileTemporary.Longitude, forRemoteViewing ? 500000 /* go global */ : userProfileTemporary.Radius, new QuantumRandomNumberGeneratorWrapper(context, mainDialog, token));
 
                         // Skip water points?
-                        if (!userProfileTemporary.IsIncludeWaterPoints)
+                        if (!userProfileTemporary.IsIncludeWaterPoints || forRemoteViewing)
                         {
                             var isWaterPoint = await Helpers.IsWaterCoordinatesAsync(incoords);
                             if (isWaterPoint)
@@ -837,17 +842,30 @@ namespace VFatumbot.BotLogic
                         }
 
                         string shortCode = Helpers.Crc32Hash($"{turnContext.Activity.From.Id}{turnContext.Activity.Timestamp.ToString()}");
-                        string mesg = Tolog(turnContext, "random", (float)incoords[0], (float)incoords[1], suggestTime ? "qtime" : "quantum", shortCode, new QuantumRandomNumberGeneratorWrapper(context, mainDialog, token));
+                        string mesg = "";
+                        if (forRemoteViewing)
+                        {
+                            await turnContext.SendActivityAsync(MessageFactory.Text($"Remote viewing coordinates are {incoords[0].ToString("#0.000")},{incoords[1].ToString("#0.000")}. Look away from screen now."), cancellationToken);
+                        }
+                        else
+                        {
+                            mesg = Tolog(turnContext, "random", (float)incoords[0], (float)incoords[1], suggestTime ? "qtime" : "quantum", shortCode, new QuantumRandomNumberGeneratorWrapper(context, mainDialog, token));
+                        }
                         await turnContext.SendActivityAsync(MessageFactory.Text(mesg), cancellationToken);
 
                         dynamic w3wResult = await Helpers.GetWhat3WordsAddressAsync(incoords);
 
-                        await turnContext.SendActivitiesAsync(CardFactory.CreateLocationCardsReply(Enum.Parse<ChannelPlatform>(turnContext.Activity.ChannelId), incoords, userProfileTemporary.IsDisplayGoogleThumbnails, w3wResult), cancellationToken);
+                        if (forRemoteViewing)
+                        {
+                            await Task.Delay(15000);
+                        }
+
+                        await turnContext.SendActivitiesAsync(CardFactory.CreateLocationCardsReply(Enum.Parse<ChannelPlatform>(turnContext.Activity.ChannelId), incoords, userProfileTemporary.IsDisplayGoogleThumbnails, w3wResult, forRemoteViewing: forRemoteViewing), cancellationToken);
                         await Helpers.SendPushNotification(userProfileTemporary, "Point Generated", mesg);
 
                         CallbackOptions callbackOptions = new CallbackOptions()
                         {
-                            StartTripReportDialog = true,
+                            StartTripReportDialog = !forRemoteViewing,
                             ShortCodes = new string[] { shortCode },
                             Messages = new string[] { mesg },
                             PointTypes = new PointTypes[] { suggestTime ? PointTypes.QuantumTime : PointTypes.Quantum },

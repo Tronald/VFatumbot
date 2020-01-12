@@ -75,7 +75,7 @@ namespace VFatumbot
             return replies;
         }
 
-        public static IMessageActivity[] CreateLocationCardsReply(ChannelPlatform platform, double[] incoords, bool showStreetAndEarthThumbnails = false, dynamic w3wResult = null)
+        public static IMessageActivity[] CreateLocationCardsReply(ChannelPlatform platform, double[] incoords, bool showStreetAndEarthThumbnails = false, dynamic w3wResult = null, bool forRemoteViewing = false)
         {
             if (platform == ChannelPlatform.discord)
             {
@@ -126,7 +126,7 @@ namespace VFatumbot
             replies[0] = attachmentReply;
 
             attachmentReply.AttachmentLayout = AttachmentLayoutTypes.Carousel;
-            attachmentReply.Attachments.Add(CreateGoogleMapCard(incoords, !useNativeLocationWidget || showStreetAndEarthThumbnails, showStreetAndEarthThumbnails, w3wResult));
+            attachmentReply.Attachments.Add(CreateGoogleMapCard(incoords, !useNativeLocationWidget || showStreetAndEarthThumbnails, showStreetAndEarthThumbnails, w3wResult, forRemoteViewing: forRemoteViewing));
 
             if (showStreetAndEarthThumbnails)
             {
@@ -137,12 +137,12 @@ namespace VFatumbot
             return replies;
         }
 
-        public static Attachment CreateGoogleMapCard(double[] incoords, bool showMapsThumbnail, bool showStreetAndEarthThumbnails = false, dynamic w3wResult = null)
+        public static Attachment CreateGoogleMapCard(double[] incoords, bool showMapsThumbnail, bool showStreetAndEarthThumbnails = false, dynamic w3wResult = null, bool forRemoteViewing = false)
         {
             var images = new List<CardImage>();
             if (showMapsThumbnail)
             {
-                images.Add(new CardImage(CreateGoogleMapsStaticThumbnail(incoords)));
+                images.Add(new CardImage(CreateGoogleMapsStaticThumbnail(incoords, forRemoteViewing)));
             }
 
             var cardAction = new CardAction(ActionTypes.OpenUrl, showStreetAndEarthThumbnails ? "Open" : "Maps", value: CreateGoogleMapsUrl(incoords));
@@ -160,7 +160,7 @@ namespace VFatumbot
             var heroCard = new HeroCard
             {
                 Title = !showStreetAndEarthThumbnails ? "View with Google:" : "Google Maps",
-                Text = w3wResult?.words,
+                Text = (forRemoteViewing ? $"{w3wResult.words} - {w3wResult?.nearestPlace}{Helpers.GetCountryFromW3W(w3wResult)}" : w3wResult.words),
                 Images = images,
                 Buttons = buttons,
                 Tap = cardAction
@@ -215,9 +215,9 @@ namespace VFatumbot
             return heroCard.ToAttachment();
         }
 
-        public static string CreateGoogleMapsStaticThumbnail(double[] incoords)
+        public static string CreateGoogleMapsStaticThumbnail(double[] incoords, bool forRemoteViewing = false)
         {
-            return "https://maps.googleapis.com/maps/api/staticmap?&markers=color:red%7Clabel:C%7C" + incoords[0] + "+" + incoords[1] + "&zoom=15&size=" + Consts.THUMBNAIL_SIZE + "&maptype=roadmap&key=" + Consts.GOOGLE_MAPS_API_KEY;
+            return "https://maps.googleapis.com/maps/api/staticmap?&markers=color:red%7Clabel:C%7C" + incoords[0] + "+" + incoords[1] + $"&zoom={(forRemoteViewing ? 4 : 15)}&size=" + Consts.THUMBNAIL_SIZE + "&maptype=roadmap&key=" + Consts.GOOGLE_MAPS_API_KEY;
         }
 
         public static string CreateGoogleMapsUrl(double[] incoords)
