@@ -374,6 +374,14 @@ namespace VFatumbot
                 case "GCP Retro":
                     stepContext.Values["qrng_source"] = "GCPRetro";
                     stepContext.Values["qrng_source_query_str"] = $"gcp=true&size={bytesSize * 2}";
+
+                    // Until the libwrapper supports proper paging spanning over multiple days restrict the amount of entropy we ask for to within 5km
+                    if (userProfileTemporary.Radius > 5000)
+                    {
+                        userProfileTemporary.Radius = 5000;
+                        await _userProfileTemporaryAccessor.SetAsync(stepContext.Context, userProfileTemporary);
+                    }
+
                     return await stepContext.NextAsync(cancellationToken: cancellationToken);
 
                 default:
