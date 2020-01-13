@@ -4,6 +4,7 @@ using System.Net;
 using System.Security.Cryptography;
 using System.Threading;
 using Microsoft.Bot.Builder;
+using Microsoft.CSharp.RuntimeBinder;
 using VFatumbot.BotLogic;
 
 namespace VFatumbot
@@ -122,8 +123,8 @@ namespace VFatumbot
             // to catch QRNG source related exceptions to allow us to do operations like
             // send the user a message, reset their scanning flags and take them back to MainDialog prompt
             if ((exception.GetType().Equals(typeof(InvalidDataException)) && "Service did not return random data.".Equals(exception.Message)) ||
-                (exception.GetType().Equals(typeof(WebException)) && exception.Message.Contains("connection attempt failed because the connected party did not properly respond after a period of time")) ||
-                (exception.GetType().Equals(typeof(WebException)) && exception.Message.Contains("timed out"))
+                (exception.GetType().Equals(typeof(RuntimeBinderException)) && exception.Message.Contains("does not contain a definition")) ||
+                (exception.GetType().Equals(typeof(WebException)))
                 )
             {
                 _turnContext.SendActivityAsync("Sorry, there was an error sourcing quantum entropy needed to randomize. Try a bit later.").GetAwaiter().GetResult();
