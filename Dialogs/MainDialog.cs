@@ -289,7 +289,7 @@ namespace VFatumbot
                                 {
                                     new Choice() { Value = "Camera" },
                                     new Choice() { Value = "ANU" },
-                                    new Choice() { Value = "ANU Leftovers)" },
+                                    new Choice() { Value = "ANU Leftovers" },
                                     new Choice() { Value = "GCP Retro" },
                                 }
                 };
