@@ -283,7 +283,7 @@ namespace VFatumbot
             {
                 var options = new PromptOptions()
                 {
-                    Prompt = MessageFactory.Text("Chose your source of entropy for the quantum random number generator:"),
+                    Prompt = MessageFactory.Text("Chose your entropy source for the quantum random number generator (choose ANU if unsure):"),
                     RetryPrompt = MessageFactory.Text("That is not a valid QRNG source."),
                     Choices = new List<Choice>()
                                 {
@@ -300,10 +300,11 @@ namespace VFatumbot
             {
                 var options = new PromptOptions()
                 {
-                    Prompt = MessageFactory.Text("Chose your entropy source (choose ANU if unsure):"),
+                    Prompt = MessageFactory.Text("Chose your entropy source for the quantum random number generator (choose ANU if unsure):"),
                     RetryPrompt = MessageFactory.Text("That is not a valid entropy source."),
                     Choices = new List<Choice>()
                                 {
+                                    //new Choice() { Value = "Camera" },
                                     new Choice() { Value = "ANU" },
                                     new Choice() { Value = "ANU Leftovers" },
                                     new Choice() { Value = "GCP Retro" },
@@ -319,11 +320,6 @@ namespace VFatumbot
             //_logger.LogInformation($"MainDialog.GetQRNGSourceStepAsync[{((FoundChoice)stepContext.Result)?.Value}]");
 
             var userProfileTemporary = await _userProfileTemporaryAccessor.GetAsync(stepContext.Context, () => new UserProfileTemporary());
-            //if (userProfileTemporary.BotSrc == Enums.WebSrc.ios || userProfileTemporary.BotSrc == Enums.WebSrc.android)
-            //{
-            //    stepContext.Values["qrng_source"] = "ANU";
-            //    return await stepContext.NextAsync(cancellationToken: cancellationToken);
-            //}
 
             // Get the number of bytes we need from the camera's entropy
             int numDots = getOptimizedDots(userProfileTemporary.Radius);
