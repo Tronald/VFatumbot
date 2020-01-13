@@ -403,12 +403,16 @@ namespace VFatumbot
             if (entropyQueryString.Length == 64)
             {
                 // Assume 64 chars exactly is entropy GID direct from camera or copy/pasted shared
-                stepContext.Values["qrng_source_query_str"] = $"gid={entropyQueryString}&raw=true";
+                entropyQueryString = $"gid={entropyQueryString}&raw=true";
+            }
+            else if (stepContext.Values != null && stepContext.Values.ContainsKey("qrng_source_query_str"))
+            {
+                // GCP Retro / ANU Leftovers (pool)
+                entropyQueryString = stepContext.Values["qrng_source_query_str"].ToString();
             }
             else
             {
-                // GCP Retro / ANU Leftovers (pool)
-                entropyQueryString = stepContext.Values["qrng_source_query_str"]?.ToString();
+                entropyQueryString = null;
             }
 
             switch (stepContext.Values["PointType"].ToString())
