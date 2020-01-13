@@ -319,12 +319,11 @@ namespace VFatumbot
             //_logger.LogInformation($"MainDialog.GetQRNGSourceStepAsync[{((FoundChoice)stepContext.Result)?.Value}]");
 
             var userProfileTemporary = await _userProfileTemporaryAccessor.GetAsync(stepContext.Context, () => new UserProfileTemporary());
-            if (userProfileTemporary.BotSrc == Enums.WebSrc.ios || userProfileTemporary.BotSrc == Enums.WebSrc.android)
-            {
-                stepContext.Values["qrng_source"] = "ANU";
-                return await stepContext.NextAsync(cancellationToken: cancellationToken);
-            }
-
+            //if (userProfileTemporary.BotSrc == Enums.WebSrc.ios || userProfileTemporary.BotSrc == Enums.WebSrc.android)
+            //{
+            //    stepContext.Values["qrng_source"] = "ANU";
+            //    return await stepContext.NextAsync(cancellationToken: cancellationToken);
+            //}
 
             // Get the number of bytes we need from the camera's entropy
             int numDots = getOptimizedDots(userProfileTemporary.Radius);
