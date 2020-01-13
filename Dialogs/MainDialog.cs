@@ -334,6 +334,7 @@ namespace VFatumbot
             {
                 case "Camera":
                     stepContext.Values["qrng_source"] = "Camera";
+                    stepContext.Values["qrng_source_query_str"] = ""; // generated later in QRNG class
 
                     var promptOptions = new PromptOptions
                     {
@@ -407,7 +408,7 @@ namespace VFatumbot
             else
             {
                 // GCP Retro / ANU Leftovers (pool)
-                entropyQueryString = stepContext.Values["qrng_source_query_str"].ToString();
+                entropyQueryString = stepContext.Values["qrng_source_query_str"]?.ToString();
             }
 
             switch (stepContext.Values["PointType"].ToString())
