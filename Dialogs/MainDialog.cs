@@ -300,7 +300,7 @@ namespace VFatumbot
             {
                 var options = new PromptOptions()
                 {
-                    Prompt = MessageFactory.Text("Chose your entropy source:"),
+                    Prompt = MessageFactory.Text("Chose your entropy source (choose ANU if unsure):"),
                     RetryPrompt = MessageFactory.Text("That is not a valid entropy source."),
                     Choices = new List<Choice>()
                                 {
@@ -359,14 +359,12 @@ namespace VFatumbot
                     var jsonStr = new WebClient().DownloadString($"https://devapi.randonauts.com/getpools");
 #endif
                     var pools = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(jsonStr);
-                    getpool: // random pool selection (pseudo)
-                        var r = new Random();
-                        var idx = r.Next(pools.Count);
-                        var pool = pools[idx];
-                        if (pool.pool.ToString().Equals("0.pool")) goto getpool;
-                        var time = DateTime.Parse(pool.time.ToString());
+                    var r = new Random();
+                    var idx = r.Next(pools.Count);
+                    var pool = pools[idx];
+                    var time = DateTime.Parse(pool.time.ToString());
 
-                    await stepContext.Context.SendActivityAsync($"Enjoy some residual entropy from around {time.ToString("yyyy-MM-dd")}");
+                    await stepContext.Context.SendActivityAsync($"Enjoy some residual ANU pool entropy from around {time.ToString("yyyy-MM-dd")}");
 
                     stepContext.Values["qrng_source_query_str"] = $"pool=true&gid={pool.pool.ToString().Replace(".pool", "")}&raw=true";
                     return await stepContext.NextAsync(cancellationToken: cancellationToken);
