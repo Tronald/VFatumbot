@@ -10,6 +10,26 @@ The V in VFatumbot comes from the project codename when I first forked the bot. 
 Before I even knew there was a dev community (with whom I later on got involved with), I'd already come across the bot's source code [here](https://github.com/JamalYusuf/Fatum). VFatumbot was coined and forked and I began rewriting it using the Bot Framework SDK. Later on I discovered this was Fatumbot2 code and since then Fatumbot3 had been born and was now using this closed-source native C++ library called "the Newton lib" to do the calculations for finding attractors.
 So I went ahead and merged the Fatumbot3's C# code into VFatumbot and along with those changes did the implementations necessary to use libAttract.dll.
 
+#### Jan 2020 updates
+So now we've made the latest bot's source code publicly available. TODO: update this README properly...
+Here's the highlights:
+- The original open-sourced code was Fatumbot2.. a Telegram-specific bot before libAttract was integrated
+- Then came Fatumbot3 which was still Telegram only, but included the closed-source libAttract
+- LibAttract is the C++ library that does the calculations for IDAs (intent-driven anomalies, i.e. Attractors/Voids)
+- Then came VFatumbot... based on Fatumbot3 but overhauled to not only support Telegram, but also support a web-based bot and other "channels" like Facebook, Slack, Skype (this was 3.1.x)
+- The original core logic from Fatumbot3 is still the same, with a minor update to libAttract (currently v0.96.1)
+- The "overhaul" saw the bot move to something called Bot Framework; a Microsoft-provided solution for developing bots
+- VFatumbot was originally hosted completely on Azure (Microsoft's cloud platform; read AWS) using their Bot Service and App Service
+- Then we moved to having the bot run on a Linux virtual machine whilst keeping the Azure Bot Service so we can still integrate with the various "channels"
+- It's .NET Core 2.1 based so can run on Linux / OS X too
+- "**REMOVE***" appears in a bunch of files to hide the various keys/passwords we obviously don't want to make public
+- Consts.cs gives you an idea of the various external services you need to sign up for (or just disable if you don't want them)
+- The rest of the README below was written circa Nov 2019 when everything was still fully running on Azure and not using a Linux VM to host
+- Furthermore we have the "libwrapper" which is a NodeJS-based API server that exposes libAttracts functions (but you can still skip this and natively called it from C#)
+- There's probably a bunch of other info I should write here to really help anybody interested in hacking the bot, but for now I'll leave it here
+- Any questions direct to soliax on reddit.com/r/randonauts or in the Telegram lobby (https://t.me/randonauts)
+- Ah lastly, to run libAttract with the bot calling it from C#, unzip libAttract/libAttract.0.96.1.tar.gz, and copy libAttract* from the <platform>/release folder into the bin/*** output from Visual Studio.
+
 ## Features
 - Implemented using Microsoft's Bot Framework SDK so allows access to the bot from multiple channels: Facebook, Telegram, LINE, Slack, Web, Skype and more...
 - Hosted on Microsoft's cloud platform Azure which allows for more reliability and scaling.
