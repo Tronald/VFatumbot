@@ -794,7 +794,11 @@ namespace VFatumbot.BotLogic
                     async (context, token) =>
                     {
                         string[] intentSuggestions = await Helpers.GetIntentSuggestionsAsync(new QuantumRandomNumberGeneratorWrapper(context, mainDialog, token));
-                        var suggestionsStr = string.Join(", ", intentSuggestions);
+                        string suggestionsStr = "  \n";
+                        foreach (var word in intentSuggestions)
+                        {
+                            suggestionsStr += $"[{word}](https://www.google.com/search?q=define%20{word.Replace(" ", "%20")})  \n";
+                        }
 
                         await turnContext.SendActivityAsync(MessageFactory.Text("Intent suggestions: " + suggestionsStr), cancellationToken);
                         await Helpers.SendPushNotification(userProfileTemporary, "Intent Suggestions", suggestionsStr);
