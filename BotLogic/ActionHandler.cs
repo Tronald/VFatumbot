@@ -861,7 +861,7 @@ namespace VFatumbot.BotLogic
                         }
 
                         await turnContext.SendActivitiesAsync(CardFactory.CreateLocationCardsReply(Enum.Parse<ChannelPlatform>(turnContext.Activity.ChannelId), incoords, userProfileTemporary.IsDisplayGoogleThumbnails, w3wResult, forRemoteViewing: forRemoteViewing), cancellationToken);
-                        await Helpers.SendPushNotification(userProfileTemporary, "Point Generated", mesg);
+                        if (!string.IsNullOrEmpty(mesg)) await Helpers.SendPushNotification(userProfileTemporary, "Point Generated", mesg);
 
                         CallbackOptions callbackOptions = new CallbackOptions()
                         {
