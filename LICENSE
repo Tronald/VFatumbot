@@ -31,4 +31,5 @@ specifically for the Randonauts/VFatumbot project. The EULA is not transferable
 to persons, parties or organizations who duplicate this Software with the intention 
 of distributing standalone versions of the Software. If the scope of the EULA is not
 met within the Software, then the EULA will be terminated and CoordinateSharp will 
-revert to the AGPL 3.0 License.
+revert to the AGPL 3.0 License which in non-compatible with the MIT License. 
+CoordinateSharp must be removed from the Software upon termination of the EULA.
