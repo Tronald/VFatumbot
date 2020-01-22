@@ -18,7 +18,7 @@ using Bia.Countries.Iso3166;
 using Microsoft.Bot.Schema;
 using static VFatumbot.BotLogic.Enums;
 using Newtonsoft.Json.Linq;
-using CoordinateSharp;
+using CoordinateSharp; //See CoordinateSharp EULA. (Must be removed if used outside EULA terms).
 using System.Threading;
 
 namespace VFatumbot.BotLogic
